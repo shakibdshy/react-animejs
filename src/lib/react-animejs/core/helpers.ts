@@ -107,7 +107,8 @@ export function extractAnimationState(instance: unknown): AnimationState {
     began: (anim.began as boolean) ?? false,
     completed: (anim.completed as boolean) ?? false,
     reversed: (anim.reversed as boolean) ?? false,
-    currentIteration: (anim._currentIteration as number) || 0,
+    currentIteration:
+      ((anim.iteration as number) ?? (anim._currentIteration as number)) || 0,
   };
 }
 

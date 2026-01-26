@@ -1,9 +1,5 @@
 import { Animate, AnimeProvider, fadeIn, fadeInUp } from "../index";
-import "./demo.css";
-
-// Import Modular Demo Components
-import { AdvancedTimerDemo } from "./components/AdvancedTimerDemo";
-import { DraggableDemo } from "./components/DraggableDemo";
+import { ConfigurableTimerDemo } from "./components/ConfigurableTimerDemo";
 
 /**
  * Main React Anime.js Demo Page
@@ -14,22 +10,25 @@ import { DraggableDemo } from "./components/DraggableDemo";
 export default function ReactAnimejsDemo() {
   return (
     <AnimeProvider>
-      <div className="demo-page">
-        <header className="demo-header">
+      <div className="min-h-screen bg-[#0a0a0f] text-[#e0e0e0] p-8 font-sans">
+        <header className="text-center mb-12 p-8">
           <Animate {...fadeInUp} autoplay>
-            <h1>🎬 React Anime.js</h1>
+            <h1 className="text-5xl font-extrabold mb-4 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+              🎬 React Anime.js
+            </h1>
           </Animate>
           <Animate {...fadeIn} delay={200} autoplay>
-            <p>A comprehensive React wrapper for Anime.js v4</p>
+            <p className="text-xl text-[#888] font-medium tracking-tight">
+              A comprehensive React wrapper for Anime.js v4
+            </p>
           </Animate>
         </header>
 
-        <main className="demo-grid">
-          <AdvancedTimerDemo />
-          <DraggableDemo />
+        <main className="grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-8 max-w-[1500px] mx-auto">
+          <ConfigurableTimerDemo />
         </main>
 
-        <footer className="demo-footer">
+        <footer className="text-center p-12 text-[#888]">
           <p>Built with ❤️ using React + Anime.js v4</p>
         </footer>
       </div>

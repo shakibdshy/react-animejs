@@ -6,8 +6,6 @@
  * scoped and cleaned up when the provider unmounts.
  */
 
-"use client";
-
 import {
   createContext,
   useContext,

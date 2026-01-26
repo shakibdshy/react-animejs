@@ -4,8 +4,6 @@
  * A component wrapper that provides a declarative way to animate children.
  */
 
-"use client";
-
 import {
   useRef,
   useEffect,

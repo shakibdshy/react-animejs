@@ -4,8 +4,6 @@
  * Provides a way to create sequenced animations with precise timing control.
  */
 
-"use client";
-
 import { useRef, useEffect, useState, useMemo, useCallback } from "react";
 import { createTimeline } from "animejs";
 import type {

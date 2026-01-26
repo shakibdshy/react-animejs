@@ -76,6 +76,10 @@ export interface Timer {
   began: boolean;
   completed: boolean;
   reversed: boolean;
+  iterationTime: number;
+  iterationDuration: number;
+  iterationCurrentTime: number;
+  iterationProgress: number;
   _currentIteration: number;
 
   // Methods

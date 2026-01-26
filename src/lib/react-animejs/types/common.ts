@@ -178,6 +178,12 @@ export interface PlaybackControls {
    * @param rate - Speed multiplier (1 = normal, 0.5 = half, 2 = double)
    */
   setPlaybackRate: (rate: number) => void;
+
+  /**
+   * Set the frame rate dynamically
+   * @param fps - Target frames per second
+   */
+  setFrameRate: (fps: number) => void;
 }
 
 // =============================================================================
