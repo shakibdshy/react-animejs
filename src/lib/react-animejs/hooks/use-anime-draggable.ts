@@ -4,8 +4,6 @@
  * Makes elements draggable with physics-based release animations.
  */
 
-"use client";
-
 import { useRef, useEffect, useState, useMemo, useCallback } from "react";
 import { createDraggable } from "animejs";
 import type {

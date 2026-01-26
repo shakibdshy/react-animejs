@@ -298,6 +298,51 @@
 }
 
 /* =============================================================================
+   Advanced Timer Demo (LCD)
+   ============================================================================= */
+
+.timer-row {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.timer-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.log-box {
+  background: #050508;
+  border: 1px solid var(--demo-border);
+  border-radius: var(--demo-radius-sm);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.log-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--demo-text-muted);
+}
+
+.lcd-value {
+  font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--demo-success);
+  text-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+  line-height: 1;
+}
+
+/* =============================================================================
    Responsive
    ============================================================================= */
 
@@ -322,5 +367,9 @@
   .demo-box.large {
     width: 100px;
     height: 100px;
+  }
+
+  .timer-row {
+    flex-direction: column;
   }
 }
