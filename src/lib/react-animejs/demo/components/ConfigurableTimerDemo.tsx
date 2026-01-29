@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { useAnimeTimer } from "../../index";
+import { useAnimeTimer } from "@/lib/react-animejs";
 import { DemoSection } from "./DemoSection";
 
 /**

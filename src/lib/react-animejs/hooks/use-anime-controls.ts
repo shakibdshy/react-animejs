@@ -146,6 +146,11 @@ export function useAnimeControls(): AnimeController {
           (a as unknown as Record<string, unknown>).playbackRate = rate;
         });
       },
+      setFrameRate: (fps: number) => {
+        forEachAnimation((a) => {
+          (a as unknown as Record<string, unknown>).fps = fps;
+        });
+      },
     }),
     [register, getAnimations, clear, forEachAnimation],
   );

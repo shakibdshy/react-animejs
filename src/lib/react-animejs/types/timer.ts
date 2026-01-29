@@ -2,6 +2,7 @@
  * Timer-specific types for useAnimeTimer hook
  */
 
+import type { RefObject } from "react";
 import type {
   PlaybackSettings,
   AnimationCallbacks,
@@ -28,6 +29,27 @@ export interface UseAnimeTimerOptions
    * @default true
    */
   enabled?: boolean;
+
+  /**
+   * Enable automatic loop count tracking
+   * When true, the hook will automatically track and display loop count
+   * @default false
+   */
+  trackLoopCount?: boolean;
+
+  /**
+   * Enable automatic iteration time tracking
+   * When true, the hook will automatically track and display iteration time
+   * @default false
+   */
+  trackIterationTime?: boolean;
+
+  /**
+   * Automatically update DOM refs with tracked values
+   * When true, the hook will automatically update countRef and iterationTimeRef
+   * @default false
+   */
+  autoUpdateRefs?: boolean;
 }
 
 /**
@@ -58,6 +80,33 @@ export interface UseAnimeTimerReturn {
    * Whether the timer is ready
    */
   isReady: boolean;
+
+  /**
+   * Tracked loop count (only available when trackLoopCount is true)
+   */
+  count: number;
+
+  /**
+   * Tracked iteration time in milliseconds (only available when trackIterationTime is true)
+   */
+  iterationTime: number;
+
+  /**
+   * Auto-managed ref for loop count display element
+   * Attach this to your display element and set autoUpdateRefs to true
+   */
+  countRef: RefObject<HTMLSpanElement | null>;
+
+  /**
+   * Auto-managed ref for iteration time display element
+   * Attach this to your display element and set autoUpdateRefs to true
+   */
+  iterationTimeRef: RefObject<HTMLSpanElement | null>;
+
+  /**
+   * Whether the component is mounted (useful for TanStack Start hydration fix)
+   */
+  isMounted: boolean;
 }
 
 // =============================================================================

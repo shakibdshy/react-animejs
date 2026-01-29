@@ -393,6 +393,13 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
           ).playbackRate = rate;
         }
       },
+      setFrameRate: (fps: number) => {
+        if (animationRef.current) {
+          (
+            animationRef.current as unknown as Record<string, unknown>
+          ).fps = fps;
+        }
+      },
     }),
     [],
   );

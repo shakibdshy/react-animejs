@@ -62,6 +62,15 @@ export function useAnimeTimer(
   // Timer instance ref
   const timerRef = useRef<Timer | null>(null);
 
+  // Display refs for auto-update functionality
+  const countDisplayRef = useRef<HTMLSpanElement>(null);
+  const iterationTimeDisplayRef = useRef<HTMLSpanElement>(null);
+
+  // Internal tracking refs
+  const loopCountRef = useRef(0);
+  const iterationTimeRef = useRef(0);
+  const isMountedRef = useRef(false);
+
   // ==========================================================================
   // Context
   // ==========================================================================
@@ -77,6 +86,10 @@ export function useAnimeTimer(
     DEFAULT_ANIMATION_STATE,
   );
   const [isReady, setIsReady] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  const [trackedCount, setTrackedCount] = useState(0);
+  const [trackedIterationTime, setTrackedIterationTime] = useState(0);
 
   // ==========================================================================
   // Extract Options
@@ -103,7 +116,26 @@ export function useAnimeTimer(
     autoplay = false,
     frameRate,
     playbackRate,
+
+    // Tracking options
+    trackLoopCount = false,
+    trackIterationTime = false,
+    autoUpdateRefs = false,
   } = options;
+
+  // ==========================================================================
+  // Mount State Management
+  // ==========================================================================
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    setIsMounted(true);
+
+    return () => {
+      isMountedRef.current = false;
+      setIsMounted(false);
+    };
+  }, []);
 
   // ==========================================================================
   // Timer Lifecycle
@@ -174,11 +206,32 @@ export function useAnimeTimer(
         // NOTE: We intentionally do NOT call setTimerState here!
         // React state updates on every frame interfere with Anime.js timing.
         // Users should use refs for per-frame updates (like the vanilla JS docs example).
+
+        if (trackIterationTime) {
+          const time = timer.iterationCurrentTime ?? timer.iterationTime ?? timer.currentTime ?? 0;
+          iterationTimeRef.current = time;
+          setTrackedIterationTime(Math.round(time));
+
+          if (autoUpdateRefs && iterationTimeDisplayRef.current) {
+            iterationTimeDisplayRef.current.textContent = String(Math.round(time));
+          }
+        }
+
         createSafeCallback(onUpdate, "onUpdate")?.(timer);
       };
 
       config.onLoop = (timer: Timer) => {
         setTimerState(extractAnimationState(timer));
+
+        if (trackLoopCount) {
+          loopCountRef.current += 1;
+          setTrackedCount(loopCountRef.current);
+
+          if (autoUpdateRefs && countDisplayRef.current) {
+            countDisplayRef.current.textContent = String(loopCountRef.current);
+          }
+        }
+
         createSafeCallback(onLoop, "onLoop")?.(timer);
       };
 
@@ -319,6 +372,11 @@ export function useAnimeTimer(
     timer: timerRef.current,
     isRunning: !timerState.paused && timerState.began && !timerState.completed,
     isReady,
+    count: trackedCount,
+    iterationTime: trackedIterationTime,
+    countRef: countDisplayRef,
+    iterationTimeRef: iterationTimeDisplayRef,
+    isMounted,
   };
 }
 

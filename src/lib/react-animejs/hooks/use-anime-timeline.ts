@@ -363,6 +363,13 @@ export function useAnimeTimeline(
           ).playbackRate = rate;
         }
       },
+      setFrameRate: (fps: number) => {
+        if (timelineRef.current) {
+          (
+            timelineRef.current as unknown as Record<string, unknown>
+          ).fps = fps;
+        }
+      },
     }),
     [],
   );
