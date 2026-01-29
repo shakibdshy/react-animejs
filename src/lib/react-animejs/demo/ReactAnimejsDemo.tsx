@@ -1,6 +1,8 @@
 import { Animate, AnimeProvider, fadeIn, fadeInUp } from "../index";
-import { ConfigurableTimerDemo } from "./components/ConfigurableTimerDemo";
 import { AlternatingTimerDemo } from "./components/AlternatingTimerDemo";
+import { ReversedTimerDemo } from "./components/ReversedTimerDemo";
+import { PlaybackRateDemo } from "./components/PlaybackRateDemo";
+import { TimerCallbacksDemo } from "./components/TimerCallbacksDemo";
 
 /**
  * Main React Anime.js Demo Page
@@ -25,9 +27,12 @@ export default function ReactAnimejsDemo() {
           </Animate>
         </header>
 
-        <main className="grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-8 max-w-[1500px] mx-auto">
-          <ConfigurableTimerDemo />
+        <main className="grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-8 max-w-375 mx-auto">
+          {/* <ConfigurableTimerDemo /> */}
           <AlternatingTimerDemo />
+          <ReversedTimerDemo />
+          <PlaybackRateDemo />
+          <TimerCallbacksDemo />
         </main>
 
         <footer className="text-center p-12 text-[#888]">

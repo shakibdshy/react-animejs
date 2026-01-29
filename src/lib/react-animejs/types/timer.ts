@@ -144,5 +144,9 @@ export interface Timer {
   revert(): this;
   seek(time: number | string): this;
   stretch(duration: number): this;
+  /**
+   * Returns a Promise that resolves and execute a callback when the timer completes
+   * The then() method can be directly inlined
+   */
   then(callback: (timer: this) => void): Promise<this>;
 }

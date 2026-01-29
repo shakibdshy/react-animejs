@@ -348,6 +348,18 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
   ]);
 
   // ==========================================================================
+  // Dynamic frameRate update
+  // ==========================================================================
+
+  useEffect(() => {
+    if (animationRef.current && frameRate !== undefined) {
+      // Dynamically update fps on the existing animation instance
+      (animationRef.current as unknown as Record<string, unknown>).fps =
+        frameRate;
+    }
+  }, [frameRate]);
+
+  // ==========================================================================
   // Playback Controls
   // ==========================================================================
 

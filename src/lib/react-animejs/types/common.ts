@@ -82,28 +82,32 @@ export interface PlaybackSettings {
  */
 export interface AnimationCallbacks<T = unknown> {
   /**
-   * Called when the animation begins (after any initial delay)
+   * Executes a function when a timer starts (after any initial delay)
+   * @default noop
    */
   onBegin?: (instance: T) => void;
 
   /**
-   * Called when the animation completes
+   * Executes a function when all the iterations (loop) of a timer have finished playing
+   * @default noop
    */
   onComplete?: (instance: T) => void;
 
   /**
-   * Called on every animation frame update
-   * ⚠️ Use sparingly as this can impact performance if triggering React state updates
+   * Executes a function on every frames of a running timer at the specified frameRate
+   * @default noop
    */
   onUpdate?: (instance: T) => void;
 
   /**
-   * Called at the end of each loop iteration
+   * Executes a function every time a timer iteration completes
+   * @default noop
    */
   onLoop?: (instance: T) => void;
 
   /**
-   * Called when the animation is paused
+   * Executes a function when a running timer is paused
+   * @default noop
    */
   onPause?: (instance: T) => void;
 }
