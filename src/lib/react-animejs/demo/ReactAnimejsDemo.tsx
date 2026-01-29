@@ -3,6 +3,8 @@ import { AlternatingTimerDemo } from "./components/AlternatingTimerDemo";
 import { ReversedTimerDemo } from "./components/ReversedTimerDemo";
 import { PlaybackRateDemo } from "./components/PlaybackRateDemo";
 import { TimerCallbacksDemo } from "./components/TimerCallbacksDemo";
+import { TimerMethodsDemo } from "./components/TimerMethodsDemo";
+import { TimerPropertiesDemo } from "./components/TimerPropertiesDemo";
 
 /**
  * Main React Anime.js Demo Page
@@ -33,6 +35,8 @@ export default function ReactAnimejsDemo() {
           <ReversedTimerDemo />
           <PlaybackRateDemo />
           <TimerCallbacksDemo />
+          <TimerMethodsDemo />
+          <TimerPropertiesDemo />
         </main>
 
         <footer className="text-center p-12 text-[#888]">

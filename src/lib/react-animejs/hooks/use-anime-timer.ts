@@ -314,34 +314,70 @@ export function useAnimeTimer(
   const controls: PlaybackControls = useMemo(
     () => ({
       play: () => {
-        timerRef.current?.play();
+        if (timerRef.current) {
+          timerRef.current.play();
+          setTimerState(extractAnimationState(timerRef.current));
+        }
       },
       pause: () => {
-        timerRef.current?.pause();
+        if (timerRef.current) {
+          timerRef.current.pause();
+          setTimerState(extractAnimationState(timerRef.current));
+        }
       },
       resume: () => {
-        timerRef.current?.resume();
+        if (timerRef.current) {
+          timerRef.current.resume();
+          setTimerState(extractAnimationState(timerRef.current));
+        }
       },
       restart: () => {
-        timerRef.current?.restart();
+        if (timerRef.current) {
+          timerRef.current.restart();
+          setTimerState(extractAnimationState(timerRef.current));
+        }
       },
       reverse: () => {
-        timerRef.current?.reverse();
+        if (timerRef.current) {
+          timerRef.current.reverse();
+          setTimerState(extractAnimationState(timerRef.current));
+        }
       },
       alternate: () => {
-        timerRef.current?.alternate();
+        if (timerRef.current) {
+          timerRef.current.alternate();
+          setTimerState(extractAnimationState(timerRef.current));
+        }
       },
       complete: () => {
-        timerRef.current?.complete();
+        if (timerRef.current) {
+          timerRef.current.complete();
+          setTimerState(extractAnimationState(timerRef.current));
+        }
       },
       reset: () => {
-        timerRef.current?.reset();
+        if (timerRef.current) {
+          timerRef.current.reset();
+          setTimerState(extractAnimationState(timerRef.current));
+        }
       },
       cancel: () => {
-        timerRef.current?.cancel();
+        if (timerRef.current) {
+          timerRef.current.cancel();
+          setTimerState(extractAnimationState(timerRef.current));
+        }
+      },
+      revert: () => {
+        if (timerRef.current) {
+          timerRef.current.revert();
+          setTimerState(extractAnimationState(timerRef.current));
+        }
       },
       seek: (time: number | string) => {
-        timerRef.current?.seek(time);
+        if (timerRef.current) {
+          timerRef.current.seek(time);
+          setTimerState(extractAnimationState(timerRef.current));
+        }
       },
       stretch: (newDuration: number) => {
         timerRef.current?.stretch(newDuration);

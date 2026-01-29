@@ -38,6 +38,12 @@ export const DEFAULT_ANIMATION_STATE: AnimationState = {
   completed: false,
   reversed: false,
   currentIteration: 0,
+  deltaTime: 0,
+  iterationCurrentTime: 0,
+  iterationProgress: 0,
+  speed: 1,
+  fps: 0,
+  backwards: false,
 };
 
 // =============================================================================

@@ -121,70 +121,75 @@ export interface AnimationCallbacks<T = unknown> {
  */
 export interface PlaybackControls {
   /**
-   * Start or resume the animation
+   * Starts or resumes the timer.
    */
   play: () => void;
 
   /**
-   * Pause the animation
+   * Pauses a running timer.
    */
   pause: () => void;
 
   /**
-   * Resume a paused animation
+   * Resumes a paused timer.
    */
   resume: () => void;
 
   /**
-   * Restart the animation from the beginning
+   * Restarts the timer from its initial position.
    */
   restart: () => void;
 
   /**
-   * Reverse the animation direction
+   * Reverses the timer direction.
    */
   reverse: () => void;
 
   /**
-   * Toggle the animation direction
+   * Toggles the timer direction.
    */
   alternate: () => void;
 
   /**
-   * Jump to the end of the animation
+   * Finishes the timer and jumps to its end position.
    */
   complete: () => void;
 
   /**
-   * Reset the animation to its initial state
+   * Resets the timer to its initial position without removing its internal state.
    */
   reset: () => void;
 
   /**
-   * Cancel the animation and reset to initial state
+   * Cancels the timer and resets its progression to 0.
    */
   cancel: () => void;
 
   /**
-   * Seek to a specific time or progress
+   * Reverts the timer to its initial state and removes it from the engine.
+   */
+  revert: () => void;
+
+  /**
+   * Seeks to a specific time or progress.
    * @param time - Time in ms or progress string (e.g., '50%')
    */
   seek: (time: number | string) => void;
 
   /**
-   * Change the animation duration dynamically
+   * Stretches the timer duration.
    * @param duration - New duration in milliseconds
    */
   stretch: (duration: number) => void;
 
   /**
-   * Set the playback rate
+   * Set the playback rate dynamically.
    * @param rate - Speed multiplier (1 = normal, 0.5 = half, 2 = double)
    */
   setPlaybackRate: (rate: number) => void;
 
   /**
-   * Set the frame rate dynamically
+   * Set the frame rate dynamically.
    * @param fps - Target frames per second
    */
   setFrameRate: (fps: number) => void;
@@ -242,6 +247,36 @@ export interface AnimationState {
    * Current loop iteration (0-indexed)
    */
   currentIteration: number;
+
+  /**
+   * Time in ms elapsed between the current and previous frame
+   */
+  deltaTime: number;
+
+  /**
+   * Current iteration time in ms
+   */
+  iterationCurrentTime: number;
+
+  /**
+   * Progress of the current iteration from 0 to 1
+   */
+  iterationProgress: number;
+
+  /**
+   * Current playbackRate multiplier
+   */
+  speed: number;
+
+  /**
+   * Current frameRate of the timer
+   */
+  fps: number;
+
+  /**
+   * Whether the timer is currently playing backwards
+   */
+  backwards: boolean;
 }
 
 /**
@@ -257,6 +292,12 @@ export const INITIAL_ANIMATION_STATE: AnimationState = {
   completed: false,
   reversed: false,
   currentIteration: 0,
+  deltaTime: 0,
+  iterationCurrentTime: 0,
+  iterationProgress: 0,
+  speed: 1,
+  fps: 0,
+  backwards: false,
 };
 
 // =============================================================================

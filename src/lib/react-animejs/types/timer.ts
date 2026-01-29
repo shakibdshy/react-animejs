@@ -125,6 +125,10 @@ export interface Timer {
   began: boolean;
   completed: boolean;
   reversed: boolean;
+  backwards: boolean;
+  deltaTime: number;
+  speed: number;
+  fps: number;
   iterationTime: number;
   iterationDuration: number;
   iterationCurrentTime: number;

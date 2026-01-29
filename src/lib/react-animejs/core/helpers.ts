@@ -93,6 +93,12 @@ export function extractAnimationState(instance: unknown): AnimationState {
       completed: false,
       reversed: false,
       currentIteration: 0,
+      deltaTime: 0,
+      iterationCurrentTime: 0,
+      iterationProgress: 0,
+      speed: 1,
+      fps: 0,
+      backwards: false,
     };
   }
 
@@ -109,6 +115,12 @@ export function extractAnimationState(instance: unknown): AnimationState {
     reversed: (anim.reversed as boolean) ?? false,
     currentIteration:
       ((anim.iteration as number) ?? (anim._currentIteration as number)) || 0,
+    deltaTime: (anim.deltaTime as number) || 0,
+    iterationCurrentTime: (anim.iterationCurrentTime as number) || 0,
+    iterationProgress: (anim.iterationProgress as number) || 0,
+    speed: (anim.speed as number) || 1,
+    fps: (anim.fps as number) || 0,
+    backwards: (anim.backwards as boolean) ?? false,
   };
 }
 

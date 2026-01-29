@@ -366,34 +366,70 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
   const controls: PlaybackControls = useMemo(
     () => ({
       play: () => {
-        animationRef.current?.play();
+        if (animationRef.current) {
+          animationRef.current.play();
+          setAnimationState(extractAnimationState(animationRef.current));
+        }
       },
       pause: () => {
-        animationRef.current?.pause();
+        if (animationRef.current) {
+          animationRef.current.pause();
+          setAnimationState(extractAnimationState(animationRef.current));
+        }
       },
       resume: () => {
-        animationRef.current?.resume();
+        if (animationRef.current) {
+          animationRef.current.resume();
+          setAnimationState(extractAnimationState(animationRef.current));
+        }
       },
       restart: () => {
-        animationRef.current?.restart();
+        if (animationRef.current) {
+          animationRef.current.restart();
+          setAnimationState(extractAnimationState(animationRef.current));
+        }
       },
       reverse: () => {
-        animationRef.current?.reverse();
+        if (animationRef.current) {
+          animationRef.current.reverse();
+          setAnimationState(extractAnimationState(animationRef.current));
+        }
       },
       alternate: () => {
-        animationRef.current?.alternate();
+        if (animationRef.current) {
+          animationRef.current.alternate();
+          setAnimationState(extractAnimationState(animationRef.current));
+        }
       },
       complete: () => {
-        animationRef.current?.complete();
+        if (animationRef.current) {
+          animationRef.current.complete();
+          setAnimationState(extractAnimationState(animationRef.current));
+        }
       },
       reset: () => {
-        animationRef.current?.reset();
+        if (animationRef.current) {
+          animationRef.current.reset();
+          setAnimationState(extractAnimationState(animationRef.current));
+        }
       },
       cancel: () => {
-        animationRef.current?.cancel();
+        if (animationRef.current) {
+          animationRef.current.cancel();
+          setAnimationState(extractAnimationState(animationRef.current));
+        }
+      },
+      revert: () => {
+        if (animationRef.current) {
+          animationRef.current.revert();
+          setAnimationState(extractAnimationState(animationRef.current));
+        }
       },
       seek: (time: number | string) => {
-        animationRef.current?.seek(time);
+        if (animationRef.current) {
+          animationRef.current.seek(time);
+          setAnimationState(extractAnimationState(animationRef.current));
+        }
       },
       stretch: (newDuration: number) => {
         animationRef.current?.stretch(newDuration);
