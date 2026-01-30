@@ -103,6 +103,8 @@ export function useAnimeTimer(
     onBegin,
     onComplete,
     onUpdate,
+    onRender,
+    onBeforeUpdate,
     onLoop,
     onPause,
 
@@ -116,6 +118,8 @@ export function useAnimeTimer(
     autoplay = false,
     frameRate,
     playbackRate,
+    playbackEase,
+    persist,
 
     // Tracking options
     trackLoopCount = false,
@@ -154,6 +158,8 @@ export function useAnimeTimer(
         reversed,
         autoplay,
         playbackRate,
+        playbackEase,
+        persist,
       }),
     [
       delay,
@@ -164,6 +170,8 @@ export function useAnimeTimer(
       reversed,
       autoplay,
       playbackRate,
+      playbackEase,
+      persist,
     ],
   );
 
@@ -189,6 +197,8 @@ export function useAnimeTimer(
         autoplay,
         frameRate, // Only used for initial creation
         playbackRate,
+        playbackEase,
+        persist,
       };
 
       // Wrap callbacks with state updates (only for lifecycle events, NOT onUpdate)
@@ -218,6 +228,16 @@ export function useAnimeTimer(
         }
 
         createSafeCallback(onUpdate, "onUpdate")?.(timer);
+      };
+
+      config.onRender = (timer: Timer) => {
+        setTimerState(extractAnimationState(timer));
+        createSafeCallback(onRender, "onRender")?.(timer);
+      };
+
+      config.onBeforeUpdate = (timer: Timer) => {
+        setTimerState(extractAnimationState(timer));
+        createSafeCallback(onBeforeUpdate, "onBeforeUpdate")?.(timer);
       };
 
       config.onLoop = (timer: Timer) => {
@@ -381,6 +401,12 @@ export function useAnimeTimer(
       },
       stretch: (newDuration: number) => {
         timerRef.current?.stretch(newDuration);
+      },
+      refresh: () => {
+        timerRef.current?.refresh();
+        if (timerRef.current) {
+          setTimerState(extractAnimationState(timerRef.current));
+        }
       },
       setPlaybackRate: (rate: number) => {
         if (timerRef.current) {

@@ -102,6 +102,8 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     onBegin,
     onComplete,
     onUpdate,
+    onRender,
+    onBeforeUpdate,
     onLoop,
     onPause,
 
@@ -115,6 +117,8 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     autoplay = false,
     frameRate,
     playbackRate,
+    playbackEase,
+    persist,
 
     // Tween params
     ease,
@@ -157,6 +161,8 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       onBegin,
       onComplete,
       onUpdate,
+      onRender,
+      onBeforeUpdate,
       onLoop,
       onPause,
       delay,
@@ -168,6 +174,8 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       autoplay = false,
       frameRate,
       playbackRate,
+      playbackEase,
+      persist,
       ease,
       round,
       modifier,
@@ -204,6 +212,8 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       autoplay,
       frameRate,
       playbackRate,
+      playbackEase,
+      persist,
 
       // Tween params
       ease,
@@ -237,6 +247,16 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       // Update state for reactive progress/values
       setAnimationState(extractAnimationState(anim));
       createSafeCallback(onUpdate, "onUpdate")?.(anim);
+    };
+
+    config.onRender = (anim: JSAnimation) => {
+      setAnimationState(extractAnimationState(anim));
+      createSafeCallback(onRender, "onRender")?.(anim);
+    };
+
+    config.onBeforeUpdate = (anim: JSAnimation) => {
+      setAnimationState(extractAnimationState(anim));
+      createSafeCallback(onBeforeUpdate, "onBeforeUpdate")?.(anim);
     };
 
     config.onLoop = (anim: JSAnimation) => {
@@ -433,6 +453,12 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       },
       stretch: (newDuration: number) => {
         animationRef.current?.stretch(newDuration);
+      },
+      refresh: () => {
+        animationRef.current?.refresh();
+        if (animationRef.current) {
+          setAnimationState(extractAnimationState(animationRef.current));
+        }
       },
       setPlaybackRate: (rate: number) => {
         if (animationRef.current) {

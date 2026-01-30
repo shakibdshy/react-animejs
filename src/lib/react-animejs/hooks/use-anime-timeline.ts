@@ -101,6 +101,8 @@ export function useAnimeTimeline(
     onBegin,
     onComplete,
     onUpdate,
+    onRender,
+    onBeforeUpdate,
     onLoop,
     onPause,
 
@@ -114,6 +116,8 @@ export function useAnimeTimeline(
     autoplay = false,
     frameRate,
     playbackRate,
+    playbackEase,
+    persist,
   } = options;
 
   // ==========================================================================
@@ -133,6 +137,8 @@ export function useAnimeTimeline(
         autoplay,
         frameRate,
         playbackRate,
+        playbackEase,
+        persist,
         defaults,
       }),
     [
@@ -145,6 +151,8 @@ export function useAnimeTimeline(
       autoplay,
       frameRate,
       playbackRate,
+      playbackEase,
+      persist,
       defaults,
     ],
   );
@@ -168,6 +176,8 @@ export function useAnimeTimeline(
         autoplay,
         frameRate,
         playbackRate,
+        playbackEase,
+        persist,
         defaults,
       };
 
@@ -185,6 +195,16 @@ export function useAnimeTimeline(
       config.onUpdate = (tl: Timeline) => {
         setTimelineState(extractAnimationState(tl));
         createSafeCallback(onUpdate, "onUpdate")?.(tl);
+      };
+
+      config.onRender = (tl: Timeline) => {
+        setTimelineState(extractAnimationState(tl));
+        createSafeCallback(onRender, "onRender")?.(tl);
+      };
+
+      config.onBeforeUpdate = (tl: Timeline) => {
+        setTimelineState(extractAnimationState(tl));
+        createSafeCallback(onBeforeUpdate, "onBeforeUpdate")?.(tl);
       };
 
       config.onLoop = (tl: Timeline) => {
@@ -349,6 +369,21 @@ export function useAnimeTimeline(
       },
       cancel: () => {
         timelineRef.current?.cancel();
+        if (timelineRef.current) {
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
+      },
+      revert: () => {
+        timelineRef.current?.revert();
+        if (timelineRef.current) {
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
+      },
+      refresh: () => {
+        timelineRef.current?.refresh();
+        if (timelineRef.current) {
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
       },
       seek: (time: number | string) => {
         timelineRef.current?.seek(time);

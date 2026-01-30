@@ -8,7 +8,7 @@ import type {
   AnimationCallbacks,
   PlaybackControls,
   AnimationState,
-  AnimationTarget,
+  AnimationTargets,
   Easing,
   PropertyValue,
 } from "./common";
@@ -133,7 +133,7 @@ export interface AnimatableProperties
    * Custom CSS property or any additional property
    * Allows animating any CSS custom property (--my-prop) or other properties
    */
-  [key: `--${string}`]: PropertyValue;
+  [key: string]: any;
 }
 
 // =============================================================================
@@ -159,7 +159,7 @@ export interface TweenParameters {
   /**
    * Modifier function applied to the animated value
    */
-  modifier?: (value: number) => number;
+  modifier?: (value: number) => number | string;
 
   /**
    * Composition mode for overlapping animations
@@ -208,54 +208,52 @@ export interface StaggerOptions {
 /**
  * Options for useAnime hook
  */
-export interface UseAnimeOptions
-  extends
-    PlaybackSettings,
-    AnimationCallbacks,
-    TweenParameters,
-    Partial<AnimatableProperties> {
-  /**
-   * CSS selector to target elements within the scoped root
-   * Use this instead of ref when targeting multiple elements
-   */
-  selector?: string;
+export type UseAnimeOptions = PlaybackSettings &
+  AnimationCallbacks &
+  TweenParameters &
+  Partial<AnimatableProperties> & {
+    /**
+     * CSS selector to target elements within the scoped root
+     * Use this instead of ref when targeting multiple elements
+     */
+    selector?: string;
 
-  /**
-   * External targets to animate (alternative to ref)
-   */
-  targets?: AnimationTarget;
+    /**
+     * External targets to animate (alternative to ref)
+     */
+    targets?: AnimationTargets;
 
-  /**
-   * Delay each target's animation
-   */
-  stagger?: number | StaggerOptions;
+    /**
+     * Delay each target's animation
+     */
+    stagger?: number | StaggerOptions;
 
-  /**
-   * Keyframes for the animation
-   */
-  keyframes?: Partial<AnimatableProperties>[];
+    /**
+     * Keyframes for the animation
+     */
+    keyframes?: Partial<AnimatableProperties>[];
 
-  /**
-   * Dependencies that should trigger animation re-initialization
-   * Similar to useEffect dependencies
-   */
-  deps?: unknown[];
+    /**
+     * Dependencies that should trigger animation re-initialization
+     * Similar to useEffect dependencies
+     */
+    deps?: unknown[];
 
-  /**
-   * Whether the animation should be enabled
-   * @default true
-   */
-  enabled?: boolean;
+    /**
+     * Whether the animation should be enabled
+     * @default true
+     */
+    enabled?: boolean;
 
-  /**
-   * Shared controller from useAnimeControls
-   * When provided, the animation will be registered with this controller
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  controller?: {
-    register: (animation: any) => () => void;
+    /**
+     * Shared controller from useAnimeControls
+     * When provided, the animation will be registered with this controller
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    controller?: {
+      register: (animation: any) => () => void;
+    };
   };
-}
 
 /**
  * Return type for useAnime hook
@@ -312,6 +310,7 @@ export interface JSAnimation {
   began: boolean;
   completed: boolean;
   reversed: boolean;
+  persist: boolean;
   _currentIteration: number;
 
   // Methods
@@ -325,6 +324,7 @@ export interface JSAnimation {
   reset(): this;
   cancel(): this;
   revert(): this;
+  refresh(): this;
   seek(time: number | string): this;
   stretch(duration: number): this;
   then(callback: (anim: this) => void): Promise<this>;

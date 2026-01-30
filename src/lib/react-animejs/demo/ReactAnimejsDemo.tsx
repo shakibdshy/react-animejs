@@ -5,6 +5,10 @@ import { PlaybackRateDemo } from "./components/PlaybackRateDemo";
 import { TimerCallbacksDemo } from "./components/TimerCallbacksDemo";
 import { TimerMethodsDemo } from "./components/TimerMethodsDemo";
 import { TimerPropertiesDemo } from "./components/TimerPropertiesDemo";
+import { V4FeaturesDemo } from "./components/V4FeaturesDemo";
+import { CssSelectorDemo } from "./components/CssSelectorDemo";
+import { JsObjectDemo } from "./components/JsObjectDemo";
+import { ArrayOfTargetsDemo } from "./components/ArrayOfTargetsDemo";
 
 /**
  * Main React Anime.js Demo Page
@@ -37,6 +41,10 @@ export default function ReactAnimejsDemo() {
           <TimerCallbacksDemo />
           <TimerMethodsDemo />
           <TimerPropertiesDemo />
+          <V4FeaturesDemo />
+          <CssSelectorDemo />
+          <JsObjectDemo />
+          <ArrayOfTargetsDemo />
         </main>
 
         <footer className="text-center p-12 text-[#888]">

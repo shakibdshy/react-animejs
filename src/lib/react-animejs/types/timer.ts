@@ -17,40 +17,40 @@ import type {
 /**
  * Options for useAnimeTimer hook
  */
-export interface UseAnimeTimerOptions
-  extends PlaybackSettings, AnimationCallbacks {
-  /**
-   * Dependencies that should trigger timer re-initialization
-   */
-  deps?: unknown[];
+export type UseAnimeTimerOptions = PlaybackSettings &
+  AnimationCallbacks & {
+    /**
+     * Dependencies that should trigger timer re-initialization
+     */
+    deps?: unknown[];
 
-  /**
-   * Whether the timer should be enabled
-   * @default true
-   */
-  enabled?: boolean;
+    /**
+     * Whether the timer should be enabled
+     * @default true
+     */
+    enabled?: boolean;
 
-  /**
-   * Enable automatic loop count tracking
-   * When true, the hook will automatically track and display loop count
-   * @default false
-   */
-  trackLoopCount?: boolean;
+    /**
+     * Enable automatic loop count tracking
+     * When true, the hook will automatically track and display loop count
+     * @default false
+     */
+    trackLoopCount?: boolean;
 
-  /**
-   * Enable automatic iteration time tracking
-   * When true, the hook will automatically track and display iteration time
-   * @default false
-   */
-  trackIterationTime?: boolean;
+    /**
+     * Enable automatic iteration time tracking
+     * When true, the hook will automatically track and display iteration time
+     * @default false
+     */
+    trackIterationTime?: boolean;
 
-  /**
-   * Automatically update DOM refs with tracked values
-   * When true, the hook will automatically update countRef and iterationTimeRef
-   * @default false
-   */
-  autoUpdateRefs?: boolean;
-}
+    /**
+     * Automatically update DOM refs with tracked values
+     * When true, the hook will automatically update countRef and iterationTimeRef
+     * @default false
+     */
+    autoUpdateRefs?: boolean;
+  };
 
 /**
  * Return type for useAnimeTimer hook
@@ -126,6 +126,7 @@ export interface Timer {
   completed: boolean;
   reversed: boolean;
   backwards: boolean;
+  persist: boolean;
   deltaTime: number;
   speed: number;
   fps: number;
@@ -146,6 +147,7 @@ export interface Timer {
   reset(): this;
   cancel(): this;
   revert(): this;
+  refresh(): this;
   seek(time: number | string): this;
   stretch(duration: number): this;
   /**

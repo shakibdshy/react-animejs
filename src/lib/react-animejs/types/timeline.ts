@@ -60,31 +60,31 @@ export type TimelineChild = TimelineEntry | TimelineLabel;
 /**
  * Timeline defaults that apply to all children
  */
-export interface TimelineDefaults extends Omit<PlaybackSettings, "autoplay"> {
+export type TimelineDefaults = Omit<PlaybackSettings, "autoplay"> & {
   ease?: Easing;
-}
+};
 
 /**
  * Options for useAnimeTimeline hook
  */
-export interface UseAnimeTimelineOptions
-  extends PlaybackSettings, AnimationCallbacks {
-  /**
-   * Default settings for all timeline children
-   */
-  defaults?: TimelineDefaults;
+export type UseAnimeTimelineOptions = PlaybackSettings &
+  AnimationCallbacks & {
+    /**
+     * Default settings for all timeline children
+     */
+    defaults?: TimelineDefaults;
 
-  /**
-   * Dependencies that should trigger timeline re-initialization
-   */
-  deps?: unknown[];
+    /**
+     * Dependencies that should trigger timeline re-initialization
+     */
+    deps?: unknown[];
 
-  /**
-   * Whether the timeline should be enabled
-   * @default true
-   */
-  enabled?: boolean;
-}
+    /**
+     * Whether the timeline should be enabled
+     * @default true
+     */
+    enabled?: boolean;
+  };
 
 /**
  * Return type for useAnimeTimeline hook
@@ -142,6 +142,7 @@ export interface Timeline {
   began: boolean;
   completed: boolean;
   reversed: boolean;
+  persist: boolean;
   _currentIteration: number;
 
   // Methods
@@ -168,6 +169,7 @@ export interface Timeline {
   reset(): this;
   cancel(): this;
   revert(): this;
+  refresh(): this;
   seek(time: number | string): this;
   stretch(duration: number): this;
   then(callback: (timeline: this) => void): Promise<this>;

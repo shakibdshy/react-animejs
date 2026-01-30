@@ -23,6 +23,8 @@ export const DEFAULT_PLAYBACK_SETTINGS: Required<PlaybackSettings> = {
   autoplay: false, // React default: false for better control
   frameRate: null as unknown as number,
   playbackRate: 1,
+  playbackEase: "linear",
+  persist: false,
 };
 
 /**
@@ -63,6 +65,8 @@ export const PLAYBACK_SETTING_KEYS = [
   "autoplay",
   "frameRate",
   "playbackRate",
+  "playbackEase",
+  "persist",
 ] as const;
 
 /**
@@ -72,6 +76,8 @@ export const CALLBACK_KEYS = [
   "onBegin",
   "onComplete",
   "onUpdate",
+  "onRender",
+  "onBeforeUpdate",
   "onLoop",
   "onPause",
 ] as const;

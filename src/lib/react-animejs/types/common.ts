@@ -70,6 +70,18 @@ export interface PlaybackSettings {
    * @default 1
    */
   playbackRate?: number;
+
+  /**
+   * Easing function for the playback progress
+   * @default 'linear'
+   */
+  playbackEase?: Easing;
+
+  /**
+   * Whether the animation should persist in the engine after completion
+   * @default false
+   */
+  persist?: boolean;
 }
 
 // =============================================================================
@@ -98,6 +110,18 @@ export interface AnimationCallbacks<T = unknown> {
    * @default noop
    */
   onUpdate?: (instance: T) => void;
+
+  /**
+   * Executes a function after the values are applied to targets on every frame
+   * @default noop
+   */
+  onRender?: (instance: T) => void;
+
+  /**
+   * Executes a function before the values are calculated on every frame
+   * @default noop
+   */
+  onBeforeUpdate?: (instance: T) => void;
 
   /**
    * Executes a function every time a timer iteration completes
@@ -181,6 +205,11 @@ export interface PlaybackControls {
    * @param duration - New duration in milliseconds
    */
   stretch: (duration: number) => void;
+
+  /**
+   * Recalculates the values of the animation.
+   */
+  refresh: () => void;
 
   /**
    * Set the playback rate dynamically.
@@ -315,6 +344,7 @@ export type AnimationTarget =
   | HTMLElement[]
   | SVGElement[]
   | RefObject<HTMLElement | SVGElement | null>
+  | object
   | null;
 
 /**
@@ -382,7 +412,7 @@ export type EasingFunction = (t: number) => number;
 /**
  * All valid easing types
  */
-export type Easing = EasingName | EasingPattern | EasingFunction | string;
+export type Easing = EasingName | EasingPattern | EasingFunction | (string & {});
 
 // =============================================================================
 // Value Types
