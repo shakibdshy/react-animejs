@@ -217,17 +217,126 @@ const { controls, state, add } = useAnimeTimeline(
 
 #### `useAnimeDraggable(options)`
 
-Make elements draggable with physics-based animations.
+Make elements draggable with physics-based animations. Full implementation of Anime.js v4 Draggable API.
+
+**Basic Usage:**
 
 ```tsx
-const { ref, isDragging, position, setPosition, reset } = useAnimeDraggable({
-  container: [0, 0, 500, 500], // [minX, minY, maxX, maxY]
-  axis: 'x', // or 'y' or undefined for both
-  snap: { x: 50, y: 50 }, // Snap to grid
-  releaseEase: 'spring(1, 80, 10)',
-  onDrag: (d) => console.log(d.x, d.y),
+const { ref, isDragging, position, progress, velocity } = useAnimeDraggable({
+  container: containerRef.current,
+  containerPadding: 16,
+  releaseStiffness: 120,
+  releaseDamping: 20,
 });
 ```
+
+**Axis Constraints:**
+
+```tsx
+// X-axis only
+const { ref } = useAnimeDraggable({
+  y: false, // Disable Y axis
+});
+
+// Y-axis only
+const { ref } = useAnimeDraggable({
+  x: false, // Disable X axis
+});
+
+// Per-axis configuration
+const { ref } = useAnimeDraggable({
+  x: { snap: 100, modifier: (v) => Math.round(v) },
+  y: { snap: 50 },
+});
+```
+
+**Snapping:**
+
+```tsx
+const { ref } = useAnimeDraggable({
+  snap: 50, // Snap to 50px grid
+  // or
+  snap: { x: 100, y: 50 }, // Different snap per axis
+  onSnap: (d) => console.log('Snapped to', d.x, d.y),
+  onSettle: (d) => console.log('Settled!'),
+});
+```
+
+**Physics Settings:**
+
+```tsx
+const { ref } = useAnimeDraggable({
+  containerFriction: 0.85,        // Friction at bounds (0-1)
+  releaseContainerFriction: 0.25, // Release friction at bounds
+  releaseMass: 1,                 // Momentum mass
+  releaseStiffness: 80,           // Spring stiffness (snappier = higher)
+  releaseDamping: 20,             // Spring damping (less oscillation = higher)
+  velocityMultiplier: 1,          // Velocity scaling
+  minVelocity: 0,                 // Minimum velocity threshold
+  maxVelocity: Infinity,          // Maximum velocity cap
+  dragSpeed: 1,                   // Drag movement speed
+  dragThreshold: 0,               // Distance before drag starts
+});
+```
+
+**Control Methods:**
+
+```tsx
+const { 
+  ref, 
+  setX, setY, setPosition, // Position control
+  reset,                    // Reset to origin
+  enable, disable,          // Enable/disable dragging
+  stop,                     // Stop current animation
+  refresh,                  // Recalculate bounds
+  animateInView,            // Animate into container view
+  scrollInView,             // Scroll into container view
+} = useAnimeDraggable({ ... });
+
+// Set positions
+setX(100);           // Set X to 100
+setY(-50);           // Set Y to -50
+setPosition(0, 0);   // Set both
+
+// Control state
+disable();           // Disable dragging
+enable();            // Enable dragging
+reset();             // Reset with animation
+refresh();           // Recalculate after resize
+```
+
+**Callbacks:**
+
+```tsx
+const { ref } = useAnimeDraggable({
+  onGrab: (d) => console.log('Grabbed at', d.x, d.y),
+  onDrag: (d) => console.log('Dragging', d.x, d.y),
+  onRelease: (d) => console.log('Released at', d.x, d.y),
+  onSnap: (d) => console.log('Snapped to', d.x, d.y),
+  onSettle: (d) => console.log('Animation settled'),
+  onUpdate: (d) => console.log('Update tick'),
+  onResize: (d) => console.log('Container resized'),
+  onAfterResize: (d) => console.log('Resize handled'),
+});
+```
+
+**Return Values:**
+
+```tsx
+const {
+  ref,           // Ref to attach to element
+  state,         // Full state object
+  isGrabbed,     // Element is grabbed
+  isDragging,    // Currently dragging
+  isReleasing,   // In release animation
+  isDisabled,    // Dragging is disabled
+  position,      // { x, y } current position
+  progress,      // { x, y } progress within bounds (0-1)
+  velocity,      // { x, y } current velocity
+  draggable,     // Raw anime.js draggable instance
+} = useAnimeDraggable(options);
+```
+
 
 ---
 

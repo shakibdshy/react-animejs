@@ -21,6 +21,7 @@ import { CallbacksGroup } from "./components/CallbacksGroup";
 import { AnimatableDemo } from "./components/AnimatableDemo";
 import { AnimatableMethodsDemo } from "./components/methods/AnimatableMethodsDemo";
 import MethodsGroup from "./components/MethodsGroup";
+import { DraggableDemo } from "./components/DraggableDemo";
 
 /**
  * Main React Anime.js Demo Page
@@ -72,6 +73,10 @@ export default function ReactAnimejsDemo() {
           <MethodsGroup />
           <AnimatableDemo />
           <AnimatableMethodsDemo />
+        </div>
+
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-8 max-w-375 mx-auto">
+          <DraggableDemo />
         </div>
 
         <footer className="text-center p-12 text-[#888]">

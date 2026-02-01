@@ -2,6 +2,18 @@
  * useAnimeDraggable - Draggable hook for React
  *
  * Makes elements draggable with physics-based release animations.
+ * Fully implements Anime.js v4 Draggable API.
+ *
+ * @see https://animejs.com/documentation/draggable
+ *
+ * Features:
+ * - Axes Parameters: x, y, snap, modifier, mapTo
+ * - Settings: trigger, container, containerPadding, containerFriction, releaseContainerFriction,
+ *             releaseMass, releaseStiffness, releaseDamping, velocityMultiplier, minVelocity,
+ *             maxVelocity, releaseEase, dragSpeed, dragThreshold, scrollThreshold, scrollSpeed, cursor
+ * - Callbacks: onGrab, onDrag, onUpdate, onRelease, onSnap, onSettle, onResize, onAfterResize
+ * - Methods: disable, enable, setX, setY, animateInView, scrollInView, stop, reset, refresh, revert
+ * - Properties: progressX, progressY, velocity, x, y, velocityX, velocityY, isDragging, isReleasing
  */
 
 import { useRef, useEffect, useState, useMemo, useCallback } from "react";
@@ -23,9 +35,35 @@ const DEFAULT_DRAGGABLE_STATE: DraggableState = {
   y: 0,
   velocityX: 0,
   velocityY: 0,
+  progressX: 0,
+  progressY: 0,
+  isGrabbed: false,
   isDragging: false,
   isReleasing: false,
+  isDisabled: false,
 };
+
+// =============================================================================
+// Helper Functions
+// =============================================================================
+
+/**
+ * Extract state from draggable instance
+ */
+function extractDraggableState(d: Draggable): DraggableState {
+  return {
+    x: d.x ?? 0,
+    y: d.y ?? 0,
+    velocityX: d.velocityX ?? 0,
+    velocityY: d.velocityY ?? 0,
+    progressX: d.progressX ?? 0,
+    progressY: d.progressY ?? 0,
+    isGrabbed: d.isGrabbed ?? false,
+    isDragging: d.isDragging ?? false,
+    isReleasing: d.isReleasing ?? false,
+    isDisabled: d.disabled ?? false,
+  };
+}
 
 // =============================================================================
 // Hook Implementation
@@ -40,10 +78,14 @@ const DEFAULT_DRAGGABLE_STATE: DraggableState = {
  * @example
  * ```tsx
  * function DraggableCard() {
- *   const { ref, isDragging, position } = useAnimeDraggable({
- *     container: [0, 0, 0, 0],
- *     releaseEase: 'spring(0.7)',
+ *   const { ref, isDragging, position, setX, setY } = useAnimeDraggable({
+ *     container: containerRef.current,
+ *     containerPadding: 20,
+ *     releaseStiffness: 120,
+ *     releaseDamping: 20,
+ *     snap: 50,
  *     onDrag: (d) => console.log(d.x, d.y),
+ *     onSettle: (d) => console.log('Settled at', d.x, d.y),
  *   });
  *
  *   return (
@@ -83,8 +125,6 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
   const [draggableState, setDraggableState] = useState<DraggableState>(
     DEFAULT_DRAGGABLE_STATE,
   );
-  // Track enabled state internally (may be used for future features)
-  const [_isEnabled, _setIsEnabled] = useState(true);
 
   // ==========================================================================
   // Extract Options
@@ -95,15 +135,37 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
     enabled = true,
     disabled = false,
 
-    // Draggable config
+    // Axes Parameters
+    x,
+    y,
+    snap,
+    modifier,
+    mapTo,
+
+    // Settings
     trigger,
     container,
-    axis,
-    snap,
+    containerPadding,
+    containerFriction,
+    releaseContainerFriction,
+    releaseMass,
+    releaseStiffness,
+    releaseDamping,
+    velocityMultiplier,
+    minVelocity,
+    maxVelocity,
     releaseEase,
     releaseDuration,
     releaseSpring,
-    releaseVelocity,
+    releaseVelocity, // Legacy alias
+    dragSpeed,
+    dragThreshold,
+    scrollThreshold,
+    scrollSpeed,
+    cursor,
+
+    // Legacy
+    axis,
 
     // Callbacks
     onGrab,
@@ -111,6 +173,9 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
     onRelease,
     onSnap,
     onUpdate,
+    onSettle,
+    onResize,
+    onAfterResize,
   } = options;
 
   // ==========================================================================
@@ -121,24 +186,60 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
   const optionsJson = useMemo(
     () =>
       safeJsonStringify({
+        // Axes
+        x,
+        y,
+        snap,
+        mapTo,
+        // Settings
         trigger,
         container,
-        axis,
-        snap,
+        containerPadding,
+        containerFriction,
+        releaseContainerFriction,
+        releaseMass,
+        releaseStiffness,
+        releaseDamping,
+        velocityMultiplier,
+        minVelocity,
+        maxVelocity,
         releaseEase,
         releaseDuration,
         releaseVelocity,
         releaseSpring,
+        dragSpeed,
+        dragThreshold,
+        scrollThreshold,
+        scrollSpeed,
+        cursor,
+        axis,
       }),
     [
+      x,
+      y,
+      snap,
+      mapTo,
       trigger,
       container,
-      axis,
-      snap,
+      containerPadding,
+      containerFriction,
+      releaseContainerFriction,
+      releaseMass,
+      releaseStiffness,
+      releaseDamping,
+      velocityMultiplier,
+      minVelocity,
+      maxVelocity,
       releaseEase,
       releaseDuration,
       releaseVelocity,
       releaseSpring,
+      dragSpeed,
+      dragThreshold,
+      scrollThreshold,
+      scrollSpeed,
+      cursor,
+      axis,
     ],
   );
 
@@ -149,17 +250,95 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
 
     try {
       // Build config
-      const config: Record<string, unknown> = {
-        trigger,
-        container,
-        axis,
-        snap,
-        releaseEase,
-        releaseDuration,
-        releaseVelocity,
-      };
+      const config: Record<string, unknown> = {};
 
-      // Handle spring config
+      // ========================================================================
+      // Axes Parameters
+      // ========================================================================
+
+      // X-axis configuration
+      if (x !== undefined) {
+        if (typeof x === "boolean") {
+          config.x = x;
+        } else {
+          config.x = { ...x };
+          // Handle modifier (can't be serialized, use from options directly)
+          if (x.modifier) {
+            (config.x as Record<string, unknown>).modifier = x.modifier;
+          }
+        }
+      }
+
+      // Y-axis configuration
+      if (y !== undefined) {
+        if (typeof y === "boolean") {
+          config.y = y;
+        } else {
+          config.y = { ...y };
+          // Handle modifier
+          if (y.modifier) {
+            (config.y as Record<string, unknown>).modifier = y.modifier;
+          }
+        }
+      }
+
+      // Legacy axis support (deprecated but supported for backwards compatibility)
+      if (axis !== undefined && x === undefined && y === undefined) {
+        if (axis === "x") {
+          config.y = false;
+        } else if (axis === "y") {
+          config.x = false;
+        }
+      }
+
+      // Global snap
+      if (snap !== undefined) {
+        config.snap = snap;
+      }
+
+      // Global modifier
+      if (modifier !== undefined) {
+        config.modifier = modifier;
+      }
+
+      // Map to
+      if (mapTo !== undefined) {
+        config.mapTo = mapTo;
+      }
+
+      // ========================================================================
+      // Settings
+      // ========================================================================
+
+      if (trigger !== undefined) config.trigger = trigger;
+      if (container !== undefined) config.container = container;
+      if (containerPadding !== undefined)
+        config.containerPadding = containerPadding;
+      if (containerFriction !== undefined)
+        config.containerFriction = containerFriction;
+      if (releaseContainerFriction !== undefined)
+        config.releaseContainerFriction = releaseContainerFriction;
+      if (releaseMass !== undefined) config.releaseMass = releaseMass;
+      if (releaseStiffness !== undefined)
+        config.releaseStiffness = releaseStiffness;
+      if (releaseDamping !== undefined) config.releaseDamping = releaseDamping;
+      if (velocityMultiplier !== undefined)
+        config.velocityMultiplier = velocityMultiplier;
+      if (releaseVelocity !== undefined)
+        config.velocityMultiplier = releaseVelocity; // Legacy alias
+      if (minVelocity !== undefined) config.minVelocity = minVelocity;
+      if (maxVelocity !== undefined) config.maxVelocity = maxVelocity;
+      if (releaseEase !== undefined) config.releaseEase = releaseEase;
+      if (releaseDuration !== undefined)
+        config.releaseDuration = releaseDuration;
+      if (dragSpeed !== undefined) config.dragSpeed = dragSpeed;
+      if (dragThreshold !== undefined) config.dragThreshold = dragThreshold;
+      if (scrollThreshold !== undefined)
+        config.scrollThreshold = scrollThreshold;
+      if (scrollSpeed !== undefined) config.scrollSpeed = scrollSpeed;
+      if (cursor !== undefined) config.cursor = cursor;
+
+      // Handle spring config (builds a spring easing string)
       if (releaseSpring) {
         if (typeof releaseSpring === "string") {
           config.releaseEase = releaseSpring;
@@ -170,77 +349,64 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
         }
       }
 
-      // Wrap callbacks with state updates
+      // ========================================================================
+      // Callbacks - Wrap with state updates
+      // ========================================================================
+
       config.onGrab = (d: Draggable) => {
-        setDraggableState({
-          x: d.x,
-          y: d.y,
-          velocityX: d.velocityX,
-          velocityY: d.velocityY,
-          isDragging: true,
-          isReleasing: false,
-        });
+        setDraggableState(extractDraggableState(d));
         createSafeCallback(onGrab, "onGrab")?.(d);
       };
 
       config.onDrag = (d: Draggable) => {
-        setDraggableState({
-          x: d.x,
-          y: d.y,
-          velocityX: d.velocityX,
-          velocityY: d.velocityY,
-          isDragging: true,
-          isReleasing: false,
-        });
+        setDraggableState(extractDraggableState(d));
         createSafeCallback(onDrag, "onDrag")?.(d);
       };
 
       config.onRelease = (d: Draggable) => {
-        setDraggableState({
-          x: d.x,
-          y: d.y,
-          velocityX: d.velocityX,
-          velocityY: d.velocityY,
-          isDragging: false,
-          isReleasing: true,
-        });
+        setDraggableState(extractDraggableState(d));
         createSafeCallback(onRelease, "onRelease")?.(d);
       };
 
       if (onSnap) {
         config.onSnap = (d: Draggable) => {
-          setDraggableState((prev) => ({
-            ...prev,
-            x: d.x,
-            y: d.y,
-            isReleasing: false,
-          }));
+          setDraggableState(extractDraggableState(d));
           createSafeCallback(onSnap, "onSnap")?.(d);
         };
       }
 
       if (onUpdate) {
         config.onUpdate = (d: Draggable) => {
-          setDraggableState({
-            x: d.x,
-            y: d.y,
-            velocityX: d.velocityX,
-            velocityY: d.velocityY,
-            isDragging: d.isDragging,
-            isReleasing: d.isReleasing,
-          });
+          setDraggableState(extractDraggableState(d));
           createSafeCallback(onUpdate, "onUpdate")?.(d);
         };
       }
 
-      // Clean undefined values
-      Object.keys(config).forEach((key) => {
-        if (config[key] === undefined) {
-          delete config[key];
-        }
-      });
+      if (onSettle) {
+        config.onSettle = (d: Draggable) => {
+          setDraggableState(extractDraggableState(d));
+          createSafeCallback(onSettle, "onSettle")?.(d);
+        };
+      }
 
-      // Create draggable
+      if (onResize) {
+        config.onResize = (d: Draggable) => {
+          setDraggableState(extractDraggableState(d));
+          createSafeCallback(onResize, "onResize")?.(d);
+        };
+      }
+
+      if (onAfterResize) {
+        config.onAfterResize = (d: Draggable) => {
+          setDraggableState(extractDraggableState(d));
+          createSafeCallback(onAfterResize, "onAfterResize")?.(d);
+        };
+      }
+
+      // ========================================================================
+      // Create Draggable
+      // ========================================================================
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const draggables = createDraggable(targetRef.current, config as any);
 
@@ -251,17 +417,8 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
 
       // Update initial state
       if (draggableRef.current) {
-        setDraggableState({
-          x: draggableRef.current.x || 0,
-          y: draggableRef.current.y || 0,
-          velocityX: 0,
-          velocityY: 0,
-          isDragging: false,
-          isReleasing: false,
-        });
+        setDraggableState(extractDraggableState(draggableRef.current));
       }
-
-      _setIsEnabled(true);
 
       // Register cleanup with parent scope
       if (scopeContext.isScoped) {
@@ -298,17 +455,36 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
   // ==========================================================================
 
   /**
-   * Set position programmatically
+   * Set X position
    */
-  const setPosition = useCallback((x: number, y: number, animate = false) => {
+  const setX = useCallback((value: number, _animate = false) => {
     if (!draggableRef.current) return;
+    draggableRef.current.setX(value);
+    setDraggableState((prev) => ({
+      ...prev,
+      x: value,
+    }));
+  }, []);
 
-    if (animate) {
-      draggableRef.current.animateTo(x, y);
-    } else {
-      draggableRef.current.setPosition(x, y);
-    }
+  /**
+   * Set Y position
+   */
+  const setY = useCallback((value: number, _animate = false) => {
+    if (!draggableRef.current) return;
+    draggableRef.current.setY(value);
+    setDraggableState((prev) => ({
+      ...prev,
+      y: value,
+    }));
+  }, []);
 
+  /**
+   * Set both X and Y position
+   */
+  const setPosition = useCallback((x: number, y: number, _animate = false) => {
+    if (!draggableRef.current) return;
+    draggableRef.current.setX(x);
+    draggableRef.current.setY(y);
     setDraggableState((prev) => ({
       ...prev,
       x,
@@ -317,25 +493,98 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
   }, []);
 
   /**
-   * Reset to initial position
+   * Animate element into view within container
    */
-  const reset = useCallback(() => {
-    setPosition(0, 0, true);
-  }, [setPosition]);
+  const animateInView = useCallback((params?: object) => {
+    if (!draggableRef.current) return;
+    draggableRef.current.animateInView(params);
+  }, []);
 
   /**
-   * Enable/disable draggable
+   * Scroll element into view within container
    */
-  const setEnabled = useCallback((enabled: boolean) => {
+  const scrollInView = useCallback(() => {
     if (!draggableRef.current) return;
+    draggableRef.current.scrollInView();
+  }, []);
 
-    if (enabled) {
-      draggableRef.current.enable();
-    } else {
-      draggableRef.current.disable();
-    }
+  /**
+   * Stop current animation
+   */
+  const stop = useCallback(() => {
+    if (!draggableRef.current) return;
+    draggableRef.current.stop();
+  }, []);
 
-    _setIsEnabled(enabled);
+  /**
+   * Reset to initial position
+   */
+  const reset = useCallback(
+    (animate = true) => {
+      if (!draggableRef.current) return;
+      if (animate) {
+        draggableRef.current.reset();
+      } else {
+        setPosition(0, 0, false);
+      }
+    },
+    [setPosition],
+  );
+
+  /**
+   * Enable the draggable
+   */
+  const enable = useCallback(() => {
+    if (!draggableRef.current) return;
+    draggableRef.current.enable();
+    setDraggableState((prev) => ({
+      ...prev,
+      isDisabled: false,
+    }));
+  }, []);
+
+  /**
+   * Disable the draggable
+   */
+  const disableDraggable = useCallback(() => {
+    if (!draggableRef.current) return;
+    draggableRef.current.disable();
+    setDraggableState((prev) => ({
+      ...prev,
+      isDisabled: true,
+    }));
+  }, []);
+
+  /**
+   * Enable/disable draggable (legacy method)
+   */
+  const setEnabled = useCallback(
+    (enabled: boolean) => {
+      if (enabled) {
+        enable();
+      } else {
+        disableDraggable();
+      }
+    },
+    [enable, disableDraggable],
+  );
+
+  /**
+   * Refresh draggable bounds and calculations
+   */
+  const refresh = useCallback(() => {
+    if (!draggableRef.current) return;
+    draggableRef.current.refresh();
+  }, []);
+
+  /**
+   * Completely remove the draggable
+   */
+  const revert = useCallback(() => {
+    if (!draggableRef.current) return;
+    draggableRef.current.revert();
+    draggableRef.current = null;
+    setDraggableState(DEFAULT_DRAGGABLE_STATE);
   }, []);
 
   // ==========================================================================
@@ -350,18 +599,61 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
     [draggableState.x, draggableState.y],
   );
 
+  const progress = useMemo(
+    () => ({
+      x: draggableState.progressX,
+      y: draggableState.progressY,
+    }),
+    [draggableState.progressX, draggableState.progressY],
+  );
+
+  const velocity = useMemo(
+    () => ({
+      x: draggableState.velocityX,
+      y: draggableState.velocityY,
+    }),
+    [draggableState.velocityX, draggableState.velocityY],
+  );
+
   // ==========================================================================
   // Return Value
   // ==========================================================================
 
   return {
+    // Ref
     ref: targetRef,
+
+    // State
     state: draggableState,
+    isGrabbed: draggableState.isGrabbed,
     isDragging: draggableState.isDragging,
+    isReleasing: draggableState.isReleasing,
+    isDisabled: draggableState.isDisabled,
+
+    // Position & Velocity
     position,
+    progress,
+    velocity,
+
+    // Position Methods
+    setX,
+    setY,
     setPosition,
+
+    // View Methods
+    animateInView,
+    scrollInView,
+
+    // Control Methods
+    stop,
     reset,
+    enable,
+    disable: disableDraggable,
     setEnabled,
+    refresh,
+    revert,
+
+    // Instance Access
     draggable: draggableRef.current,
   };
 }

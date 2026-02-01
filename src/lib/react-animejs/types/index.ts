@@ -53,9 +53,13 @@ export type {
 
 // Draggable types
 export type {
+  DraggableModifier,
+  DraggableAxisParams,
+  DraggableMapToConfig,
   DraggableBounds,
   DraggableAxis,
   DraggableSnap,
+  DraggableCursorParams,
   DraggableCallbacks,
   UseAnimeDraggableOptions,
   DraggableState,
