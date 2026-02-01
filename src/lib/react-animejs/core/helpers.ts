@@ -30,7 +30,10 @@ export function resolveTarget(
   // String selector
   if (typeof target === "string") {
     const root = rootElement || document;
-    return root.querySelectorAll(target) as unknown as (HTMLElement | SVGElement)[];
+    return root.querySelectorAll(target) as unknown as (
+      | HTMLElement
+      | SVGElement
+    )[];
   }
 
   // Ref object
@@ -245,8 +248,15 @@ export function safeJsonStringify(obj: unknown): string {
       }
 
       // Handle React refs
-      if ("current" in (value as Record<string, unknown>)) {
-        return "[Ref]";
+      if (
+        value &&
+        typeof value === "object" &&
+        Object.prototype.hasOwnProperty.call(value, "current")
+      ) {
+        return {
+          __type: "Ref",
+          current: (value as { current: unknown }).current,
+        };
       }
 
       // Handle functions

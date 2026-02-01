@@ -14,6 +14,7 @@ import { TimelineTimersDemo } from "./components/TimelineTimersDemo";
 import { TimelineAnimationsDemo } from "./components/TimelineAnimationsDemo";
 import { CallFunctionsDemo } from "./components/CallFunctionsDemo";
 import { HighFidelityTimePosition } from "./components/HighFidelityTimePosition";
+import { PlaybackSettingsGroup } from "./components/PlaybackSettingsGroup";
 import { SyncWAAPIAnimationsDemo } from "./components/SyncWAAPIAnimationsDemo";
 import { SyncTimelinesDemo } from "./components/SyncTimelinesDemo";
 
@@ -40,7 +41,7 @@ export default function ReactAnimejsDemo() {
           </Animate>
         </header>
 
-        <main className="grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-8 max-w-375 mx-auto">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-8 max-w-375 mx-auto">
           {/* <ConfigurableTimerDemo /> */}
           <AlternatingTimerDemo />
           <ReversedTimerDemo />
@@ -59,7 +60,11 @@ export default function ReactAnimejsDemo() {
           <HighFidelityTimePosition />
           <SyncWAAPIAnimationsDemo />
           <SyncTimelinesDemo />
-        </main>
+        </div>
+
+        <div>
+          <PlaybackSettingsGroup />
+        </div>
 
         <footer className="text-center p-12 text-[#888]">
           <p>Built with ❤️ using React + Anime.js v4</p>

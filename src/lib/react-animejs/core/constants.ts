@@ -23,7 +23,7 @@ export const DEFAULT_PLAYBACK_SETTINGS: Required<PlaybackSettings> = {
   autoplay: false, // React default: false for better control
   frameRate: null as unknown as number,
   playbackRate: 1,
-  playbackEase: "linear",
+  playbackEase: null as unknown as any,
   persist: false,
 };
 

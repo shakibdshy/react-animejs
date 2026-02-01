@@ -21,7 +21,8 @@ import type { UseAnimeTimerOptions } from "./timer";
  * Single timeline animation segment
  */
 export interface TimelineAnimationEntry
-  extends Partial<AnimatableProperties>,
+  extends
+    Partial<AnimatableProperties>,
     TweenParameters,
     Omit<PlaybackSettings, "autoplay"> {
   /**
@@ -111,9 +112,10 @@ export type TimelineChild = TimelineEntry | TimelineLabel;
 /**
  * Timeline defaults that apply to all children
  */
-export type TimelineDefaults = Omit<PlaybackSettings, "autoplay"> & {
-  ease?: Easing;
-};
+export type TimelineDefaults = Omit<PlaybackSettings, "autoplay"> &
+  Partial<AnimatableProperties> & {
+    ease?: Easing;
+  };
 
 /**
  * Options for useAnimeTimeline hook

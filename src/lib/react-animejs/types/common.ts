@@ -390,7 +390,37 @@ export type EasingName =
   | "easeInOutElastic"
   | "easeInBounce"
   | "easeOutBounce"
-  | "easeInOutBounce";
+  | "easeInOutBounce"
+  | "in-quad"
+  | "out-quad"
+  | "in-out-quad"
+  | "in-cubic"
+  | "out-cubic"
+  | "in-out-cubic"
+  | "in-quart"
+  | "out-quart"
+  | "in-out-quart"
+  | "in-quint"
+  | "out-quint"
+  | "in-out-quint"
+  | "in-sine"
+  | "out-sine"
+  | "in-out-sine"
+  | "in-expo"
+  | "out-expo"
+  | "in-out-expo"
+  | "in-circ"
+  | "out-circ"
+  | "in-out-circ"
+  | "in-back"
+  | "out-back"
+  | "in-out-back"
+  | "in-elastic"
+  | "out-elastic"
+  | "in-out-elastic"
+  | "in-bounce"
+  | "out-bounce"
+  | "in-out-bounce";
 
 /**
  * Anime.js 4.x easing string patterns
@@ -412,7 +442,11 @@ export type EasingFunction = (t: number) => number;
 /**
  * All valid easing types
  */
-export type Easing = EasingName | EasingPattern | EasingFunction | (string & {});
+export type Easing =
+  | EasingName
+  | EasingPattern
+  | EasingFunction
+  | (string & {});
 
 // =============================================================================
 // Value Types
