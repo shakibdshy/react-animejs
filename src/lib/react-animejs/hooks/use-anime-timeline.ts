@@ -18,7 +18,7 @@ import {
   useAnimeScope,
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
-  isRef,
+  resolveTarget,
   createSafeCallback,
   safeJsonStringify,
 } from "../core";
@@ -235,19 +235,32 @@ export function useAnimeTimeline(
       entries.forEach((entry) => {
         if (!timeline) return;
 
-        const { targets, offset, ...animProps } = entry;
+        if ("label" in entry) {
+          // Label entry
+          timeline.label(entry.label, entry.position);
+        } else if ("callback" in entry) {
+          // Function call
+          timeline.call(entry.callback, entry.position);
+        } else if ("target" in entry) {
+          // Sync timeline/WAAPI
+          timeline.sync(entry.target, entry.position);
+        } else if ("targets" in entry) {
+          // Animation entry
+          const { targets, position, ...animProps } = entry;
 
-        // Resolve target
-        let resolvedTarget: unknown = targets;
-        if (isRef(targets)) {
-          resolvedTarget = targets.current;
+          // Resolve target
+          const resolvedTarget = resolveTarget(targets);
+
+          if (!resolvedTarget) return;
+
+          // Add to timeline
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          timeline.add(resolvedTarget as any, animProps as any, position);
+        } else {
+          // Timer entry
+          const { position, ...timerProps } = entry;
+          timeline.add(timerProps as any, position);
         }
-
-        if (!resolvedTarget) return;
-
-        // Add to timeline
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        timeline.add(resolvedTarget as any, animProps as any, offset);
       });
 
       entriesAddedRef.current = true;
@@ -296,37 +309,68 @@ export function useAnimeTimeline(
   /**
    * Add an animation entry to the timeline dynamically
    */
-  const add = useCallback((entry: TimelineEntry, offset?: number | string) => {
-    if (!timelineRef.current) {
-      console.warn(
-        "[react-animejs] Cannot add entry: timeline not initialized",
-      );
-      return;
-    }
+  const add = useCallback(
+    (entry: TimelineEntry, position?: number | string) => {
+      if (!timelineRef.current) {
+        console.warn(
+          "[react-animejs] Cannot add entry: timeline not initialized",
+        );
+        return;
+      }
 
-    const { targets, offset: entryOffset, ...animProps } = entry;
+      if ("label" in entry) {
+        timelineRef.current.label(entry.label, position ?? entry.position);
+      } else if ("callback" in entry) {
+        timelineRef.current.call(entry.callback, position ?? entry.position);
+      } else if ("target" in entry) {
+        timelineRef.current.sync(entry.target, position ?? entry.position);
+      } else if ("targets" in entry) {
+        const { targets, position: entryPos, ...animProps } = entry;
 
-    // Resolve target
-    let resolvedTarget: unknown = targets;
-    if (isRef(targets)) {
-      resolvedTarget = targets.current;
-    }
+        // Resolve target
+        const resolvedTarget = resolveTarget(targets);
 
-    if (!resolvedTarget) return;
+        if (!resolvedTarget) return;
 
-    // Add to timeline
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    timelineRef.current.add(
-      resolvedTarget as any,
-      animProps as any,
-      offset ?? entryOffset,
-    );
-  }, []);
+        // Add to timeline
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        timelineRef.current.add(
+          resolvedTarget as any,
+          animProps as any,
+          position ?? entryPos,
+        );
+      } else {
+        const { position: entryPos, ...timerProps } = entry;
+        timelineRef.current.add(timerProps as any, position ?? entryPos);
+      }
+    },
+    [],
+  );
+
+  /**
+   * Sync another timeline or WAAPI animation
+   */
+  const sync = useCallback(
+    (target: Timeline | unknown, position?: number | string) => {
+      timelineRef.current?.sync(target, position);
+    },
+    [],
+  );
+
+  /**
+   * Call a function at a specific position
+   */
+  const call = useCallback(
+    (callback: (tl: Timeline) => void, position?: number | string) => {
+      timelineRef.current?.call(callback, position);
+    },
+    [],
+  );
 
   /**
    * Add a label to the timeline
    */
-  const addLabel = useCallback((label: string, offset?: number | string) => {
+  const addLabel = useCallback((label: string, position?: number | string) => {
     if (!timelineRef.current) {
       console.warn(
         "[react-animejs] Cannot add label: timeline not initialized",
@@ -334,7 +378,7 @@ export function useAnimeTimeline(
       return;
     }
 
-    timelineRef.current.label(label, offset);
+    timelineRef.current.label(label, position);
   }, []);
 
   // ==========================================================================
@@ -344,65 +388,95 @@ export function useAnimeTimeline(
   const controls: PlaybackControls = useMemo(
     () => ({
       play: () => {
-        timelineRef.current?.play();
+        if (timelineRef.current) {
+          timelineRef.current.play();
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
       },
       pause: () => {
-        timelineRef.current?.pause();
+        if (timelineRef.current) {
+          timelineRef.current.pause();
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
       },
       resume: () => {
-        timelineRef.current?.resume();
+        if (timelineRef.current) {
+          timelineRef.current.resume();
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
       },
       restart: () => {
-        timelineRef.current?.restart();
+        if (timelineRef.current) {
+          timelineRef.current.restart();
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
       },
       reverse: () => {
-        timelineRef.current?.reverse();
+        if (timelineRef.current) {
+          timelineRef.current.reverse();
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
       },
       alternate: () => {
-        timelineRef.current?.alternate();
+        if (timelineRef.current) {
+          timelineRef.current.alternate();
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
       },
       complete: () => {
-        timelineRef.current?.complete();
+        if (timelineRef.current) {
+          timelineRef.current.complete();
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
       },
       reset: () => {
-        timelineRef.current?.reset();
+        if (timelineRef.current) {
+          timelineRef.current.reset();
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
       },
       cancel: () => {
-        timelineRef.current?.cancel();
         if (timelineRef.current) {
+          timelineRef.current.cancel();
           setTimelineState(extractAnimationState(timelineRef.current));
         }
       },
       revert: () => {
-        timelineRef.current?.revert();
         if (timelineRef.current) {
+          timelineRef.current.revert();
           setTimelineState(extractAnimationState(timelineRef.current));
         }
       },
       refresh: () => {
-        timelineRef.current?.refresh();
         if (timelineRef.current) {
+          timelineRef.current.refresh();
           setTimelineState(extractAnimationState(timelineRef.current));
         }
       },
       seek: (time: number | string) => {
-        timelineRef.current?.seek(time);
+        if (timelineRef.current) {
+          timelineRef.current.seek(time);
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
       },
       stretch: (newDuration: number) => {
-        timelineRef.current?.stretch(newDuration);
+        if (timelineRef.current) {
+          timelineRef.current.stretch(newDuration);
+          setTimelineState(extractAnimationState(timelineRef.current));
+        }
       },
       setPlaybackRate: (rate: number) => {
         if (timelineRef.current) {
           (
             timelineRef.current as unknown as Record<string, unknown>
           ).playbackRate = rate;
+          setTimelineState(extractAnimationState(timelineRef.current));
         }
       },
       setFrameRate: (fps: number) => {
         if (timelineRef.current) {
-          (
-            timelineRef.current as unknown as Record<string, unknown>
-          ).fps = fps;
+          (timelineRef.current as unknown as Record<string, unknown>).fps = fps;
+          setTimelineState(extractAnimationState(timelineRef.current));
         }
       },
     }),
@@ -418,6 +492,8 @@ export function useAnimeTimeline(
     state: timelineState,
     timeline: timelineRef.current,
     add,
+    sync,
+    call,
     addLabel,
     isPlaying:
       !timelineState.paused && timelineState.began && !timelineState.completed,

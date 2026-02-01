@@ -7,4 +7,5 @@ export { useAnimeTimer } from "./use-anime-timer";
 export { useAnimeTimeline } from "./use-anime-timeline";
 export { useAnimeDraggable } from "./use-anime-draggable";
 export { useAnimeControls } from "./use-anime-controls";
+export { useAnimeWAAPI } from "./use-anime-waapi";
 export type { AnimeController } from "./use-anime-controls";

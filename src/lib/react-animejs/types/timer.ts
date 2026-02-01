@@ -18,7 +18,7 @@ import type {
  * Options for useAnimeTimer hook
  */
 export type UseAnimeTimerOptions = PlaybackSettings &
-  AnimationCallbacks & {
+  AnimationCallbacks<Timer> & {
     /**
      * Dependencies that should trigger timer re-initialization
      */

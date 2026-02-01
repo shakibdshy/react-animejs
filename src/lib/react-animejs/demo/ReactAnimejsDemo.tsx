@@ -9,6 +9,13 @@ import { V4FeaturesDemo } from "./components/V4FeaturesDemo";
 import { CssSelectorDemo } from "./components/CssSelectorDemo";
 import { JsObjectDemo } from "./components/JsObjectDemo";
 import { ArrayOfTargetsDemo } from "./components/ArrayOfTargetsDemo";
+import { TimelineFeaturesDemo } from "./components/TimelineFeaturesDemo";
+import { TimelineTimersDemo } from "./components/TimelineTimersDemo";
+import { TimelineAnimationsDemo } from "./components/TimelineAnimationsDemo";
+import { CallFunctionsDemo } from "./components/CallFunctionsDemo";
+import { HighFidelityTimePosition } from "./components/HighFidelityTimePosition";
+import { SyncWAAPIAnimationsDemo } from "./components/SyncWAAPIAnimationsDemo";
+import { SyncTimelinesDemo } from "./components/SyncTimelinesDemo";
 
 /**
  * Main React Anime.js Demo Page
@@ -45,6 +52,13 @@ export default function ReactAnimejsDemo() {
           <CssSelectorDemo />
           <JsObjectDemo />
           <ArrayOfTargetsDemo />
+          <TimelineFeaturesDemo />
+          <TimelineTimersDemo />
+          <TimelineAnimationsDemo />
+          <CallFunctionsDemo />
+          <HighFidelityTimePosition />
+          <SyncWAAPIAnimationsDemo />
+          <SyncTimelinesDemo />
         </main>
 
         <footer className="text-center p-12 text-[#888]">

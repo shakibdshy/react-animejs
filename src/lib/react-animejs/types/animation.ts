@@ -209,7 +209,7 @@ export interface StaggerOptions {
  * Options for useAnime hook
  */
 export type UseAnimeOptions = PlaybackSettings &
-  AnimationCallbacks &
+  AnimationCallbacks<JSAnimation> &
   TweenParameters &
   Partial<AnimatableProperties> & {
     /**

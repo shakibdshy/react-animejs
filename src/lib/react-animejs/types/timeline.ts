@@ -2,50 +2,101 @@
  * Timeline-specific types for useAnimeTimeline hook
  */
 
-import type { RefObject } from "react";
 import type {
   PlaybackSettings,
   AnimationCallbacks,
   PlaybackControls,
   AnimationState,
-  AnimationTarget,
+  AnimationTargets,
   Easing,
 } from "./common";
 import type { AnimatableProperties, TweenParameters } from "./animation";
+import type { UseAnimeTimerOptions } from "./timer";
 
 // =============================================================================
 // Timeline Entry Types
 // =============================================================================
 
 /**
- * Single timeline entry/segment
+ * Single timeline animation segment
  */
-export interface TimelineEntry
-  extends
-    Partial<AnimatableProperties>,
+export interface TimelineAnimationEntry
+  extends Partial<AnimatableProperties>,
     TweenParameters,
     Omit<PlaybackSettings, "autoplay"> {
   /**
    * Target element(s) for this animation segment
    */
-  targets: AnimationTarget | RefObject<HTMLElement | SVGElement | null>;
+  targets: AnimationTargets;
 
   /**
-   * Offset from the previous animation
+   * Position in the timeline
    * - number: absolute time in ms
    * - '+=100': 100ms after previous ends
    * - '-=100': 100ms before previous ends
+   * - '<': start of previous
+   * - '>': end of previous
    * - string: percentage or label
    */
-  offset?: number | string;
+  position?: number | string;
 }
+
+/**
+ * Timeline timer segment
+ */
+export interface TimelineTimerEntry extends UseAnimeTimerOptions {
+  /**
+   * Position in the timeline
+   */
+  position?: number | string;
+}
+
+/**
+ * Timeline function call
+ */
+export interface TimelineCallEntry {
+  /**
+   * Function to call
+   */
+  callback: (tl: Timeline) => void;
+
+  /**
+   * Position in the timeline
+   */
+  position?: number | string;
+}
+
+/**
+ * Timeline sync entry
+ */
+export interface TimelineSyncEntry {
+  /**
+   * Timeline or WAAPI animation to sync
+   */
+  target: Timeline | unknown;
+
+  /**
+   * Position in the timeline
+   */
+  position?: number | string;
+}
+
+/**
+ * All possible timeline entries
+ */
+export type TimelineEntry =
+  | TimelineAnimationEntry
+  | TimelineTimerEntry
+  | TimelineCallEntry
+  | TimelineSyncEntry
+  | TimelineLabel;
 
 /**
  * Timeline label for marking positions
  */
 export interface TimelineLabel {
   label: string;
-  offset?: number | string;
+  position?: number | string;
 }
 
 /**
@@ -68,7 +119,7 @@ export type TimelineDefaults = Omit<PlaybackSettings, "autoplay"> & {
  * Options for useAnimeTimeline hook
  */
 export type UseAnimeTimelineOptions = PlaybackSettings &
-  AnimationCallbacks & {
+  AnimationCallbacks<Timeline> & {
     /**
      * Default settings for all timeline children
      */
@@ -108,12 +159,22 @@ export interface UseAnimeTimelineReturn {
   /**
    * Add a new animation to the timeline dynamically
    */
-  add: (entry: TimelineEntry, offset?: number | string) => void;
+  add: (entry: TimelineEntry, position?: number | string) => void;
+
+  /**
+   * Sync another timeline or WAAPI animation
+   */
+  sync: (target: Timeline | unknown, position?: number | string) => void;
+
+  /**
+   * Call a function at a specific position
+   */
+  call: (callback: (tl: Timeline) => void, position?: number | string) => void;
 
   /**
    * Add a label to the timeline
    */
-  addLabel: (label: string, offset?: number | string) => void;
+  addLabel: (label: string, position?: number | string) => void;
 
   /**
    * Whether the timeline is currently playing
@@ -147,18 +208,21 @@ export interface Timeline {
 
   // Methods
   add(
-    targets: AnimationTarget,
+    targets: AnimationTargets,
     parameters: Partial<AnimatableProperties> &
       TweenParameters &
       PlaybackSettings,
-    offset?: number | string,
+    position?: number | string,
   ): this;
+  add(parameters: UseAnimeTimerOptions, position?: number | string): this;
   set(
-    targets: AnimationTarget,
+    targets: AnimationTargets,
     parameters: Partial<AnimatableProperties>,
-    offset?: number | string,
+    position?: number | string,
   ): this;
-  label(name: string, offset?: number | string): this;
+  sync(timeline: Timeline | unknown, position?: number | string): this;
+  call(callback: (tl: Timeline) => void, position?: number | string): this;
+  label(name: string, position?: number | string): this;
   play(): this;
   pause(): this;
   resume(): this;

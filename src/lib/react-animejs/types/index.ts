@@ -62,6 +62,13 @@ export type {
   Draggable,
 } from "./draggable";
 
+// WAAPI types
+export type {
+  UseAnimeWAAPIOptions,
+  UseAnimeWAAPIReturn,
+  WAAPIAnimation,
+} from "./waapi";
+
 // Scope types
 export type {
   AnimeScope,

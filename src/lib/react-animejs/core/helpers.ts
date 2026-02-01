@@ -19,10 +19,18 @@ export function resolveTarget(
 ): HTMLElement | SVGElement | NodeList | (HTMLElement | SVGElement)[] | null {
   if (!target) return null;
 
+  // Array of targets
+  if (Array.isArray(target)) {
+    return target
+      .map((t) => resolveTarget(t as AnimationTarget, rootElement))
+      .filter(Boolean)
+      .flat() as (HTMLElement | SVGElement)[];
+  }
+
   // String selector
   if (typeof target === "string") {
     const root = rootElement || document;
-    return root.querySelectorAll(target);
+    return root.querySelectorAll(target) as unknown as (HTMLElement | SVGElement)[];
   }
 
   // Ref object
@@ -264,4 +272,6 @@ export function safeJsonStringify(obj: unknown): string {
 /**
  * Create stagger value (re-export from anime.js with type safety)
  */
-export { stagger } from "animejs";
+import { stagger, waapi } from "animejs";
+export { stagger };
+export const convertEase = waapi.convertEase;

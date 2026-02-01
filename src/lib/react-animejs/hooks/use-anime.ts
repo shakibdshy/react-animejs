@@ -18,6 +18,7 @@ import {
   useAnimeScope,
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
+  resolveTarget,
   isRef,
   createSafeCallback,
   safeJsonStringify,
@@ -186,13 +187,9 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     } = currentOptions;
 
     // Resolve target
-    let target: unknown = targetRef.current;
+    let target: unknown = resolveTarget(externalTargets || targetRef);
 
-    if (externalTargets) {
-      target = isRef(externalTargets)
-        ? externalTargets.current
-        : externalTargets;
-    } else if (selector && scopeContext.rootRef.current) {
+    if (!target && selector && scopeContext.rootRef.current) {
       target = scopeContext.rootRef.current.querySelectorAll(selector);
     }
 
