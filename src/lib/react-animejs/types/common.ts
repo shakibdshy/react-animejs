@@ -347,8 +347,7 @@ export type AnimationTarget =
   | HTMLElement
   | SVGElement
   | NodeList
-  | HTMLElement[]
-  | SVGElement[]
+  // Array types are handled by AnimationTargets
   | RefObject<HTMLElement | SVGElement | null>
   | object
   | null;

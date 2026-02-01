@@ -7,7 +7,12 @@ import {
   RefObject,
 } from "react";
 import { createAnimatable } from "animejs";
-import type { AnimationTargets, Easing } from "../types";
+import type {
+  AnimationTargets,
+  Easing,
+  JSAnimation,
+  AnimationTarget,
+} from "../types";
 import { useAnimeScope, resolveTarget } from "../core";
 
 // =============================================================================
@@ -71,9 +76,9 @@ export interface AnimatableInstance {
   /** Reverts all applied styles */
   revert: () => void;
   /** Array of target elements */
-  targets: unknown[];
+  targets: AnimationTarget[];
   /** Object containing animation instances per property */
-  animations: Record<string, unknown>;
+  animations: Record<string, JSAnimation>;
 }
 
 /**
