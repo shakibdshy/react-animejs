@@ -140,26 +140,11 @@ export type UseAnimeTimelineOptions = PlaybackSettings &
   };
 
 /**
- * Return type for useAnimeTimeline hook
+ * Timeline-specific control methods
  */
-export interface UseAnimeTimelineReturn {
+export interface TimelineControls extends PlaybackControls {
   /**
-   * Playback control methods
-   */
-  controls: PlaybackControls;
-
-  /**
-   * Current timeline state (reactive)
-   */
-  state: AnimationState;
-
-  /**
-   * Raw timeline instance (escape hatch)
-   */
-  timeline: Timeline | null;
-
-  /**
-   * Add a new animation to the timeline dynamically
+   * Add a new animation to the timeline
    */
   add: (entry: TimelineEntry, position?: number | string) => void;
 
@@ -176,7 +161,49 @@ export interface UseAnimeTimelineReturn {
   /**
    * Add a label to the timeline
    */
-  addLabel: (label: string, position?: number | string) => void;
+  label: (name: string, position?: number | string) => void;
+
+  /**
+   * Set values of targets at a specific position
+   */
+  set: (
+    targets: AnimationTargets,
+    parameters: Partial<AnimatableProperties>,
+    position?: number | string,
+  ) => void;
+
+  /**
+   * Remove targets or instances from the timeline
+   */
+  remove: (
+    targetsOrInstance: AnimationTargets | Timeline | unknown,
+    propertyOrPosition?: string | number,
+  ) => void;
+
+  /**
+   * Initialize/Render the timeline state immediately
+   */
+  init: () => void;
+}
+
+/**
+ * Return type for useAnimeTimeline hook
+ */
+export interface UseAnimeTimelineReturn {
+  /**
+   * Timeline-specific playback control methods
+   */
+  controls: TimelineControls;
+
+  /**
+   * Current timeline state (reactive)
+   */
+  state: AnimationState;
+
+  /**
+   * Raw timeline instance (escape hatch)
+   */
+  timeline: Timeline | null;
 
   /**
    * Whether the timeline is currently playing
@@ -222,9 +249,14 @@ export interface Timeline {
     parameters: Partial<AnimatableProperties>,
     position?: number | string,
   ): this;
+  remove(
+    targetsOrInstance: AnimationTargets | Timeline | unknown,
+    propertyOrPosition?: string | number,
+  ): this;
   sync(timeline: Timeline | unknown, position?: number | string): this;
   call(callback: (tl: Timeline) => void, position?: number | string): this;
   label(name: string, position?: number | string): this;
+  init(): this;
   play(): this;
   pause(): this;
   resume(): this;

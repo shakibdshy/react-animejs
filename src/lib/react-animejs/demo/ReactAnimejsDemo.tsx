@@ -18,6 +18,7 @@ import { PlaybackSettingsGroup } from "./components/PlaybackSettingsGroup";
 import { SyncWAAPIAnimationsDemo } from "./components/SyncWAAPIAnimationsDemo";
 import { SyncTimelinesDemo } from "./components/SyncTimelinesDemo";
 import { CallbacksGroup } from "./components/CallbacksGroup";
+import MethodsGroup from "./components/MethodsGroup";
 
 /**
  * Main React Anime.js Demo Page
@@ -66,6 +67,7 @@ export default function ReactAnimejsDemo() {
         <div>
           <PlaybackSettingsGroup />
           <CallbacksGroup />
+          <MethodsGroup />
         </div>
 
         <footer className="text-center p-12 text-[#888]">

@@ -45,6 +45,7 @@ export type {
   TimelineLabel,
   TimelineChild,
   TimelineDefaults,
+  TimelineControls,
   UseAnimeTimelineOptions,
   UseAnimeTimelineReturn,
   Timeline,

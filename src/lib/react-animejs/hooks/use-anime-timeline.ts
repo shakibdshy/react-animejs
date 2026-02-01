@@ -11,7 +11,7 @@ import type {
   UseAnimeTimelineReturn,
   TimelineEntry,
   AnimationState,
-  PlaybackControls,
+  TimelineControls,
   Timeline,
 } from "../types";
 import {
@@ -370,7 +370,7 @@ export function useAnimeTimeline(
   /**
    * Add a label to the timeline
    */
-  const addLabel = useCallback((label: string, position?: number | string) => {
+  const label = useCallback((name: string, position?: number | string) => {
     if (!timelineRef.current) {
       console.warn(
         "[react-animejs] Cannot add label: timeline not initialized",
@@ -378,14 +378,70 @@ export function useAnimeTimeline(
       return;
     }
 
-    timelineRef.current.label(label, position);
+    timelineRef.current.label(name, position);
+  }, []);
+
+  /**
+   * Set values of targets at a specific position
+   */
+  const set = useCallback(
+    (targets: any, parameters: any, position?: number | string) => {
+      if (!timelineRef.current) return;
+      const resolvedTarget = resolveTarget(targets);
+      if (!resolvedTarget) return;
+
+      // If no position specified, use current time to ensure it applies now
+      const pos = position ?? timelineRef.current.currentTime;
+
+      timelineRef.current.set(resolvedTarget as any, parameters, pos);
+
+      // Force a render by seeking to the current time
+      timelineRef.current.seek(timelineRef.current.currentTime);
+
+      setTimelineState(extractAnimationState(timelineRef.current));
+    },
+    [],
+  );
+
+  /**
+   * Remove targets or instances from the timeline
+   */
+  const remove = useCallback(
+    (targetsOrInstance: any, propertyOrPosition?: string | number) => {
+      if (!timelineRef.current) return;
+
+      let resolved = targetsOrInstance;
+      // If it looks like a ref or target, resolve it
+      if (
+        typeof targetsOrInstance === "string" ||
+        (targetsOrInstance &&
+          typeof targetsOrInstance === "object" &&
+          !("id" in targetsOrInstance))
+      ) {
+        resolved = resolveTarget(targetsOrInstance) || targetsOrInstance;
+      }
+
+      timelineRef.current.remove(resolved, propertyOrPosition);
+      setTimelineState(extractAnimationState(timelineRef.current));
+    },
+    [],
+  );
+
+  /**
+   * Initialize/Render the timeline state immediately
+   */
+  const init = useCallback(() => {
+    if (timelineRef.current) {
+      timelineRef.current.init();
+      setTimelineState(extractAnimationState(timelineRef.current));
+    }
   }, []);
 
   // ==========================================================================
   // Playback Controls
   // ==========================================================================
 
-  const controls: PlaybackControls = useMemo(
+  const controls: TimelineControls = useMemo(
     () => ({
       play: () => {
         if (timelineRef.current) {
@@ -479,8 +535,15 @@ export function useAnimeTimeline(
           setTimelineState(extractAnimationState(timelineRef.current));
         }
       },
+      set,
+      remove,
+      init,
+      label,
+      add,
+      sync,
+      call,
     }),
-    [],
+    [set, remove, init, label, add, sync, call],
   );
 
   // ==========================================================================
@@ -491,10 +554,6 @@ export function useAnimeTimeline(
     controls,
     state: timelineState,
     timeline: timelineRef.current,
-    add,
-    sync,
-    call,
-    addLabel,
     isPlaying:
       !timelineState.paused && timelineState.began && !timelineState.completed,
     isReady,
