@@ -11,6 +11,7 @@ import {
   TimelineStretchDemo,
   TimelineRevertDemo,
   TimelinePlaybackMethodsDemo,
+  TimelinePropertiesDemo,
 } from "./methods";
 
 const MethodsGroup: React.FC = () => {
@@ -21,10 +22,11 @@ const MethodsGroup: React.FC = () => {
           <span className="w-8 h-8 rounded-lg bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm">
             M
           </span>
-          Timeline Methods (20 Total)
+          Timeline Methods & Properties
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <TimelinePlaybackMethodsDemo />
+          <TimelinePropertiesDemo />
           <TimelineAddDemo />
           <TimelineSetDemo />
           <TimelineSyncDemo />

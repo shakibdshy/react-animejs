@@ -233,6 +233,7 @@ export interface Timeline {
   completed: boolean;
   reversed: boolean;
   persist: boolean;
+  labels: Record<string, number>;
   _currentIteration: number;
 
   // Methods

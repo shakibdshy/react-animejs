@@ -306,6 +306,11 @@ export interface AnimationState {
    * Whether the timer is currently playing backwards
    */
   backwards: boolean;
+
+  /**
+   * Timeline labels and their positions (if applicable)
+   */
+  labels?: Record<string, number>;
 }
 
 /**
@@ -327,6 +332,7 @@ export const INITIAL_ANIMATION_STATE: AnimationState = {
   speed: 1,
   fps: 0,
   backwards: false,
+  labels: {},
 };
 
 // =============================================================================

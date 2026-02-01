@@ -132,6 +132,7 @@ export function extractAnimationState(instance: unknown): AnimationState {
     speed: (anim.speed as number) || 1,
     fps: (anim.fps as number) || 0,
     backwards: (anim.backwards as boolean) ?? false,
+    labels: anim.labels as Record<string, number>,
   };
 }
 

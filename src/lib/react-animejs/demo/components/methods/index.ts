@@ -9,3 +9,4 @@ export { default as TimelineInitDemo } from "./TimelineInitDemo";
 export { default as TimelineCallDemo } from "./TimelineCallDemo";
 export { default as TimelineStretchDemo } from "./TimelineStretchDemo";
 export { default as TimelineRevertDemo } from "./TimelineRevertDemo";
+export { default as TimelinePropertiesDemo } from "./TimelinePropertiesDemo";
