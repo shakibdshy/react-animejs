@@ -18,6 +18,7 @@ import { PlaybackSettingsGroup } from "./components/PlaybackSettingsGroup";
 import { SyncWAAPIAnimationsDemo } from "./components/SyncWAAPIAnimationsDemo";
 import { SyncTimelinesDemo } from "./components/SyncTimelinesDemo";
 import { CallbacksGroup } from "./components/CallbacksGroup";
+import { AnimatableDemo } from "./components/AnimatableDemo";
 import MethodsGroup from "./components/MethodsGroup";
 
 /**
@@ -68,6 +69,7 @@ export default function ReactAnimejsDemo() {
           <PlaybackSettingsGroup />
           <CallbacksGroup />
           <MethodsGroup />
+          <AnimatableDemo />
         </div>
 
         <footer className="text-center p-12 text-[#888]">

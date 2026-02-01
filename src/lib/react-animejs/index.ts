@@ -16,6 +16,14 @@ export { useAnimeTimer } from "./hooks/use-anime-timer";
 export { useAnimeTimeline } from "./hooks/use-anime-timeline";
 export { useAnimeDraggable } from "./hooks/use-anime-draggable";
 export { useAnimeControls } from "./hooks/use-anime-controls";
+export { useAnimeWAAPI } from "./hooks/use-anime-waapi";
+export { useAnimatable, useAnimatableEvent } from "./hooks/use-animatable";
+export type {
+  AnimatableConfig,
+  AnimatableInstance,
+  AnimatablePropertySettings,
+  UseAnimatableReturn,
+} from "./hooks/use-animatable";
 export type { AnimeController } from "./hooks/use-anime-controls";
 
 // =============================================================================
@@ -159,6 +167,7 @@ export {
   animate,
   createTimer,
   createTimeline,
+  createAnimatable,
   createScope,
   createDraggable,
   spring,

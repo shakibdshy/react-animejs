@@ -23,6 +23,8 @@ import type {
 export interface TransformProperties {
   translateX?: PropertyValue;
   translateY?: PropertyValue;
+  x?: PropertyValue;
+  y?: PropertyValue;
   translateZ?: PropertyValue;
   translate?: PropertyValue;
   rotate?: PropertyValue;

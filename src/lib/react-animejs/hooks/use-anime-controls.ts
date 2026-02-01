@@ -141,6 +141,9 @@ export function useAnimeControls(): AnimeController {
         forEachAnimation((a) => a.stretch(duration));
       },
 
+      revert: () => forEachAnimation((a) => a.revert()),
+      refresh: () => forEachAnimation((a) => a.refresh()),
+
       setPlaybackRate: (rate: number) => {
         forEachAnimation((a) => {
           (a as unknown as Record<string, unknown>).playbackRate = rate;
