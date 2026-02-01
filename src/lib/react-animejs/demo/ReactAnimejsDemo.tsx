@@ -19,6 +19,7 @@ import { SyncWAAPIAnimationsDemo } from "./components/SyncWAAPIAnimationsDemo";
 import { SyncTimelinesDemo } from "./components/SyncTimelinesDemo";
 import { CallbacksGroup } from "./components/CallbacksGroup";
 import { AnimatableDemo } from "./components/AnimatableDemo";
+import { AnimatableMethodsDemo } from "./components/methods/AnimatableMethodsDemo";
 import MethodsGroup from "./components/MethodsGroup";
 
 /**
@@ -70,6 +71,7 @@ export default function ReactAnimejsDemo() {
           <CallbacksGroup />
           <MethodsGroup />
           <AnimatableDemo />
+          <AnimatableMethodsDemo />
         </div>
 
         <footer className="text-center p-12 text-[#888]">
