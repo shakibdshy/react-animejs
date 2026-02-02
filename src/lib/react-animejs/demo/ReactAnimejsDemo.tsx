@@ -23,6 +23,11 @@ import { AnimatableMethodsDemo } from "./components/methods/AnimatableMethodsDem
 import MethodsGroup from "./components/MethodsGroup";
 import { DraggableDemo } from "./components/DraggableDemo";
 import { LayoutDemo } from "./components/LayoutDemo";
+import { LayoutSettingsDemo } from "./components/LayoutSettingsDemo";
+import { LayoutEnterExitDemo } from "./components/LayoutEnterExitDemo";
+import { LayoutStaggerDemo } from "./components/LayoutStaggerDemo";
+import { LayoutMethodsDemo } from "./components/LayoutMethodsDemo";
+import { AnimeLayoutComponentDemo } from "./components/AnimeLayoutComponentDemo";
 
 /**
  * Main React Anime.js Demo Page
@@ -67,6 +72,11 @@ export default function ReactAnimejsDemo() {
           <SyncWAAPIAnimationsDemo />
           <SyncTimelinesDemo />
           <LayoutDemo />
+          <LayoutSettingsDemo />
+          <LayoutEnterExitDemo />
+          <LayoutStaggerDemo />
+          <LayoutMethodsDemo />
+          <AnimeLayoutComponentDemo />
         </div>
 
         <div>

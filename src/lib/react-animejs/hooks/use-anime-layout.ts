@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createLayout, createScope } from "animejs";
 import type { AutoLayout, LayoutAnimationParams } from "animejs";
-import type { Timeline, UseAnimeLayoutOptions, UseAnimeLayoutReturn } from "../types";
+import type {
+  Timeline,
+  UseAnimeLayoutOptions,
+  UseAnimeLayoutReturn,
+} from "../types";
 import {
   createSafeCallback,
   DEFAULT_ANIMATION_STATE,
@@ -20,7 +24,8 @@ function normalizeSingleElement(
     | null,
 ): HTMLElement | SVGElement | null {
   if (!target) return null;
-  if (Array.isArray(target)) return (target[0] as HTMLElement | SVGElement) || null;
+  if (Array.isArray(target))
+    return (target[0] as HTMLElement | SVGElement) || null;
   if (typeof NodeList !== "undefined" && target instanceof NodeList) {
     return (target[0] as HTMLElement | SVGElement) || null;
   }
@@ -69,9 +74,9 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
     const resolvedRoot =
       resolvedTarget ||
       (selector && scopeContext.rootRef.current
-        ? (scopeContext.rootRef.current.querySelector(selector) as
-            | HTMLElement
-            | null)
+        ? (scopeContext.rootRef.current.querySelector(
+            selector,
+          ) as HTMLElement | null)
         : null);
 
     if (!resolvedRoot) return;
@@ -81,7 +86,10 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
         root: scopeContext.rootRef.current || undefined,
       });
 
-      const layout = createLayout(resolvedRoot, layoutParams as any) as AutoLayout;
+      const layout = createLayout(
+        resolvedRoot,
+        layoutParams as any,
+      ) as AutoLayout;
       layoutRef.current = layout;
       timelineRef.current = null;
       setState(DEFAULT_ANIMATION_STATE);
@@ -91,8 +99,7 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
         scopeContext.registerCleanup(() => {
           try {
             layoutRef.current?.revert();
-          } catch {
-          }
+          } catch {}
         });
       }
     } catch (error) {
@@ -103,21 +110,26 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
     return () => {
       try {
         layoutRef.current?.revert();
-      } catch {
-      }
+      } catch {}
       layoutRef.current = null;
       timelineRef.current = null;
 
       try {
         scopeRef.current?.revert();
-      } catch {
-      }
+      } catch {}
       scopeRef.current = null;
 
       setIsReady(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, externalRoot, selector, scopeContext, layoutParamsJson, ...deps]);
+  }, [
+    enabled,
+    externalRoot,
+    selector,
+    scopeContext,
+    layoutParamsJson,
+    ...deps,
+  ]);
 
   const wrapParams = useCallback((params?: LayoutAnimationParams) => {
     const p = (params || {}) as LayoutAnimationParams;
@@ -183,14 +195,22 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
       },
       animate: (params?: LayoutAnimationParams) => {
         if (!layoutRef.current) return null;
-        const tl = layoutRef.current.animate(wrapParams(params) as any) as unknown as Timeline;
+        const tl = layoutRef.current.animate(
+          wrapParams(params) as any,
+        ) as unknown as Timeline;
         timelineRef.current = tl;
         setState(extractAnimationState(tl));
         return tl;
       },
-      update: (callback: (layout: AutoLayout) => void, params?: LayoutAnimationParams) => {
+      update: (
+        callback: (layout: AutoLayout) => void,
+        params?: LayoutAnimationParams,
+      ) => {
         if (!layoutRef.current) return null;
-        const tl = layoutRef.current.update(callback, wrapParams(params) as any) as unknown as Timeline;
+        const tl = layoutRef.current.update(
+          callback,
+          wrapParams(params) as any,
+        ) as unknown as Timeline;
         timelineRef.current = tl;
         setState(extractAnimationState(tl));
         return tl;
@@ -198,13 +218,17 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
       revert: () => {
         try {
           layoutRef.current?.revert();
-        } catch {
-        }
+        } catch {}
         timelineRef.current = null;
         setState(DEFAULT_ANIMATION_STATE);
       },
     };
   }, [wrapParams]);
+
+  // Get element arrays from layout instance (populated after animate/update)
+  const entering = (layoutRef.current?.entering as Element[]) ?? [];
+  const leaving = (layoutRef.current?.leaving as Element[]) ?? [];
+  const swapping = (layoutRef.current?.swapping as Element[]) ?? [];
 
   return {
     ref: rootRef,
@@ -214,6 +238,9 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
     timeline: timelineRef.current,
     isReady,
     isAnimating: !state.paused && state.began && !state.completed,
+    entering,
+    leaving,
+    swapping,
   };
 }
 

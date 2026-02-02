@@ -1,9 +1,17 @@
 import type { RefObject } from "react";
-import type { AutoLayout, AutoLayoutParams, LayoutAnimationParams } from "animejs";
+import type {
+  AutoLayout,
+  AutoLayoutParams,
+  LayoutAnimationParams,
+} from "animejs";
 import type { AnimationTarget, AnimationState } from "./common";
 import type { Timeline } from "./timeline";
 
-export type { AutoLayout, AutoLayoutParams, LayoutAnimationParams } from "animejs";
+export type {
+  AutoLayout,
+  AutoLayoutParams,
+  LayoutAnimationParams,
+} from "animejs";
 
 export type UseAnimeLayoutOptions = AutoLayoutParams & {
   root?: AnimationTarget;
@@ -30,4 +38,10 @@ export interface UseAnimeLayoutReturn<T extends HTMLElement = HTMLElement> {
   timeline: Timeline | null;
   isReady: boolean;
   isAnimating: boolean;
+  /** Elements entering the layout (populated after animate/update) */
+  entering: Element[];
+  /** Elements leaving the layout (populated after animate/update) */
+  leaving: Element[];
+  /** Elements swapping position (populated after animate/update) */
+  swapping: Element[];
 }

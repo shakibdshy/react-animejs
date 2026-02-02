@@ -10,3 +10,12 @@ export type {
   AnimatePresenceProps,
   AnimatePresenceChildProps,
 } from "./AnimatePresence";
+
+export { AnimeLayout, AnimeLayoutItem } from "./AnimeLayout";
+export type {
+  AnimeLayoutProps,
+  AnimeLayoutRef,
+  AnimeLayoutItemProps,
+  AnimeLayoutMode,
+  AnimeLayoutStateParams,
+} from "./AnimeLayout";

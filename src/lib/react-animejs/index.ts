@@ -42,6 +42,15 @@ export type {
   AnimatePresenceProps,
   AnimatePresenceChildProps,
 } from "./components/AnimatePresence";
+export { AnimeLayout, AnimeLayoutItem } from "./components/AnimeLayout";
+export type {
+  AnimeLayoutProps,
+  AnimeLayoutRef,
+  AnimeLayoutItemProps,
+  AnimeLayoutMode,
+  AnimeLayoutStateParams,
+  AnimeLayoutCallbacks,
+} from "./components/AnimeLayout";
 
 // =============================================================================
 // Core Utilities
