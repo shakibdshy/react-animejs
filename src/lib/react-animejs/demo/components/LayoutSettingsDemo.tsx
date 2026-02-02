@@ -1,24 +1,21 @@
-import React, { useState } from "react";
-import { useAnimeLayout } from "../../hooks";
-import { stagger } from "animejs";
+import React, { useRef, useState } from "react";
+import {
+  AnimeLayout,
+  AnimeLayoutItem,
+  type AnimeLayoutRef,
+} from "../../components/AnimeLayout";
 import { DemoCard } from "./DemoCard";
 import { Layout, Maximize2, Sliders } from "lucide-react";
 
 export const LayoutSettingsDemo: React.FC = () => {
+  const layoutRef = useRef<AnimeLayoutRef>(null);
   const [duration, setDuration] = useState(500);
   const [delay, setDelay] = useState(0);
   const [useStagger, setUseStagger] = useState(false);
   const [isRow, setIsRow] = useState(false);
 
-  const { ref, controls, state, isAnimating } = useAnimeLayout<HTMLDivElement>({
-    children: ".settings-item",
-    duration,
-    delay: useStagger ? stagger(50) : delay,
-    ease: "outExpo",
-  });
-
   const toggleLayout = () => {
-    controls.update((layout) => {
+    layoutRef.current?.update((layout) => {
       const root = layout.root as HTMLElement;
       root.classList.toggle("flex-row");
       root.classList.toggle("flex-col");
@@ -36,7 +33,7 @@ export const LayoutSettingsDemo: React.FC = () => {
   return (
     <DemoCard
       title="layout settings"
-      description="Configure duration, delay, and staggering. Click 'Play' to toggle layout."
+      description="Configure duration, delay, and staggering. Using <AnimeLayout> component."
       actions={
         <div className="flex gap-2">
           <button
@@ -54,9 +51,9 @@ export const LayoutSettingsDemo: React.FC = () => {
           if (isRow) toggleLayout();
         },
       }}
-      state={state}
-      isPlaying={isAnimating}
-      code={`delay: \${useStagger ? 'stagger(50)' : delay + 'ms'}`}
+      state={layoutRef.current?.state}
+      isPlaying={layoutRef.current?.isAnimating}
+      code={`<AnimeLayout duration={${duration}} delay={${useStagger ? "50" : delay}} />`}
     >
       <div className="flex flex-col gap-6 w-full h-full">
         {/* Settings Panel */}
@@ -111,19 +108,22 @@ export const LayoutSettingsDemo: React.FC = () => {
         </div>
 
         {/* Layout Container */}
-        <div
-          ref={ref}
+        <AnimeLayout
+          ref={layoutRef}
+          duration={duration}
+          delay={useStagger ? 50 : delay}
           className={`flex-1 flex gap-3 min-h-[140px] items-stretch ${isRow ? "flex-row" : "flex-col"}`}
         >
           {items.map((item) => (
-            <div
+            <AnimeLayoutItem
               key={item}
-              className="settings-item flex-1 flex items-center justify-center rounded-xl bg-[#ffd11a]/5 border border-[#ffd11a]/10 text-[#ffd11a] font-bold text-sm shadow-sm"
+              layoutId={`settings-item-${item}`}
+              className="flex-1 flex items-center justify-center rounded-xl bg-[#ffd11a]/5 border border-[#ffd11a]/10 text-[#ffd11a] font-bold text-sm shadow-sm"
             >
               ITEM {item}
-            </div>
+            </AnimeLayoutItem>
           ))}
-        </div>
+        </AnimeLayout>
       </div>
     </DemoCard>
   );

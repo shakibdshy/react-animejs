@@ -1,35 +1,33 @@
-import React, { useCallback, useState } from "react";
-import { useAnimeLayout } from "../../hooks";
+import React, { useCallback, useRef, useState } from "react";
+import {
+  AnimeLayout,
+  AnimeLayoutItem,
+  type AnimeLayoutRef,
+} from "../../components/AnimeLayout";
 import { DemoCard } from "./DemoCard";
 import { Play, RotateCcw, Zap } from "lucide-react";
 
 export const LayoutMethodsDemo: React.FC = () => {
+  const layoutRef = useRef<AnimeLayoutRef>(null);
   const [cols, setCols] = useState(2);
   const [lastMethod, setLastMethod] = useState<string | null>(null);
 
-  const { ref, controls, state, isAnimating, layout } =
-    useAnimeLayout<HTMLDivElement>({
-      children: ".method-item",
-      duration: 600,
-      ease: "outExpo",
-    });
-
   const useRecordAnimate = useCallback(() => {
-    if (!layout) return;
-    controls.record();
-    const root = ref.current;
+    if (!layoutRef.current) return;
+    layoutRef.current.record();
+    const root = layoutRef.current.getElement();
     if (root) {
       const nextCols = cols === 2 ? 4 : cols === 4 ? 3 : 2;
       root.style.gridTemplateColumns = `repeat(${nextCols}, 1fr)`;
       setCols(nextCols);
     }
-    controls.animate({ duration: 500 });
+    layoutRef.current.animate({ duration: 500 });
     setLastMethod("record() → animate()");
-  }, [layout, controls, ref, cols]);
+  }, [cols]);
 
   const useUpdate = useCallback(() => {
     const nextCols = cols === 2 ? 4 : cols === 4 ? 3 : 2;
-    controls.update(
+    layoutRef.current?.update(
       (layout) => {
         const root = layout.root as HTMLElement;
         root.style.gridTemplateColumns = `repeat(${nextCols}, minmax(0, 1fr))`;
@@ -38,20 +36,20 @@ export const LayoutMethodsDemo: React.FC = () => {
     );
     setCols(nextCols);
     setLastMethod("update()");
-  }, [controls, cols]);
+  }, [cols]);
 
   const useRevert = useCallback(() => {
-    controls.revert();
+    layoutRef.current?.revert();
     setLastMethod("revert()");
     setCols(2);
-  }, [controls]);
+  }, []);
 
   const items = [1, 2, 3, 4, 5, 6, 7, 8];
 
   return (
     <DemoCard
       title="layout methods"
-      description="Directly control the layout engine. Click 'Play' to trigger update()."
+      description="Directly control the layout engine. Using <AnimeLayout> component."
       actions={
         <div className="flex gap-2">
           <button
@@ -81,8 +79,8 @@ export const LayoutMethodsDemo: React.FC = () => {
         play: useUpdate,
         restart: useRevert,
       }}
-      state={state}
-      isPlaying={isAnimating}
+      state={layoutRef.current?.state}
+      isPlaying={layoutRef.current?.isAnimating}
       code={lastMethod ? `controls.${lastMethod}` : `// choose a method above`}
     >
       <div className="flex flex-col gap-6 w-full h-full">
@@ -96,20 +94,23 @@ export const LayoutMethodsDemo: React.FC = () => {
         </div>
 
         {/* Layout Container */}
-        <div
-          ref={ref}
+        <AnimeLayout
+          ref={layoutRef}
+          duration={600}
+          ease="outExpo"
           className="flex-1 grid gap-3 p-1 min-h-[160px]"
           style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
         >
           {items.map((item) => (
-            <div
+            <AnimeLayoutItem
               key={item}
-              className="method-item h-12 flex items-center justify-center rounded-xl bg-[#ffd11a]/10 border border-[#ffd11a]/20 text-[#ffd11a] font-bold text-sm shadow-sm"
+              layoutId={`method-item-${item}`}
+              className="h-12 flex items-center justify-center rounded-xl bg-[#ffd11a]/10 border border-[#ffd11a]/20 text-[#ffd11a] font-bold text-sm shadow-sm"
             >
               ITEM {item}
-            </div>
+            </AnimeLayoutItem>
           ))}
-        </div>
+        </AnimeLayout>
 
         {/* Method descriptions */}
         <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-[10px] text-slate-500 font-mono uppercase tracking-widest leading-relaxed mt-2 opacity-60">

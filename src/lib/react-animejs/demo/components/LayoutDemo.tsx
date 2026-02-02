@@ -1,49 +1,34 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useAnimeLayout } from "../../hooks";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import {
+  AnimeLayout,
+  AnimeLayoutItem,
+  type AnimeLayoutRef,
+} from "../../components/AnimeLayout";
 import { DemoCard } from "./DemoCard";
 import { Columns, Grid2X2, Grid3X3, Split } from "lucide-react";
 
 export const LayoutDemo: React.FC = () => {
+  const layoutRef = useRef<AnimeLayoutRef>(null);
   const [cols, setCols] = useState(3);
   const [isHidden, setIsHidden] = useState(false);
 
-  const { ref, controls, state, isReady, isAnimating } =
-    useAnimeLayout<HTMLDivElement>({
-      children: ".layout-item",
-      duration: 800,
-      ease: "outExpo",
-    });
-
-  // Handle initialization safely
-  useEffect(() => {
-    if (!isReady || !ref.current) return;
-    const root = ref.current;
-    root.style.display = "grid";
-    root.style.gap = "12px";
-    root.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
-  }, [isReady]);
-
-  const setGridColumns = useCallback(
-    (nextCols: number) => {
-      if (!isReady) return;
-      controls.update(
-        (layout) => {
-          const root = layout.root as HTMLElement;
-          root.style.gridTemplateColumns = `repeat(${nextCols}, minmax(0, 1fr))`;
-        },
-        {
-          duration: 800,
-          ease: "outExpo",
-        },
-      );
-      setCols(nextCols);
-    },
-    [controls, isReady],
-  );
+  const setGridColumns = useCallback((nextCols: number) => {
+    layoutRef.current?.update(
+      (layout) => {
+        const root = layout.root as HTMLElement;
+        root.style.gridTemplateColumns = `repeat(${nextCols}, minmax(0, 1fr))`;
+      },
+      {
+        duration: 800,
+        ease: "outExpo",
+      },
+    );
+    setCols(nextCols);
+  }, []);
 
   const toggleItem = useCallback(() => {
     const nextHidden = !isHidden;
-    controls.update(
+    layoutRef.current?.update(
       (layout) => {
         const root = layout.root as HTMLElement;
         const item = root.querySelector(
@@ -60,9 +45,8 @@ export const LayoutDemo: React.FC = () => {
       },
     );
     setIsHidden(nextHidden);
-  }, [controls, isHidden]);
+  }, [isHidden]);
 
-  // Demo play sequence: cycle through column layouts
   const playDemo = useCallback(() => {
     const sequence = [2, 4, 3];
     let i = 0;
@@ -78,7 +62,7 @@ export const LayoutDemo: React.FC = () => {
   return (
     <DemoCard
       title="automatic layout"
-      description="Fluid transitions between different grid configurations. Click 'Play' to auto-cycle."
+      description="Fluid transitions between different grid configurations. Using <AnimeLayout> component."
       actions={
         <div className="flex gap-1 bg-black/20 p-1 rounded-xl">
           <button
@@ -115,23 +99,29 @@ export const LayoutDemo: React.FC = () => {
         play: playDemo,
         restart: () => setGridColumns(3),
       }}
-      state={state}
-      isPlaying={isAnimating}
-      code={`controls.update((layout) => {
-  root.style.gridTemplateColumns = 'repeat(${cols}, 1fr)';
-});`}
+      state={layoutRef.current?.state}
+      isPlaying={layoutRef.current?.isAnimating}
+      code={`<AnimeLayout ref={layoutRef}>...</AnimeLayout>`}
     >
-      <div ref={ref} className="w-full flex-1 min-h-[160px]">
+      <AnimeLayout
+        ref={layoutRef}
+        duration={800}
+        ease="outExpo"
+        className="w-full flex-1 min-h-[160px] grid gap-3"
+        style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
+      >
         {items.map((n) => (
-          <div
+          <AnimeLayoutItem
             key={n}
+            layoutId={`item-${n}`}
             data-layout-demo-item={n}
-            className="layout-item h-12 flex items-center justify-center rounded-xl bg-[#ffd11a]/10 border border-[#ffd11a]/20 text-[#ffd11a] font-bold text-sm shadow-sm"
+            className="h-12 flex items-center justify-center rounded-xl bg-[#ffd11a]/10 border border-[#ffd11a]/20 text-[#ffd11a] font-bold text-sm shadow-sm transition-colors hover:bg-[#ffd11a]/20 cursor-pointer"
+            onClick={n === 4 ? toggleItem : undefined}
           >
             {n}
-          </div>
+          </AnimeLayoutItem>
         ))}
-      </div>
+      </AnimeLayout>
     </DemoCard>
   );
 };
