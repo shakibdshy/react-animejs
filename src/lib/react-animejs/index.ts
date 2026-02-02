@@ -19,6 +19,7 @@ export { useAnimeDraggable } from "./hooks/use-anime-draggable";
 export { useAnimeControls } from "./hooks/use-anime-controls";
 export { useAnimeWAAPI } from "./hooks/use-anime-waapi";
 export { useAnimatable, useAnimatableEvent } from "./hooks/use-animatable";
+export { useAnimeScope as useCreateScope } from "./hooks/use-anime-scope";
 export type {
   AnimatableConfig,
   AnimatableInstance,
@@ -170,8 +171,18 @@ export type {
   Draggable,
 
   // Scope types
-  AnimeScope,
+  ScopeMediaQueries,
+  ScopeMediaMatches,
+  ScopeDefaults,
+  ScopeParameters,
   ScopeSelf,
+  ScopeCleanupFunction,
+  ScopeConstructorFunction,
+  ScopeMethods,
+  AnimeJsScope,
+  AnimeScope,
+  UseAnimeScopeOptions,
+  UseAnimeScopeReturn,
   AnimeScopeContext,
   AnimeProviderProps,
 } from "./types";

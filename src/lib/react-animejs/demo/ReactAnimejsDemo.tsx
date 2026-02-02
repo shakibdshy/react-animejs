@@ -9,6 +9,7 @@ import { TimersGroup } from "./components/TimersGroup";
 import { TimelinesGroup } from "./components/TimelinesGroup";
 import { LayoutGroup } from "./components/LayoutGroup";
 import { AnimatableGroup } from "./components/AnimatableGroup";
+import { ScopeGroup } from "./components/ScopeGroup";
 
 /**
  * Main React Anime.js Demo Page
@@ -42,6 +43,7 @@ export default function ReactAnimejsDemo() {
           <TimersGroup />
           <AnimatableGroup />
           <LayoutGroup />
+          <ScopeGroup />
 
           <div className="grid grid-cols-1 gap-8 mt-16">
             <h2 className="text-2xl font-black text-white uppercase tracking-[0.2em] flex items-center gap-4">

@@ -35,6 +35,7 @@ const defaultContextValue: AnimeScopeContext = {
   rootRef: { current: null },
   isScoped: false,
   registerCleanup: () => {},
+  matches: {},
 };
 
 /**
@@ -136,6 +137,7 @@ export function AnimeProvider({
       rootRef: rootRef as RefObject<HTMLElement | null>,
       isScoped: true,
       registerCleanup,
+      matches: scopeRef.current?.matches || {},
     }),
     [rootRef, registerCleanup],
   );

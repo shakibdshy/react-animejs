@@ -76,8 +76,23 @@ export type {
 
 // Scope types
 export type {
-  AnimeScope,
+  // Scope parameter types
+  ScopeMediaQueries,
+  ScopeMediaMatches,
+  ScopeDefaults,
+  ScopeParameters,
+  // Scope self types (passed to constructors)
   ScopeSelf,
+  ScopeCleanupFunction,
+  ScopeConstructorFunction,
+  ScopeMethods,
+  // Anime.js Scope instance
+  AnimeJsScope,
+  AnimeScope, // Legacy alias
+  // React hook types
+  UseAnimeScopeOptions,
+  UseAnimeScopeReturn,
+  // Context types
   AnimeScopeContext,
   AnimeProviderProps,
 } from "./scope";
