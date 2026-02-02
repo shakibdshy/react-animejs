@@ -8,27 +8,50 @@ import { fileURLToPath, URL } from 'url'
 import tailwindcss from '@tailwindcss/vite'
 import { nitro } from 'nitro/vite'
 
-const config = defineConfig({
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
-  plugins: [
-    devtools(),
-    nitro(),
-    // this is the plugin that enables path aliases
-    viteTsConfigPaths({
-      projects: ['./tsconfig.json'],
-    }),
-    tailwindcss(),
-    tanstackStart(),
-    viteReact({
-      babel: {
-        plugins: ['babel-plugin-react-compiler'],
-      },
-    }),
-  ],
-})
+export default defineConfig(() => {
+  const isTest = process.env.VITEST === 'true' || process.env.VITEST === '1'
 
-export default config
+  return {
+    resolve: {
+      dedupe: ['react', 'react-dom'],
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
+    },
+    test: {
+      environment: 'jsdom',
+      server: {
+        deps: {
+          inline: ['react', 'react-dom'],
+        },
+      },
+    },
+    plugins: [
+      ...(isTest
+        ? [
+            viteTsConfigPaths({
+              projects: ['./tsconfig.json'],
+            }),
+            viteReact({
+              babel: {
+                plugins: [],
+              },
+            }),
+          ]
+        : [
+            devtools(),
+            nitro(),
+            viteTsConfigPaths({
+              projects: ['./tsconfig.json'],
+            }),
+            tailwindcss(),
+            tanstackStart(),
+            viteReact({
+              babel: {
+                plugins: ['babel-plugin-react-compiler'],
+              },
+            }),
+          ]),
+    ],
+  }
+})

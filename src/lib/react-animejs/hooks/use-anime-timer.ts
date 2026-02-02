@@ -331,6 +331,21 @@ export function useAnimeTimer(
   // Playback Controls
   // ==========================================================================
 
+  const resetTracking = () => {
+    loopCountRef.current = 0;
+    iterationTimeRef.current = 0;
+    setTrackedCount(0);
+    setTrackedIterationTime(0);
+
+    if (countDisplayRef.current) {
+      countDisplayRef.current.textContent = "0";
+    }
+
+    if (iterationTimeDisplayRef.current) {
+      iterationTimeDisplayRef.current.textContent = "0";
+    }
+  };
+
   const controls: PlaybackControls = useMemo(
     () => ({
       play: () => {
@@ -354,6 +369,7 @@ export function useAnimeTimer(
       restart: () => {
         if (timerRef.current) {
           timerRef.current.restart();
+          resetTracking();
           setTimerState(extractAnimationState(timerRef.current));
         }
       },
@@ -378,18 +394,21 @@ export function useAnimeTimer(
       reset: () => {
         if (timerRef.current) {
           timerRef.current.reset();
+          resetTracking();
           setTimerState(extractAnimationState(timerRef.current));
         }
       },
       cancel: () => {
         if (timerRef.current) {
           timerRef.current.cancel();
+          resetTracking();
           setTimerState(extractAnimationState(timerRef.current));
         }
       },
       revert: () => {
         if (timerRef.current) {
           timerRef.current.revert();
+          resetTracking();
           setTimerState(extractAnimationState(timerRef.current));
         }
       },

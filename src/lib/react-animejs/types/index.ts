@@ -81,3 +81,12 @@ export type {
   AnimeScopeContext,
   AnimeProviderProps,
 } from "./scope";
+
+export type {
+  AutoLayout,
+  AutoLayoutParams,
+  LayoutAnimationParams,
+  UseAnimeLayoutControls,
+  UseAnimeLayoutOptions,
+  UseAnimeLayoutReturn,
+} from "./layout";

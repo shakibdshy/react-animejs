@@ -14,6 +14,7 @@
 export { useAnime } from "./hooks/use-anime";
 export { useAnimeTimer } from "./hooks/use-anime-timer";
 export { useAnimeTimeline } from "./hooks/use-anime-timeline";
+export { useAnimeLayout } from "./hooks/use-anime-layout";
 export { useAnimeDraggable } from "./hooks/use-anime-draggable";
 export { useAnimeControls } from "./hooks/use-anime-controls";
 export { useAnimeWAAPI } from "./hooks/use-anime-waapi";
@@ -142,6 +143,13 @@ export type {
   UseAnimeTimelineReturn,
   Timeline,
 
+  // Layout types
+  AutoLayoutParams,
+  LayoutAnimationParams,
+  UseAnimeLayoutControls,
+  UseAnimeLayoutOptions,
+  UseAnimeLayoutReturn,
+
   // Draggable types
   DraggableBounds,
   DraggableAxis,
@@ -167,9 +175,11 @@ export {
   animate,
   createTimer,
   createTimeline,
+  createLayout,
   createAnimatable,
   createScope,
   createDraggable,
+  AutoLayout,
   spring,
   stagger as animeStagger,
   easings,

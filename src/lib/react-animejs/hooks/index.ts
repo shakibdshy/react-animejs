@@ -5,6 +5,7 @@
 export { useAnime } from "./use-anime";
 export { useAnimeTimer } from "./use-anime-timer";
 export { useAnimeTimeline } from "./use-anime-timeline";
+export { useAnimeLayout } from "./use-anime-layout";
 export { useAnimeDraggable } from "./use-anime-draggable";
 export { useAnimeControls } from "./use-anime-controls";
 export { useAnimeWAAPI } from "./use-anime-waapi";

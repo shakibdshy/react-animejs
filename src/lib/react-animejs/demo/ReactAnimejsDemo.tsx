@@ -22,6 +22,7 @@ import { AnimatableDemo } from "./components/AnimatableDemo";
 import { AnimatableMethodsDemo } from "./components/methods/AnimatableMethodsDemo";
 import MethodsGroup from "./components/MethodsGroup";
 import { DraggableDemo } from "./components/DraggableDemo";
+import { LayoutDemo } from "./components/LayoutDemo";
 
 /**
  * Main React Anime.js Demo Page
@@ -65,6 +66,7 @@ export default function ReactAnimejsDemo() {
           <HighFidelityTimePosition />
           <SyncWAAPIAnimationsDemo />
           <SyncTimelinesDemo />
+          <LayoutDemo />
         </div>
 
         <div>

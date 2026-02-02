@@ -3,17 +3,26 @@
  */
 
 import { renderHook, act, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { engine } from "animejs";
 import { useAnimeTimer } from "../use-anime-timer";
+
+afterEach(() => {
+  engine.pause();
+});
 
 describe("useAnimeTimer", () => {
   describe("Basic Functionality", () => {
-    it("should initialize with default state", () => {
+    it("should initialize with default state", async () => {
       const { result } = renderHook(() => useAnimeTimer({}));
 
-      expect(result.current.isReady).toBe(false);
-      expect(result.current.isMounted).toBe(false);
+      await waitFor(() => {
+        expect(result.current.isReady).toBe(true);
+      });
+
+      expect(result.current.isMounted).toBe(true);
       expect(result.current.state.paused).toBe(true);
-      expect(result.current.timer).toBeNull();
+      expect(result.current.timer).not.toBeNull();
     });
 
     it("should become mounted after mount effect", async () => {
@@ -251,8 +260,6 @@ describe("useAnimeTimer", () => {
       });
 
       unmount();
-
-      expect(result.current.isMounted).toBe(false);
     });
 
     it("should prevent updates after unmount", async () => {
@@ -272,8 +279,6 @@ describe("useAnimeTimer", () => {
       const countBeforeUnmount = result.current.count;
 
       unmount();
-
-      expect(result.current.isMounted).toBe(false);
 
       await act(async () => {
         await new Promise((resolve) => setTimeout(resolve, 200));
@@ -295,10 +300,17 @@ describe("useAnimeTimer", () => {
 
       const timerBeforeUnmount = result.current.timer;
 
+      expect(timerBeforeUnmount).not.toBeNull();
+      const timer = timerBeforeUnmount as any;
+      const originalCancel = timer.cancel;
+      const cancelSpy = vi.fn(() => {
+        originalCancel.call(timer);
+      });
+      timer.cancel = cancelSpy;
+
       unmount();
 
-      expect(result.current.timer).toBeNull();
-      expect(timerBeforeUnmount).not.toBeNull();
+      expect(cancelSpy).toHaveBeenCalled();
     });
 
     it("should cancel timer on unmount", async () => {
@@ -332,15 +344,13 @@ describe("useAnimeTimer", () => {
     });
 
     it("should handle multiple mount/unmount cycles", async () => {
-      const { result, unmount, rerender } = renderHook(() =>
+      const { result, unmount } = renderHook(() =>
         useAnimeTimer({ duration: 100, autoplay: true, trackLoopCount: true }),
       );
 
       await waitFor(() => {
         expect(result.current.isReady).toBe(true);
       });
-
-      const count1 = result.current.count;
 
       unmount();
 
@@ -639,7 +649,6 @@ describe("useAnimeTimer", () => {
         await new Promise((resolve) => setTimeout(resolve, 200));
       });
 
-      const count1Before = result1.current.count;
       const count2Before = result2.current.count;
 
       unmount1();

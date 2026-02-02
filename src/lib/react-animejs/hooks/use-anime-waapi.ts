@@ -18,7 +18,6 @@ import {
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
   resolveTarget,
-  isRef,
   createSafeCallback,
   safeJsonStringify,
 } from "../core";
