@@ -4,17 +4,9 @@ import {
   AnimeLayoutItem,
   type AnimeLayoutRef,
 } from "../../components/AnimeLayout";
-import { DemoSection } from "./DemoSection";
+import { DemoCard } from "./DemoCard";
+import { Plus, RefreshCw, Columns, Grid3X3, Grid2X2 } from "lucide-react";
 
-/**
- * AnimeLayoutComponentDemo - Demonstrates the AnimeLayout component
- *
- * Shows how to use the component-based approach instead of the hook.
- * Features:
- * - Auto mode for automatic animations
- * - Manual mode with ref controls
- * - AnimeLayout.Item for individual items
- */
 export const AnimeLayoutComponentDemo: React.FC = () => {
   const layoutRef = useRef<AnimeLayoutRef>(null);
   const [items, setItems] = useState([1, 2, 3, 4]);
@@ -41,52 +33,79 @@ export const AnimeLayoutComponentDemo: React.FC = () => {
     setCols(newCols);
   };
 
+  const playDemo = () => {
+    addItem();
+    setTimeout(() => {
+      changeColumns(cols === 4 ? 2 : 4);
+    }, 600);
+  };
+
+  const isAnimating = layoutRef.current?.state
+    ? !layoutRef.current.state.paused &&
+      layoutRef.current.state.began &&
+      !layoutRef.current.state.completed
+    : false;
+
   return (
-    <DemoSection title="AnimeLayout Component Demo">
-      <div className="flex flex-col gap-4 w-full">
-        {/* Controls */}
-        <div className="flex flex-wrap gap-3 items-center">
+    <DemoCard
+      title="declarative layout"
+      description="Declarative component-based layout. Click 'Play' to auto-scale."
+      actions={
+        <div className="flex gap-1 bg-black/20 p-1 rounded-xl">
           <button
             onClick={addItem}
-            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
+            className="p-1.5 bg-[#ffd11a] text-[#12121a] rounded-lg transition-all hover:scale-105 active:scale-95"
+            title="Add Item"
           >
-            + Add Item
+            <Plus size={12} />
           </button>
-          <button
-            onClick={() =>
-              items.length > 0 && removeItem(items[items.length - 1])
-            }
-            disabled={items.length === 0}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors disabled:opacity-50"
-          >
-            Remove Last
-          </button>
-
-          <div className="flex gap-2">
-            {[2, 3, 4].map((n) => (
-              <button
-                key={n}
-                onClick={() => changeColumns(n)}
-                className={`px-3 py-2 rounded-md transition-colors ${
-                  cols === n
-                    ? "bg-indigo-600 text-white"
-                    : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                }`}
-              >
-                {n} cols
-              </button>
-            ))}
-          </div>
-
           <button
             onClick={() => layoutRef.current?.refresh()}
-            className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-md transition-colors"
+            className="p-1.5 text-slate-500 hover:text-[#ffd11a] rounded-lg transition-all"
+            title="Refresh Layout"
           >
-            Refresh
+            <RefreshCw size={12} />
           </button>
         </div>
+      }
+      controls={{
+        play: playDemo,
+        restart: () => {
+          setItems([1, 2, 3, 4]);
+          setCounter(5);
+          setCols(4);
+        },
+      }}
+      state={layoutRef.current?.state}
+      isPlaying={isAnimating}
+      code={`<AnimeLayout mode="auto" />`}
+    >
+      <div className="flex flex-col gap-6 w-full h-full">
+        {/* Column Selectors */}
+        <div className="flex justify-center gap-2">
+          {[2, 3, 4].map((n) => (
+            <button
+              key={n}
+              onClick={() => changeColumns(n)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all ${
+                cols === n
+                  ? "bg-[#ffd11a] text-[#12121a] shadow-lg shadow-[#ffd11a]/20"
+                  : "bg-white/5 text-slate-500 hover:bg-white/10"
+              }`}
+            >
+              {n === 2 ? (
+                <Columns size={12} />
+              ) : n === 3 ? (
+                <Grid3X3 size={12} />
+              ) : (
+                <Grid2X2 size={12} />
+              )}
+              {n} Columns
+            </button>
+          ))}
+        </div>
 
-        {/* AnimeLayout Component */}
+        {/* AnimeLayout Component Area */}
         <AnimeLayout
           ref={layoutRef}
           mode="auto"
@@ -94,54 +113,29 @@ export const AnimeLayoutComponentDemo: React.FC = () => {
           ease="outExpo"
           enterFrom={{ opacity: 0, transform: "scale(0.8) translateY(20px)" }}
           leaveTo={{ opacity: 0, transform: "scale(0.8) translateY(-20px)" }}
-          className="grid gap-3 p-4 bg-[#1a1a24] rounded-lg border border-[#2a2a3a]"
+          className="flex-1 grid gap-3 p-1 min-h-[160px]"
           style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
-          onLayoutChange={({ entering, leaving }) => {
-            if (entering.length > 0)
-              console.log("Items entering:", entering.length);
-            if (leaving.length > 0)
-              console.log("Items leaving:", leaving.length);
-          }}
         >
           {items.map((id) => (
             <AnimeLayoutItem
               key={id}
               layoutId={`item-${id}`}
-              className="h-16 flex items-center justify-center rounded-lg bg-linear-to-br from-pink-500 to-purple-600 text-white font-bold shadow-lg cursor-pointer hover:scale-105 transition-transform"
+              className="h-12 flex items-center justify-center rounded-xl bg-linear-to-br from-[#ffd11a]/20 to-[#f59e0b]/20 border border-[#ffd11a]/20 text-[#ffd11a] font-bold text-sm shadow-sm cursor-pointer hover:from-[#ffd11a] hover:to-[#f59e0b] hover:text-[#12121a] transition-all"
               onClick={() => removeItem(id)}
             >
               {id}
             </AnimeLayoutItem>
           ))}
           {items.length === 0 && (
-            <div className="col-span-full text-gray-500 text-center py-8">
-              Click "Add Item" to add elements
+            <div className="col-span-full h-32 flex items-center justify-center border-2 border-dashed border-white/5 rounded-2xl text-slate-600 text-sm font-mono uppercase tracking-widest leading-loose text-center">
+              Layout Empty
+              <br />
+              Click + to begin
             </div>
           )}
         </AnimeLayout>
-
-        {/* Status */}
-        <div className="grid grid-cols-2 gap-4 text-xs font-mono bg-[#0f0f15] p-4 rounded-lg border border-[#2a2a3a]">
-          <div className="text-gray-500">Items:</div>
-          <div className="text-amber-400">{items.length}</div>
-          <div className="text-gray-500">Columns:</div>
-          <div className="text-amber-400">{cols}</div>
-          <div className="text-gray-500">Mode:</div>
-          <div className="text-indigo-400">auto</div>
-          <div className="text-gray-500">Ready:</div>
-          <div className="text-green-400">
-            {layoutRef.current?.isReady ? "Yes" : "Initializing..."}
-          </div>
-        </div>
-
-        <p className="text-xs text-gray-500">
-          This demo uses the{" "}
-          <code className="text-amber-400">&lt;AnimeLayout&gt;</code> component
-          with <code className="text-amber-400">mode=&quot;auto&quot;</code> for
-          automatic animations when items change. Click items to remove them.
-        </p>
       </div>
-    </DemoSection>
+    </DemoCard>
   );
 };
 

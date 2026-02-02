@@ -1,57 +1,54 @@
 import React, { useCallback, useState } from "react";
 import { useAnimeLayout } from "../../hooks";
-import { DemoSection } from "./DemoSection";
+import { DemoCard } from "./DemoCard";
+import { Plus, Trash2, ChevronFirst, ChevronLast } from "lucide-react";
 
-/**
- * LayoutEnterExitDemo - Demonstrates enter/exit animations:
- * - enterFrom: initial state for entering elements
- * - leaveTo: final state for leaving elements
- * - Dynamically add/remove items with animated transitions
- */
 export const LayoutEnterExitDemo: React.FC = () => {
   const [items, setItems] = useState([1, 2, 3, 4]);
   const [counter, setCounter] = useState(5);
 
-  const { ref, controls, state, isReady, entering, leaving } =
+  const { ref, controls, state, isAnimating, entering, leaving } =
     useAnimeLayout<HTMLDivElement>({
       children: ".enter-exit-item",
-      duration: 350,
+      duration: 500,
       ease: "outExpo",
       enterFrom: {
         opacity: 0,
         transform: "translateY(50px) scale(0.8)",
-        duration: 450,
-        ease: "out(3)",
       },
       leaveTo: {
         opacity: 0,
         transform: "translateY(-50px) scale(0.8)",
-        duration: 350,
-        ease: "out(2)",
       },
     });
 
   const addItem = useCallback(() => {
     const newId = counter;
     setCounter((c) => c + 1);
-
     controls.update(() => {
-      // The actual DOM update happens via React state
+      setItems((prev) => [...prev, newId]);
     });
-
-    setItems((prev) => [...prev, newId]);
   }, [counter, controls]);
 
   const removeItem = useCallback(
     (id: number) => {
       controls.update(() => {
-        // The actual DOM update happens via React state
+        setItems((prev) => prev.filter((item) => item !== id));
       });
-
-      setItems((prev) => prev.filter((item) => item !== id));
     },
     [controls],
   );
+
+  const playDemo = () => {
+    // Add 2 items, then remove 1
+    addItem();
+    setTimeout(() => {
+      addItem();
+      setTimeout(() => {
+        if (items.length > 0) removeItem(items[0]);
+      }, 600);
+    }, 600);
+  };
 
   const removeFirst = useCallback(() => {
     if (items.length > 0) {
@@ -66,76 +63,98 @@ export const LayoutEnterExitDemo: React.FC = () => {
   }, [items, removeItem]);
 
   return (
-    <DemoSection title="Layout: Enter/Exit Animations">
-      <div className="flex flex-col gap-4 w-full">
-        {/* Controls */}
-        <div className="flex flex-wrap gap-3 items-center">
+    <DemoCard
+      title="enter / exit"
+      description="Animated insertion and removal of elements. Click 'Play' to auto-add items."
+      actions={
+        <div className="flex gap-1 bg-black/20 p-1 rounded-xl">
           <button
             onClick={addItem}
-            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
+            className="p-1.5 bg-[#ffd11a] text-[#12121a] rounded-lg transition-all hover:scale-105 active:scale-95"
+            title="Add Item"
           >
-            + Add Item
+            <Plus size={12} />
           </button>
           <button
             onClick={removeFirst}
             disabled={items.length === 0}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors disabled:opacity-50"
+            className="p-1.5 text-slate-500 hover:text-orange-500 rounded-lg transition-all disabled:opacity-20"
+            title="Remove First"
           >
-            Remove First
+            <ChevronFirst size={12} />
           </button>
           <button
             onClick={removeLast}
             disabled={items.length === 0}
-            className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-md transition-colors disabled:opacity-50"
+            className="p-1.5 text-slate-500 hover:text-orange-500 rounded-lg transition-all disabled:opacity-20"
+            title="Remove Last"
           >
-            Remove Last
+            <ChevronLast size={12} />
           </button>
         </div>
-
-        {/* Layout Container */}
+      }
+      controls={{
+        play: playDemo,
+        restart: () => {
+          controls.update(() => setItems([1, 2, 3, 4]));
+          setCounter(5);
+        },
+      }}
+      state={state}
+      isPlaying={isAnimating}
+      code={`enterFrom: { opacity: 0, translateY: 50 }`}
+    >
+      <div className="flex flex-col gap-6 w-full h-full">
         <div
           ref={ref}
-          className="w-full flex flex-wrap gap-3 p-4 bg-[#1a1a24] rounded-lg border border-[#2a2a3a] min-h-[80px]"
+          className="w-full flex flex-wrap gap-4 min-h-[160px] items-start content-start"
         >
           {items.map((id) => (
             <div
               key={id}
-              className="enter-exit-item w-20 h-20 flex items-center justify-center rounded-lg bg-purple-500/90 text-white font-bold shadow cursor-pointer hover:bg-purple-400/90 transition-colors"
+              className="enter-exit-item w-16 h-16 flex items-center justify-center rounded-2xl bg-[#ffd11a]/10 border border-[#ffd11a]/20 text-[#ffd11a] font-bold text-lg shadow-sm cursor-pointer group hover:bg-[#ffd11a] hover:text-[#12121a] transition-all"
               onClick={() => removeItem(id)}
-              title="Click to remove"
             >
-              {id}
+              <span className="group-hover:hidden">{id}</span>
+              <Trash2 size={24} className="hidden group-hover:block" />
             </div>
           ))}
           {items.length === 0 && (
-            <div className="text-gray-500 text-sm italic">
-              Click "Add Item" to add elements
+            <div className="w-full h-32 flex items-center justify-center border-2 border-dashed border-white/5 rounded-2xl text-slate-600 text-sm font-mono uppercase tracking-widest">
+              No items - Click + to add
             </div>
           )}
         </div>
 
-        {/* Status */}
-        <div className="grid grid-cols-2 gap-4 text-xs font-mono bg-[#0f0f15] p-4 rounded-lg border border-[#2a2a3a]">
-          <div className="text-gray-500">Ready:</div>
-          <div className="text-amber-400">{isReady ? "Yes" : "No"}</div>
-          <div className="text-gray-500">Items:</div>
-          <div className="text-amber-400">{items.length}</div>
-          <div className="text-gray-500">Entering:</div>
-          <div className="text-green-400">{entering.length} elements</div>
-          <div className="text-gray-500">Leaving:</div>
-          <div className="text-red-400">{leaving.length} elements</div>
-          <div className="text-gray-500">Progress:</div>
-          <div className="text-amber-400">
-            {Math.round(state.progress * 100)}%
+        {/* Live Status */}
+        <div className="flex gap-4">
+          <div className="flex-1 bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
+            <span className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">
+              Entering
+            </span>
+            <span className="text-green-500 font-mono font-bold">
+              {entering.length}
+            </span>
+          </div>
+          <div className="flex-1 bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
+            <span className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">
+              Leaving
+            </span>
+            <span className="text-red-500 font-mono font-bold">
+              {leaving.length}
+            </span>
+          </div>
+          <div className="flex-1 bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
+            <span className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">
+              Total
+            </span>
+            <span className="text-[#ffd11a] font-mono font-bold">
+              {items.length}
+            </span>
           </div>
         </div>
-
-        <p className="text-xs text-gray-500">
-          Click on any item to remove it. New items enter with a scale-up
-          animation, removed items exit with a scale-down animation.
-        </p>
       </div>
-    </DemoSection>
+    </DemoCard>
   );
 };
 

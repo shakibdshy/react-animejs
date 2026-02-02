@@ -1,148 +1,127 @@
 import React, { useCallback, useState } from "react";
 import { useAnimeLayout } from "../../hooks";
-import { DemoSection } from "./DemoSection";
+import { DemoCard } from "./DemoCard";
+import { Play, RotateCcw, Zap } from "lucide-react";
 
-/**
- * LayoutMethodsDemo - Demonstrates all layout methods:
- * - record(): manually record current layout state
- * - animate(): animate from recorded state to current state
- * - update(): combined record + DOM change + animate
- * - revert(): revert layout changes
- */
 export const LayoutMethodsDemo: React.FC = () => {
   const [cols, setCols] = useState(2);
   const [lastMethod, setLastMethod] = useState<string | null>(null);
 
-  const { ref, controls, state, isReady, layout } =
+  const { ref, controls, state, isAnimating, layout } =
     useAnimeLayout<HTMLDivElement>({
       children: ".method-item",
       duration: 600,
       ease: "outExpo",
     });
 
-  // Manual record() + DOM change + animate() approach
   const useRecordAnimate = useCallback(() => {
     if (!layout) return;
-
-    // 1. Record current state
     controls.record();
-
-    // 2. Make DOM changes
     const root = ref.current;
     if (root) {
       const nextCols = cols === 2 ? 4 : cols === 4 ? 3 : 2;
       root.style.gridTemplateColumns = `repeat(${nextCols}, 1fr)`;
       setCols(nextCols);
     }
-
-    // 3. Animate to new state
     controls.animate({ duration: 500 });
-    setLastMethod("record() → DOM change → animate()");
+    setLastMethod("record() → animate()");
   }, [layout, controls, ref, cols]);
 
-  // Combined update() approach
   const useUpdate = useCallback(() => {
     const nextCols = cols === 2 ? 4 : cols === 4 ? 3 : 2;
-
     controls.update(
       (layout) => {
         const root = layout.root as HTMLElement;
-        root.style.gridTemplateColumns = `repeat(${nextCols}, 1fr)`;
+        root.style.gridTemplateColumns = `repeat(${nextCols}, minmax(0, 1fr))`;
       },
       { duration: 700, ease: "outBack" },
     );
-
     setCols(nextCols);
-    setLastMethod("update(callback, params)");
+    setLastMethod("update()");
   }, [controls, cols]);
 
-  // Revert method
   const useRevert = useCallback(() => {
     controls.revert();
     setLastMethod("revert()");
+    setCols(2);
   }, [controls]);
 
   const items = [1, 2, 3, 4, 5, 6, 7, 8];
 
   return (
-    <DemoSection title="Layout: Methods Demo">
-      <div className="flex flex-col gap-4 w-full">
-        {/* Controls */}
-        <div className="flex flex-wrap gap-3 items-center">
+    <DemoCard
+      title="layout methods"
+      description="Directly control the layout engine. Click 'Play' to trigger update()."
+      actions={
+        <div className="flex gap-2">
           <button
             onClick={useRecordAnimate}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors text-sm"
+            className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-blue-400 rounded-lg transition-all"
+            title="record() + animate()"
           >
-            record() + animate()
+            <Zap size={16} />
           </button>
           <button
             onClick={useUpdate}
-            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors text-sm"
+            className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-green-400 rounded-lg transition-all"
+            title="update()"
           >
-            update()
+            <Play size={16} />
           </button>
           <button
             onClick={useRevert}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors text-sm"
+            className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-red-400 rounded-lg transition-all"
+            title="revert()"
           >
-            revert()
+            <RotateCcw size={16} />
           </button>
+        </div>
+      }
+      controls={{
+        play: useUpdate,
+        restart: useRevert,
+      }}
+      state={state}
+      isPlaying={isAnimating}
+      code={lastMethod ? `controls.${lastMethod}` : `// choose a method above`}
+    >
+      <div className="flex flex-col gap-6 w-full h-full">
+        {/* Method Indicator */}
+        <div className="flex items-center gap-3 bg-black/20 px-4 py-3 rounded-xl border border-white/5">
+          <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+          <span className="text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em]">
+            Active Method:{" "}
+            <span className="text-[#ffd11a] ml-1">{lastMethod || "Idle"}</span>
+          </span>
         </div>
 
         {/* Layout Container */}
         <div
           ref={ref}
-          className="w-full grid gap-3 p-4 bg-[#1a1a24] rounded-lg border border-[#2a2a3a]"
+          className="flex-1 grid gap-3 p-1 min-h-[160px]"
           style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
         >
           {items.map((item) => (
             <div
               key={item}
-              className="method-item h-16 flex items-center justify-center rounded-lg bg-cyan-500/90 text-white font-semibold shadow"
+              className="method-item h-12 flex items-center justify-center rounded-xl bg-[#ffd11a]/10 border border-[#ffd11a]/20 text-[#ffd11a] font-bold text-sm shadow-sm"
             >
-              {item}
+              ITEM {item}
             </div>
           ))}
         </div>
 
-        {/* Status */}
-        <div className="grid grid-cols-2 gap-4 text-xs font-mono bg-[#0f0f15] p-4 rounded-lg border border-[#2a2a3a]">
-          <div className="text-gray-500">Ready:</div>
-          <div className="text-amber-400">{isReady ? "Yes" : "No"}</div>
-          <div className="text-gray-500">Columns:</div>
-          <div className="text-amber-400">{cols}</div>
-          <div className="text-gray-500">Last Method:</div>
-          <div className="text-indigo-400">{lastMethod || "None"}</div>
-          <div className="text-gray-500">Progress:</div>
-          <div className="text-amber-400">
-            {Math.round(state.progress * 100)}%
-          </div>
-          <div className="text-gray-500">State:</div>
-          <div className="text-indigo-400">
-            {state.completed
-              ? "Completed"
-              : state.paused
-                ? "Paused"
-                : "Playing"}
-          </div>
-        </div>
-
-        <div className="text-xs text-gray-500 space-y-1">
-          <p>
-            • <code className="text-amber-400">record() + animate()</code>:
-            Manual two-step approach for complex scenarios
-          </p>
-          <p>
-            • <code className="text-amber-400">update(callback)</code>:
-            Simplified one-call approach for most use cases
-          </p>
-          <p>
-            • <code className="text-amber-400">revert()</code>: Resets layout
-            and clears animation state
-          </p>
+        {/* Method descriptions */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-[10px] text-slate-500 font-mono uppercase tracking-widest leading-relaxed mt-2 opacity-60">
+          <span className="text-blue-400">Zap</span>{" "}
+          <span>Record & Animate</span>
+          <span className="text-green-400">Play</span>{" "}
+          <span>Update Callback</span>
+          <span className="text-red-400">Rotate</span>{" "}
+          <span>Revert Styles</span>
         </div>
       </div>
-    </DemoSection>
+    </DemoCard>
   );
 };
 

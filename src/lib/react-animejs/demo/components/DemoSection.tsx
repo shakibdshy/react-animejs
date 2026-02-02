@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 
 interface DemoSectionProps {
   title: string;
@@ -7,21 +7,28 @@ interface DemoSectionProps {
 }
 
 /**
- * Reusable wrapper for demo sections to ensure consistent layout and styling
+ * Reusable wrapper for demo sections to ensure consistent layout and styling.
+ * Follows the high-end design pattern with yellow accents.
  */
-export function DemoSection({
+export const DemoSection: React.FC<DemoSectionProps> = ({
   title,
   children,
   className = "",
-}: DemoSectionProps) {
+}) => {
   return (
-    <section
-      className={`bg-[#12121a] border border-[#2a2a3a] rounded-2xl p-6 transition-all duration-300 hover:border-indigo-500 hover:shadow-[0_0_30px_rgba(99,102,241,0.1)] ${className}`}
-    >
-      <h3 className="text-lg font-semibold text-indigo-400 mb-6 pb-3 border-b border-[#2a2a3a]">
-        {title}
-      </h3>
-      <div className="flex flex-col items-center gap-6">{children}</div>
-    </section>
+    <div className={`w-full space-y-12 mt-16 ${className}`}>
+      <div className="flex items-center gap-4 mb-8">
+        <div className="h-[2px] flex-1 bg-linear-to-r from-transparent via-[#ffd11a]/20 to-transparent" />
+        <h2 className="text-2xl font-black text-white uppercase tracking-[0.2em] flex items-center gap-4">
+          <span className="w-2 h-8 bg-[#ffd11a] rounded-full" />
+          {title}
+        </h2>
+        <div className="h-[2px] flex-1 bg-linear-to-r from-transparent via-[#ffd11a]/20 to-transparent" />
+      </div>
+
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-8">
+        {children}
+      </div>
+    </div>
   );
-}
+};

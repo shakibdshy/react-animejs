@@ -5,13 +5,9 @@ import {
   type AnimeLayoutRef,
 } from "../../components/AnimeLayout";
 import { stagger } from "animejs";
-import { DemoSection } from "./DemoSection";
+import { DemoCard } from "./DemoCard";
+import { Layout, Sliders, Target } from "lucide-react";
 
-/**
- * LayoutStaggerDemo - Demonstrates staggered layout animations using AnimeLayout component:
- * - Stagger delay from first/last/center
- * - Visual effect of sequential item animations
- */
 export const LayoutStaggerDemo: React.FC = () => {
   const layoutRef = useRef<AnimeLayoutRef>(null);
   const [staggerFrom, setStaggerFrom] = useState<"first" | "last" | "center">(
@@ -36,102 +32,109 @@ export const LayoutStaggerDemo: React.FC = () => {
 
   const items = ["1", "2", "3", "4", "5", "6"];
 
+  const playDemo = () => {
+    toggleLayout();
+    setTimeout(toggleLayout, 1000);
+  };
+
   return (
-    <DemoSection title="Layout: Staggered Animation">
-      <div className="flex flex-col gap-4 w-full">
+    <DemoCard
+      title="staggered layout"
+      description="Apply sequential delays to layout transitions. Click 'Play' to toggle with stagger."
+      actions={
+        <div className="flex gap-2">
+          <button
+            onClick={toggleLayout}
+            className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-[#ffd11a] rounded-lg transition-all"
+            title="Toggle orientation"
+          >
+            <Layout size={16} className={isRow ? "rotate-90" : ""} />
+          </button>
+        </div>
+      }
+      controls={{
+        play: playDemo,
+        restart: () => {
+          if (!isRow) toggleLayout();
+        },
+      }}
+      state={layoutRef.current?.state}
+      isPlaying={
+        !layoutRef.current?.state.paused &&
+        layoutRef.current?.state.began &&
+        !layoutRef.current?.state.completed
+      }
+      code={`delay: stagger(${staggerDelay}, { from: '${staggerFrom}' })`}
+    >
+      <div className="flex flex-col gap-6 w-full h-full">
         {/* Controls */}
-        <div className="flex flex-wrap gap-4 items-center">
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-400">Stagger From:</label>
-            <select
-              value={staggerFrom}
-              onChange={(e) =>
-                setStaggerFrom(e.target.value as "first" | "last" | "center")
-              }
-              className="px-3 py-1 bg-gray-700 text-white rounded-md border border-gray-600"
-            >
-              <option value="first">First</option>
-              <option value="last">Last</option>
-              <option value="center">Center</option>
-            </select>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-black/20 p-4 rounded-2xl border border-white/5">
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+              <label className="flex items-center gap-1.5">
+                <Target size={10} /> Stagger From
+              </label>
+              <span className="text-[#ffd11a] capitalize">{staggerFrom}</span>
+            </div>
+            <div className="flex gap-1">
+              {(["first", "center", "last"] as const).map((pos) => (
+                <button
+                  key={pos}
+                  onClick={() => setStaggerFrom(pos)}
+                  className={`flex-1 py-1 text-[10px] font-bold uppercase rounded-md transition-all ${
+                    staggerFrom === pos
+                      ? "bg-[#ffd11a] text-[#12121a]"
+                      : "bg-white/5 text-slate-500 hover:bg-white/10"
+                  }`}
+                >
+                  {pos}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-400">Delay:</label>
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+              <label className="flex items-center gap-1.5">
+                <Sliders size={10} /> Stagger Delay
+              </label>
+              <span className="text-[#ffd11a]">{staggerDelay}ms</span>
+            </div>
             <input
               type="range"
               min="25"
               max="200"
               value={staggerDelay}
               onChange={(e) => setStaggerDelay(Number(e.target.value))}
-              className="w-24"
+              className="w-full h-1 bg-slate-800 rounded-full appearance-none cursor-pointer accent-[#ffd11a]"
             />
-            <span className="text-xs text-amber-400 w-12">
-              {staggerDelay}ms
-            </span>
           </div>
-
-          <button
-            onClick={toggleLayout}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition-colors"
-          >
-            Toggle Layout
-          </button>
         </div>
 
-        {/* Layout Container using AnimeLayout Component */}
+        {/* Layout Container */}
         <AnimeLayout
           ref={layoutRef}
           childrenSelector=".stagger-item"
           duration={600}
           ease="outExpo"
-          className={`w-full flex gap-3 p-4 bg-[#1a1a24] rounded-lg border border-[#2a2a3a] ${isRow ? "flex-row" : "flex-col"}`}
+          className={`flex-1 flex gap-3 min-h-[140px] items-stretch ${isRow ? "flex-row" : "flex-col"}`}
         >
           {items.map((item, index) => (
             <AnimeLayoutItem
               key={item}
-              className="stagger-item flex-1 h-14 flex items-center justify-center rounded-lg text-white font-semibold shadow"
+              className="stagger-item flex-1 flex items-center justify-center rounded-xl bg-[#ffd11a]/5 border border-[#ffd11a]/10 text-[#ffd11a] font-bold text-lg shadow-sm"
               style={{
-                backgroundColor: `hsl(${200 + index * 25}, 70%, 50%)`,
+                borderColor: `hsla(${200 + index * 25}, 70%, 50%, 0.3)`,
+                backgroundColor: `hsla(${200 + index * 25}, 70%, 50%, 0.1)`,
+                color: `hsl(${200 + index * 25}, 70%, 60%)`,
               }}
             >
               {item}
             </AnimeLayoutItem>
           ))}
         </AnimeLayout>
-
-        {/* Status */}
-        <div className="grid grid-cols-2 gap-4 text-xs font-mono bg-[#0f0f15] p-4 rounded-lg border border-[#2a2a3a]">
-          <div className="text-gray-500">Ready:</div>
-          <div className="text-amber-400">
-            {layoutRef.current?.isReady ? "Yes" : "No"}
-          </div>
-          <div className="text-gray-500">Stagger:</div>
-          <div className="text-amber-400">
-            stagger({staggerDelay}, &#123; from: '{staggerFrom}' &#125;)
-          </div>
-          <div className="text-gray-500">Progress:</div>
-          <div className="text-amber-400">
-            {Math.round((layoutRef.current?.state.progress ?? 0) * 100)}%
-          </div>
-          <div className="text-gray-500">State:</div>
-          <div className="text-indigo-400">
-            {layoutRef.current?.state.completed
-              ? "Completed"
-              : layoutRef.current?.state.paused
-                ? "Paused"
-                : "Playing"}
-          </div>
-        </div>
-
-        <p className="text-xs text-gray-500">
-          This demo uses the{" "}
-          <code className="text-amber-400">&lt;AnimeLayout&gt;</code> component
-          with ref-based controls. Toggle the layout to see items animate
-          sequentially based on the stagger configuration.
-        </p>
       </div>
-    </DemoSection>
+    </DemoCard>
   );
 };
 
