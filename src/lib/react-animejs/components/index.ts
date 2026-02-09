@@ -19,3 +19,11 @@ export type {
   AnimeLayoutMode,
   AnimeLayoutStateParams,
 } from "./AnimeLayout";
+
+export { AnimeScope } from "./AnimeScope";
+export type {
+  AnimeScopeProps,
+  AnimeScopeRef,
+  AnimeScopeAnimateFn,
+  AnimeScopeContext,
+} from "./AnimeScope";

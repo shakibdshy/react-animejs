@@ -1,131 +1,123 @@
 /**
  * ScopeMediaQueriesDemo - Media query reactivity demonstration
  *
- * Shows how scopes can react to media query changes and automatically
- * re-run constructors when viewport changes.
+ * Shows how to use useCreateScope and useAnime hooks together for
+ * a clean, reactive, and scoped animation experience.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DemoCard } from "../DemoCard";
-import { useAnimeScope } from "../../../hooks/use-anime-scope";
-import { animate, utils } from "animejs";
+import { useCreateScope, useAnime } from "../../../index";
+import { GripVertical } from "lucide-react";
 
-// Custom media queries for the demo
+// Media queries to track
 const MEDIA_QUERIES = {
-  isSmall: "(max-width: 400px)",
-  isMedium: "(min-width: 401px) and (max-width: 600px)",
-  isLarge: "(min-width: 601px)",
+  isSmall: "(max-width: 200px)",
   reduceMotion: "(prefers-reduced-motion)",
 } as const;
 
 export const ScopeMediaQueriesDemo: React.FC = () => {
-  const [containerWidth, setContainerWidth] = useState(500);
-  const { ref, isReady, matches, add } = useAnimeScope({
-    mediaQueries: MEDIA_QUERIES,
-    onMediaChange: (newMatches) => {
-      console.log("[ScopeMediaQueriesDemo] Media changed:", newMatches);
-    },
+  const [iframeWidth, setIframeWidth] = useState(300);
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // 1. Create the scope (tracks media queries automatically on the root element)
+  const { ref, matches } = useCreateScope({ mediaQueries: MEDIA_QUERIES });
+
+  // 2. Use the animation hook (automatically scoped and re-runs on deps changes)
+  useAnime({
+    selector: ".square",
+    translateX: matches.isSmall ? 0 : ["-35%", "35%"],
+    translateY: matches.isSmall ? ["-40%", "40%"] : 0,
+    scale: matches.isSmall ? 0.5 : 1,
+    loop: true,
+    alternate: true,
+    duration: matches.reduceMotion ? 0 : matches.isSmall ? 750 : 1250,
+    ease: "inOutQuad",
+    deps: [matches.isSmall, matches.reduceMotion],
   });
 
+  // Drag resize logic (UI concern)
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  }, []);
+
   useEffect(() => {
-    if (!isReady) return;
-
-    add((self) => {
-      const { isSmall, reduceMotion } = self.matches;
-
-      // Set initial scale based on size
-      utils.set(".mq-box", {
-        scale: isSmall ? 0.6 : 1,
-      });
-
-      // Different animations based on media query
-      if (isSmall) {
-        animate(".mq-box", {
-          y: [-30, 30],
-          duration: reduceMotion ? 0 : 600,
-          loop: true,
-          alternate: true,
-          ease: "inOutSine",
-        });
-      } else {
-        animate(".mq-box", {
-          x: [-50, 50],
-          rotate: [0, 360],
-          duration: reduceMotion ? 0 : 1200,
-          loop: true,
-          alternate: true,
-          ease: "inOutExpo",
-        });
-      }
-
-      return () => {
-        console.log("[ScopeMediaQueriesDemo] Cleaning up animations");
-      };
-    });
-  }, [isReady, add]);
-
-  const getActiveQuery = () => {
-    if (matches.isSmall) return "Small";
-    if (matches.isMedium) return "Medium";
-    if (matches.isLarge) return "Large";
-    return "Unknown";
-  };
+    if (!isDragging) return;
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const newWidth = e.clientX - containerRect.left;
+      const clampedWidth = Math.max(
+        100,
+        Math.min(newWidth, containerRect.width - 40),
+      );
+      setIframeWidth(clampedWidth);
+    };
+    const handleMouseUp = () => setIsDragging(false);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging]);
 
   return (
     <DemoCard
-      title="media queries"
-      description="Scopes react to media query changes and re-run animations. Resize the window to see different behaviors."
-      actions={
-        <div className="flex gap-1 bg-black/20 p-1 rounded-xl">
-          <button
-            onClick={() => setContainerWidth(350)}
-            className={`px-2 py-1 rounded-lg text-xs transition-all ${
-              containerWidth === 350
-                ? "bg-[#ffd11a] text-[#12121a]"
-                : "text-slate-500 hover:text-white"
-            }`}
-          >
-            Small
-          </button>
-          <button
-            onClick={() => setContainerWidth(500)}
-            className={`px-2 py-1 rounded-lg text-xs transition-all ${
-              containerWidth === 500
-                ? "bg-[#ffd11a] text-[#12121a]"
-                : "text-slate-500 hover:text-white"
-            }`}
-          >
-            Medium
-          </button>
-          <button
-            onClick={() => setContainerWidth(700)}
-            className={`px-2 py-1 rounded-lg text-xs transition-all ${
-              containerWidth === 700
-                ? "bg-[#ffd11a] text-[#12121a]"
-                : "text-slate-500 hover:text-white"
-            }`}
-          >
-            Large
-          </button>
-        </div>
-      }
-      code={`useAnimeScope({ mediaQueries: {...} })`}
+      title="Scope"
+      description="Using useCreateScope and useAnime hooks together. The animation automatically adapts when the container crosses 200px."
+      code={`useCreateScope({ mediaQueries: { isSmall: '(max-width: 200px)' } })\nuseAnime({ x: matches.isSmall ? 0 : 100, deps: [matches.isSmall] })`}
     >
       <div className="w-full flex flex-col items-center gap-4">
-        {/* Container with resizable width (simulated) */}
-        <div
-          ref={ref as React.RefObject<HTMLDivElement>}
-          style={{ width: containerWidth, maxWidth: "100%" }}
-          className="relative bg-[#1a1a24]/50 rounded-xl p-8 border border-[#2a2a3a] transition-all duration-300 flex justify-center items-center min-h-[120px]"
-        >
-          <div className="mq-box w-14 h-14 rounded-xl bg-linear-to-br from-[#a855f7] to-[#7c3aed] shadow-lg shadow-purple-500/30" />
+        {/* Resizable container */}
+        <div ref={containerRef} className="relative w-full flex items-center">
+          <div
+            ref={ref as React.RefObject<HTMLDivElement>}
+            style={{ width: iframeWidth }}
+            className="relative bg-[#0d3d38] rounded-lg border-2 border-[#2dd4bf] transition-colors duration-200 overflow-hidden"
+          >
+            {/* Content area */}
+            <div className="relative min-h-[140px] flex items-center justify-center p-4">
+              <div className="square w-12 h-12 rounded-lg bg-[#2dd4bf] shadow-lg shadow-[#2dd4bf]/30" />
+            </div>
+
+            {/* Resize handle */}
+            <div
+              onMouseDown={handleMouseDown}
+              className={`absolute right-0 top-0 bottom-0 w-6 flex items-center justify-center cursor-ew-resize transition-colors ${
+                isDragging ? "bg-[#2dd4bf]/20" : "hover:bg-[#2dd4bf]/10"
+              }`}
+            >
+              <GripVertical className="w-4 h-4 text-[#2dd4bf]/60" />
+            </div>
+
+            {/* Labels */}
+            <div className="absolute bottom-2 right-8 text-[10px] text-[#2dd4bf]/60 font-mono whitespace-nowrap">
+              resize iframe »
+            </div>
+            <div className="absolute top-2 right-8 text-[10px] text-[#2dd4bf]/80 font-mono">
+              {Math.round(iframeWidth)}px
+            </div>
+          </div>
         </div>
 
         {/* Status indicators */}
-        <div className="flex gap-4 text-xs">
+        <div className="flex gap-6 text-xs">
           <div className="flex items-center gap-2">
-            <span className="text-slate-500">Active:</span>
-            <span className="text-[#ffd11a] font-mono">{getActiveQuery()}</span>
+            <span className="text-slate-500">Size:</span>
+            <span
+              className={`font-mono ${matches.isSmall ? "text-[#2dd4bf]" : "text-[#ffd11a]"}`}
+            >
+              {matches.isSmall ? "Small (≤200px)" : "Normal (>200px)"}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-slate-500">Direction:</span>
+            <span className="text-slate-300 font-mono">
+              {matches.isSmall ? "Vertical ↕" : "Horizontal ↔"}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-slate-500">Reduce Motion:</span>
@@ -135,22 +127,6 @@ export const ScopeMediaQueriesDemo: React.FC = () => {
               {matches.reduceMotion ? "On" : "Off"}
             </span>
           </div>
-        </div>
-
-        {/* Media query badges */}
-        <div className="flex gap-2 flex-wrap justify-center">
-          {Object.entries(matches).map(([key, value]) => (
-            <span
-              key={key}
-              className={`px-2 py-0.5 rounded-full text-[10px] font-mono transition-all ${
-                value
-                  ? "bg-[#ffd11a]/20 text-[#ffd11a] border border-[#ffd11a]/30"
-                  : "bg-slate-800/50 text-slate-600 border border-slate-700/30"
-              }`}
-            >
-              {key}
-            </span>
-          ))}
         </div>
       </div>
     </DemoCard>

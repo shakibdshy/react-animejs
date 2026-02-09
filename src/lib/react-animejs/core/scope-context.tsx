@@ -41,7 +41,8 @@ const defaultContextValue: AnimeScopeContext = {
 /**
  * React Context for anime scope
  */
-const ScopeContext = createContext<AnimeScopeContext>(defaultContextValue);
+export const ScopeContext =
+  createContext<AnimeScopeContext>(defaultContextValue);
 
 // =============================================================================
 // Provider Component
