@@ -2,6 +2,7 @@
  * Timeline-specific types for useAnimeTimeline hook
  */
 
+import type { RefObject } from "react";
 import type {
   PlaybackSettings,
   AnimationCallbacks,
@@ -201,9 +202,10 @@ export interface UseAnimeTimelineReturn {
   state: AnimationState;
 
   /**
-   * Raw timeline instance (escape hatch)
+   * Ref to the timeline instance - use .current to get the latest value
+   * This is a ref so consumers can always access the most recent instance
    */
-  timeline: Timeline | null;
+  timeline: RefObject<Timeline | null>;
 
   /**
    * Whether the timeline is currently playing

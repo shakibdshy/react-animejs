@@ -482,7 +482,8 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     ref: targetRef,
     controls,
     state: animationState,
-    animation: animationRef.current,
+    // Return the ref so consumers can always access the latest animation instance
+    animation: animationRef,
     isPlaying:
       !animationState.paused &&
       animationState.began &&

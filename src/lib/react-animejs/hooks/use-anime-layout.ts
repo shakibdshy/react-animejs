@@ -44,6 +44,9 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
 
   const [state, setState] = useState(DEFAULT_ANIMATION_STATE);
   const [isReady, setIsReady] = useState(false);
+  const [entering, setEntering] = useState<Element[]>([]);
+  const [leaving, setLeaving] = useState<Element[]>([]);
+  const [swapping, setSwapping] = useState<Element[]>([]);
 
   const optionsRef = useRef(options);
   optionsRef.current = options;
@@ -151,8 +154,17 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
       createSafeCallback(onBegin as any, "onBegin")?.(tl);
     };
 
+    // Helper to track layout state after animation completes
+    const trackLayoutState = () => {
+      if (!layoutRef.current) return;
+      setEntering((layoutRef.current.entering as Element[]) ?? []);
+      setLeaving((layoutRef.current.leaving as Element[]) ?? []);
+      setSwapping((layoutRef.current.swapping as Element[]) ?? []);
+    };
+
     wrapped.onComplete = (tl: Timeline) => {
       setState(extractAnimationState(tl));
+      trackLayoutState();
       createSafeCallback(onComplete as any, "onComplete")?.(tl);
     };
 
@@ -225,11 +237,7 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
     };
   }, [wrapParams]);
 
-  // Get element arrays from layout instance (populated after animate/update)
-  const entering = (layoutRef.current?.entering as Element[]) ?? [];
-  const leaving = (layoutRef.current?.leaving as Element[]) ?? [];
-  const swapping = (layoutRef.current?.swapping as Element[]) ?? [];
-
+  // Get element arrays from layout instance - now using state for reactive updates
   return {
     ref: rootRef,
     controls,

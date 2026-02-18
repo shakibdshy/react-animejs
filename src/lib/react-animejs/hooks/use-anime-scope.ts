@@ -335,6 +335,10 @@ export function useAnimeScope<T extends ScopeMediaQueries = ScopeMediaQueries>(
   // Sync Matches State (for media query changes)
   // ==========================================================================
 
+  // Use a ref to track previous matches to avoid stale closure
+  const matchesRef = useRef(matches);
+  matchesRef.current = matches;
+
   useEffect(() => {
     if (!isReady || !scopeRef.current || !mediaQueries) return;
 
@@ -345,10 +349,10 @@ export function useAnimeScope<T extends ScopeMediaQueries = ScopeMediaQueries>(
       if (!scope) return;
 
       const currentMatches = extractMatches(scope, mediaQueries);
-      const matchesChanged =
-        JSON.stringify(currentMatches) !== JSON.stringify(matches);
+      const prevMatches = matchesRef.current;
 
-      if (matchesChanged) {
+      // Compare using JSON stringify for deep comparison
+      if (JSON.stringify(currentMatches) !== JSON.stringify(prevMatches)) {
         setMatches(currentMatches);
         setMethods({ ...scope.methods });
         onMediaChangeRef.current?.(currentMatches);
@@ -358,7 +362,7 @@ export function useAnimeScope<T extends ScopeMediaQueries = ScopeMediaQueries>(
     return () => {
       clearInterval(intervalId);
     };
-  }, [isReady, mediaQueries, matches]);
+  }, [isReady, mediaQueries]);
 
   // ==========================================================================
   // Controls

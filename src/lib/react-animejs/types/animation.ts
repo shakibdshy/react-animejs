@@ -3,6 +3,7 @@
  */
 
 import type { RefObject } from "react";
+import type React from "react";
 import type {
   PlaybackSettings,
   AnimationCallbacks,
@@ -260,9 +261,9 @@ export type UseAnimeOptions = PlaybackSettings &
 /**
  * Return type for useAnime hook
  */
-export interface UseAnimeReturn<
+export type UseAnimeReturn<
   T extends HTMLElement | SVGElement = HTMLElement,
-> {
+> = {
   /**
    * Ref to attach to the target element
    */
@@ -279,10 +280,10 @@ export interface UseAnimeReturn<
   state: AnimationState;
 
   /**
-   * Raw animation instance (escape hatch for advanced usage)
-   * May be null if animation hasn't been created yet
+   * Ref to the animation instance - use .current to get the latest value
+   * This is a ref so consumers can always access the most recent instance
    */
-  animation: unknown | null;
+  animation: React.MutableRefObject<JSAnimation | null>;
 
   /**
    * Whether the animation is currently playing
@@ -293,7 +294,7 @@ export interface UseAnimeReturn<
    * Whether the animation is ready (created and initialized)
    */
   isReady: boolean;
-}
+};
 
 // =============================================================================
 // Animation Instance Types (from Anime.js)

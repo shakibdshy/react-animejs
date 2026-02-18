@@ -553,7 +553,8 @@ export function useAnimeTimeline(
   return {
     controls,
     state: timelineState,
-    timeline: timelineRef.current,
+    // Return the ref so consumers can always access the latest timeline instance
+    timeline: timelineRef,
     isPlaying:
       !timelineState.paused && timelineState.began && !timelineState.completed,
     isReady,

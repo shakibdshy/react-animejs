@@ -88,9 +88,9 @@ export interface UseAnimatableReturn<
   T extends HTMLElement | SVGElement = HTMLElement,
 > {
   /** Ref to attach to the target element */
-  ref: React.RefObject<T | null>;
-  /** The animatable instance - null until ready */
-  animatable: AnimatableInstance | null;
+  ref: RefObject<T | null>;
+  /** Ref to the animatable instance - use .current to get the latest value */
+  animatable: RefObject<AnimatableInstance | null>;
   /** Whether the animatable is initialized and ready */
   isReady: boolean;
   /** Cleanup function to revert all applied styles */
@@ -173,7 +173,8 @@ export function useAnimatable<T extends HTMLElement | SVGElement = HTMLElement>(
 
   return {
     ref: internalRef,
-    animatable: animatableRef.current,
+    // Return the ref so consumers can always access the latest animatable instance
+    animatable: animatableRef,
     isReady,
     revert,
   };
