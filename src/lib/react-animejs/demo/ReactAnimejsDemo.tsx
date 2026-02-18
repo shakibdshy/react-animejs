@@ -1,26 +1,12 @@
 import { Animate, AnimeProvider, fadeIn, fadeInUp } from "../index";
-import { AlternatingTimerDemo } from "./components/AlternatingTimerDemo";
-import { ReversedTimerDemo } from "./components/ReversedTimerDemo";
-import { PlaybackRateDemo } from "./components/PlaybackRateDemo";
-import { TimerCallbacksDemo } from "./components/TimerCallbacksDemo";
-import { TimerMethodsDemo } from "./components/TimerMethodsDemo";
-import { TimerPropertiesDemo } from "./components/TimerPropertiesDemo";
-import { V4FeaturesDemo } from "./components/V4FeaturesDemo";
-import { CssSelectorDemo } from "./components/CssSelectorDemo";
-import { JsObjectDemo } from "./components/JsObjectDemo";
-import { ArrayOfTargetsDemo } from "./components/ArrayOfTargetsDemo";
-import { TimelineFeaturesDemo } from "./components/TimelineFeaturesDemo";
-import { TimelineTimersDemo } from "./components/TimelineTimersDemo";
-import { TimelineAnimationsDemo } from "./components/TimelineAnimationsDemo";
-import { CallFunctionsDemo } from "./components/CallFunctionsDemo";
-import { HighFidelityTimePosition } from "./components/HighFidelityTimePosition";
+import { CoreFeaturesGroup } from "./components/CoreFeaturesGroup";
+import { TimelinesGroup } from "./components/TimelinesGroup";
+import { TimersGroup } from "./components/TimersGroup";
 import { PlaybackSettingsGroup } from "./components/PlaybackSettingsGroup";
-import { SyncWAAPIAnimationsDemo } from "./components/SyncWAAPIAnimationsDemo";
-import { SyncTimelinesDemo } from "./components/SyncTimelinesDemo";
 import { CallbacksGroup } from "./components/CallbacksGroup";
 import MethodsGroup from "./components/MethodsGroup";
+import { LayoutGroup } from "./components/LayoutGroup";
 import { DraggableDemo } from "./components/DraggableDemo";
-import { LayoutDemo } from "./components/LayoutDemo";
 
 /**
  * Main React Anime.js Demo Page
@@ -45,38 +31,14 @@ export default function ReactAnimejsDemo() {
           </Animate>
         </header>
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-8 max-w-375 mx-auto">
-          {/* <ConfigurableTimerDemo /> */}
-          <AlternatingTimerDemo />
-          <ReversedTimerDemo />
-          <PlaybackRateDemo />
-          <TimerCallbacksDemo />
-          <TimerMethodsDemo />
-          <TimerPropertiesDemo />
-          <V4FeaturesDemo />
-          <CssSelectorDemo />
-          <JsObjectDemo />
-          <ArrayOfTargetsDemo />
-          <TimelineFeaturesDemo />
-          <TimelineTimersDemo />
-          <TimelineAnimationsDemo />
-          <CallFunctionsDemo />
-          <HighFidelityTimePosition />
-          <SyncWAAPIAnimationsDemo />
-          <SyncTimelinesDemo />
-
-          <LayoutDemo />
-        </div>
-
-        <div>
-          <PlaybackSettingsGroup />
-          <CallbacksGroup />
-          <MethodsGroup />
-        </div>
-
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(450px,1fr))] gap-8 max-w-375 mx-auto">
-          <DraggableDemo />
-        </div>
+        <CoreFeaturesGroup />
+        <TimersGroup />
+        <TimelinesGroup />
+        <PlaybackSettingsGroup />
+        <CallbacksGroup />
+        <MethodsGroup />
+        <DraggableDemo />
+        <LayoutGroup />
 
         <footer className="text-center p-12 text-[#888]">
           <p>Built with ❤️ using React + Anime.js v4</p>
