@@ -19,8 +19,9 @@ import {
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
   resolveTarget,
-  createSafeCallback,
   safeJsonStringify,
+  buildCallbackConfig,
+  cleanUndefinedValues,
 } from "../core";
 
 // =============================================================================
@@ -182,49 +183,18 @@ export function useAnimeTimeline(
       };
 
       // Wrap callbacks with state updates
-      config.onBegin = (tl: Timeline) => {
-        setTimelineState(extractAnimationState(tl));
-        createSafeCallback(onBegin, "onBegin")?.(tl);
-      };
+      const callbackConfig = buildCallbackConfig(
+        setTimelineState,
+        extractAnimationState,
+        { onBegin, onComplete, onUpdate, onRender, onBeforeUpdate, onLoop, onPause },
+        DEFAULT_ANIMATION_STATE,
+      );
 
-      config.onComplete = (tl: Timeline) => {
-        setTimelineState(extractAnimationState(tl));
-        createSafeCallback(onComplete, "onComplete")?.(tl);
-      };
-
-      config.onUpdate = (tl: Timeline) => {
-        setTimelineState(extractAnimationState(tl));
-        createSafeCallback(onUpdate, "onUpdate")?.(tl);
-      };
-
-      config.onRender = (tl: Timeline) => {
-        setTimelineState(extractAnimationState(tl));
-        createSafeCallback(onRender, "onRender")?.(tl);
-      };
-
-      config.onBeforeUpdate = (tl: Timeline) => {
-        setTimelineState(extractAnimationState(tl));
-        createSafeCallback(onBeforeUpdate, "onBeforeUpdate")?.(tl);
-      };
-
-      config.onLoop = (tl: Timeline) => {
-        setTimelineState(extractAnimationState(tl));
-        createSafeCallback(onLoop, "onLoop")?.(tl);
-      };
-
-      if (onPause) {
-        config.onPause = (tl: Timeline) => {
-          setTimelineState(extractAnimationState(tl));
-          createSafeCallback(onPause, "onPause")?.(tl);
-        };
-      }
+      // Merge into config
+      Object.assign(config, callbackConfig);
 
       // Clean undefined values
-      Object.keys(config).forEach((key) => {
-        if (config[key] === undefined) {
-          delete config[key];
-        }
-      });
+      cleanUndefinedValues(config);
 
       // Create timeline
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

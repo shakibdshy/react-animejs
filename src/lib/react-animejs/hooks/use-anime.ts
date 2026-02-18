@@ -19,8 +19,9 @@ import {
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
   resolveTarget,
-  createSafeCallback,
   safeJsonStringify,
+  buildCallbackConfig,
+  cleanUndefinedValues,
 } from "../core";
 
 // =============================================================================
@@ -229,50 +230,18 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     }
 
     // Wrap callbacks with state updates
-    config.onBegin = (anim: JSAnimation) => {
-      setAnimationState(extractAnimationState(anim));
-      createSafeCallback(onBegin, "onBegin")?.(anim);
-    };
+    const callbackConfig = buildCallbackConfig(
+      setAnimationState,
+      extractAnimationState,
+      { onBegin, onComplete, onUpdate, onRender, onBeforeUpdate, onLoop, onPause },
+      DEFAULT_ANIMATION_STATE,
+    );
 
-    config.onComplete = (anim: JSAnimation) => {
-      setAnimationState(extractAnimationState(anim));
-      createSafeCallback(onComplete, "onComplete")?.(anim);
-    };
-
-    config.onUpdate = (anim: JSAnimation) => {
-      // Update state for reactive progress/values
-      setAnimationState(extractAnimationState(anim));
-      createSafeCallback(onUpdate, "onUpdate")?.(anim);
-    };
-
-    config.onRender = (anim: JSAnimation) => {
-      setAnimationState(extractAnimationState(anim));
-      createSafeCallback(onRender, "onRender")?.(anim);
-    };
-
-    config.onBeforeUpdate = (anim: JSAnimation) => {
-      setAnimationState(extractAnimationState(anim));
-      createSafeCallback(onBeforeUpdate, "onBeforeUpdate")?.(anim);
-    };
-
-    config.onLoop = (anim: JSAnimation) => {
-      setAnimationState(extractAnimationState(anim));
-      createSafeCallback(onLoop, "onLoop")?.(anim);
-    };
-
-    if (onPause) {
-      config.onPause = (anim: JSAnimation) => {
-        setAnimationState(extractAnimationState(anim));
-        createSafeCallback(onPause, "onPause")?.(anim);
-      };
-    }
+    // Merge callback config
+    Object.assign(config, callbackConfig);
 
     // Clean undefined values
-    Object.keys(config).forEach((key) => {
-      if (config[key] === undefined) {
-        delete config[key];
-      }
-    });
+    cleanUndefinedValues(config);
 
     return { target, config };
   }, [scopeContext.rootRef]);

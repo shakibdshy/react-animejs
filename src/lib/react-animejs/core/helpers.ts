@@ -3,7 +3,7 @@
  */
 
 import type { RefObject } from "react";
-import type { AnimationTarget, AnimationState } from "../types";
+import type { AnimationTarget } from "../types";
 import { RESERVED_KEYS } from "./constants";
 
 // =============================================================================
@@ -286,3 +286,109 @@ export function safeJsonStringify(obj: unknown): string {
 import { stagger, waapi } from "animejs";
 export { stagger };
 export const convertEase = waapi.convertEase;
+
+// =============================================================================
+// Callback Wrappers
+// =============================================================================
+
+import type { AnimationState } from "../types";
+
+/**
+ * Build a complete callback config object that wraps all anime.js callbacks
+ * with state extraction and safe execution.
+ *
+ * This reduces duplication when implementing hooks that need to wrap
+ * multiple callback types (onBegin, onComplete, onUpdate, etc.)
+ *
+ * @param setState - Function to update the animation state
+ * @param callbacks - Object containing all callback functions
+ * @returns Config object with wrapped callbacks
+ *
+ * @example
+ * ```typescript
+ * const config = buildCallbackConfig(
+ *   setAnimationState,
+ *   { onBegin, onComplete, onUpdate, onLoop }
+ * );
+ * ```
+ */
+export function buildCallbackConfig<
+  T extends Record<string, unknown>,
+  S extends AnimationState,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  C extends Record<string, ((...args: any[]) => void) | undefined>,
+>(
+  setState: (state: S) => void,
+  extractState: (instance: unknown) => S,
+  callbacks: C,
+  _defaultState: S,
+): T {
+  const config: Record<string, unknown> = {};
+
+  // Wrap each callback if provided
+  if (callbacks.onBegin) {
+    config.onBegin = (anim: unknown) => {
+      setState(extractState(anim));
+      createSafeCallback(callbacks.onBegin, "onBegin")?.(anim);
+    };
+  }
+
+  if (callbacks.onComplete) {
+    config.onComplete = (anim: unknown) => {
+      setState(extractState(anim));
+      createSafeCallback(callbacks.onComplete, "onComplete")?.(anim);
+    };
+  }
+
+  if (callbacks.onUpdate) {
+    config.onUpdate = (anim: unknown) => {
+      setState(extractState(anim));
+      createSafeCallback(callbacks.onUpdate, "onUpdate")?.(anim);
+    };
+  }
+
+  if (callbacks.onRender) {
+    config.onRender = (anim: unknown) => {
+      setState(extractState(anim));
+      createSafeCallback(callbacks.onRender, "onRender")?.(anim);
+    };
+  }
+
+  if (callbacks.onBeforeUpdate) {
+    config.onBeforeUpdate = (anim: unknown) => {
+      setState(extractState(anim));
+      createSafeCallback(callbacks.onBeforeUpdate, "onBeforeUpdate")?.(anim);
+    };
+  }
+
+  if (callbacks.onLoop) {
+    config.onLoop = (anim: unknown) => {
+      setState(extractState(anim));
+      createSafeCallback(callbacks.onLoop, "onLoop")?.(anim);
+    };
+  }
+
+  if (callbacks.onPause) {
+    config.onPause = (anim: unknown) => {
+      setState(extractState(anim));
+      createSafeCallback(callbacks.onPause, "onPause")?.(anim);
+    };
+  }
+
+  return config as T;
+}
+
+/**
+ * Clean undefined values from a config object
+ * Used before passing config to anime.js
+ */
+export function cleanUndefinedValues<T extends Record<string, unknown>>(
+  config: T,
+): T {
+  Object.keys(config).forEach((key) => {
+    if (config[key] === undefined) {
+      delete config[key];
+    }
+  });
+  return config;
+}

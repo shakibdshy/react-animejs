@@ -49,7 +49,24 @@ import type {
  */
 export interface AnimeScopeContext<
   T extends ScopeMediaQueries = ScopeMediaQueries,
-> extends ScopeSelf<T> {
+> {
+  /**
+   * Current media query match states
+   */
+  matches: ScopeMediaMatches<T>;
+
+  /**
+   * The root element of the scope
+   */
+  root: HTMLElement | Document;
+
+  /**
+   * Register a method accessible via scope.methods
+   * @param name - The method name
+   * @param fn - The method function
+   */
+  add: (name: string, fn: (...args: unknown[]) => unknown) => void;
+
   /**
    * Anime.js animate function - creates animations scoped to this element
    * @see https://animejs.com/documentation/animation
@@ -253,9 +270,32 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
    * Wraps user's callback to enhance scope self with animate and utils
    */
   const wrapCallback = (callback: AnimeScopeAnimateFn<T>) => {
-    return (self: ScopeSelf<T>) => {
+    return (self: { matches: ScopeMediaMatches<T>; root: HTMLElement | Document; add: (name: string, fn: (...args: unknown[]) => unknown) => void }) => {
+      // Create a safe add function that registers named methods
+      // In Anime.js, self.add(name, fn) registers a method that can be called later via scope.methods[name]
+      const addMethod = (name: string, fn: (...args: unknown[]) => unknown) => {
+        // Validate inputs
+        if (!name || typeof name !== 'string') {
+          console.warn('[AnimeScope] add: method name must be a non-empty string');
+          return;
+        }
+        if (typeof fn !== 'function') {
+          console.warn('[AnimeScope] add: method must be a function');
+          return;
+        }
+        // Call self.add to register the named method
+        // In Anime.js, this adds the method to scope.methods
+        try {
+          self.add(name, fn);
+        } catch (err) {
+          console.error('[AnimeScope] Failed to register method:', name, err);
+        }
+      };
+
       const enhancedContext: AnimeScopeContext<T> = {
-        ...self,
+        matches: self.matches,
+        root: self.root,
+        add: addMethod,
         animate,
         utils,
       };

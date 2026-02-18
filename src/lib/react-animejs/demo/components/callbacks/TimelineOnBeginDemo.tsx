@@ -51,7 +51,7 @@ export const TimelineOnBeginDemo: React.FC = () => {
         </button>
       </div>
 
-      <div className="bg-[#0f0f13] rounded-2xl p-8 relative min-h-[160px] flex items-center justify-start border border-[#2a2a3a] overflow-hidden">
+      <div className="bg-[#0f0f13] rounded-2xl p-8 relative min-h-40 flex items-center justify-start border border-[#2a2a3a] overflow-hidden">
         <div
           ref={boxRef}
           className="w-12 h-12 bg-linear-to-br from-[#ffd11a] to-[#ff9100] rounded-xl shadow-[0_0_20px_rgba(255,209,26,0.2)]"

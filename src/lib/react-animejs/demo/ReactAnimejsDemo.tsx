@@ -7,6 +7,7 @@ import { CallbacksGroup } from "./components/CallbacksGroup";
 import MethodsGroup from "./components/MethodsGroup";
 import { LayoutGroup } from "./components/LayoutGroup";
 import { DraggableDemo } from "./components/DraggableDemo";
+import ScopeGroup from "./components/ScopeGroup";
 
 /**
  * Main React Anime.js Demo Page
@@ -32,6 +33,7 @@ export default function ReactAnimejsDemo() {
         </header>
 
         <CoreFeaturesGroup />
+        
         <TimersGroup />
         <TimelinesGroup />
         <PlaybackSettingsGroup />
@@ -39,6 +41,7 @@ export default function ReactAnimejsDemo() {
         <MethodsGroup />
         <DraggableDemo />
         <LayoutGroup />
+        <ScopeGroup />
 
         <footer className="text-center p-12 text-[#888]">
           <p>Built with ❤️ using React + Anime.js v4</p>
