@@ -11,7 +11,7 @@ export const SyncTimelinesDemo: React.FC = () => {
   const squareRef = useRef<HTMLDivElement>(null);
 
   // 1. Standalone animation to be synced into tlA
-  const { animation: circleAnimation } = useAnime({
+  const { animation: circleAnimation, isReady: isCircleReady } = useAnime({
     targets: circleRef,
     translateX: '15rem',
     autoplay: false,
@@ -20,7 +20,10 @@ export const SyncTimelinesDemo: React.FC = () => {
 
   // 2. Timeline A: Sequences circle, triangle, and square movements
   const { timeline: tlA, isReady: isAReady } = useAnimeTimeline(
-    { autoplay: false },
+    {
+      autoplay: false,
+      enabled: isCircleReady,
+    },
     [
       { target: circleAnimation, position: 0 },
       { 
@@ -64,7 +67,6 @@ export const SyncTimelinesDemo: React.FC = () => {
     { 
       autoplay: false,
       enabled: isAReady && isBReady,
-      deps: [tlA, tlB]
     },
     [
       { target: tlA, position: 0 },

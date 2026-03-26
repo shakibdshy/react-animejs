@@ -7,12 +7,14 @@
 import {
   useState,
   useEffect,
+  useLayoutEffect,
   useRef,
   Children,
   cloneElement,
   isValidElement,
   type ReactNode,
   type ReactElement,
+  type CSSProperties,
 } from "react";
 import { useAnime } from "../hooks/use-anime";
 import type { AnimatableProperties } from "../types";
@@ -90,6 +92,7 @@ interface AnimatedChildProps extends AnimatePresenceChildProps {
   isPresent: boolean;
   onExitComplete?: () => void;
   skipInitial?: boolean;
+  popLayout?: boolean;
 }
 
 function AnimatedChild({
@@ -103,9 +106,13 @@ function AnimatedChild({
   delay = 0,
   onExitComplete,
   skipInitial = false,
+  popLayout = false,
 }: AnimatedChildProps) {
   const [shouldRender, setShouldRender] = useState(isPresent);
+  const [popLayoutStyle, setPopLayoutStyle] = useState<CSSProperties>();
   const hasAnimated = useRef(false);
+  const hasMeasuredPopLayout = useRef(false);
+  const nodeRef = useRef<HTMLElement | null>(null);
 
   // Determine current animation state
   const currentProps = isPresent
@@ -127,6 +134,32 @@ function AnimatedChild({
       hasAnimated.current = true;
     }
   }, [isPresent]);
+
+  useLayoutEffect(() => {
+    if (isPresent || !popLayout || !shouldRender) {
+      hasMeasuredPopLayout.current = false;
+      if (popLayoutStyle) {
+        setPopLayoutStyle(undefined);
+      }
+      return;
+    }
+
+    if (hasMeasuredPopLayout.current || !nodeRef.current) {
+      return;
+    }
+
+    hasMeasuredPopLayout.current = true;
+    const rect = nodeRef.current.getBoundingClientRect();
+    setPopLayoutStyle({
+      position: "fixed",
+      top: `${rect.top}px`,
+      left: `${rect.left}px`,
+      width: `${rect.width}px`,
+      height: `${rect.height}px`,
+      margin: 0,
+      pointerEvents: "none",
+    });
+  }, [isPresent, popLayout, shouldRender, popLayoutStyle]);
 
   // Handle exit animation completion
   useEffect(() => {
@@ -152,7 +185,18 @@ function AnimatedChild({
     return children;
   }
 
-  return cloneElement(children, { ref } as Partial<unknown>);
+  return cloneElement(children, {
+    ref: (node: HTMLElement | null) => {
+      nodeRef.current = node;
+      (ref as { current: HTMLElement | null }).current = node;
+    },
+    style: popLayoutStyle
+      ? {
+          ...((children.props as { style?: CSSProperties }).style || {}),
+          ...popLayoutStyle,
+        }
+      : (children.props as { style?: CSSProperties }).style,
+  } as Partial<unknown>);
 }
 
 // =============================================================================
@@ -185,7 +229,7 @@ function AnimatedChild({
  */
 export function AnimatePresence({
   children,
-  mode: _mode = "sync",
+  mode = "sync",
   onExitComplete,
   initial = true,
 }: AnimatePresenceProps) {
@@ -251,29 +295,33 @@ export function AnimatePresence({
     });
   };
 
+  const shouldWaitForExit = mode === "wait" && exitingChildren.size > 0;
+
   // Render all children (present + exiting)
   const allChildren: ReactElement[] = [];
 
   // Add present children
-  presentChildren.forEach((child, key) => {
-    const childProps = child.props as AnimatePresenceChildProps;
+  if (!shouldWaitForExit) {
+    presentChildren.forEach((child, key) => {
+      const childProps = child.props as AnimatePresenceChildProps;
 
-    allChildren.push(
-      <AnimatedChild
-        key={key}
-        isPresent={true}
-        initial={childProps.initial}
-        animate={childProps.animate}
-        exit={childProps.exit}
-        duration={childProps.duration}
-        ease={childProps.ease}
-        delay={childProps.delay}
-        skipInitial={!initial && isInitialMount.current}
-      >
-        {child}
-      </AnimatedChild>,
-    );
-  });
+      allChildren.push(
+        <AnimatedChild
+          key={key}
+          isPresent={true}
+          initial={childProps.initial}
+          animate={childProps.animate}
+          exit={childProps.exit}
+          duration={childProps.duration}
+          ease={childProps.ease}
+          delay={childProps.delay}
+          skipInitial={!initial && isInitialMount.current}
+        >
+          {child}
+        </AnimatedChild>,
+      );
+    });
+  }
 
   // Add exiting children
   exitingChildren.forEach((child, key) => {
@@ -290,6 +338,7 @@ export function AnimatePresence({
         ease={childProps.ease}
         delay={childProps.delay}
         onExitComplete={() => handleExitComplete(key)}
+        popLayout={mode === "popLayout"}
       >
         {child}
       </AnimatedChild>,

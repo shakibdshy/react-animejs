@@ -11,8 +11,13 @@ import type {
   AnimationTargets,
   Easing,
 } from "./common";
-import type { AnimatableProperties, TweenParameters } from "./animation";
+import type {
+  AnimatableProperties,
+  TweenParameters,
+  JSAnimation,
+} from "./animation";
 import type { UseAnimeTimerOptions } from "./timer";
+import type { WAAPIAnimation } from "./waapi";
 
 // =============================================================================
 // Timeline Entry Types
@@ -71,11 +76,18 @@ export interface TimelineCallEntry {
 /**
  * Timeline sync entry
  */
+export type TimelineSyncTarget =
+  | Timeline
+  | JSAnimation
+  | WAAPIAnimation
+  | RefObject<Timeline | JSAnimation | WAAPIAnimation | null>;
+
 export interface TimelineSyncEntry {
   /**
-   * Timeline or WAAPI animation to sync
+   * Timeline or animation to sync.
+   * Accepts raw instances or refs returned by the library hooks.
    */
-  target: Timeline | unknown;
+  target: TimelineSyncTarget | unknown;
 
   /**
    * Position in the timeline
@@ -152,7 +164,7 @@ export interface TimelineControls extends PlaybackControls {
   /**
    * Sync another timeline or WAAPI animation
    */
-  sync: (target: Timeline | unknown, position?: number | string) => void;
+  sync: (target: TimelineSyncTarget | unknown, position?: number | string) => void;
 
   /**
    * Call a function at a specific position
@@ -256,7 +268,7 @@ export interface Timeline {
     targetsOrInstance: AnimationTargets | Timeline | unknown,
     propertyOrPosition?: string | number,
   ): this;
-  sync(timeline: Timeline | unknown, position?: number | string): this;
+  sync(timeline: TimelineSyncTarget | unknown, position?: number | string): this;
   call(callback: (tl: Timeline) => void, position?: number | string): this;
   label(name: string, position?: number | string): this;
   init(): this;

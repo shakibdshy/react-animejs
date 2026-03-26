@@ -24,6 +24,19 @@ import {
   cleanUndefinedValues,
 } from "../core";
 
+function resolveSyncTarget(target: unknown) {
+  if (
+    target &&
+    typeof target === "object" &&
+    "current" in target &&
+    "current" in (target as { current?: unknown })
+  ) {
+    return (target as { current: unknown }).current ?? null;
+  }
+
+  return target;
+}
+
 // =============================================================================
 // Hook Implementation
 // =============================================================================
@@ -213,13 +226,20 @@ export function useAnimeTimeline(
           timeline.call(entry.callback, entry.position);
         } else if ("target" in entry) {
           // Sync timeline/WAAPI
-          timeline.sync(entry.target, entry.position);
+          const syncTarget = resolveSyncTarget(entry.target);
+
+          if (!syncTarget) return;
+
+          timeline.sync(syncTarget, entry.position);
         } else if ("targets" in entry) {
           // Animation entry
           const { targets, position, ...animProps } = entry;
 
           // Resolve target
-          const resolvedTarget = resolveTarget(targets);
+          const resolvedTarget = resolveTarget(
+            targets,
+            scopeContext.rootRef.current,
+          );
 
           if (!resolvedTarget) return;
 
@@ -293,12 +313,19 @@ export function useAnimeTimeline(
       } else if ("callback" in entry) {
         timelineRef.current.call(entry.callback, position ?? entry.position);
       } else if ("target" in entry) {
-        timelineRef.current.sync(entry.target, position ?? entry.position);
+        const syncTarget = resolveSyncTarget(entry.target);
+
+        if (!syncTarget) return;
+
+        timelineRef.current.sync(syncTarget, position ?? entry.position);
       } else if ("targets" in entry) {
         const { targets, position: entryPos, ...animProps } = entry;
 
         // Resolve target
-        const resolvedTarget = resolveTarget(targets);
+        const resolvedTarget = resolveTarget(
+          targets,
+          scopeContext.rootRef.current,
+        );
 
         if (!resolvedTarget) return;
 
@@ -322,7 +349,11 @@ export function useAnimeTimeline(
    */
   const sync = useCallback(
     (target: Timeline | unknown, position?: number | string) => {
-      timelineRef.current?.sync(target, position);
+      const syncTarget = resolveSyncTarget(target);
+
+      if (!syncTarget) return;
+
+      timelineRef.current?.sync(syncTarget, position);
     },
     [],
   );

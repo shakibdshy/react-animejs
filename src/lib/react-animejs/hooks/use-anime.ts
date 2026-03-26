@@ -187,7 +187,10 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     } = currentOptions;
 
     // Resolve target
-    let target: unknown = resolveTarget(externalTargets || targetRef);
+    let target: unknown = resolveTarget(
+      externalTargets || targetRef,
+      scopeContext.rootRef.current,
+    );
 
     if (!target && selector && scopeContext.rootRef.current) {
       target = scopeContext.rootRef.current.querySelectorAll(selector);

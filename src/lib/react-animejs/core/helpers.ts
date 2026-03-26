@@ -325,55 +325,42 @@ export function buildCallbackConfig<
 ): T {
   const config: Record<string, unknown> = {};
 
-  // Wrap each callback if provided
-  if (callbacks.onBegin) {
-    config.onBegin = (anim: unknown) => {
-      setState(extractState(anim));
-      createSafeCallback(callbacks.onBegin, "onBegin")?.(anim);
-    };
-  }
+  // Always update state from lifecycle callbacks so hooks stay reactive even
+  // when consumers don't pass their own callback handlers.
+  config.onBegin = (anim: unknown) => {
+    setState(extractState(anim));
+    createSafeCallback(callbacks.onBegin, "onBegin")?.(anim);
+  };
 
-  if (callbacks.onComplete) {
-    config.onComplete = (anim: unknown) => {
-      setState(extractState(anim));
-      createSafeCallback(callbacks.onComplete, "onComplete")?.(anim);
-    };
-  }
+  config.onComplete = (anim: unknown) => {
+    setState(extractState(anim));
+    createSafeCallback(callbacks.onComplete, "onComplete")?.(anim);
+  };
 
-  if (callbacks.onUpdate) {
-    config.onUpdate = (anim: unknown) => {
-      setState(extractState(anim));
-      createSafeCallback(callbacks.onUpdate, "onUpdate")?.(anim);
-    };
-  }
+  config.onUpdate = (anim: unknown) => {
+    setState(extractState(anim));
+    createSafeCallback(callbacks.onUpdate, "onUpdate")?.(anim);
+  };
 
-  if (callbacks.onRender) {
-    config.onRender = (anim: unknown) => {
-      setState(extractState(anim));
-      createSafeCallback(callbacks.onRender, "onRender")?.(anim);
-    };
-  }
+  config.onRender = (anim: unknown) => {
+    setState(extractState(anim));
+    createSafeCallback(callbacks.onRender, "onRender")?.(anim);
+  };
 
-  if (callbacks.onBeforeUpdate) {
-    config.onBeforeUpdate = (anim: unknown) => {
-      setState(extractState(anim));
-      createSafeCallback(callbacks.onBeforeUpdate, "onBeforeUpdate")?.(anim);
-    };
-  }
+  config.onBeforeUpdate = (anim: unknown) => {
+    setState(extractState(anim));
+    createSafeCallback(callbacks.onBeforeUpdate, "onBeforeUpdate")?.(anim);
+  };
 
-  if (callbacks.onLoop) {
-    config.onLoop = (anim: unknown) => {
-      setState(extractState(anim));
-      createSafeCallback(callbacks.onLoop, "onLoop")?.(anim);
-    };
-  }
+  config.onLoop = (anim: unknown) => {
+    setState(extractState(anim));
+    createSafeCallback(callbacks.onLoop, "onLoop")?.(anim);
+  };
 
-  if (callbacks.onPause) {
-    config.onPause = (anim: unknown) => {
-      setState(extractState(anim));
-      createSafeCallback(callbacks.onPause, "onPause")?.(anim);
-    };
-  }
+  config.onPause = (anim: unknown) => {
+    setState(extractState(anim));
+    createSafeCallback(callbacks.onPause, "onPause")?.(anim);
+  };
 
   return config as T;
 }

@@ -46,6 +46,12 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
     enabled = true,
     autoplay = false,
     stagger,
+    onBegin,
+    onComplete,
+    onUpdate,
+    onRender,
+    onLoop,
+    onPause,
     ...restOptions
   } = options;
 
@@ -62,7 +68,10 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
     }
 
     // Resolve target
-    const target = resolveTarget(externalTargets || targetRef);
+    const target = resolveTarget(
+      externalTargets || targetRef,
+      scopeContext.rootRef.current,
+    );
 
     if (!target) return;
 
@@ -83,11 +92,12 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
           createSafeCallback(cb, name)?.(anim);
         };
 
-      config.onBegin = wrapCallback(options.onBegin, "onBegin");
-      config.onComplete = wrapCallback(options.onComplete, "onComplete");
-      config.onUpdate = wrapCallback(options.onUpdate, "onUpdate");
-      config.onRender = wrapCallback(options.onRender, "onRender");
-      config.onLoop = wrapCallback(options.onLoop, "onLoop");
+      config.onBegin = wrapCallback(onBegin, "onBegin");
+      config.onComplete = wrapCallback(onComplete, "onComplete");
+      config.onUpdate = wrapCallback(onUpdate, "onUpdate");
+      config.onRender = wrapCallback(onRender, "onRender");
+      config.onLoop = wrapCallback(onLoop, "onLoop");
+      config.onPause = wrapCallback(onPause, "onPause");
 
       const anim = waapi.animate(target as any, config as any) as unknown as WAAPIAnimation;
       animationRef.current = anim;
@@ -114,27 +124,81 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
 
   const controls: PlaybackControls = useMemo(
     () => ({
-      play: () => animationRef.current?.play(),
-      pause: () => animationRef.current?.pause(),
-      resume: () => animationRef.current?.resume(),
-      restart: () => animationRef.current?.restart(),
-      reverse: () => animationRef.current?.reverse(),
-      alternate: () => animationRef.current?.alternate(),
-      complete: () => animationRef.current?.complete(),
-      reset: () => animationRef.current?.reset(),
-      cancel: () => animationRef.current?.cancel(),
-      revert: () => animationRef.current?.revert(),
-      refresh: () => animationRef.current?.refresh(),
-      seek: (time: number | string) => animationRef.current?.seek(time),
-      stretch: (dur: number) => animationRef.current?.stretch(dur),
+      play: () => {
+        if (!animationRef.current) return;
+        animationRef.current.play();
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
+      pause: () => {
+        if (!animationRef.current) return;
+        animationRef.current.pause();
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
+      resume: () => {
+        if (!animationRef.current) return;
+        animationRef.current.resume();
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
+      restart: () => {
+        if (!animationRef.current) return;
+        animationRef.current.restart();
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
+      reverse: () => {
+        if (!animationRef.current) return;
+        animationRef.current.reverse();
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
+      alternate: () => {
+        if (!animationRef.current) return;
+        animationRef.current.alternate();
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
+      complete: () => {
+        if (!animationRef.current) return;
+        animationRef.current.complete();
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
+      reset: () => {
+        if (!animationRef.current) return;
+        animationRef.current.reset();
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
+      cancel: () => {
+        if (!animationRef.current) return;
+        animationRef.current.cancel();
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
+      revert: () => {
+        if (!animationRef.current) return;
+        animationRef.current.revert();
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
+      refresh: () => {
+        if (!animationRef.current) return;
+        animationRef.current.refresh();
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
+      seek: (time: number | string) => {
+        if (!animationRef.current) return;
+        animationRef.current.seek(time);
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
+      stretch: (dur: number) => {
+        if (!animationRef.current) return;
+        animationRef.current.stretch(dur);
+        setAnimationState(extractAnimationState(animationRef.current));
+      },
       setPlaybackRate: (rate: number) => {
         if (animationRef.current) {
           (animationRef.current as any).playbackRate = rate;
+          setAnimationState(extractAnimationState(animationRef.current));
         }
       },
       setFrameRate: (fps: number) => {
         if (animationRef.current) {
           (animationRef.current as any).fps = fps;
+          setAnimationState(extractAnimationState(animationRef.current));
         }
       },
     }),
