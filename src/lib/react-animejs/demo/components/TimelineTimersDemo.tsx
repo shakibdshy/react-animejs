@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useAnimeTimeline, useAnimeTimer } from '../../hooks';
+import { useAnimeTimer } from '../../hooks';
+import { AnimeTimeline } from '../../components';
 import { DemoSection } from './DemoSection';
 
 /**
@@ -18,36 +19,21 @@ export const TimelineTimersDemo: React.FC = () => {
   });
 
   // 2. Create a timeline that syncs the external timer and adds two more
-  const { controls, state } = useAnimeTimeline(
-    { 
-      autoplay: false,
-      onUpdate: () => {
-        // Timeline's own update if needed
-      },
-      onComplete: () => {
-        // Reset timers visually on complete if not looping
-        // setTimer01(0); setTimer02(0); setTimer03(0);
-      }
+  const entries = [
+    { target: externalTimer, position: 0 },
+    {
+      duration: 500,
+      onUpdate: (self: { currentTime: number }) =>
+        setTimer02(Math.round(self.currentTime)),
+      position: '+=0',
     },
-    [
-      // Sync the external timer
-      { target: externalTimer, position: 0 },
-      
-      // Add second timer directly (starts after first)
-      { 
-        duration: 500, 
-        onUpdate: (self) => setTimer02(Math.round(self.currentTime)),
-        position: '+=0'
-      },
-      
-      // Add third timer directly (starts after second)
-      { 
-        duration: 1000, 
-        onUpdate: (self) => setTimer03(Math.round(self.currentTime)),
-        position: '+=0'
-      }
-    ]
-  );
+    {
+      duration: 1000,
+      onUpdate: (self: { currentTime: number }) =>
+        setTimer03(Math.round(self.currentTime)),
+      position: '+=0',
+    },
+  ];
 
   // Total duration is 1500 + 500 + 1000 = 3000
   const totalDuration = 3000;
@@ -56,32 +42,34 @@ export const TimelineTimersDemo: React.FC = () => {
   const bar3Width = (1000 / totalDuration) * 100;
 
   return (
-    <DemoSection title="Timeline: Add & Sync Timers">
-      <div className="flex flex-col gap-8 w-full bg-[#2a2610] p-8 rounded-2xl border border-[#4a4220]">
-        <div className="flex justify-between items-center">
-          <h3 className="text-amber-500 font-bold text-lg uppercase tracking-tight">Add timers</h3>
-          <div className="flex gap-2">
-            <button 
-              onClick={controls.restart}
-              className="p-2 hover:bg-[#3a3418] text-amber-500 rounded-lg transition-colors"
-              title="Restart"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-            </button>
-            <button 
-              onClick={state.paused ? controls.play : controls.pause}
-              className="p-2 hover:bg-[#3a3418] text-amber-500 rounded-lg transition-colors"
-            >
-              {state.paused ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-              )}
-            </button>
-          </div>
-        </div>
+    <AnimeTimeline autoplay={false} enabled={Boolean(externalTimer)} entries={entries}>
+      {({ controls, state }) => (
+        <DemoSection title="Timeline: Add & Sync Timers">
+          <div className="flex flex-col gap-8 w-full bg-[#2a2610] p-8 rounded-2xl border border-[#4a4220]">
+            <div className="flex justify-between items-center">
+              <h3 className="text-amber-500 font-bold text-lg uppercase tracking-tight">Add timers</h3>
+              <div className="flex gap-2">
+                <button 
+                  onClick={controls.restart}
+                  className="p-2 hover:bg-[#3a3418] text-amber-500 rounded-lg transition-colors"
+                  title="Restart"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+                </button>
+                <button 
+                  onClick={state.paused ? controls.play : controls.pause}
+                  className="p-2 hover:bg-[#3a3418] text-amber-500 rounded-lg transition-colors"
+                >
+                  {state.paused ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                  )}
+                </button>
+              </div>
+            </div>
 
-        <div className="grid grid-cols-3 gap-4 w-full">
+            <div className="grid grid-cols-3 gap-4 w-full">
           <div className="flex flex-col gap-2">
             <span className="text-[10px] uppercase tracking-wider text-amber-700 font-bold">timer 01</span>
             <div className="bg-[#1a180a] p-4 rounded-xl border border-[#3a3418] flex items-center justify-center">
@@ -108,10 +96,9 @@ export const TimelineTimersDemo: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+            </div>
 
-        {/* Timeline Visualization */}
-        <div className="relative w-full h-12 flex flex-col justify-end gap-1">
+            <div className="relative w-full h-12 flex flex-col justify-end gap-1">
           {/* Bar 1 */}
           <div 
             className="h-1.5 bg-amber-900/30 rounded-full relative overflow-hidden"
@@ -150,14 +137,16 @@ export const TimelineTimersDemo: React.FC = () => {
             className="absolute bottom-0 w-0.5 h-full bg-amber-500/50"
             style={{ left: `${state.progress * 100}%` }}
           />
-        </div>
+            </div>
 
-        <div className="text-[10px] text-amber-700 font-medium leading-relaxed uppercase tracking-wide border-t border-[#3a3418] pt-4">
-          <p>• Synchronises animations, timers, and callbacks together.</p>
-          <p>• Visualizing individual segments within the global timeline progress.</p>
-        </div>
-      </div>
-    </DemoSection>
+            <div className="text-[10px] text-amber-700 font-medium leading-relaxed uppercase tracking-wide border-t border-[#3a3418] pt-4">
+              <p>• Synchronises animations, timers, and callbacks together.</p>
+              <p>• Visualizing individual segments within the global timeline progress.</p>
+            </div>
+          </div>
+        </DemoSection>
+      )}
+    </AnimeTimeline>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
-import { useAnimeTimeline, useAnime } from '../../hooks';
+import { useAnime } from '../../hooks';
+import { AnimeTimeline } from '../../components';
 import { DemoSection } from './DemoSection';
 
 /**
@@ -11,7 +12,7 @@ export const TimelineAnimationsDemo: React.FC = () => {
   const squareRef = useRef<HTMLDivElement>(null);
 
   // 1. Create an external animation using useAnime (synced later)
-  const { animation: externalCircleAnim } = useAnime({
+  const { animation: externalCircleAnim, isReady: isCircleReady } = useAnime({
     targets: circleRef,
     translateX: '15rem',
     duration: 1000,
@@ -19,35 +20,24 @@ export const TimelineAnimationsDemo: React.FC = () => {
     ease: 'easeInOutQuad'
   });
 
-  // 2. Create a timeline that syncs the external animation and adds two more
-  const { controls, state } = useAnimeTimeline(
-    { 
-      autoplay: false,
+  const entries = [
+    { target: externalCircleAnim, position: 0 },
+    {
+      targets: triangleRef,
+      translateX: '15rem',
+      rotate: '1turn',
+      duration: 500,
+      alternate: true,
+      loop: 2,
+      position: '+=0',
     },
-    [
-      // Sync the external circle animation
-      { target: externalCircleAnim, position: 0 },
-      
-      // Add triangle animation directly (starts after circle)
-      { 
-        targets: triangleRef,
-        translateX: '15rem',
-        rotate: '1turn',
-        duration: 500,
-        alternate: true,
-        loop: 2,
-        position: '+=0'
-      },
-      
-      // Add square animation directly (starts after triangle)
-      { 
-        targets: squareRef,
-        translateX: '15rem',
-        duration: 800,
-        position: '+=0'
-      }
-    ]
-  );
+    {
+      targets: squareRef,
+      translateX: '15rem',
+      duration: 800,
+      position: '+=0',
+    },
+  ];
 
   // Total duration: 1000 (circle) + 1000 (triangle 500*2) + 800 (square) = 2800ms
   const totalDuration = 2800;
@@ -56,30 +46,32 @@ export const TimelineAnimationsDemo: React.FC = () => {
   const bar3Width = (800 / totalDuration) * 100;
 
   return (
-    <DemoSection title="Timeline: Add & Sync Animations">
-      <div className="flex flex-col gap-10 w-full bg-[#1a180a] p-10 rounded-3xl border border-[#2a2610] shadow-2xl">
-        <div className="flex justify-between items-center">
-          <h3 className="text-amber-500 font-bold text-xl uppercase tracking-widest">ADD ANIMATIONS</h3>
-          <div className="flex gap-4">
-            <button 
-              onClick={controls.restart}
-              className="text-amber-500 hover:text-amber-400 transition-colors"
-              title="Restart"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
-            </button>
-            <button 
-              onClick={state.paused ? controls.play : controls.pause}
-              className="text-amber-500 hover:text-amber-400 transition-colors"
-            >
-              {state.paused ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-              )}
-            </button>
-          </div>
-        </div>
+    <AnimeTimeline autoplay={false} enabled={isCircleReady} entries={entries}>
+      {({ controls, state }) => (
+        <DemoSection title="Timeline: Add & Sync Animations">
+          <div className="flex flex-col gap-10 w-full bg-[#1a180a] p-10 rounded-3xl border border-[#2a2610] shadow-2xl">
+            <div className="flex justify-between items-center">
+              <h3 className="text-amber-500 font-bold text-xl uppercase tracking-widest">ADD ANIMATIONS</h3>
+              <div className="flex gap-4">
+                <button 
+                  onClick={controls.restart}
+                  className="text-amber-500 hover:text-amber-400 transition-colors"
+                  title="Restart"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+                </button>
+                <button 
+                  onClick={state.paused ? controls.play : controls.pause}
+                  className="text-amber-500 hover:text-amber-400 transition-colors"
+                >
+                  {state.paused ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                  )}
+                </button>
+              </div>
+            </div>
 
         {/* Animation Stage */}
         <div className="relative h-64 w-full bg-[#0a0905] rounded-2xl border border-[#2a2610] p-6 overflow-hidden shadow-inner">
@@ -154,22 +146,24 @@ export const TimelineAnimationsDemo: React.FC = () => {
           />
         </div>
 
-        <div className="space-y-3 pt-6 border-t border-[#2a2610]">
-          <div className="flex items-center gap-3">
-            <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
-            <span className="text-xs text-amber-600 font-bold tracking-widest uppercase">TIMELINE.SYNC(ANIMATION) FOR PRE-EXISTING ANIMATIONS.</span>
+            <div className="space-y-3 pt-6 border-t border-[#2a2610]">
+              <div className="flex items-center gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                <span className="text-xs text-amber-600 font-bold tracking-widest uppercase">TIMELINE.SYNC(ANIMATION) FOR PRE-EXISTING ANIMATIONS.</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                <span className="text-xs text-amber-600 font-bold tracking-widest uppercase">TIMELINE.ADD(TARGETS, PARAMS) FOR DIRECT SEGMENT CREATION.</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                <span className="text-xs text-amber-600 font-bold tracking-widest uppercase">PYRAMID STRUCTURE COMPOSITION WITH SEQUENCED MOVEMENT.</span>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
-            <span className="text-xs text-amber-600 font-bold tracking-widest uppercase">TIMELINE.ADD(TARGETS, PARAMS) FOR DIRECT SEGMENT CREATION.</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
-            <span className="text-xs text-amber-600 font-bold tracking-widest uppercase">PYRAMID STRUCTURE COMPOSITION WITH SEQUENCED MOVEMENT.</span>
-          </div>
-        </div>
-      </div>
-    </DemoSection>
+        </DemoSection>
+      )}
+    </AnimeTimeline>
   );
 };
 

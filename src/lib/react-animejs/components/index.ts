@@ -27,3 +27,6 @@ export type {
   AnimeScopeAnimateFn,
   AnimeScopeContext,
 } from "./AnimeScope";
+
+export { AnimeTimeline } from "./AnimeTimeline";
+export type { AnimeTimelineProps, AnimeTimelineRef } from "./AnimeTimeline";

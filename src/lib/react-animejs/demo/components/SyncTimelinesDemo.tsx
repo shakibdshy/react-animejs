@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useAnimeTimeline, useAnime } from '../../hooks';
+import { AnimeTimeline } from '../../components';
 import { DemoSection } from './DemoSection';
 
 /**
@@ -63,24 +64,24 @@ export const SyncTimelinesDemo: React.FC = () => {
 
   // 4. Main Timeline: Syncs tlA and tlB
   // Only initialize tlMain when tlA and tlB are ready
-  const { controls, state } = useAnimeTimeline(
-    { 
-      autoplay: false,
-      enabled: isAReady && isBReady,
-    },
-    [
-      { target: tlA, position: 0 },
-      { target: tlB, position: '-=2000' }
-    ]
-  );
+  const mainEntries = [
+    { target: tlA, position: 0 },
+    { target: tlB, position: '-=2000' },
+  ];
 
   const tlAWidth = 100; // 4000/4000
   const tlBWidth = 50;  // 2000/4000
   const tlBOffset = 50; // Starts at 2000ms
 
   return (
-    <DemoSection title="Timeline: Sync Timelines">
-      <div className="flex flex-col gap-10 w-full bg-[#1a180a] p-10 rounded-3xl border border-[#2a2610] shadow-2xl">
+    <AnimeTimeline
+      autoplay={false}
+      enabled={isAReady && isBReady}
+      entries={mainEntries}
+    >
+      {({ controls, state }) => (
+        <DemoSection title="Timeline: Sync Timelines">
+          <div className="flex flex-col gap-10 w-full bg-[#1a180a] p-10 rounded-3xl border border-[#2a2610] shadow-2xl">
         <div className="flex justify-between items-center">
           <h3 className="text-amber-500 font-bold text-xl uppercase tracking-widest">Sync timelines</h3>
           <div className="flex gap-4">
@@ -176,8 +177,10 @@ export const SyncTimelinesDemo: React.FC = () => {
             <span className="text-xs text-amber-600 font-bold tracking-widest uppercase">Complex nesting and relative positioning control.</span>
           </div>
         </div>
-      </div>
-    </DemoSection>
+          </div>
+        </DemoSection>
+      )}
+    </AnimeTimeline>
   );
 };
 

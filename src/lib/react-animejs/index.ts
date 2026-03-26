@@ -52,6 +52,11 @@ export type {
   AnimeLayoutStateParams,
   AnimeLayoutCallbacks,
 } from "./components/AnimeLayout";
+export { AnimeTimeline } from "./components/AnimeTimeline";
+export type {
+  AnimeTimelineProps,
+  AnimeTimelineRef,
+} from "./components/AnimeTimeline";
 
 // =============================================================================
 // Core Utilities

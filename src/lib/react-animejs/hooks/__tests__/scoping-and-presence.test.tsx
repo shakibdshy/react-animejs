@@ -226,6 +226,7 @@ vi.mock("animejs", () => {
 });
 
 import { __mock } from "animejs";
+import { AnimeTimeline } from "../../components/AnimeTimeline";
 import { AnimatePresence, AnimatePresenceChild } from "../../components/AnimatePresence";
 import { ScopeContext } from "../../core/scope-context";
 import { useAnime } from "../use-anime";
@@ -488,5 +489,29 @@ describe("AnimatePresence modes", () => {
     expect(screen.getByTestId("second")).not.toBeNull();
 
     rectSpy.mockRestore();
+  });
+});
+
+describe("AnimeTimeline component", () => {
+  it("exposes timeline state and controls through the render prop", async () => {
+    const handleReady = vi.fn();
+
+    render(
+      <AnimeTimeline
+        entries={[{ label: "start", position: 0 }]}
+        onReady={handleReady}
+      >
+        {({ isReady, state }) => (
+          <div data-testid="timeline-state">
+            {isReady ? "ready" : "pending"}:{state.paused ? "paused" : "playing"}
+          </div>
+        )}
+      </AnimeTimeline>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("timeline-state").textContent).toBe("ready:paused");
+      expect(handleReady).toHaveBeenCalledTimes(1);
+    });
   });
 });

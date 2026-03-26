@@ -1,5 +1,6 @@
 import React from 'react';
-import { useAnimeTimeline, useAnimeWAAPI } from '@/lib/react-animejs/hooks';
+import { useAnimeWAAPI } from '@/lib/react-animejs/hooks';
+import { AnimeTimeline } from '@/lib/react-animejs/components';
 import { DemoSection } from './DemoSection';
 
 /**
@@ -26,17 +27,11 @@ export const SyncWAAPIAnimationsDemo: React.FC = () => {
     autoplay: false,
   });
 
-  // 2. Create a timeline that syncs the WAAPI animations
-  const { controls, state } = useAnimeTimeline(
-    { 
-      autoplay: false,
-    },
-    [
-      { target: circleWAAPI, position: 0 },
-      { target: triangleWAAPI, position: 350 },
-      { target: squareWAAPI, position: 250 },
-    ]
-  );
+  const entries = [
+    { target: circleWAAPI, position: 0 },
+    { target: triangleWAAPI, position: 350 },
+    { target: squareWAAPI, position: 250 },
+  ];
 
   // Animation durations:
   // Circle: default 1000ms (Anime.js v4 default)
@@ -61,8 +56,14 @@ export const SyncWAAPIAnimationsDemo: React.FC = () => {
   const triangleDur = 750;
 
   return (
-    <DemoSection title="Timeline: Sync WAAPI Animations">
-      <div className="flex flex-col gap-10 w-full bg-[#2a2610] p-10 rounded-3xl border border-[#4a4220] shadow-2xl">
+    <AnimeTimeline
+      autoplay={false}
+      enabled={Boolean(circleWAAPI && triangleWAAPI && squareWAAPI)}
+      entries={entries}
+    >
+      {({ controls, state }) => (
+        <DemoSection title="Timeline: Sync WAAPI Animations">
+          <div className="flex flex-col gap-10 w-full bg-[#2a2610] p-10 rounded-3xl border border-[#4a4220] shadow-2xl">
         <div className="flex justify-between items-center">
           <h3 className="text-amber-500 font-bold text-xl uppercase tracking-widest">Sync WAAPI animations</h3>
           <div className="flex gap-4">
@@ -168,8 +169,10 @@ export const SyncWAAPIAnimationsDemo: React.FC = () => {
             <span className="text-xs text-amber-600 font-bold tracking-widest uppercase">Demonstrating precise overlapping timing control.</span>
           </div>
         </div>
-      </div>
-    </DemoSection>
+          </div>
+        </DemoSection>
+      )}
+    </AnimeTimeline>
   );
 };
 
