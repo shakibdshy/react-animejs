@@ -30,3 +30,6 @@ export type {
 
 export { AnimeTimeline } from "./AnimeTimeline";
 export type { AnimeTimelineProps, AnimeTimelineRef } from "./AnimeTimeline";
+
+export { AnimeWAAPI } from "./AnimeWAAPI";
+export type { AnimeWAAPIProps, AnimeWAAPIRef } from "./AnimeWAAPI";

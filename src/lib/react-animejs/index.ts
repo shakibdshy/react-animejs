@@ -57,6 +57,11 @@ export type {
   AnimeTimelineProps,
   AnimeTimelineRef,
 } from "./components/AnimeTimeline";
+export { AnimeWAAPI } from "./components/AnimeWAAPI";
+export type {
+  AnimeWAAPIProps,
+  AnimeWAAPIRef,
+} from "./components/AnimeWAAPI";
 
 // =============================================================================
 // Core Utilities

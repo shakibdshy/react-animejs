@@ -1,31 +1,16 @@
-import React from 'react';
-import { useAnimeWAAPI } from '@/lib/react-animejs/hooks';
-import { AnimeTimeline } from '@/lib/react-animejs/components';
+import React, { useState } from 'react';
+import type { WAAPIAnimation } from '@/lib/react-animejs/types';
+import type { AnimeWAAPIRef } from '@/lib/react-animejs/components';
+import { AnimeTimeline, AnimeWAAPI } from '@/lib/react-animejs/components';
 import { DemoSection } from './DemoSection';
 
 /**
  * SyncWAAPIAnimationsDemo - Demonstrates syncing WAAPI animations to a timeline
  */
 export const SyncWAAPIAnimationsDemo: React.FC = () => {
-  // 1. Create WAAPI animations using useAnimeWAAPI hook
-  const { animation: circleWAAPI, ref: circleRef } = useAnimeWAAPI<HTMLDivElement>({
-    translateX: '15rem',
-    autoplay: false,
-  });
-
-  const { animation: triangleWAAPI, ref: triangleRef } = useAnimeWAAPI<HTMLDivElement>({
-    translateX: '15rem',
-    translateY: [0, '-1.5rem', 0],
-    ease: 'out(4)',
-    duration: 750,
-    autoplay: false,
-  });
-
-  const { animation: squareWAAPI, ref: squareRef } = useAnimeWAAPI<HTMLDivElement>({
-    translateX: '15rem',
-    rotateZ: 360,
-    autoplay: false,
-  });
+  const [circleWAAPI, setCircleWAAPI] = useState<WAAPIAnimation | null>(null);
+  const [triangleWAAPI, setTriangleWAAPI] = useState<WAAPIAnimation | null>(null);
+  const [squareWAAPI, setSquareWAAPI] = useState<WAAPIAnimation | null>(null);
 
   const entries = [
     { target: circleWAAPI, position: 0 },
@@ -91,24 +76,43 @@ export const SyncWAAPIAnimationsDemo: React.FC = () => {
         <div className="relative h-64 w-full bg-[#1a180a] rounded-2xl border border-[#3a3418] p-6 overflow-hidden shadow-inner">
           <div className="relative w-full h-full flex items-center">
             {/* Square (Bottom Left) */}
-            <div 
-              ref={squareRef} 
-              className="absolute left-6 w-16 h-16 bg-amber-500 rounded-2xl shadow-[0_0_25px_rgba(245,158,11,0.4)] z-10"
-            ></div>
+            <AnimeWAAPI
+              translateX="15rem"
+              rotateZ={360}
+              autoplay={false}
+              onReady={(api: AnimeWAAPIRef) => setSquareWAAPI(api.animation)}
+            >
+              <div 
+                className="absolute left-6 w-16 h-16 bg-amber-500 rounded-2xl shadow-[0_0_25px_rgba(245,158,11,0.4)] z-10"
+              ></div>
+            </AnimeWAAPI>
 
             {/* Triangle (Top) */}
-            <div 
-              ref={triangleRef} 
-              className="absolute left-12 w-0 h-0 border-l-35 border-l-transparent border-r-35 border-r-transparent border-b-60 border-b-amber-500 drop-shadow-[0_0_15px_rgba(245,158,11,0.4)] z-20 -translate-y-8"
-            ></div>
+            <AnimeWAAPI
+              translateX="15rem"
+              translateY={[0, '-1.5rem', 0]}
+              ease="out(4)"
+              duration={750}
+              autoplay={false}
+              onReady={(api: AnimeWAAPIRef) => setTriangleWAAPI(api.animation)}
+            >
+              <div 
+                className="absolute left-12 w-0 h-0 border-l-35 border-l-transparent border-r-35 border-r-transparent border-b-60 border-b-amber-500 drop-shadow-[0_0_15px_rgba(245,158,11,0.4)] z-20 -translate-y-8"
+              ></div>
+            </AnimeWAAPI>
 
             {/* Circle (Bottom Right) */}
-            <div 
-              ref={circleRef} 
-              className="absolute left-16 w-16 h-16 bg-amber-500 rounded-full shadow-[0_0_30px_rgba(245,158,11,0.5)] z-30 flex items-center justify-center border-2 border-amber-400"
+            <AnimeWAAPI
+              translateX="15rem"
+              autoplay={false}
+              onReady={(api: AnimeWAAPIRef) => setCircleWAAPI(api.animation)}
             >
-              <div className="w-6 h-6 rounded-full border-4 border-[#1a180a]"></div>
-            </div>
+              <div 
+                className="absolute left-16 w-16 h-16 bg-amber-500 rounded-full shadow-[0_0_30px_rgba(245,158,11,0.5)] z-30 flex items-center justify-center border-2 border-amber-400"
+              >
+                <div className="w-6 h-6 rounded-full border-4 border-[#1a180a]"></div>
+              </div>
+            </AnimeWAAPI>
           </div>
         </div>
 

@@ -227,6 +227,7 @@ vi.mock("animejs", () => {
 
 import { __mock } from "animejs";
 import { AnimeTimeline } from "../../components/AnimeTimeline";
+import { AnimeWAAPI } from "../../components/AnimeWAAPI";
 import { AnimatePresence, AnimatePresenceChild } from "../../components/AnimatePresence";
 import { ScopeContext } from "../../core/scope-context";
 import { useAnime } from "../use-anime";
@@ -512,6 +513,24 @@ describe("AnimeTimeline component", () => {
     await waitFor(() => {
       expect(screen.getByTestId("timeline-state").textContent).toBe("ready:paused");
       expect(handleReady).toHaveBeenCalledTimes(1);
+    });
+  });
+});
+
+describe("AnimeWAAPI component", () => {
+  it("exposes the WAAPI animation through onReady", async () => {
+    const handleReady = vi.fn();
+
+    render(
+      <AnimeWAAPI autoplay={false} translateX="5rem" onReady={handleReady}>
+        <div data-testid="waapi-box">box</div>
+      </AnimeWAAPI>,
+    );
+
+    await waitFor(() => {
+      expect(handleReady).toHaveBeenCalledTimes(1);
+      expect(handleReady.mock.calls[0][0].isReady).toBe(true);
+      expect(handleReady.mock.calls[0][0].animation).not.toBeNull();
     });
   });
 });
