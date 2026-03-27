@@ -16,6 +16,7 @@ export { useAnimeTimer } from "./hooks/use-anime-timer";
 export { useAnimeTimeline } from "./hooks/use-anime-timeline";
 export { useAnimeLayout } from "./hooks/use-anime-layout";
 export { useAnimeDraggable } from "./hooks/use-anime-draggable";
+export { useAnimeOnScroll } from "./hooks/use-anime-onscroll";
 export { useAnimeControls } from "./hooks/use-anime-controls";
 export { useAnimeWAAPI } from "./hooks/use-anime-waapi";
 export { useAnimatable, useAnimatableEvent } from "./hooks/use-animatable";
@@ -180,6 +181,19 @@ export type {
   UseAnimeDraggableReturn,
   Draggable,
 
+  // Events types
+  ScrollObserverParams,
+  ScrollThresholdCallback,
+  ScrollThresholdParam,
+  ScrollThresholdValue,
+  ScrollLinkedInstance,
+  ScrollLinkedTarget,
+  ScrollObserverState,
+  ScrollObserverCallbacks,
+  UseAnimeOnScrollOptions,
+  UseAnimeOnScrollControls,
+  UseAnimeOnScrollReturn,
+
   // Scope types
   ScopeMediaQueries,
   ScopeMediaMatches,
@@ -209,6 +223,9 @@ export {
   createAnimatable,
   createScope,
   createDraggable,
+  onScroll,
+  ScrollObserver,
+  scrollContainers,
   AutoLayout,
   spring,
   stagger as animeStagger,
@@ -218,3 +235,5 @@ export {
   engine,
   waapi,
 } from "animejs";
+
+export * as events from "animejs/events";

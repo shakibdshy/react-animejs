@@ -7,6 +7,7 @@ import { CallbacksGroup } from "./components/CallbacksGroup";
 import MethodsGroup from "./components/MethodsGroup";
 import { LayoutGroup } from "./components/LayoutGroup";
 import { DraggableDemo } from "./components/DraggableDemo";
+import { OnScrollGroup } from "./components/OnScrollGroup";
 import ScopeGroup from "./components/ScopeGroup";
 
 /**
@@ -40,6 +41,7 @@ export default function ReactAnimejsDemo() {
         <CallbacksGroup />
         <MethodsGroup />
         <DraggableDemo />
+        <OnScrollGroup />
         <LayoutGroup />
         <ScopeGroup />
 

@@ -105,3 +105,19 @@ export type {
   UseAnimeLayoutOptions,
   UseAnimeLayoutReturn,
 } from "./layout";
+
+// Event types
+export type {
+  ScrollObserver,
+  ScrollObserverParams,
+  ScrollThresholdCallback,
+  ScrollThresholdParam,
+  ScrollThresholdValue,
+  ScrollLinkedInstance,
+  ScrollLinkedTarget,
+  ScrollObserverState,
+  ScrollObserverCallbacks,
+  UseAnimeOnScrollOptions,
+  UseAnimeOnScrollControls,
+  UseAnimeOnScrollReturn,
+} from "./events";

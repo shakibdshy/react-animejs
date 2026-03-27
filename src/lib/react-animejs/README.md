@@ -4,7 +4,7 @@ A comprehensive React wrapper for [Anime.js v4](https://animejs.com), providing 
 
 ## ✨ Features
 
-- 🎣 **Hooks-first API** - `useAnime`, `useAnimeTimer`, `useAnimeTimeline`, `useAnimeDraggable`
+- 🎣 **Hooks-first API** - `useAnime`, `useAnimeTimer`, `useAnimeTimeline`, `useAnimeDraggable`, `useAnimeOnScroll`
 - 🔄 **Automatic cleanup** - Animations are properly cleaned up when components unmount
 - 📦 **TypeScript first** - Full type safety with comprehensive types
 - 🎯 **Scoped animations** - `AnimeProvider` for isolated animation contexts
@@ -229,6 +229,30 @@ const { ref, isDragging, position, progress, velocity } = useAnimeDraggable({
   releaseDamping: 20,
 });
 ```
+
+---
+
+#### `useAnimeOnScroll(options)`
+
+Create a React-friendly `ScrollObserver` for Anime.js events and scroll-synchronised playback.
+
+```tsx
+const { ref, containerRef, observer, progress, isInView, controls } =
+  useAnimeOnScroll({
+    sync: true,
+    container: scrollAreaRef,
+    onEnter: (self) => console.log("Entered", self.id),
+    onLeaveBackward: () => console.log("Scrolled back out"),
+  });
+```
+
+**Returns:**
+- `ref` / `targetRef` - Ref for the observed target element
+- `containerRef` - Optional ref for the scroll container element
+- `observer` - Raw Anime.js `ScrollObserver` instance
+- `controls` - Observer methods (`refresh`, `link`, `revert`)
+- `state` - Reactive observer state (`progress`, `scroll`, `velocity`, `isInView`, etc.)
+- `isReady` - Whether the observer has been initialized
 
 **Axis Constraints:**
 
