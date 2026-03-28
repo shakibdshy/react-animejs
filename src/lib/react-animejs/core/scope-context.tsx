@@ -13,6 +13,7 @@ import {
   useEffect,
   useCallback,
   useMemo,
+  useState,
   type RefObject,
 } from "react";
 import React from "react";
@@ -80,6 +81,7 @@ export function AnimeProvider({
 
   // Store the scope instance
   const scopeRef = useRef<AnimeScope | null>(null);
+  const [scope, setScope] = useState<AnimeScope | null>(null);
 
   // Store cleanup functions registered by child hooks
   const cleanupFunctions = useRef<Set<() => void>>(new Set());
@@ -104,6 +106,7 @@ export function AnimeProvider({
 
     // Create the anime.js scope
     scopeRef.current = createScope({ root: rootRef }) as unknown as AnimeScope;
+    setScope(scopeRef.current);
 
     // Cleanup on unmount
     return () => {
@@ -126,6 +129,7 @@ export function AnimeProvider({
         }
         scopeRef.current = null;
       }
+      setScope(null);
     };
   }, [rootRef]);
 
@@ -134,13 +138,13 @@ export function AnimeProvider({
    */
   const contextValue = useMemo<AnimeScopeContext>(
     () => ({
-      scope: scopeRef.current,
+      scope,
       rootRef: rootRef as RefObject<HTMLElement | null>,
       isScoped: true,
       registerCleanup,
-      matches: scopeRef.current?.matches || {},
+      matches: scope?.matches || {},
     }),
-    [rootRef, registerCleanup],
+    [rootRef, registerCleanup, scope],
   );
 
   // If using external ref (no wrapper needed)

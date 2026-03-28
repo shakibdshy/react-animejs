@@ -98,6 +98,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     targets: externalTargets,
     deps = [],
     enabled = true,
+    controller,
 
     // Callbacks
     onBegin,
@@ -137,6 +138,25 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     ...animatableProps
   } = options;
 
+  const callbackRefs = useRef({
+    onBegin,
+    onComplete,
+    onUpdate,
+    onRender,
+    onBeforeUpdate,
+    onLoop,
+    onPause,
+  });
+  callbackRefs.current = {
+    onBegin,
+    onComplete,
+    onUpdate,
+    onRender,
+    onBeforeUpdate,
+    onLoop,
+    onPause,
+  };
+
   // ==========================================================================
   // Memoized Options
   // ==========================================================================
@@ -150,6 +170,41 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     () => safeJsonStringify(animatableProps),
     [animatableProps],
   );
+  const configJson = useMemo(
+    () =>
+      safeJsonStringify({
+        delay,
+        duration,
+        loop,
+        loopDelay,
+        alternate,
+        reversed,
+        autoplay,
+        frameRate,
+        playbackRate,
+        persist,
+        round,
+        composition,
+        stagger,
+        keyframes,
+      }),
+    [
+      delay,
+      duration,
+      loop,
+      loopDelay,
+      alternate,
+      reversed,
+      autoplay,
+      frameRate,
+      playbackRate,
+      persist,
+      round,
+      composition,
+      stagger,
+      keyframes,
+    ],
+  );
 
   /**
    * Build the anime.js configuration object
@@ -159,13 +214,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     const {
       targets: externalTargets,
       selector,
-      onBegin,
-      onComplete,
-      onUpdate,
-      onRender,
-      onBeforeUpdate,
-      onLoop,
-      onPause,
+      controller,
       delay,
       duration,
       loop,
@@ -236,7 +285,17 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     const callbackConfig = buildCallbackConfig(
       setAnimationState,
       extractAnimationState,
-      { onBegin, onComplete, onUpdate, onRender, onBeforeUpdate, onLoop, onPause },
+      {
+        onBegin: (anim) => callbackRefs.current.onBegin?.(anim as JSAnimation),
+        onComplete: (anim) =>
+          callbackRefs.current.onComplete?.(anim as JSAnimation),
+        onUpdate: (anim) => callbackRefs.current.onUpdate?.(anim as JSAnimation),
+        onRender: (anim) => callbackRefs.current.onRender?.(anim as JSAnimation),
+        onBeforeUpdate: (anim) =>
+          callbackRefs.current.onBeforeUpdate?.(anim as JSAnimation),
+        onLoop: (anim) => callbackRefs.current.onLoop?.(anim as JSAnimation),
+        onPause: (anim) => callbackRefs.current.onPause?.(anim as JSAnimation),
+      },
       DEFAULT_ANIMATION_STATE,
     );
 
@@ -270,6 +329,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     if (!result) return;
 
     const { target, config } = result;
+    let unregisterController: (() => void) | undefined;
 
     try {
       // Create animation within a scope for proper cleanup
@@ -281,6 +341,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const anim = animate(target, config as any) as unknown as JSAnimation;
       animationRef.current = anim;
+      unregisterController = controller?.register(anim);
 
       // Update initial state
       setAnimationState(extractAnimationState(anim));
@@ -314,6 +375,8 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
         animationRef.current = null;
       }
 
+      unregisterController?.();
+
       if (scopeRef.current) {
         try {
           scopeRef.current.revert();
@@ -330,8 +393,15 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     enabled,
     externalTargets,
     selector,
-    scopeContext,
+    controller,
+    scopeContext.isScoped,
+    scopeContext.registerCleanup,
+    scopeContext.rootRef,
     animatablePropsJson,
+    configJson,
+    ease,
+    modifier,
+    playbackEase,
     ...deps,
   ]);
 

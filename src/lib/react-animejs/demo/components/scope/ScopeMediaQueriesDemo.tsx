@@ -24,7 +24,7 @@ export const ScopeMediaQueriesDemo: React.FC = () => {
   // 1. Create the scope (tracks media queries automatically on the root element)
   const { ref, matches } = useCreateScope({ mediaQueries: MEDIA_QUERIES });
 
-  // 2. Use the animation hook (automatically scoped and re-runs on deps changes)
+  // 2. Use the animation hook (automatically scoped and reactive to option changes)
   useAnime({
     selector: ".square",
     translateX: matches.isSmall ? 0 : ["-35%", "35%"],
@@ -34,7 +34,6 @@ export const ScopeMediaQueriesDemo: React.FC = () => {
     alternate: true,
     duration: matches.reduceMotion ? 0 : matches.isSmall ? 750 : 1250,
     ease: "inOutQuad",
-    deps: [matches.isSmall, matches.reduceMotion],
   });
 
   // Drag resize logic (UI concern)
@@ -68,7 +67,7 @@ export const ScopeMediaQueriesDemo: React.FC = () => {
     <DemoCard
       title="Scope"
       description="Using useCreateScope and useAnime hooks together. The animation automatically adapts when the container crosses 200px."
-      code={`useCreateScope({ mediaQueries: { isSmall: '(max-width: 200px)' } })\nuseAnime({ x: matches.isSmall ? 0 : 100, deps: [matches.isSmall] })`}
+      code={`useCreateScope({ mediaQueries: { isSmall: '(max-width: 200px)' } })\nuseAnime({ x: matches.isSmall ? 0 : 100, duration: matches.isSmall ? 0 : 750 })`}
     >
       <div className="w-full flex flex-col items-center gap-4">
         {/* Resizable container */}

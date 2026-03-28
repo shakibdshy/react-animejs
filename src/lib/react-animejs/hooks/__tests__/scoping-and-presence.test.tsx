@@ -229,8 +229,13 @@ import { __mock } from "animejs";
 import { AnimeTimeline } from "../../components/AnimeTimeline";
 import { AnimeWAAPI } from "../../components/AnimeWAAPI";
 import { AnimatePresence, AnimatePresenceChild } from "../../components/AnimatePresence";
-import { ScopeContext } from "../../core/scope-context";
+import {
+  AnimeProvider,
+  ScopeContext,
+  useAnimeScope as useProviderScope,
+} from "../../core/scope-context";
 import { useAnime } from "../use-anime";
+import { useAnimeControls } from "../use-anime-controls";
 import { useAnimeTimeline } from "../use-anime-timeline";
 import { useAnimeWAAPI } from "../use-anime-waapi";
 
@@ -262,6 +267,72 @@ function createScopedWrapper(root: HTMLElement) {
 }
 
 describe("scoped selector handling", () => {
+  it("registers useAnime instances with shared controllers", async () => {
+    const target = document.createElement("div");
+    document.body.appendChild(target);
+
+    const { result, unmount } = renderHook(() => {
+      const controller = useAnimeControls();
+      const animation = useAnime({
+        targets: target,
+        duration: 300,
+        controller,
+      });
+
+      return { controller, animation };
+    });
+
+    await waitFor(() => {
+      expect(result.current.animation.isReady).toBe(true);
+      expect(result.current.controller.getAnimations()).toHaveLength(1);
+    });
+
+    act(() => {
+      result.current.controller.pause();
+    });
+
+    expect(result.current.animation.state.paused).toBe(true);
+
+    unmount();
+
+    expect(result.current.controller.getAnimations()).toHaveLength(0);
+  });
+
+  it("recreates useAnime animations when playback options change", async () => {
+    const target = document.createElement("div");
+    document.body.appendChild(target);
+
+    const { result, rerender } = renderHook(
+      ({ duration, ease }: { duration: number; ease: string }) =>
+        useAnime({
+          targets: target,
+          autoplay: true,
+          duration,
+          ease,
+        }),
+      {
+        initialProps: {
+          duration: 300,
+          ease: "linear",
+        },
+      },
+    );
+
+    await waitFor(() => {
+      expect(result.current.isReady).toBe(true);
+      expect(__mock.animateCalls).toHaveLength(1);
+    });
+
+    rerender({ duration: 600, ease: "outQuad" });
+
+    await waitFor(() => {
+      expect(__mock.animateCalls).toHaveLength(2);
+    });
+
+    expect(__mock.animateCalls[1].config.duration).toBe(600);
+    expect(__mock.animateCalls[1].config.ease).toBe("outQuad");
+  });
+
   it("scopes useAnime string targets to the active root", async () => {
     const root = document.createElement("div");
     root.innerHTML = '<div class="item" data-testid="inside"></div>';
@@ -395,9 +466,71 @@ describe("scoped selector handling", () => {
     });
     expect(result.current.state.paused).toBe(false);
   });
+
+  it("exposes the created provider scope through context consumers", async () => {
+    function ScopeProbe() {
+      const { scope } = useProviderScope();
+      return (
+        <div data-testid="scope-state">
+          {scope ? "ready" : "missing"}
+        </div>
+      );
+    }
+
+    render(
+      <AnimeProvider>
+        <ScopeProbe />
+      </AnimeProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("scope-state").textContent).toBe("ready");
+    });
+  });
 });
 
 describe("AnimatePresence modes", () => {
+  it("keeps AnimatePresenceChild props off the rendered child element", async () => {
+    const receivedProps = vi.fn();
+
+    const SpyChild = React.forwardRef<
+      HTMLDivElement,
+      Record<string, unknown> & { label: string }
+    >(function SpyChild(props, ref) {
+      receivedProps(props);
+      return (
+        <div ref={ref} data-testid="spy-child">
+          {props.label}
+        </div>
+      );
+    });
+
+    render(
+      <AnimatePresence>
+        <AnimatePresenceChild
+          key="spy"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          duration={300}
+        >
+          <SpyChild label="visible" />
+        </AnimatePresenceChild>
+      </AnimatePresence>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("spy-child")).not.toBeNull();
+    });
+
+    const lastProps = receivedProps.mock.lastCall?.[0];
+
+    expect(lastProps?.label).toBe("visible");
+    expect(lastProps?.initial).toBeUndefined();
+    expect(lastProps?.animate).toBeUndefined();
+    expect(lastProps?.exit).toBeUndefined();
+  });
+
   it("wait mode delays entering children until exits finish", async () => {
     const { rerender } = render(
       <AnimatePresence mode="wait">

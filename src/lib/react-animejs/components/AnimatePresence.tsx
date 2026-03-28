@@ -304,6 +304,13 @@ export function AnimatePresence({
   if (!shouldWaitForExit) {
     presentChildren.forEach((child, key) => {
       const childProps = child.props as AnimatePresenceChildProps;
+      const renderedChild =
+        child.type === AnimatePresenceChild &&
+        isValidElement(
+          (child.props as { children?: ReactNode }).children,
+        )
+          ? ((child.props as { children: ReactElement }).children)
+          : child;
 
       allChildren.push(
         <AnimatedChild
@@ -317,7 +324,7 @@ export function AnimatePresence({
           delay={childProps.delay}
           skipInitial={!initial && isInitialMount.current}
         >
-          {child}
+          {renderedChild}
         </AnimatedChild>,
       );
     });
@@ -326,6 +333,13 @@ export function AnimatePresence({
   // Add exiting children
   exitingChildren.forEach((child, key) => {
     const childProps = child.props as AnimatePresenceChildProps;
+    const renderedChild =
+      child.type === AnimatePresenceChild &&
+      isValidElement(
+        (child.props as { children?: ReactNode }).children,
+      )
+        ? ((child.props as { children: ReactElement }).children)
+        : child;
 
     allChildren.push(
       <AnimatedChild
@@ -340,7 +354,7 @@ export function AnimatePresence({
         onExitComplete={() => handleExitComplete(key)}
         popLayout={mode === "popLayout"}
       >
-        {child}
+        {renderedChild}
       </AnimatedChild>,
     );
   });
@@ -354,10 +368,9 @@ export function AnimatePresence({
  */
 export function AnimatePresenceChild({
   children,
-  ...props
 }: AnimatePresenceChildProps & { children: ReactElement }) {
   // This component is just a marker - AnimatePresence reads its props
-  return cloneElement(children, props as Partial<unknown>);
+  return children;
 }
 
 export default AnimatePresence;
