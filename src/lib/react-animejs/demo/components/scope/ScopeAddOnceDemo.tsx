@@ -8,7 +8,7 @@
  * @see https://animejs.com/documentation/scope/scope-methods/addonce
  */
 
-import React, { useState, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { DemoCard } from "../DemoCard";
 import { AnimeScope } from "../../../components/AnimeScope";
 import { animate } from "animejs";

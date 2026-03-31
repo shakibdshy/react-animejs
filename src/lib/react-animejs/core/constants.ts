@@ -2,7 +2,7 @@
  * Constants and default values for React Anime.js
  */
 
-import type { PlaybackSettings, AnimationState } from "../types";
+import type { AnimationState, PlaybackSettings } from "../types";
 
 // =============================================================================
 // Default Values

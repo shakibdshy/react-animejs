@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import { DemoCard } from "../DemoCard";
 import { useAnimeScope } from "../../../hooks/use-anime-scope";
 import { animate } from "animejs";
-import { RotateCcw, Play, Trash2 } from "lucide-react";
+import { Play, RotateCcw, Trash2 } from "lucide-react";
 
 export const ScopeRevertDemo: React.FC = () => {
   const [status, setStatus] = useState<

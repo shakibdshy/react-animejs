@@ -16,15 +16,15 @@
  * - Properties: progressX, progressY, velocity, x, y, velocityX, velocityY, isDragging, isReleasing
  */
 
-import { useRef, useEffect, useState, useMemo, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createDraggable } from "animejs";
 import type {
+  Draggable,
+  DraggableState,
   UseAnimeDraggableOptions,
   UseAnimeDraggableReturn,
-  DraggableState,
-  Draggable,
 } from "../types";
-import { useAnimeScope, createSafeCallback, safeJsonStringify } from "../core";
+import { createSafeCallback, safeJsonStringify, useAnimeScope } from "../core";
 
 // =============================================================================
 // Default State
@@ -407,7 +407,7 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
       // Create Draggable
       // ========================================================================
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       const draggables = createDraggable(targetRef.current, config as any);
 
       // createDraggable returns an array of draggables

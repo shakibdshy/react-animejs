@@ -1,18 +1,18 @@
-import React, {
+import {
   cloneElement,
   forwardRef,
   isValidElement,
+  type ReactElement,
   useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
-  type ReactElement,
 } from "react";
 import { useAnimeWAAPI } from "../hooks";
 import type {
-  UseAnimeWAAPIOptions,
-  PlaybackControls,
   AnimationState,
+  PlaybackControls,
+  UseAnimeWAAPIOptions,
   WAAPIAnimation,
 } from "../types";
 

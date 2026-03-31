@@ -4,24 +4,24 @@
  * Provides a way to create sequenced animations with precise timing control.
  */
 
-import { useRef, useEffect, useState, useMemo, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createTimeline } from "animejs";
 import type {
+  AnimationState,
+  Timeline,
+  TimelineControls,
+  TimelineEntry,
   UseAnimeTimelineOptions,
   UseAnimeTimelineReturn,
-  TimelineEntry,
-  AnimationState,
-  TimelineControls,
-  Timeline,
 } from "../types";
 import {
-  useAnimeScope,
+  buildCallbackConfig,
+  cleanUndefinedValues,
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
   resolveTarget,
   safeJsonStringify,
-  buildCallbackConfig,
-  cleanUndefinedValues,
+  useAnimeScope,
 } from "../core";
 
 function resolveSyncTarget(target: unknown) {
@@ -210,7 +210,7 @@ export function useAnimeTimeline(
       cleanUndefinedValues(config);
 
       // Create timeline
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       const timeline = createTimeline(config as any) as unknown as Timeline;
       timelineRef.current = timeline;
 
@@ -244,7 +244,7 @@ export function useAnimeTimeline(
           if (!resolvedTarget) return;
 
           // Add to timeline
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+           
           timeline.add(resolvedTarget as any, animProps as any, position);
         } else {
           // Timer entry
@@ -330,7 +330,7 @@ export function useAnimeTimeline(
         if (!resolvedTarget) return;
 
         // Add to timeline
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         timelineRef.current.add(
           resolvedTarget as any,
           animProps as any,

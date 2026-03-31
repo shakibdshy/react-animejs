@@ -8,20 +8,20 @@
 
 import {
   createContext,
-  useContext,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-  useState,
   type RefObject,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
 import React from "react";
 import { createScope } from "animejs";
 import type {
-  AnimeScopeContext,
   AnimeProviderProps,
   AnimeScope,
+  AnimeScopeContext,
 } from "../types";
 
 // =============================================================================

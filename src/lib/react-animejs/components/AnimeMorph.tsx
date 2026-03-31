@@ -2,25 +2,25 @@ import {
   cloneElement,
   forwardRef,
   isValidElement,
+  type ReactElement,
+  type RefObject,
   useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
   useState,
-  type ReactElement,
-  type RefObject,
 } from "react";
 import { animate, svg } from "animejs";
 import type {
-  UseAnimeOptions,
-  PlaybackControls,
   AnimationState,
   JSAnimation,
+  PlaybackControls,
+  UseAnimeOptions,
 } from "../types";
 import {
-  DEFAULT_ANIMATION_STATE,
   buildCallbackConfig,
   cleanUndefinedValues,
+  DEFAULT_ANIMATION_STATE,
   extractAnimationState,
   safeJsonStringify,
   useAnimeScope,

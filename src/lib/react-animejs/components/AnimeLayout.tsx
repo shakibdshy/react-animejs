@@ -14,24 +14,24 @@
  */
 
 import React, {
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-  useEffect,
-  useCallback,
   createContext,
-  useContext,
-  useMemo,
-  type ReactNode,
   type CSSProperties,
-  type HTMLAttributes,
   type ElementType,
+  forwardRef,
+  type HTMLAttributes,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
 } from "react";
 import { useAnimeLayout } from "../hooks";
 import type {
-  UseAnimeLayoutControls,
   AutoLayout,
   LayoutAnimationParams,
+  UseAnimeLayoutControls,
 } from "../types";
 import type { AnimationState } from "../types/common";
 import type { Timeline } from "../types/timeline";

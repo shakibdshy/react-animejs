@@ -10,16 +10,16 @@
  * @see https://animejs.com/documentation/scope
  */
 
-import { useRef, useEffect, useState, useMemo, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createScope } from "animejs";
 import type {
+  AnimeJsScope,
+  ScopeConstructorFunction,
+  ScopeMediaMatches,
+  ScopeMediaQueries,
+  ScopeMethods,
   UseAnimeScopeOptions,
   UseAnimeScopeReturn,
-  ScopeMediaQueries,
-  ScopeMediaMatches,
-  ScopeConstructorFunction,
-  AnimeJsScope,
-  ScopeMethods,
 } from "../types/scope";
 import { safeJsonStringify } from "../core";
 
@@ -268,7 +268,7 @@ export function useAnimeScope<T extends ScopeMediaQueries = ScopeMediaQueries>(
 
     try {
       // Build scope config
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       const scopeConfig: Record<string, any> = {};
 
       if (rootElement) {

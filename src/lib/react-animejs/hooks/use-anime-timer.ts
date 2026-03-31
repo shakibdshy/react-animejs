@@ -5,21 +5,21 @@
  * synchronized with anime.js animations.
  */
 
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createTimer } from "animejs";
 import type {
-  UseAnimeTimerOptions,
-  UseAnimeTimerReturn,
   AnimationState,
   PlaybackControls,
   Timer,
+  UseAnimeTimerOptions,
+  UseAnimeTimerReturn,
 } from "../types";
 import {
-  useAnimeScope,
+  createSafeCallback,
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
-  createSafeCallback,
   safeJsonStringify,
+  useAnimeScope,
 } from "../core";
 
 // =============================================================================

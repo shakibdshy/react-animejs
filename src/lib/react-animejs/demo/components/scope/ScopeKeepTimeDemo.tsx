@@ -7,7 +7,7 @@
  * @see https://animejs.com/documentation/scope/scope-methods/keeptime
  */
 
-import React, { useState, useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { DemoCard } from "../DemoCard";
 import { AnimeScope } from "../../../components/AnimeScope";
 import type { AnimeScopeRef } from "../../../components/AnimeScope";

@@ -7,12 +7,12 @@
  * @see https://animejs.com/documentation/scope/scope-methods/refresh
  */
 
-import React, { useState, useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { DemoCard } from "../DemoCard";
 import { AnimeScope } from "../../../components/AnimeScope";
 import type { AnimeScopeRef } from "../../../components/AnimeScope";
 import { animate } from "animejs";
-import { RefreshCw, Plus, Minus } from "lucide-react";
+import { Minus, Plus, RefreshCw } from "lucide-react";
 
 export const ScopeRefreshDemo: React.FC = () => {
   const [boxCount, setBoxCount] = useState(3);

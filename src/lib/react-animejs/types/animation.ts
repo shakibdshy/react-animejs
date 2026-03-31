@@ -5,12 +5,12 @@
 import type { RefObject } from "react";
 import type React from "react";
 import type {
-  PlaybackSettings,
   AnimationCallbacks,
-  PlaybackControls,
   AnimationState,
   AnimationTargets,
   Easing,
+  PlaybackControls,
+  PlaybackSettings,
   PropertyValue,
 } from "./common";
 
@@ -252,7 +252,7 @@ export type UseAnimeOptions = PlaybackSettings &
      * Shared controller from useAnimeControls
      * When provided, the animation will be registered with this controller
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     controller?: {
       register: (animation: any) => () => void;
     };

@@ -143,14 +143,14 @@ export function extractAnimationState(instance: unknown): AnimationState {
 /**
  * Create a safe callback wrapper that catches errors
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 export function createSafeCallback<T extends (...args: any[]) => void>(
   callback: T | undefined,
   name: string,
 ): T | undefined {
   if (!callback) return undefined;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   return ((...args: any[]) => {
     try {
       callback(...args);
@@ -315,7 +315,7 @@ import type { AnimationState } from "../types";
 export function buildCallbackConfig<
   T extends Record<string, unknown>,
   S extends AnimationState,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   C extends Record<string, ((...args: any[]) => void) | undefined>,
 >(
   setState: (state: S) => void,

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useAnimeTimeline, useAnime } from '../../hooks';
+import { useAnime, useAnimeTimeline } from '../../hooks';
 import { AnimeTimeline } from '../../components';
 import { DemoSection } from './DemoSection';
 

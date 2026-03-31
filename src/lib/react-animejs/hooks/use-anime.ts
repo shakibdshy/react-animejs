@@ -5,23 +5,23 @@
  * Handles lifecycle, cleanup, and state management automatically.
  */
 
-import { useRef, useEffect, useCallback, useState, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animate, createScope } from "animejs";
 import type {
+  AnimationState,
+  JSAnimation,
+  PlaybackControls,
   UseAnimeOptions,
   UseAnimeReturn,
-  AnimationState,
-  PlaybackControls,
-  JSAnimation,
 } from "../types";
 import {
-  useAnimeScope,
+  buildCallbackConfig,
+  cleanUndefinedValues,
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
   resolveTarget,
   safeJsonStringify,
-  buildCallbackConfig,
-  cleanUndefinedValues,
+  useAnimeScope,
 } from "../core";
 
 // =============================================================================
@@ -338,7 +338,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       });
 
       // Create the animation
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       const anim = animate(target, config as any) as unknown as JSAnimation;
       animationRef.current = anim;
       unregisterController = controller?.register(anim);

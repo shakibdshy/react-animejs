@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useAnimeTimeline } from "../../../hooks";
-import { RotateCcw, Play, Activity } from "lucide-react";
+import { Activity, Play, RotateCcw } from "lucide-react";
 
 export const TimelineOnUpdateDemo: React.FC = () => {
   const boxRef = useRef<HTMLDivElement>(null);

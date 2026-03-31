@@ -3,7 +3,7 @@
  * (onRender, onBeforeUpdate, persist, refresh)
  */
 
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useAnime } from "../../hooks";
 
 import { DemoCard } from "./DemoCard";

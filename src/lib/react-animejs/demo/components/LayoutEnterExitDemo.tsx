@@ -5,7 +5,7 @@ import {
   type AnimeLayoutRef,
 } from "../../components/AnimeLayout";
 import { DemoCard } from "./DemoCard";
-import { Plus, Trash2, ChevronFirst, ChevronLast } from "lucide-react";
+import { ChevronFirst, ChevronLast, Plus, Trash2 } from "lucide-react";
 
 export const LayoutEnterExitDemo: React.FC = () => {
   const layoutRef = useRef<AnimeLayoutRef>(null);

@@ -14,7 +14,7 @@
  * @see https://animejs.com/documentation/scope/scope-properties
  */
 
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DemoCard } from "../DemoCard";
 import { AnimeScope } from "../../../components/AnimeScope";
 import type { AnimeScopeRef } from "../../../components/AnimeScope";

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useAnime, utils } from '../../index';
 import { DemoSection } from './DemoSection';
 

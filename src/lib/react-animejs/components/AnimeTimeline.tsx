@@ -1,18 +1,18 @@
 import React, {
   forwardRef,
+  type ReactNode,
   useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
-  type ReactNode,
 } from "react";
 import { useAnimeTimeline } from "../hooks";
 import type {
-  UseAnimeTimelineOptions,
-  TimelineEntry,
-  TimelineControls,
-  Timeline,
   AnimationState,
+  Timeline,
+  TimelineControls,
+  TimelineEntry,
+  UseAnimeTimelineOptions,
 } from "../types";
 
 export interface AnimeTimelineRef {

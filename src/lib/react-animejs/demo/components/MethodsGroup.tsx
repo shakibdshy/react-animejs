@@ -2,17 +2,17 @@ import React from "react";
 import { DemoSection } from "./DemoSection";
 import {
   TimelineAddDemo,
-  TimelineSetDemo,
-  TimelineSyncDemo,
-  TimelineLabelDemo,
-  TimelineRemoveDemo,
-  TimelineInitDemo,
-  TimelineRefreshDemo,
   TimelineCallDemo,
-  TimelineStretchDemo,
-  TimelineRevertDemo,
+  TimelineInitDemo,
+  TimelineLabelDemo,
   TimelinePlaybackMethodsDemo,
   TimelinePropertiesDemo,
+  TimelineRefreshDemo,
+  TimelineRemoveDemo,
+  TimelineRevertDemo,
+  TimelineSetDemo,
+  TimelineStretchDemo,
+  TimelineSyncDemo,
 } from "./methods";
 
 const MethodsGroup: React.FC = () => {

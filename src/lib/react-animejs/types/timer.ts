@@ -4,10 +4,10 @@
 
 import type { RefObject } from "react";
 import type {
-  PlaybackSettings,
   AnimationCallbacks,
-  PlaybackControls,
   AnimationState,
+  PlaybackControls,
+  PlaybackSettings,
 } from "./common";
 
 // =============================================================================

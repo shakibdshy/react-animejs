@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { AnimeTimeline } from '../../components';
 import { DemoSection } from './DemoSection';
 

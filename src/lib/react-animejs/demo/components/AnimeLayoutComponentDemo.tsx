@@ -5,7 +5,7 @@ import {
   type AnimeLayoutRef,
 } from "../../components/AnimeLayout";
 import { DemoCard } from "./DemoCard";
-import { Plus, RefreshCw, Columns, Grid3X3, Grid2X2 } from "lucide-react";
+import { Columns, Grid2X2, Grid3X3, Plus, RefreshCw } from "lucide-react";
 
 export const AnimeLayoutComponentDemo: React.FC = () => {
   const layoutRef = useRef<AnimeLayoutRef>(null);

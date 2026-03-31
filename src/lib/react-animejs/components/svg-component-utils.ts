@@ -1,5 +1,5 @@
-import { useMemo, type MutableRefObject, type RefObject } from "react";
-import type { PlaybackControls, AnimationState, JSAnimation } from "../types";
+import { type MutableRefObject, type RefObject, useMemo } from "react";
+import type { AnimationState, JSAnimation, PlaybackControls } from "../types";
 import { extractAnimationState, isRef } from "../core";
 
 export interface SvgComponentRef {

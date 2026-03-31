@@ -4,17 +4,17 @@
 
 import type { RefObject } from "react";
 import type {
-  PlaybackSettings,
   AnimationCallbacks,
-  PlaybackControls,
   AnimationState,
   AnimationTargets,
   Easing,
+  PlaybackControls,
+  PlaybackSettings,
 } from "./common";
 import type {
   AnimatableProperties,
-  TweenParameters,
   JSAnimation,
+  TweenParameters,
 } from "./animation";
 import type { UseAnimeTimerOptions } from "./timer";
 import type { WAAPIAnimation } from "./waapi";

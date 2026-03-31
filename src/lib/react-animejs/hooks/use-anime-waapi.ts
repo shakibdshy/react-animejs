@@ -4,22 +4,22 @@
  * Provides a declarative way to create WAAPI animations in React components.
  */
 
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { waapi } from "animejs";
 import type {
-  UseAnimeWAAPIOptions,
-  UseAnimeWAAPIReturn,
   AnimationState,
   PlaybackControls,
+  UseAnimeWAAPIOptions,
+  UseAnimeWAAPIReturn,
   WAAPIAnimation,
 } from "../types";
 import {
-  useAnimeScope,
+  createSafeCallback,
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
   resolveTarget,
-  createSafeCallback,
   safeJsonStringify,
+  useAnimeScope,
 } from "../core";
 
 /**

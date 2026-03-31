@@ -5,17 +5,17 @@
  */
 
 import {
-  useRef,
-  useEffect,
   cloneElement,
   isValidElement,
   type ReactElement,
+  useEffect,
+  useRef,
 } from "react";
 import { useAnime } from "../hooks/use-anime";
 import type {
-  UseAnimeOptions,
-  PlaybackControls,
   AnimationState,
+  PlaybackControls,
+  UseAnimeOptions,
 } from "../types";
 
 // =============================================================================

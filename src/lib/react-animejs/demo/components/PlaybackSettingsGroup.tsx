@@ -1,16 +1,16 @@
 import React from "react";
 import { DemoSection } from "./DemoSection";
 import {
+  TimelineAlternateDemo,
+  TimelineAutoplayDemo,
   TimelineDefaultsDemo,
   TimelineDelayDemo,
-  TimelineLoopDemo,
-  TimelineLoopDelayDemo,
-  TimelineAlternateDemo,
-  TimelineReversedDemo,
-  TimelineAutoplayDemo,
   TimelineFrameRateDemo,
-  TimelinePlaybackRateDemo,
+  TimelineLoopDelayDemo,
+  TimelineLoopDemo,
   TimelinePlaybackEaseDemo,
+  TimelinePlaybackRateDemo,
+  TimelineReversedDemo,
 } from "./playback-settings";
 
 /**

@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
 import { utils } from "animejs";
 import {
-  AnimeMorph,
   AnimeDraw,
+  AnimeMorph,
   AnimeMotionPath,
 } from "@/lib/react-animejs/components";
 import { DemoCard } from "./DemoCard";

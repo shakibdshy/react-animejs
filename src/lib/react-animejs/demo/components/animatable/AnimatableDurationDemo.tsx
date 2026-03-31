@@ -1,9 +1,9 @@
 import React, { useRef } from "react";
 import {
+  stagger,
   useAnimatable,
   useAnimatableEvent,
   utils,
-  stagger,
 } from "../../../index";
 import { DemoCard } from "../DemoCard";
 

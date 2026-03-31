@@ -4,8 +4,8 @@
  * Allows controlling multiple animations from a single controller instance.
  */
 
-import { useRef, useCallback, useMemo } from "react";
-import type { PlaybackControls, JSAnimation } from "../types";
+import { useCallback, useMemo, useRef } from "react";
+import type { JSAnimation, PlaybackControls } from "../types";
 
 // =============================================================================
 // Types

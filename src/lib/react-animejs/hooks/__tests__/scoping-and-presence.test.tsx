@@ -173,10 +173,10 @@ vi.mock("animejs", () => {
         remove() {
           return this;
         },
-        sync() {
+        sync(...args: [target: unknown, position: unknown]) {
           this.syncCalls.push({
-            target: arguments[0],
-            position: arguments[1],
+            target: args[0],
+            position: args[1],
           });
           return this;
         },

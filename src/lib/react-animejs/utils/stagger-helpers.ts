@@ -8,7 +8,7 @@ import { stagger } from "animejs";
 import type { StaggerOptions } from "../types";
 
 // Type assertion helper for anime.js stagger function
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 const animeStagger = stagger as (value: any, options?: any) => any;
 
 // =============================================================================

@@ -8,7 +8,7 @@
  */
 
 import type { JSX, RefObject } from "react";
-import type { Easing, PlaybackSettings, AnimationCallbacks } from "./common";
+import type { AnimationCallbacks, Easing, PlaybackSettings } from "./common";
 
 // =============================================================================
 // Scope Parameters Types

@@ -1,21 +1,21 @@
 import React from "react";
 import { DemoSection } from "./DemoSection";
 import {
+  ScopeAddOnceDemo,
   // Basic demos
   ScopeBasicDemo,
   ScopeConstructorDemo,
-  // Parameter demos
-  ScopeRootDemo,
   ScopeDefaultsDemo,
+  ScopeKeepTimeDemo,
   ScopeMediaQueriesDemo,
   // Method demos
   ScopeMethodsDemo,
-  ScopeAddOnceDemo,
-  ScopeKeepTimeDemo,
-  ScopeRefreshDemo,
-  ScopeRevertDemo,
   // Properties demo
   ScopePropertiesDemo,
+  ScopeRefreshDemo,
+  ScopeRevertDemo,
+  // Parameter demos
+  ScopeRootDemo,
 } from "./scope";
 
 export const ScopeGroup: React.FC = () => {

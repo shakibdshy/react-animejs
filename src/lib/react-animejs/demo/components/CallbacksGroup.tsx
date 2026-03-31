@@ -1,13 +1,13 @@
 import React from "react";
 import { DemoSection } from "./DemoSection";
 import {
+  TimelineOnBeforeUpdateDemo,
   TimelineOnBeginDemo,
   TimelineOnCompleteDemo,
-  TimelineOnBeforeUpdateDemo,
-  TimelineOnUpdateDemo,
-  TimelineOnRenderDemo,
   TimelineOnLoopDemo,
   TimelineOnPauseDemo,
+  TimelineOnRenderDemo,
+  TimelineOnUpdateDemo,
   TimelineThenDemo,
 } from "./callbacks";
 

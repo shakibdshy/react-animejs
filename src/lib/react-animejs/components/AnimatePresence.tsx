@@ -5,16 +5,16 @@
  */
 
 import {
-  useState,
+  Children,
+  cloneElement,
+  type CSSProperties,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
   useEffect,
   useLayoutEffect,
   useRef,
-  Children,
-  cloneElement,
-  isValidElement,
-  type ReactNode,
-  type ReactElement,
-  type CSSProperties,
+  useState,
 } from "react";
 import { useAnime } from "../hooks/use-anime";
 import type { AnimatableProperties } from "../types";

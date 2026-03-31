@@ -1,19 +1,19 @@
 import {
-  useRef,
-  useEffect,
-  useState,
+  type RefObject,
   useCallback,
+  useEffect,
   useMemo,
-  RefObject,
+  useRef,
+  useState,
 } from "react";
 import { createAnimatable } from "animejs";
 import type {
+  AnimationTarget,
   AnimationTargets,
   Easing,
   JSAnimation,
-  AnimationTarget,
 } from "../types";
-import { useAnimeScope, resolveTarget } from "../core";
+import { resolveTarget, useAnimeScope } from "../core";
 
 // =============================================================================
 // Types

@@ -4,7 +4,7 @@ import type {
   AutoLayoutParams,
   LayoutAnimationParams,
 } from "animejs";
-import type { AnimationTarget, AnimationState } from "./common";
+import type { AnimationState, AnimationTarget } from "./common";
 import type { Timeline } from "./timeline";
 
 export type {

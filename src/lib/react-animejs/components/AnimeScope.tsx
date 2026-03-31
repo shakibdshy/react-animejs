@@ -16,27 +16,27 @@
  */
 
 import React, {
-  forwardRef,
-  useImperativeHandle,
-  useEffect,
-  useRef,
-  useMemo,
-  type ReactNode,
-  type HTMLAttributes,
   type ElementType,
+  forwardRef,
+  type HTMLAttributes,
+  type ReactNode,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
 } from "react";
 import { animate, utils } from "animejs";
 import { useAnimeScope as useCreateScope } from "../hooks/use-anime-scope";
 import { ScopeContext } from "../core/scope-context";
 import type { AnimeScopeContext as ContextType } from "../types";
 import type {
-  ScopeMediaQueries,
-  ScopeMediaMatches,
-  ScopeSelf,
-  ScopeDefaults,
-  ScopeMethods,
   AnimeJsScope,
   ScopeCleanupFunction,
+  ScopeDefaults,
+  ScopeMediaMatches,
+  ScopeMediaQueries,
+  ScopeMethods,
+  ScopeSelf,
 } from "../types/scope";
 
 // =============================================================================
