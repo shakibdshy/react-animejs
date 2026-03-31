@@ -36,6 +36,15 @@ export type { AnimeController } from "./hooks/use-anime-controls";
 export { AnimeProvider } from "./core/scope-context";
 export { Animate } from "./components/Animate";
 export type { AnimateProps } from "./components/Animate";
+export { AnimeMorph } from "./components/AnimeMorph";
+export type { AnimeMorphProps, AnimeMorphRef } from "./components/AnimeMorph";
+export { AnimeDraw } from "./components/AnimeDraw";
+export type { AnimeDrawProps, AnimeDrawRef } from "./components/AnimeDraw";
+export { AnimeMotionPath } from "./components/AnimeMotionPath";
+export type {
+  AnimeMotionPathProps,
+  AnimeMotionPathRef,
+} from "./components/AnimeMotionPath";
 export {
   AnimatePresence,
   AnimatePresenceChild,

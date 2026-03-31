@@ -1,5 +1,6 @@
 import { Animate, AnimeProvider, fadeIn, fadeInUp } from "../index";
 import { CoreFeaturesGroup } from "./components/CoreFeaturesGroup";
+import { SvgFeaturesGroup } from "./components/SvgFeaturesGroup";
 import { TimelinesGroup } from "./components/TimelinesGroup";
 import { TimersGroup } from "./components/TimersGroup";
 import { PlaybackSettingsGroup } from "./components/PlaybackSettingsGroup";
@@ -34,6 +35,7 @@ export default function ReactAnimejsDemo() {
         </header>
 
         <CoreFeaturesGroup />
+        <SvgFeaturesGroup />
         
         <TimersGroup />
         <TimelinesGroup />

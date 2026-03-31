@@ -4,6 +4,15 @@
 
 export { Animate } from "./Animate";
 export type { AnimateProps } from "./Animate";
+export { AnimeMorph } from "./AnimeMorph";
+export type { AnimeMorphProps, AnimeMorphRef } from "./AnimeMorph";
+export { AnimeDraw } from "./AnimeDraw";
+export type { AnimeDrawProps, AnimeDrawRef } from "./AnimeDraw";
+export { AnimeMotionPath } from "./AnimeMotionPath";
+export type {
+  AnimeMotionPathProps,
+  AnimeMotionPathRef,
+} from "./AnimeMotionPath";
 
 export { AnimatePresence, AnimatePresenceChild } from "./AnimatePresence";
 export type {
