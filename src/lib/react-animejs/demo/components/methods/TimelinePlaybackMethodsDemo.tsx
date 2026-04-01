@@ -20,7 +20,7 @@ const TimelinePlaybackMethodsDemo: React.FC = () => {
         rotate: "1turn",
         borderRadius: ["0%", "50%"],
         duration: 2000,
-        ease: "easeInOutQuad",
+        ease: "inOutQuad",
       },
       { label: "end", position: 2000 },
     ],

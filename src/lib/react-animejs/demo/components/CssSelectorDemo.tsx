@@ -14,7 +14,7 @@ export const CssSelectorDemo: React.FC = () => {
     duration: 1500,
     loop: true,
     autoplay: false,
-    ease: 'easeInOutQuad'
+    ease: 'inOutQuad'
   });
 
   const { controls: rotateControls } = useAnime({
@@ -23,7 +23,7 @@ export const CssSelectorDemo: React.FC = () => {
     duration: 1500,
     loop: true,
     autoplay: false,
-    ease: 'easeInOutQuad'
+    ease: 'inOutQuad'
   });
 
   const { controls: scaleControls } = useAnime({
@@ -32,7 +32,7 @@ export const CssSelectorDemo: React.FC = () => {
     duration: 1500,
     loop: true,
     autoplay: false,
-    ease: 'easeInOutQuad'
+    ease: 'inOutQuad'
   });
 
   const handlePlayAll = () => {

@@ -18,7 +18,7 @@ const TimelinePropertiesDemo: React.FC = () => {
         translateX: 250,
         rotate: "1turn",
         duration: 2000,
-        ease: "easeInOutQuad",
+        ease: "inOutQuad",
       },
       { label: "middle", position: 1000 },
       { label: "end", position: 3000 },

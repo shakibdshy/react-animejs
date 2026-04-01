@@ -15,4 +15,5 @@ export {
   useAnimeScope,
   useAnimeScope as useCreateScope,
 } from "./use-anime-scope";
+export { useSplitText } from "./use-split-text";
 export type { AnimeController } from "./use-anime-controls";

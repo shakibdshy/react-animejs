@@ -7,7 +7,7 @@ export const TimelinePlaybackEaseDemo: React.FC = () => {
   const squareRef = useRef<HTMLDivElement>(null);
   const circleRef = useRef<HTMLDivElement>(null);
   const triangleRef = useRef<HTMLDivElement>(null);
-  const [ease, setEase] = useState<EasingName>("easeInOutSine");
+  const [ease, setEase] = useState<EasingName>("inOutSine");
 
   const { controls, state, isPlaying } = useAnimeTimeline(
     {
@@ -51,12 +51,12 @@ export const TimelinePlaybackEaseDemo: React.FC = () => {
             className="bg-black/40 text-[#ffd11a] text-xs border border-[#ffd11a]/20 rounded px-2 py-1 outline-none"
           >
             <option value="linear">Linear</option>
-            <option value="in-out(3)">in-out(3)</option>
-            <option value="out-sine">EaseOut Sine</option>
-            <option value="in-out-sine">EaseInOut Sine</option>
-            <option value="out-back">EaseOut Back</option>
-            <option value="out-elastic">EaseOut Elastic</option>
-            <option value="out-bounce">EaseOut Bounce</option>
+            <option value="inOut(3)">inOut(3)</option>
+            <option value="outSine">EaseOut Sine</option>
+            <option value="inOutSine">EaseInOut Sine</option>
+            <option value="outBack">EaseOut Back</option>
+            <option value="outElastic(1, 0.5)">EaseOut Elastic</option>
+            <option value="outBounce">EaseOut Bounce</option>
           </select>
           <button
             onClick={() => controls.restart()}

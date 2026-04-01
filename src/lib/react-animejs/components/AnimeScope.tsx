@@ -20,6 +20,7 @@ import React, {
   forwardRef,
   type HTMLAttributes,
   type ReactNode,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -32,6 +33,7 @@ import type { AnimeScopeContext as ContextType } from "../types";
 import type {
   AnimeJsScope,
   ScopeCleanupFunction,
+  ScopeConstructorFunction,
   ScopeDefaults,
   ScopeMediaMatches,
   ScopeMediaQueries,
@@ -239,32 +241,12 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
   // Get element helper
   const getElement = () => rootRef.current;
 
-  // Build ref value
-  const refValue: AnimeScopeRef<T> = useMemo(
-    () => ({
-      isReady,
-      matches,
-      methods,
-      scope,
-      add,
-      addOnce,
-      revert,
-      refresh,
-      keepTime,
-      getElement,
-    }),
-    [isReady, matches, methods, scope, add, addOnce, revert, refresh, keepTime],
-  );
-
-  // Expose ref
-  useImperativeHandle(forwardedRef, () => refValue, [refValue]);
-
   // Stable ref for animate prop to avoid unnecessary re-runs
   const animatePropRef = useRef(animateProp);
   animatePropRef.current = animateProp;
 
-  const animateOnceRef = useRef(animateOnce);
-  animateOnceRef.current = animateOnce;
+  const animateOncePropRef = useRef(animateOnce);
+  animateOncePropRef.current = animateOnce;
 
   /**
    * Wraps user's callback to enhance scope self with animate and utils
@@ -303,10 +285,46 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
     };
   };
 
+  // Wrapped add/addOnce for imperative use via ref — enhances callbacks
+  // with self.animate and self.utils so demos work correctly.
+  const wrappedAdd = useCallback(
+    (constructor: ScopeConstructorFunction<T>) => {
+      add(wrapCallback(constructor as AnimeScopeAnimateFn<T>) as unknown as ScopeConstructorFunction<T>);
+    },
+    [add, wrapCallback],
+  );
+
+  const wrappedAddOnce = useCallback(
+    (constructor: ScopeConstructorFunction<T>) => {
+      addOnce(wrapCallback(constructor as AnimeScopeAnimateFn<T>) as unknown as ScopeConstructorFunction<T>);
+    },
+    [addOnce, wrapCallback],
+  );
+
+  // Build ref value
+  const refValue: AnimeScopeRef<T> = useMemo(
+    () => ({
+      isReady,
+      matches,
+      methods,
+      scope,
+      add: wrappedAdd,
+      addOnce: wrappedAddOnce,
+      revert,
+      refresh,
+      keepTime,
+      getElement,
+    }),
+    [isReady, matches, methods, scope, wrappedAdd, wrappedAddOnce, revert, refresh, keepTime],
+  );
+
+  // Expose ref
+  useImperativeHandle(forwardedRef, () => refValue, [refValue]);
+
   // Handle one-time animation
   useEffect(() => {
-    if (!isReady || !animateOnceRef.current) return;
-    addOnce(wrapCallback(animateOnceRef.current));
+    if (!isReady || !animateOncePropRef.current) return;
+    addOnce(wrapCallback(animateOncePropRef.current));
   }, [isReady, addOnce]);
 
   // Handle animate prop

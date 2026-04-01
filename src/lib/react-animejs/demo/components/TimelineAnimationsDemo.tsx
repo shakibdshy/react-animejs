@@ -17,7 +17,7 @@ export const TimelineAnimationsDemo: React.FC = () => {
     translateX: '15rem',
     duration: 1000,
     autoplay: false,
-    ease: 'easeInOutQuad'
+    ease: 'inOutQuad'
   });
 
   const entries = [

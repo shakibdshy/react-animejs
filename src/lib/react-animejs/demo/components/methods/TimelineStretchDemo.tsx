@@ -18,7 +18,7 @@ const TimelineStretchDemo: React.FC = () => {
         translateX: 250,
         rotate: "1turn",
         duration: 2000,
-        ease: "easeInOutQuad",
+        ease: "inOutQuad",
       },
     ],
   );

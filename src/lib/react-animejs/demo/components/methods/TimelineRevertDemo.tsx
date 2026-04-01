@@ -18,7 +18,7 @@ const TimelineRevertDemo: React.FC = () => {
         backgroundColor: "#ef4444",
         borderRadius: "50%",
         duration: 2000,
-        ease: "easeInOutQuad",
+        ease: "inOutQuad",
       },
     ],
   );

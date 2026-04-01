@@ -18,7 +18,7 @@ export const TimelineOnRenderDemo: React.FC = () => {
         targets: boxRef,
         scale: [1, 1.5, 1],
         duration: 2000,
-        ease: "easeInOutSine",
+        ease: "inOutSine",
       },
     ],
   );

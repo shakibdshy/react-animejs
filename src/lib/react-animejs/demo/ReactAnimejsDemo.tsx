@@ -10,6 +10,7 @@ import { LayoutGroup } from "./components/LayoutGroup";
 import { DraggableDemo } from "./components/DraggableDemo";
 import { OnScrollGroup } from "./components/OnScrollGroup";
 import ScopeGroup from "./components/ScopeGroup";
+import SplitTextGroup from "./components/SplitTextGroup";
 
 /**
  * Main React Anime.js Demo Page
@@ -46,6 +47,7 @@ export default function ReactAnimejsDemo() {
         <OnScrollGroup />
         <LayoutGroup />
         <ScopeGroup />
+        <SplitTextGroup />
 
         <footer className="text-center p-12 text-[#888]">
           <p>Built with ❤️ using React + Anime.js v4</p>

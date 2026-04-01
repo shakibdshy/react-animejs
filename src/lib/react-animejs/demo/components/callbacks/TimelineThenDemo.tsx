@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
-import { useAnimeTimeline } from "@/lib/react-animejs/hooks";
-import { Play, RotateCcw, Zap } from "lucide-react";
+import React, { useRef, useState } from 'react';
+import { useAnimeTimeline } from '@/lib/react-animejs/hooks';
+import { Play, RotateCcw, Zap } from 'lucide-react';
 
 export const TimelineThenDemo: React.FC = () => {
   const boxRef = useRef<HTMLDivElement>(null);
@@ -15,11 +15,11 @@ export const TimelineThenDemo: React.FC = () => {
       {
         targets: boxRef,
         scale: [1, 2, 1],
-        rotate: "180deg",
+        rotate: '180deg',
         duration: 1500,
-        ease: "easeInOutBack",
+        ease: 'inOutBack',
       },
-    ],
+    ]
   );
 
   const handlePlay = () => {
@@ -28,12 +28,10 @@ export const TimelineThenDemo: React.FC = () => {
     controls.play();
 
     // Use the .then() promise from the timeline instance
-    if (timeline) {
-      timeline.then(() => {
-        setIsResolved(true);
-        setResolveTime(new Date().toLocaleTimeString());
-      });
-    }
+    timeline.current?.then(() => {
+      setIsResolved(true);
+      setResolveTime(new Date().toLocaleTimeString());
+    });
   };
 
   const handleRestart = () => {
@@ -41,21 +39,17 @@ export const TimelineThenDemo: React.FC = () => {
     setResolveTime(null);
     controls.restart();
 
-    if (timeline) {
-      timeline.then(() => {
-        setIsResolved(true);
-        setResolveTime(new Date().toLocaleTimeString());
-      });
-    }
+    timeline.current?.then(() => {
+      setIsResolved(true);
+      setResolveTime(new Date().toLocaleTimeString());
+    });
   };
 
   return (
     <div className="w-full bg-[#1a1a24] rounded-3xl p-6 border border-[#2a2a3a] shadow-xl">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h4 className="text-[#ffd11a] font-bold text-xl tracking-tight">
-            .then()
-          </h4>
+          <h4 className="text-[#ffd11a] font-bold text-xl tracking-tight">.then()</h4>
           <p className="text-[10px] text-slate-500 font-mono mt-1 uppercase tracking-wider">
             Promise resolved when finished
           </p>
@@ -73,9 +67,7 @@ export const TimelineThenDemo: React.FC = () => {
           ref={boxRef}
           className="w-16 h-16 bg-linear-to-br from-[#ffd11a] to-[#ff9100] rounded-2xl flex items-center justify-center shadow-lg"
         >
-          <Zap
-            className={`w-8 h-8 text-[#1a1a24] ${isPlaying ? "animate-pulse" : ""}`}
-          />
+          <Zap className={`w-8 h-8 text-[#1a1a24] ${isPlaying ? 'animate-pulse' : ''}`} />
         </div>
 
         {!isPlaying && state.progress === 0 && (
@@ -110,16 +102,16 @@ export const TimelineThenDemo: React.FC = () => {
           </span>
           <div className="flex items-center gap-2">
             <span
-              className={`text-[10px] font-mono font-bold ${isResolved ? "text-[#ffd11a]" : "text-slate-500"}`}
+              className={`text-[10px] font-mono font-bold ${isResolved ? 'text-[#ffd11a]' : 'text-slate-500'}`}
             >
-              {isResolved ? `RESOLVED AT ${resolveTime}` : "AWAITING..."}
+              {isResolved ? `RESOLVED AT ${resolveTime}` : 'AWAITING...'}
             </span>
           </div>
         </div>
 
         <p className="text-[10px] text-slate-500 italic px-1">
-          The .then() method allows you to use standard async/await or promise
-          chains for sequential logic after the timeline completes.
+          The .then() method allows you to use standard async/await or promise chains for sequential
+          logic after the timeline completes.
         </p>
       </div>
     </div>

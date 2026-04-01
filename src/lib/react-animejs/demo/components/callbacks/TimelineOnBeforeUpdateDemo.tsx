@@ -18,7 +18,7 @@ export const TimelineOnBeforeUpdateDemo: React.FC = () => {
         targets: boxRef,
         translateY: [-20, 20, -20],
         duration: 2000,
-        ease: "easeInOutSine",
+        ease: "inOutSine",
         loop: true,
       },
     ],

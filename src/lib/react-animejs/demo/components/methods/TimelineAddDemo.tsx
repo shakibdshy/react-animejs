@@ -17,7 +17,7 @@ export const TimelineAddDemo: React.FC = () => {
       targets: boxRef,
       translateX: [0, 200],
       duration: 1000,
-      ease: "out-expo",
+      ease: "outExpo",
     });
     controls.play();
   };

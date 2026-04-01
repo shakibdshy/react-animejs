@@ -19,7 +19,7 @@ export const TimelineOnLoopDemo: React.FC = () => {
         targets: boxRef,
         rotate: "1turn",
         duration: 800,
-        ease: "in-out-sine",
+        ease: "inOutSine",
       },
     ],
   );

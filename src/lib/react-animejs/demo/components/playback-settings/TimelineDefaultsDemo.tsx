@@ -13,11 +13,11 @@ export const TimelineDefaultsDemo: React.FC = () => {
       // Timeline-level defaults (for shared parameters)
       defaults: {
         duration: 1000,
-        ease: "out-expo",
+        ease: "outExpo",
       },
     },
     [
-      // These will all inherit duration: 1000 and ease: 'out-expo'
+      // These will all inherit duration: 1000 and ease: 'outExpo'
       { targets: squareRef, x: 250 },
       { targets: circleRef, x: 250, position: "-=500" },
       { targets: triangleRef, x: 250, position: "-=500" },

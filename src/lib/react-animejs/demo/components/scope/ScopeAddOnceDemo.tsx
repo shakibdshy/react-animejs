@@ -8,11 +8,11 @@
  * @see https://animejs.com/documentation/scope/scope-methods/addonce
  */
 
-import React, { useCallback, useState } from "react";
-import { DemoCard } from "../DemoCard";
-import { AnimeScope } from "../../../components/AnimeScope";
-import { animate } from "animejs";
-import { Zap } from "lucide-react";
+import React, { useCallback, useState } from 'react';
+import { DemoCard } from '../DemoCard';
+import { AnimeScope } from '../../../components/AnimeScope';
+import { animate } from 'animejs';
+import { Zap } from 'lucide-react';
 
 export const ScopeAddOnceDemo: React.FC = () => {
   const [runCount, setRunCount] = useState(0);
@@ -65,41 +65,39 @@ export const ScopeAddOnceDemo: React.FC = () => {
         {/* AnimeScope component - declarative approach */}
         <AnimeScope
           mediaQueries={{
-            isSmall: "(max-width: 400px)",
+            isSmall: '(max-width: 400px)',
           }}
           // animateOnce - runs only once, even on media query changes
           animateOnce={() => {
             setOnceCount((c) => c + 1);
-            console.log("[animateOnce] Constructor runs ONLY ONCE");
 
             // This animation persists across media query changes
-            animate(".once-box", {
+            animate('.once-box', {
               scale: [1, 1.2, 1],
               duration: 800,
               loop: true,
-              ease: "outElastic(1, 0.5)",
+              ease: 'outElastic(1, 0.5)',
             });
 
             return () => {
-              console.log("[animateOnce] Cleanup (only on full revert)");
+              console.log('[animateOnce] Cleanup (only on full revert)');
             };
           }}
           // animate - runs on every media query change
           animate={() => {
             setRunCount((c) => c + 1);
-            console.log("[animate] Constructor runs on every refresh");
 
-            animate(".add-box", {
+            animate('.add-box', {
               translateX: [0, 100],
               rotate: 360,
               duration: 1500,
               loop: true,
               alternate: true,
-              ease: "inOutQuad",
+              ease: 'inOutQuad',
             });
 
             return () => {
-              console.log("[animate] Cleanup");
+              console.log('[animate] Cleanup');
             };
           }}
         >
@@ -111,9 +109,7 @@ export const ScopeAddOnceDemo: React.FC = () => {
             </div>
             <div className="flex flex-col items-center gap-2">
               <div className="once-box w-12 h-12 rounded-xl bg-linear-to-br from-[#8b5cf6] to-[#7c3aed] shadow-lg shadow-violet-500/30" />
-              <span className="text-[10px] text-violet-400 font-mono">
-                animateOnce
-              </span>
+              <span className="text-[10px] text-violet-400 font-mono">animateOnce</span>
             </div>
           </div>
         </AnimeScope>
@@ -136,8 +132,8 @@ export const ScopeAddOnceDemo: React.FC = () => {
 
         {/* Info */}
         <div className="text-[10px] text-slate-500 text-center max-w-sm">
-          Restart to see both constructors run. Notice{" "}
-          <code className="text-[#ffd11a]">animate</code> increments but{" "}
+          Restart to see both constructors run. Notice{' '}
+          <code className="text-[#ffd11a]">animate</code> increments but{' '}
           <code className="text-violet-400">animateOnce</code> stays at 1.
         </div>
       </div>

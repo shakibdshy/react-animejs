@@ -20,7 +20,7 @@ export const TimelineOnCompleteDemo: React.FC = () => {
         targets: boxRef,
         translateX: "15rem",
         duration: 2000,
-        ease: "in-out-expo",
+        ease: "inOutExpo",
       },
     ],
   );
