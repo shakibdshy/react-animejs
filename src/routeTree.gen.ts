@@ -22,6 +22,7 @@ import { Route as DemoPlaybackSettingsRouteImport } from './routes/demo/playback
 import { Route as DemoOnscrollRouteImport } from './routes/demo/onscroll'
 import { Route as DemoMethodsRouteImport } from './routes/demo/methods'
 import { Route as DemoLayoutRouteImport } from './routes/demo/layout'
+import { Route as DemoEasingsRouteImport } from './routes/demo/easings'
 import { Route as DemoDraggableRouteImport } from './routes/demo/draggable'
 import { Route as DemoCoreFeaturesRouteImport } from './routes/demo/core-features'
 import { Route as DemoCallbacksRouteImport } from './routes/demo/callbacks'
@@ -91,6 +92,11 @@ const DemoLayoutRoute = DemoLayoutRouteImport.update({
   path: '/layout',
   getParentRoute: () => DemoRouteRoute,
 } as any)
+const DemoEasingsRoute = DemoEasingsRouteImport.update({
+  id: '/easings',
+  path: '/easings',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
 const DemoDraggableRoute = DemoDraggableRouteImport.update({
   id: '/draggable',
   path: '/draggable',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
   '/demo/draggable': typeof DemoDraggableRoute
+  '/demo/easings': typeof DemoEasingsRoute
   '/demo/layout': typeof DemoLayoutRoute
   '/demo/methods': typeof DemoMethodsRoute
   '/demo/onscroll': typeof DemoOnscrollRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
   '/demo/draggable': typeof DemoDraggableRoute
+  '/demo/easings': typeof DemoEasingsRoute
   '/demo/layout': typeof DemoLayoutRoute
   '/demo/methods': typeof DemoMethodsRoute
   '/demo/onscroll': typeof DemoOnscrollRoute
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
   '/demo/draggable': typeof DemoDraggableRoute
+  '/demo/easings': typeof DemoEasingsRoute
   '/demo/layout': typeof DemoLayoutRoute
   '/demo/methods': typeof DemoMethodsRoute
   '/demo/onscroll': typeof DemoOnscrollRoute
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/demo/callbacks'
     | '/demo/core-features'
     | '/demo/draggable'
+    | '/demo/easings'
     | '/demo/layout'
     | '/demo/methods'
     | '/demo/onscroll'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/demo/callbacks'
     | '/demo/core-features'
     | '/demo/draggable'
+    | '/demo/easings'
     | '/demo/layout'
     | '/demo/methods'
     | '/demo/onscroll'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/demo/callbacks'
     | '/demo/core-features'
     | '/demo/draggable'
+    | '/demo/easings'
     | '/demo/layout'
     | '/demo/methods'
     | '/demo/onscroll'
@@ -318,6 +330,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoLayoutRouteImport
       parentRoute: typeof DemoRouteRoute
     }
+    '/demo/easings': {
+      id: '/demo/easings'
+      path: '/easings'
+      fullPath: '/demo/easings'
+      preLoaderRoute: typeof DemoEasingsRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
     '/demo/draggable': {
       id: '/demo/draggable'
       path: '/draggable'
@@ -346,6 +365,7 @@ interface DemoRouteRouteChildren {
   DemoCallbacksRoute: typeof DemoCallbacksRoute
   DemoCoreFeaturesRoute: typeof DemoCoreFeaturesRoute
   DemoDraggableRoute: typeof DemoDraggableRoute
+  DemoEasingsRoute: typeof DemoEasingsRoute
   DemoLayoutRoute: typeof DemoLayoutRoute
   DemoMethodsRoute: typeof DemoMethodsRoute
   DemoOnscrollRoute: typeof DemoOnscrollRoute
@@ -362,6 +382,7 @@ const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoCallbacksRoute: DemoCallbacksRoute,
   DemoCoreFeaturesRoute: DemoCoreFeaturesRoute,
   DemoDraggableRoute: DemoDraggableRoute,
+  DemoEasingsRoute: DemoEasingsRoute,
   DemoLayoutRoute: DemoLayoutRoute,
   DemoMethodsRoute: DemoMethodsRoute,
   DemoOnscrollRoute: DemoOnscrollRoute,

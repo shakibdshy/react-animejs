@@ -78,6 +78,12 @@ const demoSections = [
       "Text splitting, templates, CJK support, effects, advanced patterns",
   },
   {
+    title: "Easings",
+    path: "/demo/easings",
+    description:
+      "cubicBezier, linear, steps, irregular, spring physics",
+  },
+  {
     title: "Utilities",
     path: "/demo/utilities",
     description:

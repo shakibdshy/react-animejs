@@ -16,6 +16,7 @@ export type {
   EasingPattern,
   EasingFunction,
   Easing,
+  SpringParams,
   PropertyKeyframe,
   PropertyValue,
   DeepPartial,

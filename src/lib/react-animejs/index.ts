@@ -146,6 +146,7 @@ export type {
   EasingName,
   EasingPattern,
   EasingFunction,
+  SpringParams,
   PropertyKeyframe,
   PropertyValue,
 
@@ -237,6 +238,10 @@ export {
   scrollContainers,
   AutoLayout,
   spring,
+  cubicBezier,
+  linear,
+  steps,
+  irregular,
   stagger as animeStagger,
   easings,
   svg,

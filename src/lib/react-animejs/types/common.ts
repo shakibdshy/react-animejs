@@ -433,12 +433,20 @@ export type EasingPattern =
   | `outIn(${number})`
   | `spring(${number})`
   | `spring(${number}, ${number})`
-  | `steps(${number})`;
+  | `steps(${number})`
+  | `steps(${number}, start)`
+  | `steps(${number}, end)`
+  | `cubicBezier(${number}, ${number}, ${number}, ${number})`
+  | `linear(${number}, ${number})`
+  | `irregular(${number})`
+  | `irregular(${number}, ${number})`;
 
 /**
  * Custom easing function
  */
 export type EasingFunction = (t: number) => number;
+
+import type { Spring as AnimeSpring } from "animejs";
 
 /**
  * All valid easing types
@@ -447,7 +455,34 @@ export type Easing =
   | EasingName
   | EasingPattern
   | EasingFunction
+  | AnimeSpring
   | (string & {});
+
+/**
+ * Spring easing parameters for physics-based animations
+ */
+export interface SpringParams {
+  bounce?: number;
+  duration?: number;
+  stiffness?: number;
+  damping?: number;
+  mass?: number;
+  velocity?: number;
+  onComplete?: () => void;
+}
+
+/**
+ * Spring easing parameters for physics-based animations
+ */
+export interface SpringParams {
+  bounce?: number;
+  duration?: number;
+  stiffness?: number;
+  damping?: number;
+  mass?: number;
+  velocity?: number;
+  onComplete?: () => void;
+}
 
 // =============================================================================
 // Value Types
