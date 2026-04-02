@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as DemoRouteRouteImport } from './routes/demo/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DemoUtilitiesRouteImport } from './routes/demo/utilities'
 import { Route as DemoTimersRouteImport } from './routes/demo/timers'
 import { Route as DemoTimelinesRouteImport } from './routes/demo/timelines'
 import { Route as DemoSvgRouteImport } from './routes/demo/svg'
@@ -39,6 +40,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DemoUtilitiesRoute = DemoUtilitiesRouteImport.update({
+  id: '/utilities',
+  path: '/utilities',
+  getParentRoute: () => DemoRouteRoute,
 } as any)
 const DemoTimersRoute = DemoTimersRouteImport.update({
   id: '/timers',
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/demo/svg': typeof DemoSvgRoute
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
+  '/demo/utilities': typeof DemoUtilitiesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,6 +141,7 @@ export interface FileRoutesByTo {
   '/demo/svg': typeof DemoSvgRoute
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
+  '/demo/utilities': typeof DemoUtilitiesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/demo/svg': typeof DemoSvgRoute
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
+  '/demo/utilities': typeof DemoUtilitiesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/demo/svg'
     | '/demo/timelines'
     | '/demo/timers'
+    | '/demo/utilities'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -188,6 +198,7 @@ export interface FileRouteTypes {
     | '/demo/svg'
     | '/demo/timelines'
     | '/demo/timers'
+    | '/demo/utilities'
   id:
     | '__root__'
     | '/'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/demo/svg'
     | '/demo/timelines'
     | '/demo/timers'
+    | '/demo/utilities'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -235,6 +247,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/demo/utilities': {
+      id: '/demo/utilities'
+      path: '/utilities'
+      fullPath: '/demo/utilities'
+      preLoaderRoute: typeof DemoUtilitiesRouteImport
+      parentRoute: typeof DemoRouteRoute
     }
     '/demo/timers': {
       id: '/demo/timers'
@@ -336,6 +355,7 @@ interface DemoRouteRouteChildren {
   DemoSvgRoute: typeof DemoSvgRoute
   DemoTimelinesRoute: typeof DemoTimelinesRoute
   DemoTimersRoute: typeof DemoTimersRoute
+  DemoUtilitiesRoute: typeof DemoUtilitiesRoute
 }
 
 const DemoRouteRouteChildren: DemoRouteRouteChildren = {
@@ -351,6 +371,7 @@ const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoSvgRoute: DemoSvgRoute,
   DemoTimelinesRoute: DemoTimelinesRoute,
   DemoTimersRoute: DemoTimersRoute,
+  DemoUtilitiesRoute: DemoUtilitiesRoute,
 }
 
 const DemoRouteRouteWithChildren = DemoRouteRoute._addFileChildren(

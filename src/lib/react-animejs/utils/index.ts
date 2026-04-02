@@ -49,3 +49,30 @@ export {
   createStagger,
   stagger,
 } from "./stagger-helpers";
+
+// Anime.js utilities
+export {
+  $,
+  get,
+  set,
+  cleanInlineStyles,
+  remove,
+  sync,
+  keepTime,
+  random,
+  createSeededRandom,
+  randomPick,
+  shuffle,
+  round,
+  clamp,
+  snap,
+  wrap,
+  mapRange,
+  lerp,
+  damp,
+  roundPad,
+  padStart,
+  padEnd,
+  degToRad,
+  radToDeg,
+} from "./anime-utils";

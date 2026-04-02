@@ -77,6 +77,12 @@ const demoSections = [
     description:
       "Text splitting, templates, CJK support, effects, advanced patterns",
   },
+  {
+    title: "Utilities",
+    path: "/demo/utilities",
+    description:
+      "Math, random, string, DOM and value utility functions",
+  },
 ] as const;
 
 export const Route = createFileRoute("/")({ component: HomePage });
