@@ -72,6 +72,8 @@ export type {
   AnimeWAAPIProps,
   AnimeWAAPIRef,
 } from "./components/AnimeWAAPI";
+export { ToggleSwitch } from "./components/ToggleSwitch";
+export type { ToggleSwitchProps } from "./components/ToggleSwitch";
 
 // =============================================================================
 // Core Utilities

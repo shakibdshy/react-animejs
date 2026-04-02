@@ -13,6 +13,7 @@ import { Route as McpRouteImport } from './routes/mcp'
 import { Route as DemoRouteRouteImport } from './routes/demo/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoUtilitiesRouteImport } from './routes/demo/utilities'
+import { Route as DemoToggleSwitchRouteImport } from './routes/demo/toggle-switch'
 import { Route as DemoTimersRouteImport } from './routes/demo/timers'
 import { Route as DemoTimelinesRouteImport } from './routes/demo/timelines'
 import { Route as DemoSvgRouteImport } from './routes/demo/svg'
@@ -45,6 +46,11 @@ const IndexRoute = IndexRouteImport.update({
 const DemoUtilitiesRoute = DemoUtilitiesRouteImport.update({
   id: '/utilities',
   path: '/utilities',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoToggleSwitchRoute = DemoToggleSwitchRouteImport.update({
+  id: '/toggle-switch',
+  path: '/toggle-switch',
   getParentRoute: () => DemoRouteRoute,
 } as any)
 const DemoTimersRoute = DemoTimersRouteImport.update({
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/demo/svg': typeof DemoSvgRoute
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
+  '/demo/toggle-switch': typeof DemoToggleSwitchRoute
   '/demo/utilities': typeof DemoUtilitiesRoute
 }
 export interface FileRoutesByTo {
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/demo/svg': typeof DemoSvgRoute
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
+  '/demo/toggle-switch': typeof DemoToggleSwitchRoute
   '/demo/utilities': typeof DemoUtilitiesRoute
 }
 export interface FileRoutesById {
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/demo/svg': typeof DemoSvgRoute
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
+  '/demo/toggle-switch': typeof DemoToggleSwitchRoute
   '/demo/utilities': typeof DemoUtilitiesRoute
 }
 export interface FileRouteTypes {
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/demo/svg'
     | '/demo/timelines'
     | '/demo/timers'
+    | '/demo/toggle-switch'
     | '/demo/utilities'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/demo/svg'
     | '/demo/timelines'
     | '/demo/timers'
+    | '/demo/toggle-switch'
     | '/demo/utilities'
   id:
     | '__root__'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/demo/svg'
     | '/demo/timelines'
     | '/demo/timers'
+    | '/demo/toggle-switch'
     | '/demo/utilities'
   fileRoutesById: FileRoutesById
 }
@@ -265,6 +277,13 @@ declare module '@tanstack/react-router' {
       path: '/utilities'
       fullPath: '/demo/utilities'
       preLoaderRoute: typeof DemoUtilitiesRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/toggle-switch': {
+      id: '/demo/toggle-switch'
+      path: '/toggle-switch'
+      fullPath: '/demo/toggle-switch'
+      preLoaderRoute: typeof DemoToggleSwitchRouteImport
       parentRoute: typeof DemoRouteRoute
     }
     '/demo/timers': {
@@ -375,6 +394,7 @@ interface DemoRouteRouteChildren {
   DemoSvgRoute: typeof DemoSvgRoute
   DemoTimelinesRoute: typeof DemoTimelinesRoute
   DemoTimersRoute: typeof DemoTimersRoute
+  DemoToggleSwitchRoute: typeof DemoToggleSwitchRoute
   DemoUtilitiesRoute: typeof DemoUtilitiesRoute
 }
 
@@ -392,6 +412,7 @@ const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoSvgRoute: DemoSvgRoute,
   DemoTimelinesRoute: DemoTimelinesRoute,
   DemoTimersRoute: DemoTimersRoute,
+  DemoToggleSwitchRoute: DemoToggleSwitchRoute,
   DemoUtilitiesRoute: DemoUtilitiesRoute,
 }
 

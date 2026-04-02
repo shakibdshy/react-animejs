@@ -89,6 +89,12 @@ const demoSections = [
     description:
       "Math, random, string, DOM and value utility functions",
   },
+  {
+    title: "Toggle Switch",
+    path: "/demo/toggle-switch",
+    description:
+      "Animated toggle switch with smooth transitions",
+  },
 ] as const;
 
 export const Route = createFileRoute("/")({ component: HomePage });

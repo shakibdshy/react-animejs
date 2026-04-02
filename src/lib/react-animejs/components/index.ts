@@ -49,6 +49,9 @@ export type { AnimeWAAPIProps, AnimeWAAPIRef } from "./AnimeWAAPI";
 export { SplitText } from "./SplitText";
 export type { SplitTextProps, SplitTextRef } from "./SplitText";
 
+export { ToggleSwitch } from "./ToggleSwitch";
+export type { ToggleSwitchProps } from "./ToggleSwitch";
+
 export { SplitTextEntry } from "./SplitTextEntry";
 export type {
   SplitTextEntryProps,
