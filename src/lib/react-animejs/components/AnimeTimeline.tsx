@@ -7,6 +7,7 @@ import React, {
   useRef,
 } from "react";
 import { useAnimeTimeline } from "../hooks";
+import { TimelineContext } from "../core";
 import type {
   AnimationState,
   Timeline,
@@ -94,11 +95,29 @@ export const AnimeTimeline = forwardRef<AnimeTimelineRef, AnimeTimelineProps>(
       onStateChange?.(state);
     }, [state, onStateChange]);
 
-    if (typeof children === "function") {
-      return <>{children(refValue)}</>;
-    }
+    const contextValue = useMemo(
+      () => ({
+        controls,
+        state,
+        timeline,
+        isReady,
+        isPlaying,
+      }),
+      [controls, state, timeline, isReady, isPlaying],
+    );
 
-    return <>{children ?? null}</>;
+    const renderChildren = () => {
+      if (typeof children === "function") {
+        return <>{children(refValue)}</>;
+      }
+      return <>{children ?? null}</>;
+    };
+
+    return (
+      <TimelineContext.Provider value={contextValue}>
+        {renderChildren()}
+      </TimelineContext.Provider>
+    );
   },
 );
 

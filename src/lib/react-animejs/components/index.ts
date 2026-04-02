@@ -40,8 +40,18 @@ export type {
 export { AnimeTimeline } from "./AnimeTimeline";
 export type { AnimeTimelineProps, AnimeTimelineRef } from "./AnimeTimeline";
 
+export { TimelineEntry } from "./TimelineEntry";
+export type { TimelineEntryProps, TimelineEntryRef } from "./TimelineEntry";
+
 export { AnimeWAAPI } from "./AnimeWAAPI";
 export type { AnimeWAAPIProps, AnimeWAAPIRef } from "./AnimeWAAPI";
 
 export { SplitText } from "./SplitText";
 export type { SplitTextProps, SplitTextRef } from "./SplitText";
+
+export { SplitTextEntry } from "./SplitTextEntry";
+export type {
+  SplitTextEntryProps,
+  SplitTextEntryRef,
+  SplitMode,
+} from "./SplitTextEntry";

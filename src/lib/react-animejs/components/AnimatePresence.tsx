@@ -32,11 +32,11 @@ export interface AnimatePresenceProps {
   /**
    * Mode for handling multiple children
    * - 'sync': Exit and enter animations play at the same time
-   * - 'wait': Wait for exit animation to complete before entering
+   * - 'wait' / 'exitBeforeEnter': Wait for exit animation to complete before entering
    * - 'popLayout': Exit immediately, enter with layout animation
    * @default 'sync'
    */
-  mode?: "sync" | "wait" | "popLayout";
+  mode?: "sync" | "wait" | "exitBeforeEnter" | "popLayout";
 
   /**
    * Callback when all exit animations complete
@@ -52,34 +52,11 @@ export interface AnimatePresenceProps {
 }
 
 export interface AnimatePresenceChildProps {
-  /**
-   * Initial state (before entering)
-   */
-  initial?: Partial<AnimatableProperties>;
-
-  /**
-   * Animate to this state when mounted
-   */
-  animate?: Partial<AnimatableProperties>;
-
-  /**
-   * Animate to this state before unmounting
-   */
+  initial?: Partial<AnimatableProperties> | boolean;
+  animate?: Partial<AnimatableProperties> | boolean;
   exit?: Partial<AnimatableProperties>;
-
-  /**
-   * Animation duration
-   */
   duration?: number;
-
-  /**
-   * Easing function
-   */
   ease?: string;
-
-  /**
-   * Delay before animation
-   */
   delay?: number;
 }
 
@@ -87,9 +64,11 @@ export interface AnimatePresenceChildProps {
 // AnimatedChild Component
 // =============================================================================
 
-interface AnimatedChildProps extends AnimatePresenceChildProps {
+interface AnimatedChildProps extends Omit<AnimatePresenceChildProps, 'initial' | 'animate'> {
   children: ReactElement;
   isPresent: boolean;
+  initial?: Partial<AnimatableProperties>;
+  animate?: Partial<AnimatableProperties>;
   onExitComplete?: () => void;
   skipInitial?: boolean;
   popLayout?: boolean;
@@ -120,7 +99,7 @@ function AnimatedChild({
     : exit;
 
   const { ref, controls, state } = useAnime({
-    ...currentProps,
+    ...(currentProps as Record<string, any>),
     duration,
     ease,
     delay,
@@ -203,126 +182,88 @@ function AnimatedChild({
 // AnimatePresence Component
 // =============================================================================
 
-/**
- * AnimatePresence - Animate children entering and exiting the DOM
- *
- * @example
- * ```tsx
- * function Modal({ isOpen, children }) {
- *   return (
- *     <AnimatePresence>
- *       {isOpen && (
- *         <AnimatePresenceChild
- *           key="modal"
- *           initial={{ opacity: 0, scale: 0.9 }}
- *           animate={{ opacity: 1, scale: 1 }}
- *           exit={{ opacity: 0, scale: 0.9 }}
- *           duration={300}
- *         >
- *           <div className="modal">{children}</div>
- *         </AnimatePresenceChild>
- *       )}
- *     </AnimatePresence>
- *   );
- * }
- * ```
- */
 export function AnimatePresence({
   children,
   mode = "sync",
   onExitComplete,
   initial = true,
 }: AnimatePresenceProps) {
-  // Track which children are present
-  const [presentChildren, setPresentChildren] = useState<
-    Map<string | number, ReactElement>
-  >(new Map());
+  const isInitialRender = useRef(true);
+  const presentChildren = useRef(new Map<string | number, ReactElement>());
+  const exitingChildren = useRef(new Map<string | number, ReactElement>());
 
-  // Track exiting children
-  const [exitingChildren, setExitingChildren] = useState<
-    Map<string | number, ReactElement>
-  >(new Map());
+  // Force re-render state
+  const [, forceRender] = useState({});
 
-  // Track if this is the initial render
-  const isInitialMount = useRef(true);
-
-  // Process children changes
-  useEffect(() => {
-    const childArray = Children.toArray(children).filter(
-      isValidElement,
-    ) as ReactElement[];
-    const newPresent = new Map<string | number, ReactElement>();
-    const newExiting = new Map(exitingChildren);
-
-    // Build map of currently present children
-    childArray.forEach((child) => {
-      const key = child.key;
-      if (key != null) {
-        newPresent.set(key, child);
-        // Remove from exiting if it's back
-        newExiting.delete(key);
-      }
-    });
-
-    // Find children that have been removed (need to exit)
-    presentChildren.forEach((child, key) => {
-      if (!newPresent.has(key) && !newExiting.has(key)) {
-        newExiting.set(key, child);
-      }
-    });
-
-    setPresentChildren(newPresent);
-    setExitingChildren(newExiting);
-
-    // Update initial mount flag
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
+  const childArray = Children.toArray(children).filter(isValidElement) as ReactElement[];
+  
+  // Render-phase diffing (no useEffect flicker)
+  const newPresent = new Map<string | number, ReactElement>();
+  
+  childArray.forEach((child) => {
+    const key = child.key;
+    if (key != null) {
+      newPresent.set(key, child);
     }
-  }, [children]);
+  });
 
-  // Handle exit completion
+  // 1. Any children removed? Add to exiting
+  presentChildren.current.forEach((child, key) => {
+    if (!newPresent.has(key)) {
+      exitingChildren.current.set(key, child);
+    }
+  });
+
+  // 2. Any old exiting children coming back? Remove from exiting
+  newPresent.forEach((_, key) => {
+    if (exitingChildren.current.has(key)) {
+      exitingChildren.current.delete(key);
+    }
+  });
+
+  // Update present children Ref
+  presentChildren.current = newPresent;
+
+  useEffect(() => {
+    isInitialRender.current = false;
+  }, []);
+
   const handleExitComplete = (key: string | number) => {
-    setExitingChildren((prev) => {
-      const next = new Map(prev);
-      next.delete(key);
+    exitingChildren.current.delete(key);
+    forceRender({});
 
-      // Call onExitComplete when all exits are done
-      if (next.size === 0 && onExitComplete) {
-        onExitComplete();
-      }
-
-      return next;
-    });
+    if (exitingChildren.current.size === 0 && onExitComplete) {
+      onExitComplete();
+    }
   };
 
-  const shouldWaitForExit = mode === "wait" && exitingChildren.size > 0;
+  const isWaitMode = mode === "wait" || mode === "exitBeforeEnter";
+  const shouldWaitForExit = isWaitMode && exitingChildren.current.size > 0;
 
-  // Render all children (present + exiting)
   const allChildren: ReactElement[] = [];
 
-  // Add present children
+  // Render present children
   if (!shouldWaitForExit) {
-    presentChildren.forEach((child, key) => {
+    presentChildren.current.forEach((child, key) => {
       const childProps = child.props as AnimatePresenceChildProps;
-      const renderedChild =
-        child.type === AnimatePresenceChild &&
-        isValidElement(
-          (child.props as { children?: ReactNode }).children,
-        )
-          ? ((child.props as { children: ReactElement }).children)
-          : child;
+      const isPresenceChild = child.type === AnimatePresenceChild;
+      
+      const presenceProps = isPresenceChild ? childProps : (childProps as any);
+      const renderedChild = isPresenceChild && isValidElement((childProps as any).children) 
+        ? ((childProps as any).children as ReactElement) 
+        : child;
 
       allChildren.push(
         <AnimatedChild
           key={key}
           isPresent={true}
-          initial={childProps.initial}
-          animate={childProps.animate}
-          exit={childProps.exit}
-          duration={childProps.duration}
-          ease={childProps.ease}
-          delay={childProps.delay}
-          skipInitial={!initial && isInitialMount.current}
+          initial={typeof presenceProps.initial === 'object' ? presenceProps.initial : undefined}
+          animate={typeof presenceProps.animate === 'object' ? presenceProps.animate : undefined}
+          exit={presenceProps.exit}
+          duration={presenceProps.duration}
+          ease={presenceProps.ease}
+          delay={presenceProps.delay}
+          skipInitial={!initial && isInitialRender.current}
         >
           {renderedChild}
         </AnimatedChild>,
@@ -330,27 +271,26 @@ export function AnimatePresence({
     });
   }
 
-  // Add exiting children
-  exitingChildren.forEach((child, key) => {
+  // Render exiting children
+  exitingChildren.current.forEach((child, key) => {
     const childProps = child.props as AnimatePresenceChildProps;
-    const renderedChild =
-      child.type === AnimatePresenceChild &&
-      isValidElement(
-        (child.props as { children?: ReactNode }).children,
-      )
-        ? ((child.props as { children: ReactElement }).children)
-        : child;
+    const isPresenceChild = child.type === AnimatePresenceChild;
+    
+    const presenceProps = isPresenceChild ? childProps : (childProps as any);
+    const renderedChild = isPresenceChild && isValidElement((childProps as any).children) 
+      ? ((childProps as any).children as ReactElement) 
+      : child;
 
     allChildren.push(
       <AnimatedChild
         key={key}
         isPresent={false}
-        initial={childProps.initial}
-        animate={childProps.animate}
-        exit={childProps.exit}
-        duration={childProps.duration}
-        ease={childProps.ease}
-        delay={childProps.delay}
+        initial={typeof presenceProps.initial === 'object' ? presenceProps.initial : undefined}
+        animate={typeof presenceProps.animate === 'object' ? presenceProps.animate : undefined}
+        exit={presenceProps.exit}
+        duration={presenceProps.duration}
+        ease={presenceProps.ease}
+        delay={presenceProps.delay}
         onExitComplete={() => handleExitComplete(key)}
         popLayout={mode === "popLayout"}
       >
@@ -362,14 +302,9 @@ export function AnimatePresence({
   return <>{allChildren}</>;
 }
 
-/**
- * Helper component for AnimatePresence children
- * Use this to specify initial, animate, and exit props
- */
 export function AnimatePresenceChild({
   children,
 }: AnimatePresenceChildProps & { children: ReactElement }) {
-  // This component is just a marker - AnimatePresence reads its props
   return children;
 }
 

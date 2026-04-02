@@ -18,6 +18,8 @@ import {
 } from 'react';
 import { splitText } from 'animejs';
 import type { TextSplitter, TextSplitterParams } from 'animejs';
+import { safeJsonStringify } from '../core/helpers';
+import { mergeChildProps } from './svg-component-utils';
 
 export interface SplitTextRef {
   /**
@@ -98,62 +100,11 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
     onReadyRef.current = onReady;
   }, [onReady]);
 
-  const paramsStr = JSON.stringify(params);
+  const paramsStr = safeJsonStringify(params);
 
-  // Use useLayoutEffect for synchronous DOM manipulation
-  useLayoutEffect(() => {
-    if (!splitOnMount) return;
-
-    const container = containerRef.current;
-    if (!container) return;
-
-    // Get the actual child element that contains the text
-    const child = container.firstElementChild as HTMLElement | null;
-    if (!child) {
-      console.warn('[SplitText] No child element found');
-      return;
-    }
-
-    try {
-      const parsedParams = JSON.parse(paramsStr);
-      console.log('[SplitText] Splitting with params:', parsedParams);
-      console.log('[SplitText] Target element:', child.tagName, child.textContent?.slice(0, 50));
-
-      // Use the child element as the target, not the wrapper
-      const instance = splitText(child, parsedParams);
-      console.log('[SplitText] Split complete:', {
-        lines: instance.lines?.length,
-        words: instance.words?.length,
-        chars: instance.chars?.length,
-      });
-      splitRef.current = instance;
-
-      // Use requestAnimationFrame to ensure DOM is painted before calling onReady
-      requestAnimationFrame(() => {
-        setIsReady(true);
-
-        // Call onReady after split is complete and DOM is painted
-        if (onReadyRef.current) {
-          onReadyRef.current(instance);
-        }
-      });
-    } catch (error) {
-      console.error('[react-animejs] SplitText error:', error);
-      splitRef.current = null;
-      setIsReady(false);
-    }
-
-    return () => {
-      if (splitRef.current) {
-        try {
-          splitRef.current.revert();
-        } catch {}
-        splitRef.current = null;
-      }
-      setIsReady(false);
-    };
-  }, [paramsStr, splitOnMount]);
-
+  // Expose the imperative handle immediately — the split ref is written
+  // synchronously inside useLayoutEffect so sibling components (like
+  // SplitTextEntry) can read it on their first render/effect.
   useImperativeHandle(
     ref,
     () => ({
@@ -167,6 +118,9 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
         const container = containerRef.current;
         if (!container) return;
 
+        const child = container.firstElementChild as HTMLElement | null;
+        if (!child) return;
+
         if (splitRef.current) {
           try {
             splitRef.current.revert();
@@ -175,16 +129,13 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
 
         try {
           const parsedParams = JSON.parse(paramsStr);
-          const instance = splitText(container, parsedParams);
+          const instance = splitText(child, parsedParams);
           splitRef.current = instance;
+          setIsReady(true);
 
-          requestAnimationFrame(() => {
-            setIsReady(true);
-
-            if (onReadyRef.current) {
-              onReadyRef.current(instance);
-            }
-          });
+          if (onReadyRef.current) {
+            onReadyRef.current(instance);
+          }
         } catch (error) {
           console.error('[react-animejs] SplitText error:', error);
           splitRef.current = null;
@@ -219,6 +170,53 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
     [paramsStr, isReady]
   );
 
+  // Use useLayoutEffect for synchronous DOM manipulation.
+  // The split instance is written to splitRef.current synchronously so that
+  // useImperativeHandle (which also runs during layout) exposes it before
+  // any useEffect in sibling components fires.
+  useLayoutEffect(() => {
+    if (!splitOnMount) return;
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    const child = container.firstElementChild as HTMLElement | null;
+    if (!child) {
+      console.warn('[SplitText] No child element found');
+      return;
+    }
+
+    try {
+      const parsedParams = JSON.parse(paramsStr);
+      const instance = splitText(child, parsedParams);
+      splitRef.current = instance;
+
+      // Set ready synchronously so the ref is usable by sibling effects
+      setIsReady(true);
+
+      // Fire the onReady callback after a frame to ensure DOM is painted
+      requestAnimationFrame(() => {
+        if (onReadyRef.current) {
+          onReadyRef.current(instance);
+        }
+      });
+    } catch (error) {
+      console.error('[react-animejs] SplitText error:', error);
+      splitRef.current = null;
+      setIsReady(false);
+    }
+
+    return () => {
+      if (splitRef.current) {
+        try {
+          splitRef.current.revert();
+        } catch {}
+        splitRef.current = null;
+      }
+      setIsReady(false);
+    };
+  }, [paramsStr, splitOnMount]);
+
   if (!isValidElement(children)) {
     console.warn('[react-animejs] SplitText requires a single valid React element as child');
     return children;
@@ -228,11 +226,10 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
 
   return (
     <div ref={containerRef}>
-      {cloneElement(child, {
-        className: className
-          ? `${(child.props as { className?: string }).className || ''} ${className}`.trim()
-          : (child.props as { className?: string }).className,
-      } as Partial<unknown>)}
+      {cloneElement(
+        child,
+        mergeChildProps(child as ReactElement<any>, { className })
+      )}
     </div>
   );
 });

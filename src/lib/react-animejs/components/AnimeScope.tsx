@@ -251,7 +251,7 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
   /**
    * Wraps user's callback to enhance scope self with animate and utils
    */
-  const wrapCallback = (callback: AnimeScopeAnimateFn<T>) => {
+  const wrapCallback = useCallback((callback: AnimeScopeAnimateFn<T>) => {
     return (self: { matches: ScopeMediaMatches<T>; root: HTMLElement | Document; add: (name: string, fn: (...args: unknown[]) => unknown) => void }) => {
       // Create a safe add function that registers named methods
       // In Anime.js, self.add(name, fn) registers a method that can be called later via scope.methods[name]
@@ -283,7 +283,7 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
       };
       return callback(enhancedContext);
     };
-  };
+  }, []);
 
   // Wrapped add/addOnce for imperative use via ref — enhances callbacks
   // with self.animate and self.utils so demos work correctly.

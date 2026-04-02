@@ -1,21 +1,17 @@
 /**
  * SplitTextTemplatesDemo - Demonstrates custom templates for split text
- * Using createTimeline with stagger for continuous loop animations.
+ * Uses pure declarative components.
  */
 
-import React, { useRef, useEffect, useState, useCallback } from "react";
-import { SplitText } from "../../../components";
-import type { SplitTextRef } from "../../../components";
-import type { TextSplitterParams, TextSplitter } from "animejs";
-import { createTimeline, stagger } from "../../../index";
-import { DemoCard } from "../DemoCard";
+import React, { useRef, useState } from 'react';
+import { AnimeTimeline, SplitText, SplitTextEntry } from '@/lib/react-animejs/components';
+import type { SplitTextRef } from '@/lib/react-animejs/components';
+import type { TextSplitterParams } from 'animejs';
+import { DemoCard } from '../DemoCard';
 
 export const SplitTextTemplatesDemo: React.FC = () => {
-  const [templateMode, setTemplateMode] = useState<
-    "block" | "clip" | "accessible"
-  >("block");
+  const [templateMode, setTemplateMode] = useState<'block' | 'clip' | 'accessible'>('block');
   const splitRef = useRef<SplitTextRef>(null);
-  const timelineRef = useRef<any>(null);
 
   const templateConfigs = {
     block: {
@@ -24,9 +20,9 @@ export const SplitTextTemplatesDemo: React.FC = () => {
       chars: true,
     },
     clip: {
-      lines: { wrap: "clip" },
-      words: { wrap: "clip" },
-      chars: { wrap: "clip" },
+      lines: { wrap: 'clip' },
+      words: { wrap: 'clip' },
+      chars: { wrap: 'clip' },
     },
     accessible: {
       lines: true,
@@ -36,41 +32,6 @@ export const SplitTextTemplatesDemo: React.FC = () => {
     },
   } as const;
 
-  const setupAnimation = useCallback((split: TextSplitter) => {
-    if (!split) return;
-
-    if (timelineRef.current) {
-      timelineRef.current.revert();
-    }
-
-    const targets = split.chars.length > 0 ? split.chars : split.words;
-    if (targets.length === 0) return;
-
-    timelineRef.current = createTimeline({
-      loop: true,
-      defaults: { ease: "outExpo", duration: 600 },
-    })
-      .add(
-        targets as any,
-        {
-          opacity: [0, 1],
-          translateY: [20, 0],
-          rotate: [-10, 0],
-        } as any,
-        stagger(30),
-      );
-
-    timelineRef.current.init();
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (timelineRef.current) {
-        timelineRef.current.revert();
-      }
-    };
-  }, []);
-
   return (
     <DemoCard
       title="split templates"
@@ -78,7 +39,7 @@ export const SplitTextTemplatesDemo: React.FC = () => {
     >
       <div className="flex flex-col gap-6 w-full">
         <div className="flex flex-wrap gap-2">
-          {(["block", "clip", "accessible"] as const).map((mode) => (
+          {(['block', 'clip', 'accessible'] as const).map((mode) => (
             <button
               key={mode}
               onClick={() => {
@@ -86,8 +47,8 @@ export const SplitTextTemplatesDemo: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-tighter transition-all ${
                 templateMode === mode
-                  ? "bg-[#ffd11a] text-[#12121a]"
-                  : "bg-slate-800 text-slate-400 hover:text-white"
+                  ? 'bg-[#ffd11a] text-[#12121a]'
+                  : 'bg-slate-800 text-slate-400 hover:text-white'
               }`}
             >
               {mode}
@@ -96,18 +57,27 @@ export const SplitTextTemplatesDemo: React.FC = () => {
         </div>
 
         <div className="bg-[#1a1a24]/50 rounded-2xl p-8 border border-white/5 min-h-30 flex items-center justify-center overflow-hidden">
-          <SplitText
+          <AnimeTimeline
             key={templateMode}
-            ref={splitRef}
-            params={
-              templateConfigs[templateMode] as TextSplitterParams
-            }
-            onReady={setupAnimation}
+            loop
+            autoplay
+            defaults={{ ease: 'outExpo', duration: 600 }}
           >
-            <p className="text-3xl md:text-4xl font-black text-white text-center leading-tight">
-              Split Me
-            </p>
-          </SplitText>
+            <SplitText ref={splitRef} params={templateConfigs[templateMode] as TextSplitterParams}>
+              <p className="text-3xl md:text-4xl font-black text-white text-center leading-tight">
+                Split Me
+              </p>
+            </SplitText>
+
+            <SplitTextEntry
+              splitRef={splitRef}
+              splitMode="chars"
+              opacity={[0, 1]}
+              translateY={[20, 0]}
+              rotate={[-10, 0]}
+              stagger={30}
+            />
+          </AnimeTimeline>
         </div>
 
         <div className="text-[10px] text-slate-500 space-y-1 opacity-60 font-medium">
