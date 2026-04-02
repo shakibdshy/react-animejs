@@ -90,6 +90,12 @@ const demoSections = [
       "Math, random, string, DOM and value utility functions",
   },
   {
+    title: "Animate Presence",
+    path: "/demo/animate-presence",
+    description:
+      "Enter/exit animations with sync, wait, and popLayout modes",
+  },
+  {
     title: "Toggle Switch",
     path: "/demo/toggle-switch",
     description:

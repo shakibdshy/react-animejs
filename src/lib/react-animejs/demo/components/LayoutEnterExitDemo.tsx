@@ -1,11 +1,7 @@
-import React, { useCallback, useRef, useState } from "react";
-import {
-  AnimeLayout,
-  AnimeLayoutItem,
-  type AnimeLayoutRef,
-} from "../../components/AnimeLayout";
-import { DemoCard } from "./DemoCard";
-import { ChevronFirst, ChevronLast, Plus, Trash2 } from "lucide-react";
+import React, { useCallback, useRef, useState } from 'react';
+import { AnimeLayout, AnimeLayoutItem, type AnimeLayoutRef } from '../../components/AnimeLayout';
+import { DemoCard } from './DemoCard';
+import { ChevronFirst, ChevronLast, Plus, Trash2 } from 'lucide-react';
 
 export const LayoutEnterExitDemo: React.FC = () => {
   const layoutRef = useRef<AnimeLayoutRef>(null);
@@ -99,13 +95,13 @@ export const LayoutEnterExitDemo: React.FC = () => {
           ease="outExpo"
           enterFrom={{
             opacity: 0,
-            transform: "translateY(50px) scale(0.8)",
+            transform: 'translateY(50px) scale(0.8)',
           }}
           leaveTo={{
             opacity: 0,
-            transform: "translateY(-50px) scale(0.8)",
+            transform: 'translateY(-50px) scale(0.8)',
           }}
-          className="w-full flex flex-wrap gap-4 min-h-[160px] items-start content-start"
+          className="w-full flex flex-wrap gap-4 min-h-40 items-start content-start"
         >
           {items.map((id) => (
             <AnimeLayoutItem
@@ -144,12 +140,8 @@ export const LayoutEnterExitDemo: React.FC = () => {
             </span>
           </div>
           <div className="flex-1 bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
-            <span className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">
-              Total
-            </span>
-            <span className="text-[#ffd11a] font-mono font-bold">
-              {items.length}
-            </span>
+            <span className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">Total</span>
+            <span className="text-[#ffd11a] font-mono font-bold">{items.length}</span>
           </div>
         </div>
       </div>

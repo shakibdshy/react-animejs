@@ -509,9 +509,8 @@ describe("AnimatePresence modes", () => {
       <AnimatePresence>
         <AnimatePresenceChild
           key="spy"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          enter={{ opacity: [0, 1] }}
+          exit={{ opacity: [1, 0] }}
           duration={300}
         >
           <SpyChild label="visible" />
@@ -526,8 +525,7 @@ describe("AnimatePresence modes", () => {
     const lastProps = receivedProps.mock.lastCall?.[0];
 
     expect(lastProps?.label).toBe("visible");
-    expect(lastProps?.initial).toBeUndefined();
-    expect(lastProps?.animate).toBeUndefined();
+    expect(lastProps?.enter).toBeUndefined();
     expect(lastProps?.exit).toBeUndefined();
   });
 
@@ -536,8 +534,8 @@ describe("AnimatePresence modes", () => {
       <AnimatePresence mode="wait">
         <AnimatePresenceChild
           key="first"
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          enter={{ opacity: [0, 1] }}
+          exit={{ opacity: [1, 0] }}
           duration={300}
         >
           <div data-testid="first">first</div>
@@ -551,8 +549,8 @@ describe("AnimatePresence modes", () => {
       <AnimatePresence mode="wait">
         <AnimatePresenceChild
           key="second"
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          enter={{ opacity: [0, 1] }}
+          exit={{ opacity: [1, 0] }}
           duration={300}
         >
           <div data-testid="second">second</div>
@@ -592,8 +590,8 @@ describe("AnimatePresence modes", () => {
       <AnimatePresence mode="popLayout">
         <AnimatePresenceChild
           key="first"
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          enter={{ opacity: [0, 1] }}
+          exit={{ opacity: [1, 0] }}
           duration={300}
         >
           <div data-testid="first">first</div>
@@ -605,8 +603,8 @@ describe("AnimatePresence modes", () => {
       <AnimatePresence mode="popLayout">
         <AnimatePresenceChild
           key="second"
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          enter={{ opacity: [0, 1] }}
+          exit={{ opacity: [1, 0] }}
           duration={300}
         >
           <div data-testid="second">second</div>

@@ -27,6 +27,7 @@ import { Route as DemoEasingsRouteImport } from './routes/demo/easings'
 import { Route as DemoDraggableRouteImport } from './routes/demo/draggable'
 import { Route as DemoCoreFeaturesRouteImport } from './routes/demo/core-features'
 import { Route as DemoCallbacksRouteImport } from './routes/demo/callbacks'
+import { Route as DemoAnimatePresenceRouteImport } from './routes/demo/animate-presence'
 
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
@@ -118,11 +119,17 @@ const DemoCallbacksRoute = DemoCallbacksRouteImport.update({
   path: '/callbacks',
   getParentRoute: () => DemoRouteRoute,
 } as any)
+const DemoAnimatePresenceRoute = DemoAnimatePresenceRouteImport.update({
+  id: '/animate-presence',
+  path: '/animate-presence',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
   '/mcp': typeof McpRoute
+  '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
   '/demo/draggable': typeof DemoDraggableRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
   '/mcp': typeof McpRoute
+  '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
   '/demo/draggable': typeof DemoDraggableRoute
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
   '/mcp': typeof McpRoute
+  '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
   '/demo/draggable': typeof DemoDraggableRoute
@@ -186,6 +195,7 @@ export interface FileRouteTypes {
     | '/'
     | '/demo'
     | '/mcp'
+    | '/demo/animate-presence'
     | '/demo/callbacks'
     | '/demo/core-features'
     | '/demo/draggable'
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/'
     | '/demo'
     | '/mcp'
+    | '/demo/animate-presence'
     | '/demo/callbacks'
     | '/demo/core-features'
     | '/demo/draggable'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
     | '/'
     | '/demo'
     | '/mcp'
+    | '/demo/animate-presence'
     | '/demo/callbacks'
     | '/demo/core-features'
     | '/demo/draggable'
@@ -377,10 +389,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoCallbacksRouteImport
       parentRoute: typeof DemoRouteRoute
     }
+    '/demo/animate-presence': {
+      id: '/demo/animate-presence'
+      path: '/animate-presence'
+      fullPath: '/demo/animate-presence'
+      preLoaderRoute: typeof DemoAnimatePresenceRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
   }
 }
 
 interface DemoRouteRouteChildren {
+  DemoAnimatePresenceRoute: typeof DemoAnimatePresenceRoute
   DemoCallbacksRoute: typeof DemoCallbacksRoute
   DemoCoreFeaturesRoute: typeof DemoCoreFeaturesRoute
   DemoDraggableRoute: typeof DemoDraggableRoute
@@ -399,6 +419,7 @@ interface DemoRouteRouteChildren {
 }
 
 const DemoRouteRouteChildren: DemoRouteRouteChildren = {
+  DemoAnimatePresenceRoute: DemoAnimatePresenceRoute,
   DemoCallbacksRoute: DemoCallbacksRoute,
   DemoCoreFeaturesRoute: DemoCoreFeaturesRoute,
   DemoDraggableRoute: DemoDraggableRoute,
