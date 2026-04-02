@@ -92,6 +92,61 @@ export interface UseSplitTextReturn {
       },
     ) => void,
   ) => void;
+
+  /**
+   * Gets the split root element
+   */
+  $target: HTMLElement | null;
+
+  /**
+   * Gets if debug styles are visible
+   */
+  debug: boolean;
+
+  /**
+   * Sets debug mode
+   */
+  setDebug: (debug: boolean) => void;
+
+  /**
+   * Gets if spaces are included in the split
+   */
+  includeSpaces: boolean;
+
+  /**
+   * Sets whether to include spaces
+   */
+  setIncludeSpaces: (include: boolean) => void;
+
+  /**
+   * Gets the line template
+   */
+  lineTemplate: string | false | ((value?: Node | HTMLElement) => any) | undefined;
+
+  /**
+   * Sets the line template
+   */
+  setLineTemplate: (template: string | false | ((value?: Node | HTMLElement) => any)) => void;
+
+  /**
+   * Gets the word template
+   */
+  wordTemplate: string | false | ((value?: Node | HTMLElement) => any) | undefined;
+
+  /**
+   * Sets the word template
+   */
+  setWordTemplate: (template: string | false | ((value?: Node | HTMLElement) => any)) => void;
+
+  /**
+   * Gets the char template
+   */
+  charTemplate: string | false | ((value?: Node | HTMLElement) => any) | undefined;
+
+  /**
+   * Sets the char template
+   */
+  setCharTemplate: (template: string | false | ((value?: Node | HTMLElement) => any)) => void;
 }
 
 export function useSplitText(
@@ -230,6 +285,47 @@ export function useSplitText(
     [],
   );
 
+  const $target = splitRef.current?.$target ?? null;
+  const debug = splitRef.current?.debug ?? false;
+  const includeSpaces = splitRef.current?.includeSpaces ?? false;
+  const lineTemplate = splitRef.current?.lineTemplate;
+  const wordTemplate = splitRef.current?.wordTemplate;
+  const charTemplate = splitRef.current?.charTemplate;
+
+  const setDebug = useCallback((debug: boolean) => {
+    if (splitRef.current) {
+      splitRef.current.debug = debug;
+    }
+  }, []);
+
+  const setIncludeSpaces = useCallback((include: boolean) => {
+    if (splitRef.current) {
+      splitRef.current.includeSpaces = include;
+      splitRef.current.refresh();
+    }
+  }, []);
+
+  const setLineTemplate = useCallback((template: string | false | ((value?: Node | HTMLElement) => any)) => {
+    if (splitRef.current) {
+      splitRef.current.lineTemplate = template;
+      splitRef.current.refresh();
+    }
+  }, []);
+
+  const setWordTemplate = useCallback((template: string | false | ((value?: Node | HTMLElement) => any)) => {
+    if (splitRef.current) {
+      splitRef.current.wordTemplate = template;
+      splitRef.current.refresh();
+    }
+  }, []);
+
+  const setCharTemplate = useCallback((template: string | false | ((value?: Node | HTMLElement) => any)) => {
+    if (splitRef.current) {
+      splitRef.current.charTemplate = template;
+      splitRef.current.refresh();
+    }
+  }, []);
+
   return useMemo<UseSplitTextReturn>(
     () => ({
       ref: target,
@@ -240,6 +336,17 @@ export function useSplitText(
       refresh,
       setHtml,
       addEffect,
+      $target,
+      debug,
+      setDebug,
+      includeSpaces,
+      setIncludeSpaces,
+      lineTemplate,
+      setLineTemplate,
+      wordTemplate,
+      setWordTemplate,
+      charTemplate,
+      setCharTemplate,
     }),
     [
       target,
@@ -249,6 +356,17 @@ export function useSplitText(
       refresh,
       setHtml,
       addEffect,
+      $target,
+      debug,
+      setDebug,
+      includeSpaces,
+      setIncludeSpaces,
+      lineTemplate,
+      setLineTemplate,
+      wordTemplate,
+      setWordTemplate,
+      charTemplate,
+      setCharTemplate,
     ],
   );
 }

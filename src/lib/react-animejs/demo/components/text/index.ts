@@ -7,3 +7,4 @@ export { SplitTextEffectsDemo } from "./SplitTextEffectsDemo";
 export { SplitTextTemplatesDemo } from "./SplitTextTemplatesDemo";
 export { SplitTextCjkDemo } from "./SplitTextCjkDemo";
 export { SplitTextAdvancedDemo } from "./SplitTextAdvancedDemo";
+export { SplitTextAdvancedPropsDemo } from "./SplitTextAdvancedPropsDemo";
