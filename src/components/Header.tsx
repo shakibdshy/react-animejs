@@ -1,7 +1,39 @@
 import { Link } from '@tanstack/react-router'
 
 import { useState } from 'react'
-import { Home, Menu, Webhook, X } from 'lucide-react'
+import {
+  Home,
+  Menu,
+  Webhook,
+  X,
+  Zap,
+  PenTool,
+  Timer,
+  GitBranch,
+  Play,
+  MessageSquare,
+  Wrench,
+  Move,
+  MousePointerClick,
+  Layout,
+  Box,
+  Type,
+} from 'lucide-react'
+
+const demoLinks = [
+  { to: '/demo/core-features', label: 'Core Features', icon: Zap },
+  { to: '/demo/svg', label: 'SVG Utilities', icon: PenTool },
+  { to: '/demo/timers', label: 'Timers', icon: Timer },
+  { to: '/demo/timelines', label: 'Timelines', icon: GitBranch },
+  { to: '/demo/playback-settings', label: 'Playback Settings', icon: Play },
+  { to: '/demo/callbacks', label: 'Callbacks', icon: MessageSquare },
+  { to: '/demo/methods', label: 'Methods', icon: Wrench },
+  { to: '/demo/draggable', label: 'Draggable', icon: Move },
+  { to: '/demo/onscroll', label: 'On Scroll', icon: MousePointerClick },
+  { to: '/demo/layout', label: 'Layout', icon: Layout },
+  { to: '/demo/scope', label: 'Scope', icon: Box },
+  { to: '/demo/split-text', label: 'Split Text', icon: Type },
+] as const
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -57,31 +89,40 @@ export default function Header() {
             <span className="font-medium">Home</span>
           </Link>
 
-          <Link
-            to="/demo/animejs"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-            activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-            }}
-          >
-            <Webhook size={20} />
-            <span className="font-medium">Anime.js Demo</span>
-          </Link>
+          <div className="mt-4 mb-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            Demo Sections
+          </div>
 
-          <Link
-            to="/mcp"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-            activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-            }}
-          >
-            <Webhook size={20} />
-            <span className="font-medium">MCP</span>
-          </Link>
+          {demoLinks.map(({ to, label, icon: Icon }) => (
+            <Link
+              key={to}
+              to={to}
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-1"
+              activeProps={{
+                className:
+                  'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-1',
+              }}
+            >
+              <Icon size={18} />
+              <span className="font-medium text-sm">{label}</span>
+            </Link>
+          ))}
+
+          <div className="mt-4 border-t border-gray-700 pt-4">
+            <Link
+              to="/mcp"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+              activeProps={{
+                className:
+                  'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+              }}
+            >
+              <Webhook size={20} />
+              <span className="font-medium">MCP</span>
+            </Link>
+          </div>
         </nav>
       </aside>
     </>

@@ -10,12 +10,29 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as DemoRouteRouteImport } from './routes/demo/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DemoAnimejsRouteImport } from './routes/demo/animejs'
+import { Route as DemoTimersRouteImport } from './routes/demo/timers'
+import { Route as DemoTimelinesRouteImport } from './routes/demo/timelines'
+import { Route as DemoSvgRouteImport } from './routes/demo/svg'
+import { Route as DemoSplitTextRouteImport } from './routes/demo/split-text'
+import { Route as DemoScopeRouteImport } from './routes/demo/scope'
+import { Route as DemoPlaybackSettingsRouteImport } from './routes/demo/playback-settings'
+import { Route as DemoOnscrollRouteImport } from './routes/demo/onscroll'
+import { Route as DemoMethodsRouteImport } from './routes/demo/methods'
+import { Route as DemoLayoutRouteImport } from './routes/demo/layout'
+import { Route as DemoDraggableRouteImport } from './routes/demo/draggable'
+import { Route as DemoCoreFeaturesRouteImport } from './routes/demo/core-features'
+import { Route as DemoCallbacksRouteImport } from './routes/demo/callbacks'
 
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoRouteRoute = DemoRouteRouteImport.update({
+  id: '/demo',
+  path: '/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -23,40 +40,177 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoAnimejsRoute = DemoAnimejsRouteImport.update({
-  id: '/demo/animejs',
-  path: '/demo/animejs',
-  getParentRoute: () => rootRouteImport,
+const DemoTimersRoute = DemoTimersRouteImport.update({
+  id: '/timers',
+  path: '/timers',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoTimelinesRoute = DemoTimelinesRouteImport.update({
+  id: '/timelines',
+  path: '/timelines',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoSvgRoute = DemoSvgRouteImport.update({
+  id: '/svg',
+  path: '/svg',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoSplitTextRoute = DemoSplitTextRouteImport.update({
+  id: '/split-text',
+  path: '/split-text',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoScopeRoute = DemoScopeRouteImport.update({
+  id: '/scope',
+  path: '/scope',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoPlaybackSettingsRoute = DemoPlaybackSettingsRouteImport.update({
+  id: '/playback-settings',
+  path: '/playback-settings',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoOnscrollRoute = DemoOnscrollRouteImport.update({
+  id: '/onscroll',
+  path: '/onscroll',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoMethodsRoute = DemoMethodsRouteImport.update({
+  id: '/methods',
+  path: '/methods',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoLayoutRoute = DemoLayoutRouteImport.update({
+  id: '/layout',
+  path: '/layout',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoDraggableRoute = DemoDraggableRouteImport.update({
+  id: '/draggable',
+  path: '/draggable',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoCoreFeaturesRoute = DemoCoreFeaturesRouteImport.update({
+  id: '/core-features',
+  path: '/core-features',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoCallbacksRoute = DemoCallbacksRouteImport.update({
+  id: '/callbacks',
+  path: '/callbacks',
+  getParentRoute: () => DemoRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/demo': typeof DemoRouteRouteWithChildren
   '/mcp': typeof McpRoute
-  '/demo/animejs': typeof DemoAnimejsRoute
+  '/demo/callbacks': typeof DemoCallbacksRoute
+  '/demo/core-features': typeof DemoCoreFeaturesRoute
+  '/demo/draggable': typeof DemoDraggableRoute
+  '/demo/layout': typeof DemoLayoutRoute
+  '/demo/methods': typeof DemoMethodsRoute
+  '/demo/onscroll': typeof DemoOnscrollRoute
+  '/demo/playback-settings': typeof DemoPlaybackSettingsRoute
+  '/demo/scope': typeof DemoScopeRoute
+  '/demo/split-text': typeof DemoSplitTextRoute
+  '/demo/svg': typeof DemoSvgRoute
+  '/demo/timelines': typeof DemoTimelinesRoute
+  '/demo/timers': typeof DemoTimersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/demo': typeof DemoRouteRouteWithChildren
   '/mcp': typeof McpRoute
-  '/demo/animejs': typeof DemoAnimejsRoute
+  '/demo/callbacks': typeof DemoCallbacksRoute
+  '/demo/core-features': typeof DemoCoreFeaturesRoute
+  '/demo/draggable': typeof DemoDraggableRoute
+  '/demo/layout': typeof DemoLayoutRoute
+  '/demo/methods': typeof DemoMethodsRoute
+  '/demo/onscroll': typeof DemoOnscrollRoute
+  '/demo/playback-settings': typeof DemoPlaybackSettingsRoute
+  '/demo/scope': typeof DemoScopeRoute
+  '/demo/split-text': typeof DemoSplitTextRoute
+  '/demo/svg': typeof DemoSvgRoute
+  '/demo/timelines': typeof DemoTimelinesRoute
+  '/demo/timers': typeof DemoTimersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/demo': typeof DemoRouteRouteWithChildren
   '/mcp': typeof McpRoute
-  '/demo/animejs': typeof DemoAnimejsRoute
+  '/demo/callbacks': typeof DemoCallbacksRoute
+  '/demo/core-features': typeof DemoCoreFeaturesRoute
+  '/demo/draggable': typeof DemoDraggableRoute
+  '/demo/layout': typeof DemoLayoutRoute
+  '/demo/methods': typeof DemoMethodsRoute
+  '/demo/onscroll': typeof DemoOnscrollRoute
+  '/demo/playback-settings': typeof DemoPlaybackSettingsRoute
+  '/demo/scope': typeof DemoScopeRoute
+  '/demo/split-text': typeof DemoSplitTextRoute
+  '/demo/svg': typeof DemoSvgRoute
+  '/demo/timelines': typeof DemoTimelinesRoute
+  '/demo/timers': typeof DemoTimersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/mcp' | '/demo/animejs'
+  fullPaths:
+    | '/'
+    | '/demo'
+    | '/mcp'
+    | '/demo/callbacks'
+    | '/demo/core-features'
+    | '/demo/draggable'
+    | '/demo/layout'
+    | '/demo/methods'
+    | '/demo/onscroll'
+    | '/demo/playback-settings'
+    | '/demo/scope'
+    | '/demo/split-text'
+    | '/demo/svg'
+    | '/demo/timelines'
+    | '/demo/timers'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/mcp' | '/demo/animejs'
-  id: '__root__' | '/' | '/mcp' | '/demo/animejs'
+  to:
+    | '/'
+    | '/demo'
+    | '/mcp'
+    | '/demo/callbacks'
+    | '/demo/core-features'
+    | '/demo/draggable'
+    | '/demo/layout'
+    | '/demo/methods'
+    | '/demo/onscroll'
+    | '/demo/playback-settings'
+    | '/demo/scope'
+    | '/demo/split-text'
+    | '/demo/svg'
+    | '/demo/timelines'
+    | '/demo/timers'
+  id:
+    | '__root__'
+    | '/'
+    | '/demo'
+    | '/mcp'
+    | '/demo/callbacks'
+    | '/demo/core-features'
+    | '/demo/draggable'
+    | '/demo/layout'
+    | '/demo/methods'
+    | '/demo/onscroll'
+    | '/demo/playback-settings'
+    | '/demo/scope'
+    | '/demo/split-text'
+    | '/demo/svg'
+    | '/demo/timelines'
+    | '/demo/timers'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DemoRouteRoute: typeof DemoRouteRouteWithChildren
   McpRoute: typeof McpRoute
-  DemoAnimejsRoute: typeof DemoAnimejsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -68,6 +222,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo': {
+      id: '/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -75,20 +236,131 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/animejs': {
-      id: '/demo/animejs'
-      path: '/demo/animejs'
-      fullPath: '/demo/animejs'
-      preLoaderRoute: typeof DemoAnimejsRouteImport
-      parentRoute: typeof rootRouteImport
+    '/demo/timers': {
+      id: '/demo/timers'
+      path: '/timers'
+      fullPath: '/demo/timers'
+      preLoaderRoute: typeof DemoTimersRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/timelines': {
+      id: '/demo/timelines'
+      path: '/timelines'
+      fullPath: '/demo/timelines'
+      preLoaderRoute: typeof DemoTimelinesRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/svg': {
+      id: '/demo/svg'
+      path: '/svg'
+      fullPath: '/demo/svg'
+      preLoaderRoute: typeof DemoSvgRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/split-text': {
+      id: '/demo/split-text'
+      path: '/split-text'
+      fullPath: '/demo/split-text'
+      preLoaderRoute: typeof DemoSplitTextRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/scope': {
+      id: '/demo/scope'
+      path: '/scope'
+      fullPath: '/demo/scope'
+      preLoaderRoute: typeof DemoScopeRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/playback-settings': {
+      id: '/demo/playback-settings'
+      path: '/playback-settings'
+      fullPath: '/demo/playback-settings'
+      preLoaderRoute: typeof DemoPlaybackSettingsRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/onscroll': {
+      id: '/demo/onscroll'
+      path: '/onscroll'
+      fullPath: '/demo/onscroll'
+      preLoaderRoute: typeof DemoOnscrollRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/methods': {
+      id: '/demo/methods'
+      path: '/methods'
+      fullPath: '/demo/methods'
+      preLoaderRoute: typeof DemoMethodsRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/layout': {
+      id: '/demo/layout'
+      path: '/layout'
+      fullPath: '/demo/layout'
+      preLoaderRoute: typeof DemoLayoutRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/draggable': {
+      id: '/demo/draggable'
+      path: '/draggable'
+      fullPath: '/demo/draggable'
+      preLoaderRoute: typeof DemoDraggableRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/core-features': {
+      id: '/demo/core-features'
+      path: '/core-features'
+      fullPath: '/demo/core-features'
+      preLoaderRoute: typeof DemoCoreFeaturesRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/callbacks': {
+      id: '/demo/callbacks'
+      path: '/callbacks'
+      fullPath: '/demo/callbacks'
+      preLoaderRoute: typeof DemoCallbacksRouteImport
+      parentRoute: typeof DemoRouteRoute
     }
   }
 }
 
+interface DemoRouteRouteChildren {
+  DemoCallbacksRoute: typeof DemoCallbacksRoute
+  DemoCoreFeaturesRoute: typeof DemoCoreFeaturesRoute
+  DemoDraggableRoute: typeof DemoDraggableRoute
+  DemoLayoutRoute: typeof DemoLayoutRoute
+  DemoMethodsRoute: typeof DemoMethodsRoute
+  DemoOnscrollRoute: typeof DemoOnscrollRoute
+  DemoPlaybackSettingsRoute: typeof DemoPlaybackSettingsRoute
+  DemoScopeRoute: typeof DemoScopeRoute
+  DemoSplitTextRoute: typeof DemoSplitTextRoute
+  DemoSvgRoute: typeof DemoSvgRoute
+  DemoTimelinesRoute: typeof DemoTimelinesRoute
+  DemoTimersRoute: typeof DemoTimersRoute
+}
+
+const DemoRouteRouteChildren: DemoRouteRouteChildren = {
+  DemoCallbacksRoute: DemoCallbacksRoute,
+  DemoCoreFeaturesRoute: DemoCoreFeaturesRoute,
+  DemoDraggableRoute: DemoDraggableRoute,
+  DemoLayoutRoute: DemoLayoutRoute,
+  DemoMethodsRoute: DemoMethodsRoute,
+  DemoOnscrollRoute: DemoOnscrollRoute,
+  DemoPlaybackSettingsRoute: DemoPlaybackSettingsRoute,
+  DemoScopeRoute: DemoScopeRoute,
+  DemoSplitTextRoute: DemoSplitTextRoute,
+  DemoSvgRoute: DemoSvgRoute,
+  DemoTimelinesRoute: DemoTimelinesRoute,
+  DemoTimersRoute: DemoTimersRoute,
+}
+
+const DemoRouteRouteWithChildren = DemoRouteRoute._addFileChildren(
+  DemoRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DemoRouteRoute: DemoRouteRouteWithChildren,
   McpRoute: McpRoute,
-  DemoAnimejsRoute: DemoAnimejsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
