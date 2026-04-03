@@ -74,6 +74,10 @@ export type {
 } from "./components/AnimeWAAPI";
 export { ToggleSwitch } from "./components/ToggleSwitch";
 export type { ToggleSwitchProps } from "./components/ToggleSwitch";
+export { Counter } from "./components/Counter";
+export type { CounterProps } from "./components/Counter";
+export { Countdown } from "./components/Countdown";
+export type { CountdownProps } from "./components/Countdown";
 
 // =============================================================================
 // Core Utilities

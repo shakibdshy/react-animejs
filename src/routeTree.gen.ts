@@ -25,6 +25,7 @@ import { Route as DemoMethodsRouteImport } from './routes/demo/methods'
 import { Route as DemoLayoutRouteImport } from './routes/demo/layout'
 import { Route as DemoEasingsRouteImport } from './routes/demo/easings'
 import { Route as DemoDraggableRouteImport } from './routes/demo/draggable'
+import { Route as DemoCounterCountdownRouteImport } from './routes/demo/counter-countdown'
 import { Route as DemoCoreFeaturesRouteImport } from './routes/demo/core-features'
 import { Route as DemoCallbacksRouteImport } from './routes/demo/callbacks'
 import { Route as DemoAnimatePresenceRouteImport } from './routes/demo/animate-presence'
@@ -109,6 +110,11 @@ const DemoDraggableRoute = DemoDraggableRouteImport.update({
   path: '/draggable',
   getParentRoute: () => DemoRouteRoute,
 } as any)
+const DemoCounterCountdownRoute = DemoCounterCountdownRouteImport.update({
+  id: '/counter-countdown',
+  path: '/counter-countdown',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
 const DemoCoreFeaturesRoute = DemoCoreFeaturesRouteImport.update({
   id: '/core-features',
   path: '/core-features',
@@ -132,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
+  '/demo/counter-countdown': typeof DemoCounterCountdownRoute
   '/demo/draggable': typeof DemoDraggableRoute
   '/demo/easings': typeof DemoEasingsRoute
   '/demo/layout': typeof DemoLayoutRoute
@@ -153,6 +160,7 @@ export interface FileRoutesByTo {
   '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
+  '/demo/counter-countdown': typeof DemoCounterCountdownRoute
   '/demo/draggable': typeof DemoDraggableRoute
   '/demo/easings': typeof DemoEasingsRoute
   '/demo/layout': typeof DemoLayoutRoute
@@ -175,6 +183,7 @@ export interface FileRoutesById {
   '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
+  '/demo/counter-countdown': typeof DemoCounterCountdownRoute
   '/demo/draggable': typeof DemoDraggableRoute
   '/demo/easings': typeof DemoEasingsRoute
   '/demo/layout': typeof DemoLayoutRoute
@@ -198,6 +207,7 @@ export interface FileRouteTypes {
     | '/demo/animate-presence'
     | '/demo/callbacks'
     | '/demo/core-features'
+    | '/demo/counter-countdown'
     | '/demo/draggable'
     | '/demo/easings'
     | '/demo/layout'
@@ -219,6 +229,7 @@ export interface FileRouteTypes {
     | '/demo/animate-presence'
     | '/demo/callbacks'
     | '/demo/core-features'
+    | '/demo/counter-countdown'
     | '/demo/draggable'
     | '/demo/easings'
     | '/demo/layout'
@@ -240,6 +251,7 @@ export interface FileRouteTypes {
     | '/demo/animate-presence'
     | '/demo/callbacks'
     | '/demo/core-features'
+    | '/demo/counter-countdown'
     | '/demo/draggable'
     | '/demo/easings'
     | '/demo/layout'
@@ -375,6 +387,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoDraggableRouteImport
       parentRoute: typeof DemoRouteRoute
     }
+    '/demo/counter-countdown': {
+      id: '/demo/counter-countdown'
+      path: '/counter-countdown'
+      fullPath: '/demo/counter-countdown'
+      preLoaderRoute: typeof DemoCounterCountdownRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
     '/demo/core-features': {
       id: '/demo/core-features'
       path: '/core-features'
@@ -403,6 +422,7 @@ interface DemoRouteRouteChildren {
   DemoAnimatePresenceRoute: typeof DemoAnimatePresenceRoute
   DemoCallbacksRoute: typeof DemoCallbacksRoute
   DemoCoreFeaturesRoute: typeof DemoCoreFeaturesRoute
+  DemoCounterCountdownRoute: typeof DemoCounterCountdownRoute
   DemoDraggableRoute: typeof DemoDraggableRoute
   DemoEasingsRoute: typeof DemoEasingsRoute
   DemoLayoutRoute: typeof DemoLayoutRoute
@@ -422,6 +442,7 @@ const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoAnimatePresenceRoute: DemoAnimatePresenceRoute,
   DemoCallbacksRoute: DemoCallbacksRoute,
   DemoCoreFeaturesRoute: DemoCoreFeaturesRoute,
+  DemoCounterCountdownRoute: DemoCounterCountdownRoute,
   DemoDraggableRoute: DemoDraggableRoute,
   DemoEasingsRoute: DemoEasingsRoute,
   DemoLayoutRoute: DemoLayoutRoute,

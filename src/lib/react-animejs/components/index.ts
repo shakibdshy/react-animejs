@@ -58,3 +58,9 @@ export type {
   SplitTextEntryRef,
   SplitMode,
 } from "./SplitTextEntry";
+
+export { Counter } from "./Counter";
+export type { CounterProps } from "./Counter";
+
+export { Countdown } from "./Countdown";
+export type { CountdownProps } from "./Countdown";

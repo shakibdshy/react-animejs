@@ -101,6 +101,12 @@ const demoSections = [
     description:
       "Animated toggle switch with smooth transitions",
   },
+  {
+    title: "Counter & Countdown",
+    path: "/demo/counter-countdown",
+    description:
+      "Animated counters and countdown timers with formatting",
+  },
 ] as const;
 
 export const Route = createFileRoute("/")({ component: HomePage });
