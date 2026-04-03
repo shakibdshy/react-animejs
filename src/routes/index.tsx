@@ -19,6 +19,12 @@ const demoSections = [
     description: "Advanced SVG animation utilities and helpers",
   },
   {
+    title: "SVG Path Drawing",
+    path: "/demo/svg-path-draw",
+    description:
+      "Animated SVG path drawing — waves, hearts, lightning, landscapes, and more",
+  },
+  {
     title: "Timers",
     path: "/demo/timers",
     description:
@@ -130,6 +136,12 @@ const demoSections = [
     path: "/demo/reorder-list",
     description:
       "Animated reorder with FLIP layout, add/remove, and grid layout changes",
+  },
+  {
+    title: "SVG Path Drawing",
+    path: "/demo/svg-path-draw",
+    description:
+      "SVG path drawing effects — wave, heart, star, globe, landscape, and more",
   },
 ] as const;
 

@@ -16,6 +16,7 @@ import { Route as DemoUtilitiesRouteImport } from './routes/demo/utilities'
 import { Route as DemoToggleSwitchRouteImport } from './routes/demo/toggle-switch'
 import { Route as DemoTimersRouteImport } from './routes/demo/timers'
 import { Route as DemoTimelinesRouteImport } from './routes/demo/timelines'
+import { Route as DemoSvgPathDrawRouteImport } from './routes/demo/svg-path-draw'
 import { Route as DemoSvgRouteImport } from './routes/demo/svg'
 import { Route as DemoSplitTextRouteImport } from './routes/demo/split-text'
 import { Route as DemoSpinningCubeRouteImport } from './routes/demo/spinning-cube'
@@ -67,6 +68,11 @@ const DemoTimersRoute = DemoTimersRouteImport.update({
 const DemoTimelinesRoute = DemoTimelinesRouteImport.update({
   id: '/timelines',
   path: '/timelines',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoSvgPathDrawRoute = DemoSvgPathDrawRouteImport.update({
+  id: '/svg-path-draw',
+  path: '/svg-path-draw',
   getParentRoute: () => DemoRouteRoute,
 } as any)
 const DemoSvgRoute = DemoSvgRouteImport.update({
@@ -176,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
   '/demo/svg': typeof DemoSvgRoute
+  '/demo/svg-path-draw': typeof DemoSvgPathDrawRoute
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
   '/demo/toggle-switch': typeof DemoToggleSwitchRoute
@@ -202,6 +209,7 @@ export interface FileRoutesByTo {
   '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
   '/demo/svg': typeof DemoSvgRoute
+  '/demo/svg-path-draw': typeof DemoSvgPathDrawRoute
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
   '/demo/toggle-switch': typeof DemoToggleSwitchRoute
@@ -229,6 +237,7 @@ export interface FileRoutesById {
   '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
   '/demo/svg': typeof DemoSvgRoute
+  '/demo/svg-path-draw': typeof DemoSvgPathDrawRoute
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
   '/demo/toggle-switch': typeof DemoToggleSwitchRoute
@@ -257,6 +266,7 @@ export interface FileRouteTypes {
     | '/demo/spinning-cube'
     | '/demo/split-text'
     | '/demo/svg'
+    | '/demo/svg-path-draw'
     | '/demo/timelines'
     | '/demo/timers'
     | '/demo/toggle-switch'
@@ -283,6 +293,7 @@ export interface FileRouteTypes {
     | '/demo/spinning-cube'
     | '/demo/split-text'
     | '/demo/svg'
+    | '/demo/svg-path-draw'
     | '/demo/timelines'
     | '/demo/timers'
     | '/demo/toggle-switch'
@@ -309,6 +320,7 @@ export interface FileRouteTypes {
     | '/demo/spinning-cube'
     | '/demo/split-text'
     | '/demo/svg'
+    | '/demo/svg-path-draw'
     | '/demo/timelines'
     | '/demo/timers'
     | '/demo/toggle-switch'
@@ -370,6 +382,13 @@ declare module '@tanstack/react-router' {
       path: '/timelines'
       fullPath: '/demo/timelines'
       preLoaderRoute: typeof DemoTimelinesRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/svg-path-draw': {
+      id: '/demo/svg-path-draw'
+      path: '/svg-path-draw'
+      fullPath: '/demo/svg-path-draw'
+      preLoaderRoute: typeof DemoSvgPathDrawRouteImport
       parentRoute: typeof DemoRouteRoute
     }
     '/demo/svg': {
@@ -512,6 +531,7 @@ interface DemoRouteRouteChildren {
   DemoSpinningCubeRoute: typeof DemoSpinningCubeRoute
   DemoSplitTextRoute: typeof DemoSplitTextRoute
   DemoSvgRoute: typeof DemoSvgRoute
+  DemoSvgPathDrawRoute: typeof DemoSvgPathDrawRoute
   DemoTimelinesRoute: typeof DemoTimelinesRoute
   DemoTimersRoute: typeof DemoTimersRoute
   DemoToggleSwitchRoute: typeof DemoToggleSwitchRoute
@@ -536,6 +556,7 @@ const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoSpinningCubeRoute: DemoSpinningCubeRoute,
   DemoSplitTextRoute: DemoSplitTextRoute,
   DemoSvgRoute: DemoSvgRoute,
+  DemoSvgPathDrawRoute: DemoSvgPathDrawRoute,
   DemoTimelinesRoute: DemoTimelinesRoute,
   DemoTimersRoute: DemoTimersRoute,
   DemoToggleSwitchRoute: DemoToggleSwitchRoute,
