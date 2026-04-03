@@ -125,6 +125,12 @@ const demoSections = [
     description:
       "Smooth slide transitions with left/right navigation and multiple effects",
   },
+  {
+    title: "Reorder Animation",
+    path: "/demo/reorder-list",
+    description:
+      "Animated reorder with FLIP layout, add/remove, and grid layout changes",
+  },
 ] as const;
 
 export const Route = createFileRoute("/")({ component: HomePage });

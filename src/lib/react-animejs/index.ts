@@ -88,6 +88,11 @@ export type {
   SlideDirection,
   SlideTransition,
 } from "./components/AnimatedSlider";
+export { AnimatedReorderList } from "./components/AnimatedReorderList";
+export type {
+  AnimatedReorderListProps,
+  ReorderListPresetProps,
+} from "./components/AnimatedReorderList";
 
 // =============================================================================
 // Core Utilities

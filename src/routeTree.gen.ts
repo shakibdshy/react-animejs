@@ -20,6 +20,7 @@ import { Route as DemoSvgRouteImport } from './routes/demo/svg'
 import { Route as DemoSplitTextRouteImport } from './routes/demo/split-text'
 import { Route as DemoSpinningCubeRouteImport } from './routes/demo/spinning-cube'
 import { Route as DemoScopeRouteImport } from './routes/demo/scope'
+import { Route as DemoReorderListRouteImport } from './routes/demo/reorder-list'
 import { Route as DemoPlaybackSettingsRouteImport } from './routes/demo/playback-settings'
 import { Route as DemoOnscrollRouteImport } from './routes/demo/onscroll'
 import { Route as DemoMethodsRouteImport } from './routes/demo/methods'
@@ -86,6 +87,11 @@ const DemoSpinningCubeRoute = DemoSpinningCubeRouteImport.update({
 const DemoScopeRoute = DemoScopeRouteImport.update({
   id: '/scope',
   path: '/scope',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoReorderListRoute = DemoReorderListRouteImport.update({
+  id: '/reorder-list',
+  path: '/reorder-list',
   getParentRoute: () => DemoRouteRoute,
 } as any)
 const DemoPlaybackSettingsRoute = DemoPlaybackSettingsRouteImport.update({
@@ -165,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/demo/methods': typeof DemoMethodsRoute
   '/demo/onscroll': typeof DemoOnscrollRoute
   '/demo/playback-settings': typeof DemoPlaybackSettingsRoute
+  '/demo/reorder-list': typeof DemoReorderListRoute
   '/demo/scope': typeof DemoScopeRoute
   '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByTo {
   '/demo/methods': typeof DemoMethodsRoute
   '/demo/onscroll': typeof DemoOnscrollRoute
   '/demo/playback-settings': typeof DemoPlaybackSettingsRoute
+  '/demo/reorder-list': typeof DemoReorderListRoute
   '/demo/scope': typeof DemoScopeRoute
   '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
@@ -216,6 +224,7 @@ export interface FileRoutesById {
   '/demo/methods': typeof DemoMethodsRoute
   '/demo/onscroll': typeof DemoOnscrollRoute
   '/demo/playback-settings': typeof DemoPlaybackSettingsRoute
+  '/demo/reorder-list': typeof DemoReorderListRoute
   '/demo/scope': typeof DemoScopeRoute
   '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
@@ -243,6 +252,7 @@ export interface FileRouteTypes {
     | '/demo/methods'
     | '/demo/onscroll'
     | '/demo/playback-settings'
+    | '/demo/reorder-list'
     | '/demo/scope'
     | '/demo/spinning-cube'
     | '/demo/split-text'
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
     | '/demo/methods'
     | '/demo/onscroll'
     | '/demo/playback-settings'
+    | '/demo/reorder-list'
     | '/demo/scope'
     | '/demo/spinning-cube'
     | '/demo/split-text'
@@ -293,6 +304,7 @@ export interface FileRouteTypes {
     | '/demo/methods'
     | '/demo/onscroll'
     | '/demo/playback-settings'
+    | '/demo/reorder-list'
     | '/demo/scope'
     | '/demo/spinning-cube'
     | '/demo/split-text'
@@ -386,6 +398,13 @@ declare module '@tanstack/react-router' {
       path: '/scope'
       fullPath: '/demo/scope'
       preLoaderRoute: typeof DemoScopeRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/reorder-list': {
+      id: '/demo/reorder-list'
+      path: '/reorder-list'
+      fullPath: '/demo/reorder-list'
+      preLoaderRoute: typeof DemoReorderListRouteImport
       parentRoute: typeof DemoRouteRoute
     }
     '/demo/playback-settings': {
@@ -488,6 +507,7 @@ interface DemoRouteRouteChildren {
   DemoMethodsRoute: typeof DemoMethodsRoute
   DemoOnscrollRoute: typeof DemoOnscrollRoute
   DemoPlaybackSettingsRoute: typeof DemoPlaybackSettingsRoute
+  DemoReorderListRoute: typeof DemoReorderListRoute
   DemoScopeRoute: typeof DemoScopeRoute
   DemoSpinningCubeRoute: typeof DemoSpinningCubeRoute
   DemoSplitTextRoute: typeof DemoSplitTextRoute
@@ -511,6 +531,7 @@ const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoMethodsRoute: DemoMethodsRoute,
   DemoOnscrollRoute: DemoOnscrollRoute,
   DemoPlaybackSettingsRoute: DemoPlaybackSettingsRoute,
+  DemoReorderListRoute: DemoReorderListRoute,
   DemoScopeRoute: DemoScopeRoute,
   DemoSpinningCubeRoute: DemoSpinningCubeRoute,
   DemoSplitTextRoute: DemoSplitTextRoute,
