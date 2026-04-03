@@ -67,3 +67,6 @@ export type { CountdownProps } from "./Countdown";
 
 export { SpinningCube } from "./SpinningCube";
 export type { SpinningCubeProps } from "./SpinningCube";
+
+export { ClipPathReveal } from "./ClipPathReveal";
+export type { ClipPathRevealProps, ClipPathShape } from "./ClipPathReveal";

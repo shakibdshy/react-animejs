@@ -113,6 +113,12 @@ const demoSections = [
     description:
       "CSS 3D cube with anime.js rotation, axis control, and speed variants",
   },
+  {
+    title: "ClipPath Reveal",
+    path: "/demo/clippath-reveal",
+    description:
+      "Custom clipPath animations — circle, diamond, star, horizontal & vertical wipes",
+  },
 ] as const;
 
 export const Route = createFileRoute("/")({ component: HomePage });

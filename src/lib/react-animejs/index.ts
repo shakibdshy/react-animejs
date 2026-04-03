@@ -80,6 +80,8 @@ export { Countdown } from "./components/Countdown";
 export type { CountdownProps } from "./components/Countdown";
 export { SpinningCube } from "./components/SpinningCube";
 export type { SpinningCubeProps } from "./components/SpinningCube";
+export { ClipPathReveal } from "./components/ClipPathReveal";
+export type { ClipPathRevealProps, ClipPathShape } from "./components/ClipPathReveal";
 
 // =============================================================================
 // Core Utilities

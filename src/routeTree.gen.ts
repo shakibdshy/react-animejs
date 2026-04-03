@@ -28,6 +28,7 @@ import { Route as DemoEasingsRouteImport } from './routes/demo/easings'
 import { Route as DemoDraggableRouteImport } from './routes/demo/draggable'
 import { Route as DemoCounterCountdownRouteImport } from './routes/demo/counter-countdown'
 import { Route as DemoCoreFeaturesRouteImport } from './routes/demo/core-features'
+import { Route as DemoClippathRevealRouteImport } from './routes/demo/clippath-reveal'
 import { Route as DemoCallbacksRouteImport } from './routes/demo/callbacks'
 import { Route as DemoAnimatePresenceRouteImport } from './routes/demo/animate-presence'
 
@@ -126,6 +127,11 @@ const DemoCoreFeaturesRoute = DemoCoreFeaturesRouteImport.update({
   path: '/core-features',
   getParentRoute: () => DemoRouteRoute,
 } as any)
+const DemoClippathRevealRoute = DemoClippathRevealRouteImport.update({
+  id: '/clippath-reveal',
+  path: '/clippath-reveal',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
 const DemoCallbacksRoute = DemoCallbacksRouteImport.update({
   id: '/callbacks',
   path: '/callbacks',
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/mcp': typeof McpRoute
   '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
+  '/demo/clippath-reveal': typeof DemoClippathRevealRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
   '/demo/counter-countdown': typeof DemoCounterCountdownRoute
   '/demo/draggable': typeof DemoDraggableRoute
@@ -166,6 +173,7 @@ export interface FileRoutesByTo {
   '/mcp': typeof McpRoute
   '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
+  '/demo/clippath-reveal': typeof DemoClippathRevealRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
   '/demo/counter-countdown': typeof DemoCounterCountdownRoute
   '/demo/draggable': typeof DemoDraggableRoute
@@ -190,6 +198,7 @@ export interface FileRoutesById {
   '/mcp': typeof McpRoute
   '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
+  '/demo/clippath-reveal': typeof DemoClippathRevealRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
   '/demo/counter-countdown': typeof DemoCounterCountdownRoute
   '/demo/draggable': typeof DemoDraggableRoute
@@ -215,6 +224,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/demo/animate-presence'
     | '/demo/callbacks'
+    | '/demo/clippath-reveal'
     | '/demo/core-features'
     | '/demo/counter-countdown'
     | '/demo/draggable'
@@ -238,6 +248,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/demo/animate-presence'
     | '/demo/callbacks'
+    | '/demo/clippath-reveal'
     | '/demo/core-features'
     | '/demo/counter-countdown'
     | '/demo/draggable'
@@ -261,6 +272,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/demo/animate-presence'
     | '/demo/callbacks'
+    | '/demo/clippath-reveal'
     | '/demo/core-features'
     | '/demo/counter-countdown'
     | '/demo/draggable'
@@ -420,6 +432,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoCoreFeaturesRouteImport
       parentRoute: typeof DemoRouteRoute
     }
+    '/demo/clippath-reveal': {
+      id: '/demo/clippath-reveal'
+      path: '/clippath-reveal'
+      fullPath: '/demo/clippath-reveal'
+      preLoaderRoute: typeof DemoClippathRevealRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
     '/demo/callbacks': {
       id: '/demo/callbacks'
       path: '/callbacks'
@@ -440,6 +459,7 @@ declare module '@tanstack/react-router' {
 interface DemoRouteRouteChildren {
   DemoAnimatePresenceRoute: typeof DemoAnimatePresenceRoute
   DemoCallbacksRoute: typeof DemoCallbacksRoute
+  DemoClippathRevealRoute: typeof DemoClippathRevealRoute
   DemoCoreFeaturesRoute: typeof DemoCoreFeaturesRoute
   DemoCounterCountdownRoute: typeof DemoCounterCountdownRoute
   DemoDraggableRoute: typeof DemoDraggableRoute
@@ -461,6 +481,7 @@ interface DemoRouteRouteChildren {
 const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoAnimatePresenceRoute: DemoAnimatePresenceRoute,
   DemoCallbacksRoute: DemoCallbacksRoute,
+  DemoClippathRevealRoute: DemoClippathRevealRoute,
   DemoCoreFeaturesRoute: DemoCoreFeaturesRoute,
   DemoCounterCountdownRoute: DemoCounterCountdownRoute,
   DemoDraggableRoute: DemoDraggableRoute,
