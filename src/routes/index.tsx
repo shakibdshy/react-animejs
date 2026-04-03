@@ -119,6 +119,12 @@ const demoSections = [
     description:
       "Custom clipPath animations — circle, diamond, star, horizontal & vertical wipes",
   },
+  {
+    title: "Animated Slider",
+    path: "/demo/animated-slider",
+    description:
+      "Smooth slide transitions with left/right navigation and multiple effects",
+  },
 ] as const;
 
 export const Route = createFileRoute("/")({ component: HomePage });

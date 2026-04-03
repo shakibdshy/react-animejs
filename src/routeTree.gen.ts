@@ -30,6 +30,7 @@ import { Route as DemoCounterCountdownRouteImport } from './routes/demo/counter-
 import { Route as DemoCoreFeaturesRouteImport } from './routes/demo/core-features'
 import { Route as DemoClippathRevealRouteImport } from './routes/demo/clippath-reveal'
 import { Route as DemoCallbacksRouteImport } from './routes/demo/callbacks'
+import { Route as DemoAnimatedSliderRouteImport } from './routes/demo/animated-slider'
 import { Route as DemoAnimatePresenceRouteImport } from './routes/demo/animate-presence'
 
 const McpRoute = McpRouteImport.update({
@@ -137,6 +138,11 @@ const DemoCallbacksRoute = DemoCallbacksRouteImport.update({
   path: '/callbacks',
   getParentRoute: () => DemoRouteRoute,
 } as any)
+const DemoAnimatedSliderRoute = DemoAnimatedSliderRouteImport.update({
+  id: '/animated-slider',
+  path: '/animated-slider',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
 const DemoAnimatePresenceRoute = DemoAnimatePresenceRouteImport.update({
   id: '/animate-presence',
   path: '/animate-presence',
@@ -148,6 +154,7 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRouteRouteWithChildren
   '/mcp': typeof McpRoute
   '/demo/animate-presence': typeof DemoAnimatePresenceRoute
+  '/demo/animated-slider': typeof DemoAnimatedSliderRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/clippath-reveal': typeof DemoClippathRevealRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
@@ -172,6 +179,7 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRouteRouteWithChildren
   '/mcp': typeof McpRoute
   '/demo/animate-presence': typeof DemoAnimatePresenceRoute
+  '/demo/animated-slider': typeof DemoAnimatedSliderRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/clippath-reveal': typeof DemoClippathRevealRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
@@ -197,6 +205,7 @@ export interface FileRoutesById {
   '/demo': typeof DemoRouteRouteWithChildren
   '/mcp': typeof McpRoute
   '/demo/animate-presence': typeof DemoAnimatePresenceRoute
+  '/demo/animated-slider': typeof DemoAnimatedSliderRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/clippath-reveal': typeof DemoClippathRevealRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
@@ -223,6 +232,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/mcp'
     | '/demo/animate-presence'
+    | '/demo/animated-slider'
     | '/demo/callbacks'
     | '/demo/clippath-reveal'
     | '/demo/core-features'
@@ -247,6 +257,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/mcp'
     | '/demo/animate-presence'
+    | '/demo/animated-slider'
     | '/demo/callbacks'
     | '/demo/clippath-reveal'
     | '/demo/core-features'
@@ -271,6 +282,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/mcp'
     | '/demo/animate-presence'
+    | '/demo/animated-slider'
     | '/demo/callbacks'
     | '/demo/clippath-reveal'
     | '/demo/core-features'
@@ -446,6 +458,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoCallbacksRouteImport
       parentRoute: typeof DemoRouteRoute
     }
+    '/demo/animated-slider': {
+      id: '/demo/animated-slider'
+      path: '/animated-slider'
+      fullPath: '/demo/animated-slider'
+      preLoaderRoute: typeof DemoAnimatedSliderRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
     '/demo/animate-presence': {
       id: '/demo/animate-presence'
       path: '/animate-presence'
@@ -458,6 +477,7 @@ declare module '@tanstack/react-router' {
 
 interface DemoRouteRouteChildren {
   DemoAnimatePresenceRoute: typeof DemoAnimatePresenceRoute
+  DemoAnimatedSliderRoute: typeof DemoAnimatedSliderRoute
   DemoCallbacksRoute: typeof DemoCallbacksRoute
   DemoClippathRevealRoute: typeof DemoClippathRevealRoute
   DemoCoreFeaturesRoute: typeof DemoCoreFeaturesRoute
@@ -480,6 +500,7 @@ interface DemoRouteRouteChildren {
 
 const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoAnimatePresenceRoute: DemoAnimatePresenceRoute,
+  DemoAnimatedSliderRoute: DemoAnimatedSliderRoute,
   DemoCallbacksRoute: DemoCallbacksRoute,
   DemoClippathRevealRoute: DemoClippathRevealRoute,
   DemoCoreFeaturesRoute: DemoCoreFeaturesRoute,

@@ -82,6 +82,12 @@ export { SpinningCube } from "./components/SpinningCube";
 export type { SpinningCubeProps } from "./components/SpinningCube";
 export { ClipPathReveal } from "./components/ClipPathReveal";
 export type { ClipPathRevealProps, ClipPathShape } from "./components/ClipPathReveal";
+export { AnimatedSlider } from "./components/AnimatedSlider";
+export type {
+  AnimatedSliderProps,
+  SlideDirection,
+  SlideTransition,
+} from "./components/AnimatedSlider";
 
 // =============================================================================
 // Core Utilities

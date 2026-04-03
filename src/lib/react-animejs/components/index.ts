@@ -70,3 +70,10 @@ export type { SpinningCubeProps } from "./SpinningCube";
 
 export { ClipPathReveal } from "./ClipPathReveal";
 export type { ClipPathRevealProps, ClipPathShape } from "./ClipPathReveal";
+
+export { AnimatedSlider } from "./AnimatedSlider";
+export type {
+  AnimatedSliderProps,
+  SlideDirection,
+  SlideTransition,
+} from "./AnimatedSlider";
