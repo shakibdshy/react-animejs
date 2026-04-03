@@ -107,6 +107,12 @@ const demoSections = [
     description:
       "Animated counters and countdown timers with formatting",
   },
+  {
+    title: "Spinning 3D Cube",
+    path: "/demo/spinning-cube",
+    description:
+      "CSS 3D cube with anime.js rotation, axis control, and speed variants",
+  },
 ] as const;
 
 export const Route = createFileRoute("/")({ component: HomePage });

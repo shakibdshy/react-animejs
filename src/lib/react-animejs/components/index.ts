@@ -64,3 +64,6 @@ export type { CounterProps } from "./Counter";
 
 export { Countdown } from "./Countdown";
 export type { CountdownProps } from "./Countdown";
+
+export { SpinningCube } from "./SpinningCube";
+export type { SpinningCubeProps } from "./SpinningCube";

@@ -78,6 +78,8 @@ export { Counter } from "./components/Counter";
 export type { CounterProps } from "./components/Counter";
 export { Countdown } from "./components/Countdown";
 export type { CountdownProps } from "./components/Countdown";
+export { SpinningCube } from "./components/SpinningCube";
+export type { SpinningCubeProps } from "./components/SpinningCube";
 
 // =============================================================================
 // Core Utilities

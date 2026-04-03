@@ -18,6 +18,7 @@ import { Route as DemoTimersRouteImport } from './routes/demo/timers'
 import { Route as DemoTimelinesRouteImport } from './routes/demo/timelines'
 import { Route as DemoSvgRouteImport } from './routes/demo/svg'
 import { Route as DemoSplitTextRouteImport } from './routes/demo/split-text'
+import { Route as DemoSpinningCubeRouteImport } from './routes/demo/spinning-cube'
 import { Route as DemoScopeRouteImport } from './routes/demo/scope'
 import { Route as DemoPlaybackSettingsRouteImport } from './routes/demo/playback-settings'
 import { Route as DemoOnscrollRouteImport } from './routes/demo/onscroll'
@@ -73,6 +74,11 @@ const DemoSvgRoute = DemoSvgRouteImport.update({
 const DemoSplitTextRoute = DemoSplitTextRouteImport.update({
   id: '/split-text',
   path: '/split-text',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoSpinningCubeRoute = DemoSpinningCubeRouteImport.update({
+  id: '/spinning-cube',
+  path: '/spinning-cube',
   getParentRoute: () => DemoRouteRoute,
 } as any)
 const DemoScopeRoute = DemoScopeRouteImport.update({
@@ -146,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/demo/onscroll': typeof DemoOnscrollRoute
   '/demo/playback-settings': typeof DemoPlaybackSettingsRoute
   '/demo/scope': typeof DemoScopeRoute
+  '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
   '/demo/svg': typeof DemoSvgRoute
   '/demo/timelines': typeof DemoTimelinesRoute
@@ -168,6 +175,7 @@ export interface FileRoutesByTo {
   '/demo/onscroll': typeof DemoOnscrollRoute
   '/demo/playback-settings': typeof DemoPlaybackSettingsRoute
   '/demo/scope': typeof DemoScopeRoute
+  '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
   '/demo/svg': typeof DemoSvgRoute
   '/demo/timelines': typeof DemoTimelinesRoute
@@ -191,6 +199,7 @@ export interface FileRoutesById {
   '/demo/onscroll': typeof DemoOnscrollRoute
   '/demo/playback-settings': typeof DemoPlaybackSettingsRoute
   '/demo/scope': typeof DemoScopeRoute
+  '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
   '/demo/svg': typeof DemoSvgRoute
   '/demo/timelines': typeof DemoTimelinesRoute
@@ -215,6 +224,7 @@ export interface FileRouteTypes {
     | '/demo/onscroll'
     | '/demo/playback-settings'
     | '/demo/scope'
+    | '/demo/spinning-cube'
     | '/demo/split-text'
     | '/demo/svg'
     | '/demo/timelines'
@@ -237,6 +247,7 @@ export interface FileRouteTypes {
     | '/demo/onscroll'
     | '/demo/playback-settings'
     | '/demo/scope'
+    | '/demo/spinning-cube'
     | '/demo/split-text'
     | '/demo/svg'
     | '/demo/timelines'
@@ -259,6 +270,7 @@ export interface FileRouteTypes {
     | '/demo/onscroll'
     | '/demo/playback-settings'
     | '/demo/scope'
+    | '/demo/spinning-cube'
     | '/demo/split-text'
     | '/demo/svg'
     | '/demo/timelines'
@@ -336,6 +348,13 @@ declare module '@tanstack/react-router' {
       path: '/split-text'
       fullPath: '/demo/split-text'
       preLoaderRoute: typeof DemoSplitTextRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/spinning-cube': {
+      id: '/demo/spinning-cube'
+      path: '/spinning-cube'
+      fullPath: '/demo/spinning-cube'
+      preLoaderRoute: typeof DemoSpinningCubeRouteImport
       parentRoute: typeof DemoRouteRoute
     }
     '/demo/scope': {
@@ -430,6 +449,7 @@ interface DemoRouteRouteChildren {
   DemoOnscrollRoute: typeof DemoOnscrollRoute
   DemoPlaybackSettingsRoute: typeof DemoPlaybackSettingsRoute
   DemoScopeRoute: typeof DemoScopeRoute
+  DemoSpinningCubeRoute: typeof DemoSpinningCubeRoute
   DemoSplitTextRoute: typeof DemoSplitTextRoute
   DemoSvgRoute: typeof DemoSvgRoute
   DemoTimelinesRoute: typeof DemoTimelinesRoute
@@ -450,6 +470,7 @@ const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoOnscrollRoute: DemoOnscrollRoute,
   DemoPlaybackSettingsRoute: DemoPlaybackSettingsRoute,
   DemoScopeRoute: DemoScopeRoute,
+  DemoSpinningCubeRoute: DemoSpinningCubeRoute,
   DemoSplitTextRoute: DemoSplitTextRoute,
   DemoSvgRoute: DemoSvgRoute,
   DemoTimelinesRoute: DemoTimelinesRoute,
