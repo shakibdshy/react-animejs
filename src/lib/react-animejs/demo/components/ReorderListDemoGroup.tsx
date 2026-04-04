@@ -98,25 +98,32 @@ function BasicReorderDemo() {
           </button>
         </div>
 
-        <AnimatedReorderList
-          items={items}
-          getKey={(item) => item.id}
+        <AnimeLayout
+          mode="auto"
           duration={500}
-          className="w-full"
+          ease="outExpo"
+          enterFrom={{ opacity: 0, transform: "scale(0.9)" }}
+          leaveTo={{ opacity: 0, transform: "scale(0.9)" }}
+          className="w-full grid grid-cols-2 gap-3"
         >
-          {(item) => (
-            <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#2a2a3a] bg-[#12121a]">
-              <div
-                className="w-10 h-10 rounded-full shrink-0"
-                style={{ backgroundColor: item.color }}
-              />
-              <span className="flex-1 text-sm font-bold text-[#e0e0e0]">
-                {item.label}
-              </span>
-              <span className="text-xs text-slate-500 font-mono">{item.id}</span>
-            </div>
-          )}
-        </AnimatedReorderList>
+          {items.map((item) => (
+            <AnimeLayoutItem
+              key={item.id}
+              layoutId={item.id}
+            >
+              <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#2a2a3a] bg-[#12121a]">
+                <div
+                  className="w-10 h-10 rounded-full shrink-0"
+                  style={{ backgroundColor: item.color }}
+                />
+                <span className="flex-1 text-sm font-bold text-[#e0e0e0]">
+                  {item.label}
+                </span>
+                <span className="text-xs text-slate-500 font-mono">{item.id}</span>
+              </div>
+            </AnimeLayoutItem>
+          ))}
+        </AnimeLayout>
       </div>
     </DemoCard>
   );
