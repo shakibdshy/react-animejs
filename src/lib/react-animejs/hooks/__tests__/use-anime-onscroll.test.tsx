@@ -1,4 +1,5 @@
-import { act, renderHook, waitFor } from "@testing-library/react";
+import { act, render, renderHook, waitFor } from "@testing-library/react";
+import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("animejs", () => {
@@ -105,6 +106,34 @@ afterEach(() => {
 });
 
 describe("useAnimeOnScroll", () => {
+  it("creates an observer from mounted target/container refs", async () => {
+    function Probe() {
+      const { ref, containerRef, isReady } = useAnimeOnScroll<
+        HTMLDivElement,
+        HTMLDivElement
+      >({
+        enter: "top bottom",
+        leave: "bottom top",
+      });
+
+      return (
+        <div ref={containerRef}>
+          <div ref={ref} data-testid="target" />
+          <span data-testid="ready">{String(isReady)}</span>
+        </div>
+      );
+    }
+
+    render(<Probe />);
+
+    await waitFor(() => {
+      expect(__mock.onScrollCalls).toHaveLength(1);
+    });
+
+    expect(__mock.onScrollCalls[0].config.target).toBeInstanceOf(HTMLDivElement);
+    expect(__mock.onScrollCalls[0].config.container).toBeInstanceOf(HTMLDivElement);
+  });
+
   it("creates a ScrollObserver for a provided target and tracks callback state", async () => {
     const target = document.createElement("div");
     document.body.appendChild(target);
@@ -128,6 +157,7 @@ describe("useAnimeOnScroll", () => {
     expect(__mock.onScrollCalls).toHaveLength(1);
     expect(__mock.onScrollCalls[0].config.target).toBe(target);
     expect(__mock.onScrollCalls[0].config.sync).toBe(true);
+    expect(__mock.onScrollCalls[0].instance.refresh).toHaveBeenCalled();
 
     await act(async () => {
       __mock.onScrollCalls[0].instance.trigger("onEnter", {
@@ -173,6 +203,7 @@ describe("useAnimeOnScroll", () => {
     const observer = __mock.onScrollCalls[0].instance;
 
     expect(observer.link).toHaveBeenCalledWith(linked);
+    expect(observer.refresh).toHaveBeenCalled();
     expect(result.current.observer?.linked).toBe(linked);
     expect(result.current.observer?.target).toBe(target);
 
@@ -224,5 +255,46 @@ describe("useAnimeOnScroll", () => {
       offsetEnd: 0,
       distance: 0,
     });
+  });
+
+  it("persists an imperatively linked instance when the observer is recreated", async () => {
+    const target = document.createElement("div");
+    document.body.appendChild(target);
+
+    const { result, rerender } = renderHook(
+      ({ dep }) =>
+        useAnimeOnScroll({
+          target,
+          deps: [dep],
+        }),
+      {
+        initialProps: { dep: 0 },
+      },
+    );
+
+    await waitFor(() => {
+      expect(result.current.isReady).toBe(true);
+      expect(__mock.onScrollCalls).toHaveLength(1);
+    });
+
+    const linked = {
+      pause: vi.fn(),
+      targets: [target],
+    } as any;
+
+    act(() => {
+      result.current.controls.link(linked);
+    });
+
+    expect(__mock.onScrollCalls[0].instance.link).toHaveBeenLastCalledWith(linked);
+
+    rerender({ dep: 1 });
+
+    await waitFor(() => {
+      expect(__mock.onScrollCalls).toHaveLength(2);
+    });
+
+    expect(__mock.onScrollCalls[1].instance.link).toHaveBeenCalledWith(linked);
+    expect(result.current.observer?.linked).toBe(linked);
   });
 });

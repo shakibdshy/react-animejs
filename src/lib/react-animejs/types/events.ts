@@ -70,15 +70,18 @@ export interface ScrollObserverCallbacks {
   onLeaveForward?: (observer: ScrollObserver) => void;
   onEnterBackward?: (observer: ScrollObserver) => void;
   onLeaveBackward?: (observer: ScrollObserver) => void;
+  onSyncEnter?: (observer: ScrollObserver) => void;
+  onSyncLeave?: (observer: ScrollObserver) => void;
   onUpdate?: (observer: ScrollObserver) => void;
   onResize?: (observer: ScrollObserver) => void;
   onSyncComplete?: (observer: ScrollObserver) => void;
 }
 
 /**
- * React-friendly options for `useAnimeOnScroll`.
+ * React-friendly options for configuring `onScroll()`.
+ * Matches the official Anime.js parameter object while allowing React refs.
  */
-export interface UseAnimeOnScrollOptions
+export interface UseAnimeScrollTriggerOptions
   extends Omit<
       ScrollObserverParams,
       | "container"
@@ -89,6 +92,8 @@ export interface UseAnimeOnScrollOptions
       | "onLeaveForward"
       | "onEnterBackward"
       | "onLeaveBackward"
+      | "onSyncEnter"
+      | "onSyncLeave"
       | "onUpdate"
       | "onResize"
       | "onSyncComplete"
@@ -104,6 +109,13 @@ export interface UseAnimeOnScrollOptions
    * or let Anime.js infer the target from a linked animation.
    */
   target?: AnimationTarget;
+}
+
+/**
+ * React-friendly options for `useAnimeOnScroll`.
+ */
+export interface UseAnimeOnScrollOptions
+  extends UseAnimeScrollTriggerOptions {
 
   /**
    * Optional animation/timer/timeline/WAAPI instance to link.

@@ -143,6 +143,12 @@ const demoSections = [
     description:
       "SVG path drawing effects — wave, heart, star, globe, landscape, and more",
   },
+  {
+    title: "Scroll-Linked Animations",
+    path: "/demo/scroll-linked-animations",
+    description:
+      "Parallax, fade-in, horizontal scrub, scale/rotate, color shift, and progress indicators",
+  },
 ] as const;
 
 export const Route = createFileRoute("/")({ component: HomePage });

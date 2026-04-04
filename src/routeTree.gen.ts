@@ -20,6 +20,7 @@ import { Route as DemoSvgPathDrawRouteImport } from './routes/demo/svg-path-draw
 import { Route as DemoSvgRouteImport } from './routes/demo/svg'
 import { Route as DemoSplitTextRouteImport } from './routes/demo/split-text'
 import { Route as DemoSpinningCubeRouteImport } from './routes/demo/spinning-cube'
+import { Route as DemoScrollLinkedAnimationsRouteImport } from './routes/demo/scroll-linked-animations'
 import { Route as DemoScopeRouteImport } from './routes/demo/scope'
 import { Route as DemoReorderListRouteImport } from './routes/demo/reorder-list'
 import { Route as DemoPlaybackSettingsRouteImport } from './routes/demo/playback-settings'
@@ -90,6 +91,12 @@ const DemoSpinningCubeRoute = DemoSpinningCubeRouteImport.update({
   path: '/spinning-cube',
   getParentRoute: () => DemoRouteRoute,
 } as any)
+const DemoScrollLinkedAnimationsRoute =
+  DemoScrollLinkedAnimationsRouteImport.update({
+    id: '/scroll-linked-animations',
+    path: '/scroll-linked-animations',
+    getParentRoute: () => DemoRouteRoute,
+  } as any)
 const DemoScopeRoute = DemoScopeRouteImport.update({
   id: '/scope',
   path: '/scope',
@@ -179,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/demo/playback-settings': typeof DemoPlaybackSettingsRoute
   '/demo/reorder-list': typeof DemoReorderListRoute
   '/demo/scope': typeof DemoScopeRoute
+  '/demo/scroll-linked-animations': typeof DemoScrollLinkedAnimationsRoute
   '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
   '/demo/svg': typeof DemoSvgRoute
@@ -206,6 +214,7 @@ export interface FileRoutesByTo {
   '/demo/playback-settings': typeof DemoPlaybackSettingsRoute
   '/demo/reorder-list': typeof DemoReorderListRoute
   '/demo/scope': typeof DemoScopeRoute
+  '/demo/scroll-linked-animations': typeof DemoScrollLinkedAnimationsRoute
   '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
   '/demo/svg': typeof DemoSvgRoute
@@ -234,6 +243,7 @@ export interface FileRoutesById {
   '/demo/playback-settings': typeof DemoPlaybackSettingsRoute
   '/demo/reorder-list': typeof DemoReorderListRoute
   '/demo/scope': typeof DemoScopeRoute
+  '/demo/scroll-linked-animations': typeof DemoScrollLinkedAnimationsRoute
   '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
   '/demo/svg': typeof DemoSvgRoute
@@ -263,6 +273,7 @@ export interface FileRouteTypes {
     | '/demo/playback-settings'
     | '/demo/reorder-list'
     | '/demo/scope'
+    | '/demo/scroll-linked-animations'
     | '/demo/spinning-cube'
     | '/demo/split-text'
     | '/demo/svg'
@@ -290,6 +301,7 @@ export interface FileRouteTypes {
     | '/demo/playback-settings'
     | '/demo/reorder-list'
     | '/demo/scope'
+    | '/demo/scroll-linked-animations'
     | '/demo/spinning-cube'
     | '/demo/split-text'
     | '/demo/svg'
@@ -317,6 +329,7 @@ export interface FileRouteTypes {
     | '/demo/playback-settings'
     | '/demo/reorder-list'
     | '/demo/scope'
+    | '/demo/scroll-linked-animations'
     | '/demo/spinning-cube'
     | '/demo/split-text'
     | '/demo/svg'
@@ -410,6 +423,13 @@ declare module '@tanstack/react-router' {
       path: '/spinning-cube'
       fullPath: '/demo/spinning-cube'
       preLoaderRoute: typeof DemoSpinningCubeRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/scroll-linked-animations': {
+      id: '/demo/scroll-linked-animations'
+      path: '/scroll-linked-animations'
+      fullPath: '/demo/scroll-linked-animations'
+      preLoaderRoute: typeof DemoScrollLinkedAnimationsRouteImport
       parentRoute: typeof DemoRouteRoute
     }
     '/demo/scope': {
@@ -528,6 +548,7 @@ interface DemoRouteRouteChildren {
   DemoPlaybackSettingsRoute: typeof DemoPlaybackSettingsRoute
   DemoReorderListRoute: typeof DemoReorderListRoute
   DemoScopeRoute: typeof DemoScopeRoute
+  DemoScrollLinkedAnimationsRoute: typeof DemoScrollLinkedAnimationsRoute
   DemoSpinningCubeRoute: typeof DemoSpinningCubeRoute
   DemoSplitTextRoute: typeof DemoSplitTextRoute
   DemoSvgRoute: typeof DemoSvgRoute
@@ -553,6 +574,7 @@ const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoPlaybackSettingsRoute: DemoPlaybackSettingsRoute,
   DemoReorderListRoute: DemoReorderListRoute,
   DemoScopeRoute: DemoScopeRoute,
+  DemoScrollLinkedAnimationsRoute: DemoScrollLinkedAnimationsRoute,
   DemoSpinningCubeRoute: DemoSpinningCubeRoute,
   DemoSplitTextRoute: DemoSplitTextRoute,
   DemoSvgRoute: DemoSvgRoute,

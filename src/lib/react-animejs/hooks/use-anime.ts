@@ -6,23 +6,99 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { animate, createScope } from "animejs";
+import { animate, createScope, onScroll } from "animejs";
+import type { ScrollObserver } from "animejs";
 import type {
   AnimationState,
   JSAnimation,
   PlaybackControls,
   UseAnimeOptions,
   UseAnimeReturn,
+  UseAnimeScrollTriggerOptions,
 } from "../types";
 import {
   buildCallbackConfig,
   cleanUndefinedValues,
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
+  isPlainObject,
   resolveTarget,
   safeJsonStringify,
   useAnimeScope,
 } from "../core";
+
+type ScrollObserverCallbackKey =
+  | "onEnter"
+  | "onLeave"
+  | "onEnterForward"
+  | "onLeaveForward"
+  | "onEnterBackward"
+  | "onLeaveBackward"
+  | "onSyncEnter"
+  | "onSyncLeave"
+  | "onUpdate"
+  | "onResize"
+  | "onSyncComplete";
+
+function normalizeSingleElement(
+  target:
+    | HTMLElement
+    | SVGElement
+    | NodeList
+    | (HTMLElement | SVGElement)[]
+    | null,
+): HTMLElement | SVGElement | null {
+  if (!target) return null;
+
+  if (Array.isArray(target)) {
+    return (target[0] as HTMLElement | SVGElement) ?? null;
+  }
+
+  if (typeof NodeList !== "undefined" && target instanceof NodeList) {
+    return (target[0] as HTMLElement | SVGElement) ?? null;
+  }
+
+  return target as HTMLElement | SVGElement;
+}
+
+function isScrollObserverInstance(value: unknown): value is ScrollObserver {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      "link" in value &&
+      "refresh" in value &&
+      "revert" in value,
+  );
+}
+
+function isScrollTriggerOptions(
+  value: UseAnimeOptions["autoplay"],
+): value is UseAnimeScrollTriggerOptions {
+  if (!isPlainObject(value)) return false;
+
+  return [
+    "id",
+    "sync",
+    "container",
+    "target",
+    "axis",
+    "enter",
+    "leave",
+    "repeat",
+    "debug",
+    "onEnter",
+    "onLeave",
+    "onEnterForward",
+    "onLeaveForward",
+    "onEnterBackward",
+    "onLeaveBackward",
+    "onSyncEnter",
+    "onSyncLeave",
+    "onUpdate",
+    "onResize",
+    "onSyncComplete",
+  ].some((key) => key in value);
+}
 
 // =============================================================================
 // Hook Implementation
@@ -65,6 +141,10 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
 
   // Animation instance ref
   const animationRef = useRef<JSAnimation | null>(null);
+
+  // Scroll observer ref for `autoplay: onScroll(...)`
+  const scrollObserverRef = useRef<ScrollObserver | null>(null);
+  const ownsScrollObserverRef = useRef(false);
 
   // Scope ref for cleanup
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
@@ -157,6 +237,32 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     onPause,
   };
 
+  const scrollObserverCallbackRefs = useRef<
+    Partial<
+      Record<
+        ScrollObserverCallbackKey,
+        ((observer: ScrollObserver) => void) | undefined
+      >
+    >
+  >({});
+  if (isScrollTriggerOptions(autoplay)) {
+    scrollObserverCallbackRefs.current = {
+      onEnter: autoplay.onEnter,
+      onLeave: autoplay.onLeave,
+      onEnterForward: autoplay.onEnterForward,
+      onLeaveForward: autoplay.onLeaveForward,
+      onEnterBackward: autoplay.onEnterBackward,
+      onLeaveBackward: autoplay.onLeaveBackward,
+      onSyncEnter: autoplay.onSyncEnter,
+      onSyncLeave: autoplay.onSyncLeave,
+      onUpdate: autoplay.onUpdate,
+      onResize: autoplay.onResize,
+      onSyncComplete: autoplay.onSyncComplete,
+    };
+  } else {
+    scrollObserverCallbackRefs.current = {};
+  }
+
   // ==========================================================================
   // Memoized Options
   // ==========================================================================
@@ -179,7 +285,6 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
         loopDelay,
         alternate,
         reversed,
-        autoplay,
         frameRate,
         playbackRate,
         persist,
@@ -195,7 +300,6 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       loopDelay,
       alternate,
       reversed,
-      autoplay,
       frameRate,
       playbackRate,
       persist,
@@ -205,6 +309,13 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       keyframes,
     ],
   );
+  const autoplayDependency = useMemo(() => {
+    if (isScrollTriggerOptions(autoplay)) {
+      return safeJsonStringify(autoplay);
+    }
+
+    return autoplay;
+  }, [autoplay]);
 
   /**
    * Build the anime.js configuration object
@@ -214,7 +325,6 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     const {
       targets: externalTargets,
       selector,
-      controller,
       delay,
       duration,
       loop,
@@ -247,6 +357,89 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
 
     if (!target) return null;
 
+    let resolvedAutoplay = autoplay;
+    let ownedScrollObserver: ScrollObserver | null = null;
+
+    if (isScrollTriggerOptions(autoplay)) {
+      const {
+        container: scrollContainer,
+        target: scrollTarget,
+        onEnter: _onEnter,
+        onLeave: _onLeave,
+        onEnterForward: _onEnterForward,
+        onLeaveForward: _onLeaveForward,
+        onEnterBackward: _onEnterBackward,
+        onLeaveBackward: _onLeaveBackward,
+        onSyncEnter: _onSyncEnter,
+        onSyncLeave: _onSyncLeave,
+        onUpdate: _onUpdate,
+        onResize: _onResize,
+        onSyncComplete: _onSyncComplete,
+        ...scrollObserverOptions
+      } = autoplay;
+
+      void _onEnter;
+      void _onLeave;
+      void _onEnterForward;
+      void _onLeaveForward;
+      void _onEnterBackward;
+      void _onLeaveBackward;
+      void _onSyncEnter;
+      void _onSyncLeave;
+      void _onUpdate;
+      void _onResize;
+      void _onSyncComplete;
+
+      const resolvedScrollTarget = normalizeSingleElement(
+        (scrollTarget
+          ? resolveTarget(scrollTarget, scopeContext.rootRef.current)
+          : target) as
+          | HTMLElement
+          | SVGElement
+          | NodeList
+          | (HTMLElement | SVGElement)[]
+          | null,
+      );
+      const resolvedScrollContainer = normalizeSingleElement(
+        (scrollContainer
+          ? resolveTarget(scrollContainer, scopeContext.rootRef.current)
+          : null) as
+          | HTMLElement
+          | SVGElement
+          | NodeList
+          | (HTMLElement | SVGElement)[]
+          | null,
+      );
+
+      const wrapScrollObserverCallback = (key: ScrollObserverCallbackKey) => {
+        return (observer: ScrollObserver) => {
+          scrollObserverCallbackRefs.current[key]?.(observer);
+        };
+      };
+
+      const observerConfig: Record<string, unknown> = {
+        ...scrollObserverOptions,
+        target: resolvedScrollTarget ?? undefined,
+        container: resolvedScrollContainer ?? undefined,
+        onEnter: wrapScrollObserverCallback("onEnter"),
+        onLeave: wrapScrollObserverCallback("onLeave"),
+        onEnterForward: wrapScrollObserverCallback("onEnterForward"),
+        onLeaveForward: wrapScrollObserverCallback("onLeaveForward"),
+        onEnterBackward: wrapScrollObserverCallback("onEnterBackward"),
+        onLeaveBackward: wrapScrollObserverCallback("onLeaveBackward"),
+        onSyncEnter: wrapScrollObserverCallback("onSyncEnter"),
+        onSyncLeave: wrapScrollObserverCallback("onSyncLeave"),
+        onUpdate: wrapScrollObserverCallback("onUpdate"),
+        onResize: wrapScrollObserverCallback("onResize"),
+        onSyncComplete: wrapScrollObserverCallback("onSyncComplete"),
+      };
+
+      cleanUndefinedValues(observerConfig);
+
+      ownedScrollObserver = onScroll(observerConfig as any) as ScrollObserver;
+      resolvedAutoplay = ownedScrollObserver;
+    }
+
     // Build config object
     const config: Record<string, unknown> = {
       ...props,
@@ -258,7 +451,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       loopDelay,
       alternate,
       reversed,
-      autoplay,
+      autoplay: resolvedAutoplay,
       frameRate,
       playbackRate,
       playbackEase,
@@ -305,7 +498,14 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     // Clean undefined values
     cleanUndefinedValues(config);
 
-    return { target, config };
+    return {
+      target,
+      config,
+      scrollObserver:
+        ownedScrollObserver ??
+        (isScrollObserverInstance(resolvedAutoplay) ? resolvedAutoplay : null),
+      ownsScrollObserver: Boolean(ownedScrollObserver),
+    };
   }, [scopeContext.rootRef]);
 
   // ==========================================================================
@@ -315,6 +515,8 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
   useEffect(() => {
     // Skip if disabled
     if (!enabled) {
+      scrollObserverRef.current = null;
+      ownsScrollObserverRef.current = false;
       setIsReady(false);
       return;
     }
@@ -328,7 +530,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     const result = buildConfig();
     if (!result) return;
 
-    const { target, config } = result;
+    const { target, config, scrollObserver, ownsScrollObserver } = result;
     let unregisterController: (() => void) | undefined;
 
     try {
@@ -337,11 +539,23 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
         root: scopeContext.rootRef.current || undefined,
       });
 
+      scrollObserverRef.current = scrollObserver;
+      ownsScrollObserverRef.current = ownsScrollObserver;
+
       // Create the animation
        
       const anim = animate(target, config as any) as unknown as JSAnimation;
       animationRef.current = anim;
       unregisterController = controller?.register(anim);
+
+      if (scrollObserver) {
+        try {
+          scrollObserver.link(anim as any);
+          scrollObserver.refresh();
+        } catch {
+          // Ignore observer linking errors and let Anime.js fallback behavior apply.
+        }
+      }
 
       // Update initial state
       setAnimationState(extractAnimationState(anim));
@@ -361,6 +575,15 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       }
     } catch (error) {
       console.error("[react-animejs] Animation creation error:", error);
+      if (ownsScrollObserver) {
+        try {
+          scrollObserver?.revert();
+        } catch {
+          // Ignore cleanup errors
+        }
+      }
+      scrollObserverRef.current = null;
+      ownsScrollObserverRef.current = false;
       setIsReady(false);
     }
 
@@ -386,6 +609,19 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
         scopeRef.current = null;
       }
 
+      if (ownsScrollObserver) {
+        try {
+          scrollObserver?.revert();
+        } catch {
+          // Ignore cleanup errors
+        }
+      }
+
+      if (scrollObserverRef.current === scrollObserver) {
+        scrollObserverRef.current = null;
+      }
+      ownsScrollObserverRef.current = false;
+
       setIsReady(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -399,6 +635,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     scopeContext.rootRef,
     animatablePropsJson,
     configJson,
+    autoplayDependency,
     ease,
     modifier,
     playbackEase,
@@ -482,6 +719,15 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
           animationRef.current.revert();
           setAnimationState(extractAnimationState(animationRef.current));
         }
+        if (ownsScrollObserverRef.current) {
+          try {
+            scrollObserverRef.current?.revert();
+          } catch {
+            // Ignore cleanup errors
+          }
+          scrollObserverRef.current = null;
+          ownsScrollObserverRef.current = false;
+        }
       },
       seek: (time: number | string) => {
         if (animationRef.current) {
@@ -526,6 +772,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     state: animationState,
     // Return the ref so consumers can always access the latest animation instance
     animation: animationRef,
+    scrollObserver: scrollObserverRef,
     isPlaying:
       !animationState.paused &&
       animationState.began &&

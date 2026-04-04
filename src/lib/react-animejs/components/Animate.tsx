@@ -12,7 +12,7 @@ export interface AnimateProps extends Omit<UseAnimeOptions, "targets" | "selecto
   playOnMount?: boolean;
 }
 
-export const Animate = forwardRef<HTMLElement, AnimateProps>(function Animate(
+export const Animate = forwardRef<HTMLElement | SVGElement, AnimateProps>(function Animate(
   {
     children,
     onControlsReady,
@@ -41,7 +41,11 @@ export const Animate = forwardRef<HTMLElement, AnimateProps>(function Animate(
     onStateChange?.(state);
   }, [state, onStateChange]);
 
-  useImperativeHandle(forwardedRef, () => ref.current as HTMLElement, [ref]);
+  useImperativeHandle(
+    forwardedRef,
+    () => ref.current as HTMLElement | SVGElement,
+    [ref],
+  );
 
   if (!isValidElement(children)) {
     console.warn("[react-animejs] Animate requires a single valid React element as child");

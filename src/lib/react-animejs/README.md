@@ -104,11 +104,28 @@ const { ref, controls, state, animation, isPlaying, isReady } = useAnime({
 });
 ```
 
+**Scroll-triggered autoplay:**
+
+```tsx
+const { ref, scrollObserver } = useAnime({
+  translateY: [80, 0],
+  opacity: [0, 1],
+  duration: 900,
+  ease: "linear",
+  autoplay: {
+    enter: "bottom top",
+    leave: "top bottom",
+    sync: true,
+  },
+});
+```
+
 **Returns:**
 - `ref` - Ref to attach to the target element
 - `controls` - Playback methods (play, pause, restart, etc.)
 - `state` - Reactive animation state
 - `animation` - Raw anime.js instance
+- `scrollObserver` - Raw Anime.js `ScrollObserver` ref when `autoplay` uses `onScroll()`
 - `isPlaying` - Boolean indicating play state
 - `isReady` - Boolean indicating if animation is initialized
 
@@ -254,111 +271,101 @@ const { ref, containerRef, observer, progress, isInView, controls } =
 - `state` - Reactive observer state (`progress`, `scroll`, `velocity`, `isInView`, etc.)
 - `isReady` - Whether the observer has been initialized
 
-**Axis Constraints:**
+**Settings:**
 
 ```tsx
-// X-axis only
-const { ref } = useAnimeDraggable({
-  y: false, // Disable Y axis
+const { ref, containerRef } = useAnimeOnScroll({
+  axis: "y",
+  repeat: true,
+  debug: false,
 });
 
-// Y-axis only
-const { ref } = useAnimeDraggable({
-  x: false, // Disable X axis
-});
-
-// Per-axis configuration
-const { ref } = useAnimeDraggable({
-  x: { snap: 100, modifier: (v) => Math.round(v) },
-  y: { snap: 50 },
+const { ref: horizontalRef } = useAnimeOnScroll({
+  axis: "x",
+  container: horizontalScrollerRef,
 });
 ```
 
-**Snapping:**
+**Thresholds:**
 
 ```tsx
-const { ref } = useAnimeDraggable({
-  snap: 50, // Snap to 50px grid
-  // or
-  snap: { x: 100, y: 50 }, // Different snap per axis
-  onSnap: (d) => console.log('Snapped to', d.x, d.y),
-  onSettle: (d) => console.log('Settled!'),
+useAnimeOnScroll({
+  enter: "bottom center",
+  leave: "top center",
+});
+
+useAnimeOnScroll({
+  enter: { target: "center", container: "center" },
+  leave: { target: "max-=24", container: "min+=24" },
+});
+
+useAnimeOnScroll({
+  enter: 0.15,
+  leave: 0.85,
 });
 ```
 
-**Physics Settings:**
+**Synchronisation Modes:**
 
 ```tsx
-const { ref } = useAnimeDraggable({
-  containerFriction: 0.85,        // Friction at bounds (0-1)
-  releaseContainerFriction: 0.25, // Release friction at bounds
-  releaseMass: 1,                 // Momentum mass
-  releaseStiffness: 80,           // Spring stiffness (snappier = higher)
-  releaseDamping: 20,             // Spring damping (less oscillation = higher)
-  velocityMultiplier: 1,          // Velocity scaling
-  minVelocity: 0,                 // Minimum velocity threshold
-  maxVelocity: Infinity,          // Maximum velocity cap
-  dragSpeed: 1,                   // Drag movement speed
-  dragThreshold: 0,               // Distance before drag starts
+// Frame-perfect playback progress
+useAnimeOnScroll({ linked: animation, sync: true });
+
+// Smooth playback progress
+useAnimeOnScroll({ linked: animation, sync: 0.2 });
+
+// Eased playback progress
+useAnimeOnScroll({ linked: animation, sync: "inOutExpo" });
+
+// Method-name sync
+useAnimeOnScroll({
+  linked: animation,
+  sync: "play pause reverse reset",
 });
 ```
 
 **Control Methods:**
 
 ```tsx
-const { 
-  ref, 
-  setX, setY, setPosition, // Position control
-  reset,                    // Reset to origin
-  enable, disable,          // Enable/disable dragging
-  stop,                     // Stop current animation
-  refresh,                  // Recalculate bounds
-  animateInView,            // Animate into container view
-  scrollInView,             // Scroll into container view
-} = useAnimeDraggable({ ... });
+const { controls, observer } = useAnimeOnScroll({ linked: animation });
 
-// Set positions
-setX(100);           // Set X to 100
-setY(-50);           // Set Y to -50
-setPosition(0, 0);   // Set both
+controls.refresh();
+controls.link(otherAnimation);
+controls.revert();
 
-// Control state
-disable();           // Disable dragging
-enable();            // Enable dragging
-reset();             // Reset with animation
-refresh();           // Recalculate after resize
+console.log(observer?.progress, observer?.velocity, observer?.isInView);
 ```
 
 **Callbacks:**
 
 ```tsx
-const { ref } = useAnimeDraggable({
-  onGrab: (d) => console.log('Grabbed at', d.x, d.y),
-  onDrag: (d) => console.log('Dragging', d.x, d.y),
-  onRelease: (d) => console.log('Released at', d.x, d.y),
-  onSnap: (d) => console.log('Snapped to', d.x, d.y),
-  onSettle: (d) => console.log('Animation settled'),
-  onUpdate: (d) => console.log('Update tick'),
-  onResize: (d) => console.log('Container resized'),
-  onAfterResize: (d) => console.log('Resize handled'),
+const { ref, state } = useAnimeOnScroll({
+  onEnter: (self) => console.log("enter", self.id),
+  onLeave: () => console.log("leave"),
+  onEnterForward: () => console.log("forward enter"),
+  onEnterBackward: () => console.log("backward enter"),
+  onSyncEnter: () => console.log("sync enter"),
+  onSyncLeave: () => console.log("sync leave"),
+  onUpdate: (self) => console.log(self.progress),
+  onResize: () => console.log("resized"),
+  onSyncComplete: () => console.log("sync complete"),
 });
 ```
 
-**Return Values:**
+**Reactive State:**
 
 ```tsx
 const {
-  ref,           // Ref to attach to element
-  state,         // Full state object
-  isGrabbed,     // Element is grabbed
-  isDragging,    // Currently dragging
-  isReleasing,   // In release animation
-  isDisabled,    // Dragging is disabled
-  position,      // { x, y } current position
-  progress,      // { x, y } progress within bounds (0-1)
-  velocity,      // { x, y } current velocity
-  draggable,     // Raw anime.js draggable instance
-} = useAnimeDraggable(options);
+  ref,
+  state,
+  progress,
+  scroll,
+  velocity,
+  backward,
+  isInView,
+  isReady,
+  observer,
+} = useAnimeOnScroll();
 ```
 
 

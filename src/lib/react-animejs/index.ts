@@ -221,6 +221,7 @@ export type {
   ScrollLinkedTarget,
   ScrollObserverState,
   ScrollObserverCallbacks,
+  UseAnimeScrollTriggerOptions,
   UseAnimeOnScrollOptions,
   UseAnimeOnScrollControls,
   UseAnimeOnScrollReturn,

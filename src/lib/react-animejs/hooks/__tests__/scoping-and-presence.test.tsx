@@ -14,6 +14,10 @@ vi.mock("animejs", () => {
     config: Record<string, unknown>;
     instance: Record<string, any>;
   }> = [];
+  const onScrollCalls: Array<{
+    config: Record<string, unknown>;
+    instance: Record<string, any>;
+  }> = [];
   const timelineCalls: Array<{
     config: Record<string, unknown>;
     instance: Record<string, any>;
@@ -113,6 +117,45 @@ vi.mock("animejs", () => {
     return instance;
   };
 
+  const createScrollObserverInstance = (config: Record<string, unknown> = {}) => {
+    const instance: Record<string, any> = {
+      id: config.id ?? `observer-${onScrollCalls.length + 1}`,
+      target: config.target ?? null,
+      container: config.container ?? document.body,
+      ready: true,
+      began: false,
+      completed: false,
+      reverted: false,
+      isInView: false,
+      velocity: 0,
+      backward: false,
+      scroll: 0,
+      progress: 0,
+      offset: 0,
+      offsetStart: 0,
+      offsetEnd: 100,
+      distance: 100,
+      link: vi.fn(function (this: Record<string, any>) {
+        return this;
+      }),
+      refresh: vi.fn(function (this: Record<string, any>) {
+        return this;
+      }),
+      revert: vi.fn(function (this: Record<string, any>) {
+        this.reverted = true;
+        return this;
+      }),
+      trigger(callbackName: string, updates: Record<string, unknown> = {}) {
+        Object.assign(this, updates);
+        config[callbackName]?.(this);
+        return this;
+      },
+    };
+
+    onScrollCalls.push({ config, instance });
+    return instance;
+  };
+
   return {
     createScope: ({ root }: { root?: { current?: HTMLElement | null } | HTMLElement }) => {
       const resolvedRoot =
@@ -204,13 +247,17 @@ vi.mock("animejs", () => {
       convertEase: () => "linear()",
     },
     stagger: () => 0,
+    onScroll: (config: Record<string, unknown>) =>
+      createScrollObserverInstance(config),
     utils: {},
     __mock: {
       animateCalls,
+      onScrollCalls,
       timelineCalls,
       waapiCalls,
       reset() {
         animateCalls.length = 0;
+        onScrollCalls.length = 0;
         timelineCalls.length = 0;
         waapiCalls.length = 0;
       },
@@ -331,6 +378,122 @@ describe("scoped selector handling", () => {
 
     expect(__mock.animateCalls[1].config.duration).toBe(600);
     expect(__mock.animateCalls[1].config.ease).toBe("outQuad");
+  });
+
+  it("supports official onScroll autoplay params in useAnime", async () => {
+    const target = document.createElement("div");
+    const container = document.createElement("div");
+    document.body.append(container, target);
+
+    const onEnter = vi.fn();
+
+    const { result, unmount } = renderHook(() =>
+      useAnime({
+        targets: target,
+        translateY: 80,
+        duration: 400,
+        autoplay: {
+          container,
+          enter: "bottom top",
+          leave: "top bottom",
+          sync: true,
+          onEnter,
+        },
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isReady).toBe(true);
+      expect(__mock.animateCalls).toHaveLength(1);
+      expect(__mock.onScrollCalls).toHaveLength(1);
+    });
+
+    const observer = __mock.onScrollCalls[0].instance;
+
+    expect(__mock.onScrollCalls[0].config.target).toBe(target);
+    expect(__mock.onScrollCalls[0].config.container).toBe(container);
+    expect(__mock.animateCalls[0].config.autoplay).toBe(observer);
+    expect(result.current.scrollObserver.current).toBe(observer);
+    expect(observer.link).toHaveBeenCalledWith(__mock.animateCalls[0].instance);
+    expect(observer.refresh).toHaveBeenCalled();
+
+    act(() => {
+      observer.trigger("onEnter", { isInView: true, progress: 0.3 });
+    });
+
+    expect(onEnter).toHaveBeenCalledTimes(1);
+
+    unmount();
+
+    expect(observer.revert).toHaveBeenCalled();
+  });
+
+  it("creates autoplay scroll observers from mounted refs", async () => {
+    function Probe() {
+      const containerRef = React.useRef<HTMLDivElement>(null);
+      const { ref, isReady, scrollObserver } = useAnime<HTMLDivElement>({
+        translateY: 80,
+        autoplay: {
+          container: containerRef,
+          enter: "top bottom",
+          leave: "bottom top",
+          sync: true,
+        },
+      });
+
+      return (
+        <div ref={containerRef}>
+          <div ref={ref} data-testid="target" />
+          <span data-testid="ready">{String(isReady)}</span>
+          <span data-testid="observer">{String(Boolean(scrollObserver.current))}</span>
+        </div>
+      );
+    }
+
+    render(<Probe />);
+
+    await waitFor(() => {
+      expect(__mock.animateCalls.length).toBeGreaterThan(0);
+      expect(__mock.onScrollCalls.length).toBeGreaterThan(0);
+    });
+
+    const latestAnimation = __mock.animateCalls.at(-1)!;
+    const latestObserver = __mock.onScrollCalls.at(-1)!;
+
+    expect(latestObserver.config.target).toBeInstanceOf(HTMLDivElement);
+    expect(latestObserver.config.container).toBeInstanceOf(HTMLDivElement);
+    expect(latestObserver.instance.link).toHaveBeenCalledWith(
+      latestAnimation.instance,
+    );
+  });
+
+  it("reverts owned scroll observers when controls.revert is called", async () => {
+    const target = document.createElement("div");
+    document.body.appendChild(target);
+
+    const { result } = renderHook(() =>
+      useAnime({
+        targets: target,
+        autoplay: {
+          enter: "bottom top",
+          leave: "top bottom",
+        },
+      }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isReady).toBe(true);
+      expect(__mock.onScrollCalls).toHaveLength(1);
+    });
+
+    const observer = __mock.onScrollCalls[0].instance;
+
+    act(() => {
+      result.current.controls.revert();
+    });
+
+    expect(observer.revert).toHaveBeenCalled();
+    expect(result.current.scrollObserver.current).toBeNull();
   });
 
   it("scopes useAnime string targets to the active root", async () => {

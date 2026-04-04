@@ -4,6 +4,7 @@
 
 import type { RefObject } from "react";
 import type React from "react";
+import type { ScrollObserver } from "animejs";
 import type {
   AnimationCallbacks,
   AnimationState,
@@ -13,6 +14,7 @@ import type {
   PlaybackSettings,
   PropertyValue,
 } from "./common";
+import type { UseAnimeScrollTriggerOptions } from "./events";
 
 // =============================================================================
 // Animatable CSS Properties
@@ -211,10 +213,18 @@ export interface StaggerOptions {
 /**
  * Options for useAnime hook
  */
-export type UseAnimeOptions = PlaybackSettings &
+export type UseAnimeOptions = Omit<PlaybackSettings, "autoplay"> &
   AnimationCallbacks<JSAnimation> &
   TweenParameters &
   Partial<AnimatableProperties> & {
+    /**
+     * Whether the animation should automatically start.
+     * Supports native Anime.js scroll observers via `autoplay: onScroll(...)`
+     * and React-friendly `onScroll()` parameter objects.
+     * @default false
+     */
+    autoplay?: boolean | ScrollObserver | UseAnimeScrollTriggerOptions;
+
     /**
      * CSS selector to target elements within the scoped root
      * Use this instead of ref when targeting multiple elements
@@ -284,6 +294,11 @@ export type UseAnimeReturn<
    * This is a ref so consumers can always access the most recent instance
    */
   animation: React.MutableRefObject<JSAnimation | null>;
+
+  /**
+   * Ref to the linked scroll observer when `autoplay` uses `onScroll()`
+   */
+  scrollObserver: React.MutableRefObject<ScrollObserver | null>;
 
   /**
    * Whether the animation is currently playing

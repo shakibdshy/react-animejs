@@ -6,6 +6,11 @@
  * - Optional linking to animations, timers, timelines, and WAAPI instances
  * - Reactive observer state
  * - Automatic cleanup on unmount and scoped cleanup support
+ *
+ * Prefer `useAnime({ autoplay: { ...scrollObserverParams } })` when you only
+ * need to drive a single animation with the official Anime.js autoplay API.
+ * Use this hook when you need standalone observer state, imperative observer
+ * controls, or observer callbacks without coupling them to one animation.
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -53,11 +58,12 @@ function resolveLinkedInstance(
 ): ScrollLinkedInstance {
   if (!linked) return null;
 
+  // Handle React ref objects: { current: value }
   if (
-    linked &&
     typeof linked === "object" &&
     "current" in linked &&
-    "current" in (linked as { current?: unknown })
+    !("targets" in linked) &&
+    !("duration" in linked)
   ) {
     return (linked as { current?: ScrollLinkedInstance }).current ?? null;
   }
@@ -132,9 +138,6 @@ export function useAnimeOnScroll<
   );
   const [isReady, setIsReady] = useState(false);
 
-  const optionsRef = useRef(options);
-  optionsRef.current = options;
-
   const {
     id,
     sync,
@@ -154,6 +157,8 @@ export function useAnimeOnScroll<
     onLeaveForward,
     onEnterBackward,
     onLeaveBackward,
+    onSyncEnter,
+    onSyncLeave,
     onUpdate,
     onResize,
     onSyncComplete,
@@ -166,6 +171,8 @@ export function useAnimeOnScroll<
     onLeaveForward,
     onEnterBackward,
     onLeaveBackward,
+    onSyncEnter,
+    onSyncLeave,
     onUpdate,
     onResize,
     onSyncComplete,
@@ -177,13 +184,21 @@ export function useAnimeOnScroll<
     onLeaveForward,
     onEnterBackward,
     onLeaveBackward,
+    onSyncEnter,
+    onSyncLeave,
     onUpdate,
     onResize,
     onSyncComplete,
   };
 
-  const linkedInstance = resolveLinkedInstance(linked);
-  const linkedReady = Boolean(linkedInstance);
+  // Keep prop-driven and imperative linking separate so a manual `controls.link()`
+  // survives observer recreation unless the caller provides a new controlled link.
+  const resolvedPropLinked = resolveLinkedInstance(linked);
+  const [imperativeLinked, setImperativeLinked] =
+    useState<ScrollLinkedInstance>(null);
+  const linkedInstance = resolvedPropLinked ?? imperativeLinked;
+
+  const controlledLinkedReady = Boolean(resolvedPropLinked);
 
   const configJson = useMemo(
     () =>
@@ -214,6 +229,8 @@ export function useAnimeOnScroll<
         | "onLeaveForward"
         | "onEnterBackward"
         | "onLeaveBackward"
+        | "onSyncEnter"
+        | "onSyncLeave"
         | "onUpdate"
         | "onResize"
         | "onSyncComplete",
@@ -243,12 +260,12 @@ export function useAnimeOnScroll<
       ? normalizeSingleElement(resolveTarget(container, scopeContext.rootRef.current))
       : containerRef.current;
 
-    if (!resolvedTarget && !linkedReady) {
+    if (!resolvedTarget && !controlledLinkedReady && !imperativeLinked) {
       return;
     }
 
     try {
-      const config: ScrollObserverParams = {
+      const config = {
         id,
         sync,
         container: resolvedContainer ?? undefined,
@@ -264,21 +281,23 @@ export function useAnimeOnScroll<
         onLeaveForward: createWrappedCallback("onLeaveForward"),
         onEnterBackward: createWrappedCallback("onEnterBackward"),
         onLeaveBackward: createWrappedCallback("onLeaveBackward"),
+        onSyncEnter: createWrappedCallback("onSyncEnter"),
+        onSyncLeave: createWrappedCallback("onSyncLeave"),
         onUpdate: createWrappedCallback("onUpdate"),
         onResize: createWrappedCallback("onResize"),
         onSyncComplete: createWrappedCallback("onSyncComplete"),
-      };
+      } as ScrollObserverParams & Record<string, unknown>;
 
-      cleanUndefinedValues(
-        config as unknown as Record<string, unknown>,
-      );
+      cleanUndefinedValues(config);
 
-      const observer = onScroll(config);
+      const observer = onScroll(config as ScrollObserverParams);
       observerRef.current = observer;
 
       if (linkedInstance) {
         observer.link(toAnimeScrollLinked(linkedInstance)!);
       }
+
+      observer.refresh();
 
       syncObserverState(observer);
       setIsReady(true);
@@ -310,7 +329,7 @@ export function useAnimeOnScroll<
       setIsReady(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, linkedReady, configJson, scopeContext, ...deps]);
+  }, [enabled, resolvedPropLinked, configJson, scopeContext, ...deps]);
 
   useEffect(() => {
     if (!observerRef.current || !linkedInstance) return;
@@ -340,6 +359,7 @@ export function useAnimeOnScroll<
 
         if (!observerRef.current || !resolvedLinked) return null;
 
+        setImperativeLinked(resolvedLinked);
         observerRef.current.link(toAnimeScrollLinked(resolvedLinked)!);
         syncObserverState(observerRef.current);
         return observerRef.current;
