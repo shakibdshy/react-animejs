@@ -1,14 +1,9 @@
-import { useState, useCallback, useRef } from "react";
-import { AnimatePresence, AnimatePresenceChild } from "./AnimatePresence";
+import { useState, useCallback, useRef } from 'react';
+import { AnimatePresence, AnimatePresenceChild } from './AnimatePresence';
 
-export type SlideDirection = "left" | "right";
+export type SlideDirection = 'left' | 'right';
 
-export type SlideTransition =
-  | "slide"
-  | "fade"
-  | "scale"
-  | "fade-slide"
-  | "flip";
+export type SlideTransition = 'slide' | 'fade' | 'scale' | 'fade-slide' | 'flip';
 
 export interface AnimatedSliderProps<T> {
   /** Array of slide data */
@@ -47,7 +42,7 @@ const TRANSITIONS: Record<
     enter: { opacity: [0, 1], scale: [0.85, 1] },
     exit: { opacity: [1, 0], scale: [1, 0.85] },
   },
-  "fade-slide": {
+  'fade-slide': {
     enter: { opacity: [0, 1], translateY: [24, 0] },
     exit: { opacity: [1, 0], translateY: [0, -24] },
   },
@@ -60,16 +55,16 @@ const TRANSITIONS: Record<
 export function AnimatedSlider<T>({
   items,
   children,
-  transition = "slide",
+  transition = 'slide',
   duration = 500,
-  ease = "outCubic",
+  ease = 'outCubic',
   loop = true,
   dots = true,
   arrows = true,
-  className = "",
+  className = '',
 }: AnimatedSliderProps<T>) {
   const [current, setCurrent] = useState(0);
-  const directionRef = useRef<SlideDirection>("right");
+  const directionRef = useRef<SlideDirection>('right');
   const count = items.length;
   if (count === 0) return null;
 
@@ -78,41 +73,33 @@ export function AnimatedSlider<T>({
 
   const goLeft = useCallback(() => {
     if (!canGoLeft) return;
-    directionRef.current = "left";
+    directionRef.current = 'left';
     setCurrent((c) => (c - 1 + count) % count);
   }, [canGoLeft, count]);
 
   const goRight = useCallback(() => {
     if (!canGoRight) return;
-    directionRef.current = "right";
+    directionRef.current = 'right';
     setCurrent((c) => (c + 1) % count);
   }, [canGoRight, count]);
 
   const goTo = useCallback(
     (index: number) => {
-      directionRef.current = index > current ? "right" : "left";
+      directionRef.current = index > current ? 'right' : 'left';
       setCurrent(index);
     },
-    [current],
+    [current]
   );
 
   const dir = directionRef.current;
   const config = TRANSITIONS[transition];
 
   // Adjust enter/exit directions based on navigation direction
-  const enter =
-    dir === "right"
-      ? config.enter
-      : swapDirection(config.enter);
-  const exit =
-    dir === "right"
-      ? config.exit
-      : swapDirection(config.exit);
+  const enter = dir === 'right' ? config.enter : swapDirection(config.enter);
+  const exit = dir === 'right' ? config.exit : swapDirection(config.exit);
 
   return (
-    <div
-      className={`flex flex-col items-center gap-6 w-full ${className}`}
-    >
+    <div className={`flex flex-col items-center gap-6 w-full ${className}`}>
       {/* Slide viewport */}
       <div className="relative w-full overflow-hidden rounded-2xl border border-[#2a2a3a] bg-[#12121a]">
         <div className="relative w-full min-h-60 flex items-center justify-center">
@@ -124,9 +111,7 @@ export function AnimatedSlider<T>({
               duration={duration}
               ease={ease}
             >
-              <div className="w-full">
-                {children(items[current], current)}
-              </div>
+              <div className="w-full">{children(items[current], current)}</div>
             </AnimatePresenceChild>
           </AnimatePresence>
         </div>
@@ -183,8 +168,8 @@ export function AnimatedSlider<T>({
               onClick={() => goTo(i)}
               className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                 i === current
-                  ? "bg-[#ffd11a] shadow-[0_0_8px_rgba(255,209,26,0.5)] scale-125"
-                  : "bg-[#2a2a3a] hover:bg-[#3a3a4a]"
+                  ? 'bg-[#ffd11a] shadow-[0_0_8px_rgba(255,209,26,0.5)] scale-125'
+                  : 'bg-[#2a2a3a] hover:bg-[#3a3a4a]'
               }`}
             />
           ))}
@@ -195,17 +180,21 @@ export function AnimatedSlider<T>({
 }
 
 /** Swap translateX / translateY / rotateY directions for reverse navigation */
-function swapDirection(
-  props: Record<string, unknown>,
-): Record<string, unknown> {
+function swapDirection(props: Record<string, unknown>): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(props)) {
     if (Array.isArray(value) && value.length === 2) {
       const negate = (v: number) => -v;
-      if (key === "translateX" || key === "translateY") {
-        result[key] = [typeof value[1] === "number" ? negate(value[1] as number) : value[1], typeof value[0] === "number" ? negate(value[0] as number) : value[0]];
-      } else if (key === "rotateY") {
-        result[key] = [typeof value[0] === "number" ? negate(value[0] as number) : value[0], typeof value[1] === "number" ? negate(value[1] as number) : value[1]];
+      if (key === 'translateX' || key === 'translateY') {
+        result[key] = [
+          typeof value[1] === 'number' ? negate(value[1] as number) : value[1],
+          typeof value[0] === 'number' ? negate(value[0] as number) : value[0],
+        ];
+      } else if (key === 'rotateY') {
+        result[key] = [
+          typeof value[0] === 'number' ? negate(value[0] as number) : value[0],
+          typeof value[1] === 'number' ? negate(value[1] as number) : value[1],
+        ];
       } else {
         result[key] = value;
       }
