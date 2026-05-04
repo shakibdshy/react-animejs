@@ -18,7 +18,7 @@ const TimelineSetDemo: React.FC = () => {
   return (
     <DemoSection title="timeline.set()">
       <div className="space-y-6">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-demo-text-secondary">
           Immediately sets values to targets without animation. Similar to add()
           but with zero duration.
         </p>
@@ -44,7 +44,7 @@ const TimelineSetDemo: React.FC = () => {
           </button>
         </div>
 
-        <div className="text-xs text-slate-400 font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+        <div className="text-xs text-demo-text-secondary font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
           controls.set(targets, &#123; translateX: 100 &#125;)
         </div>
       </div>

@@ -106,21 +106,21 @@ export function ClipPathReveal({
         {!isPlaying ? (
           <button
             onClick={handlePlay}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#ffd11a] text-[#12121a] rounded-lg hover:bg-[#ffd11a]/90 transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-accent text-demo-bg rounded-lg hover:bg-demo-accent/90 transition-colors"
           >
             Play
           </button>
         ) : (
           <button
             onClick={handleReverse}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#2a2a3a] text-[#e0e0e0] rounded-lg hover:bg-[#3a3a4a] transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text rounded-lg hover:bg-demo-border-hover transition-colors"
           >
             Reverse
           </button>
         )}
         <button
           onClick={handlePlay}
-          className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#2a2a3a] text-slate-400 rounded-lg hover:bg-[#3a3a4a] hover:text-[#e0e0e0] transition-colors"
+          className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text-secondary rounded-lg hover:bg-demo-border-hover hover:text-demo-text transition-colors"
         >
           Restart
         </button>

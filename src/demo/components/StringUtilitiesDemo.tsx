@@ -68,9 +68,9 @@ export const StringUtilitiesDemo: React.FC = () => {
       <div className="w-full space-y-6">
         {/* RoundPad Demo */}
         <div>
-          <div className="flex justify-between text-xs text-slate-400 mb-2">
+          <div className="flex justify-between text-xs text-demo-text-secondary mb-2">
             <span>roundPad(value, decimals)</span>
-            <span className="text-[#ffd11a] font-mono">"{roundPadResult}"</span>
+            <span className="text-demo-accent font-mono">"{roundPadResult}"</span>
           </div>
           <input
             type="range"
@@ -79,13 +79,13 @@ export const StringUtilitiesDemo: React.FC = () => {
             step="0.0001"
             value={roundPadValue}
             onChange={handleRoundPadChange}
-            className="w-full accent-[#ffd11a]"
+            className="w-full accent-demo-accent"
           />
           <div className="flex gap-2 mt-2">
             {[2, 3, 4, 5].map((decimals) => (
               <span
                 key={decimals}
-                className="text-[10px] bg-[#2a2a3a] px-2 py-1 rounded text-slate-400"
+                className="text-[10px] bg-demo-border px-2 py-1 rounded text-demo-text-secondary"
               >
                 {decimals}: "{roundPad(roundPadValue, decimals)}"
               </span>
@@ -95,45 +95,45 @@ export const StringUtilitiesDemo: React.FC = () => {
 
         {/* PadStart Demo */}
         <div>
-          <div className="flex justify-between text-xs text-slate-400 mb-2">
+          <div className="flex justify-between text-xs text-demo-text-secondary mb-2">
             <span>padStart(str, length, pad)</span>
-            <span className="text-[#ffd11a] font-mono">"{padStartResult}"</span>
+            <span className="text-demo-accent font-mono">"{padStartResult}"</span>
           </div>
           <input
             type="text"
             value={padStartValue}
             onChange={handlePadStartChange}
-            className="w-full bg-[#2a2a3a] border border-[#3a3a4a] rounded-lg px-3 py-2 text-white text-sm"
+            className="w-full bg-demo-border border border-demo-border-hover rounded-lg px-3 py-2 text-white text-sm"
             placeholder="Enter value"
           />
-          <div className="text-[10px] text-slate-500 mt-1">
+          <div className="text-[10px] text-demo-text-muted mt-1">
             Pads to 6 characters with "0"
           </div>
         </div>
 
         {/* PadEnd Demo */}
         <div>
-          <div className="flex justify-between text-xs text-slate-400 mb-2">
+          <div className="flex justify-between text-xs text-demo-text-secondary mb-2">
             <span>padEnd(str, length, pad)</span>
-            <span className="text-[#ffd11a] font-mono">"{padEndResult}"</span>
+            <span className="text-demo-accent font-mono">"{padEndResult}"</span>
           </div>
           <input
             type="text"
             value={padEndValue}
             onChange={handlePadEndChange}
-            className="w-full bg-[#2a2a3a] border border-[#3a3a4a] rounded-lg px-3 py-2 text-white text-sm"
+            className="w-full bg-demo-border border border-demo-border-hover rounded-lg px-3 py-2 text-white text-sm"
             placeholder="Enter value"
           />
-          <div className="text-[10px] text-slate-500 mt-1">
+          <div className="text-[10px] text-demo-text-muted mt-1">
             Pads to 6 characters with "0"
           </div>
         </div>
 
         {/* DegToRad Demo */}
         <div>
-          <div className="flex justify-between text-xs text-slate-400 mb-2">
+          <div className="flex justify-between text-xs text-demo-text-secondary mb-2">
             <span>degToRad(degrees)</span>
-            <span className="text-[#ffd11a] font-mono">{degToRadResult.toFixed(4)} rad</span>
+            <span className="text-demo-accent font-mono">{degToRadResult.toFixed(4)} rad</span>
           </div>
           <input
             type="range"
@@ -141,30 +141,30 @@ export const StringUtilitiesDemo: React.FC = () => {
             max="360"
             value={degValue}
             onChange={handleDegChange}
-            className="w-full accent-[#ffd11a]"
+            className="w-full accent-demo-accent"
           />
-          <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+          <div className="flex justify-between text-[10px] text-demo-text-muted mt-1">
             <span>0°</span>
-            <span className="text-[#ffd11a]">{degValue}°</span>
+            <span className="text-demo-accent">{degValue}°</span>
             <span>360°</span>
           </div>
           <div className="mt-3 flex items-center justify-center">
             <div
-              className="w-16 h-16 border-2 border-[#ffd11a] rounded-full relative"
+              className="w-16 h-16 border-2 border-demo-accent rounded-full relative"
               style={{
                 transform: `rotate(${degValue}deg)`,
               }}
             >
-              <div className="absolute top-0 left-1/2 w-0.5 h-1/2 bg-[#ffd11a] origin-bottom -translate-x-1/2" />
+              <div className="absolute top-0 left-1/2 w-0.5 h-1/2 bg-demo-accent origin-bottom -translate-x-1/2" />
             </div>
           </div>
         </div>
 
         {/* RadToDeg Demo */}
         <div>
-          <div className="flex justify-between text-xs text-slate-400 mb-2">
+          <div className="flex justify-between text-xs text-demo-text-secondary mb-2">
             <span>radToDeg(radians)</span>
-            <span className="text-[#ffd11a] font-mono">{radToDegResult.toFixed(2)}°</span>
+            <span className="text-demo-accent font-mono">{radToDegResult.toFixed(2)}°</span>
           </div>
           <input
             type="range"
@@ -173,11 +173,11 @@ export const StringUtilitiesDemo: React.FC = () => {
             step="0.01"
             value={radValue}
             onChange={handleRadChange}
-            className="w-full accent-[#ffd11a]"
+            className="w-full accent-demo-accent"
           />
-          <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+          <div className="flex justify-between text-[10px] text-demo-text-muted mt-1">
             <span>0 rad</span>
-            <span className="text-[#ffd11a]">{radValue.toFixed(2)} rad</span>
+            <span className="text-demo-accent">{radValue.toFixed(2)} rad</span>
             <span>2π rad</span>
           </div>
         </div>

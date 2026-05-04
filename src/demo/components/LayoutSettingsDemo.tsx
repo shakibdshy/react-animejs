@@ -38,7 +38,7 @@ export const LayoutSettingsDemo: React.FC = () => {
         <div className="flex gap-2">
           <button
             onClick={toggleLayout}
-            className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-[#ffd11a] rounded-lg transition-all"
+            className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-demo-accent rounded-lg transition-all"
             title="Toggle Layout orientation"
           >
             <Layout size={16} className={isRow ? "rotate-90" : ""} />
@@ -59,11 +59,11 @@ export const LayoutSettingsDemo: React.FC = () => {
         {/* Settings Panel */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-black/20 p-4 rounded-2xl border border-white/5">
           <div className="flex flex-col gap-2">
-            <div className="flex justify-between text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+            <div className="flex justify-between text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
               <label className="flex items-center gap-1.5">
                 <Maximize2 size={10} /> Duration
               </label>
-              <span className="text-[#ffd11a]">{duration}ms</span>
+              <span className="text-demo-accent">{duration}ms</span>
             </div>
             <input
               type="range"
@@ -71,16 +71,16 @@ export const LayoutSettingsDemo: React.FC = () => {
               max="1500"
               value={duration}
               onChange={(e) => setDuration(Number(e.target.value))}
-              className="w-full h-1 bg-slate-800 rounded-full appearance-none cursor-pointer accent-[#ffd11a]"
+              className="w-full h-1 bg-demo-card rounded-full appearance-none cursor-pointer accent-demo-accent"
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <div className="flex justify-between text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+            <div className="flex justify-between text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
               <label className="flex items-center gap-1.5">
                 <Sliders size={10} /> Delay
               </label>
-              <span className="text-[#ffd11a]">
+              <span className="text-demo-accent">
                 {useStagger ? "stagger" : `${delay}ms`}
               </span>
             </div>
@@ -92,14 +92,14 @@ export const LayoutSettingsDemo: React.FC = () => {
                 value={delay}
                 onChange={(e) => setDelay(Number(e.target.value))}
                 disabled={useStagger}
-                className="flex-1 h-1 bg-slate-800 rounded-full appearance-none cursor-pointer accent-[#ffd11a] disabled:opacity-30"
+                className="flex-1 h-1 bg-demo-card rounded-full appearance-none cursor-pointer accent-demo-accent disabled:opacity-30"
               />
-              <label className="flex items-center gap-1.5 text-[10px] font-mono text-slate-500 uppercase cursor-pointer whitespace-nowrap">
+              <label className="flex items-center gap-1.5 text-[10px] font-mono text-demo-text-muted uppercase cursor-pointer whitespace-nowrap">
                 <input
                   type="checkbox"
                   checked={useStagger}
                   onChange={(e) => setUseStagger(e.target.checked)}
-                  className="w-3 h-3 rounded border-white/10 bg-white/5 checked:bg-[#ffd11a] accent-[#ffd11a]"
+                  className="w-3 h-3 rounded border-white/10 bg-white/5 checked:bg-demo-accent accent-demo-accent"
                 />
                 Stagger
               </label>
@@ -118,7 +118,7 @@ export const LayoutSettingsDemo: React.FC = () => {
             <AnimeLayoutItem
               key={item}
               layoutId={`settings-item-${item}`}
-              className="flex-1 flex items-center justify-center rounded-xl bg-[#ffd11a]/5 border border-[#ffd11a]/10 text-[#ffd11a] font-bold text-sm shadow-sm"
+              className="flex-1 flex items-center justify-center rounded-xl bg-demo-accent/5 border border-demo-accent/10 text-demo-accent font-bold text-sm shadow-sm"
             >
               ITEM {item}
             </AnimeLayoutItem>

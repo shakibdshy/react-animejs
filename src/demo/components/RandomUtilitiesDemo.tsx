@@ -50,10 +50,10 @@ export const RandomUtilitiesDemo: React.FC = () => {
         {/* Random Demo */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <span className="text-xs text-slate-400">random(min, max)</span>
+            <span className="text-xs text-demo-text-secondary">random(min, max)</span>
             <button
               onClick={handleGenerateRandom}
-              className="text-xs bg-[#ffd11a] text-black px-3 py-1 rounded-full font-medium hover:bg-[#ffd11a]/80 transition-colors"
+              className="text-xs bg-demo-accent text-black px-3 py-1 rounded-full font-medium hover:bg-demo-accent/80 transition-colors"
             >
               Generate
             </button>
@@ -74,7 +74,7 @@ export const RandomUtilitiesDemo: React.FC = () => {
         {/* Seeded Random Demo */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <span className="text-xs text-slate-400">createSeededRandom(42)</span>
+            <span className="text-xs text-demo-text-secondary">createSeededRandom(42)</span>
             <button
               onClick={handleGenerateSeeded}
               className="text-xs bg-[#4ecdc4] text-black px-3 py-1 rounded-full font-medium hover:bg-[#4ecdc4]/80 transition-colors"
@@ -93,7 +93,7 @@ export const RandomUtilitiesDemo: React.FC = () => {
               </div>
             ))}
           </div>
-          <p className="text-[10px] text-slate-500 mt-2">
+          <p className="text-[10px] text-demo-text-muted mt-2">
             Always produces the same sequence with seed 42
           </p>
         </div>
@@ -101,7 +101,7 @@ export const RandomUtilitiesDemo: React.FC = () => {
         {/* Random Pick Demo */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <span className="text-xs text-slate-400">randomPick(array)</span>
+            <span className="text-xs text-demo-text-secondary">randomPick(array)</span>
             <button
               onClick={handleRandomPick}
               className="text-xs bg-[#ff6b6b] text-white px-3 py-1 rounded-full font-medium hover:bg-[#ff6b6b]/80 transition-colors"
@@ -115,8 +115,8 @@ export const RandomUtilitiesDemo: React.FC = () => {
                 key={i}
                 className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-300 ${
                   pickedValue === fruit
-                    ? "bg-[#ffd11a] text-black scale-110"
-                    : "bg-[#2a2a3a] text-slate-400"
+                    ? "bg-demo-accent text-black scale-110"
+                    : "bg-demo-border text-demo-text-secondary"
                 }`}
               >
                 {fruit}
@@ -128,7 +128,7 @@ export const RandomUtilitiesDemo: React.FC = () => {
         {/* Shuffle Demo */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <span className="text-xs text-slate-400">shuffle(array)</span>
+            <span className="text-xs text-demo-text-secondary">shuffle(array)</span>
             <button
               onClick={handleShuffle}
               className="text-xs bg-[#96ceb4] text-black px-3 py-1 rounded-full font-medium hover:bg-[#96ceb4]/80 transition-colors"
@@ -141,7 +141,7 @@ export const RandomUtilitiesDemo: React.FC = () => {
               (fruit, i) => (
                 <div
                   key={i}
-                  className="px-3 py-2 rounded-lg text-xs font-medium bg-[#2a2a3a] text-slate-400 transition-all duration-300"
+                  className="px-3 py-2 rounded-lg text-xs font-medium bg-demo-border text-demo-text-secondary transition-all duration-300"
                 >
                   {fruit}
                 </div>

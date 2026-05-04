@@ -71,9 +71,9 @@ export const MathUtilitiesDemo: React.FC = () => {
       <div className="w-full space-y-6">
         {/* Lerp Demo */}
         <div>
-          <div className="flex justify-between text-xs text-slate-400 mb-2">
+          <div className="flex justify-between text-xs text-demo-text-secondary mb-2">
             <span>lerp(start, end, t)</span>
-            <span className="text-[#ffd11a]">{lerpResult.toFixed(2)}</span>
+            <span className="text-demo-accent">{lerpResult.toFixed(2)}</span>
           </div>
           <input
             type="range"
@@ -81,11 +81,11 @@ export const MathUtilitiesDemo: React.FC = () => {
             max="100"
             value={lerpValue}
             onChange={handleLerpChange}
-            className="w-full accent-[#ffd11a]"
+            className="w-full accent-demo-accent"
           />
-          <div className="h-2 bg-[#2a2a3a] rounded-full mt-2 relative">
+          <div className="h-2 bg-demo-border rounded-full mt-2 relative">
             <div
-              className="h-full bg-[#ffd11a] rounded-full transition-all duration-100"
+              className="h-full bg-demo-accent rounded-full transition-all duration-100"
               style={{ width: `${lerpResult}%` }}
             />
           </div>
@@ -93,9 +93,9 @@ export const MathUtilitiesDemo: React.FC = () => {
 
         {/* Clamp Demo */}
         <div>
-          <div className="flex justify-between text-xs text-slate-400 mb-2">
+          <div className="flex justify-between text-xs text-demo-text-secondary mb-2">
             <span>clamp(value, min, max)</span>
-            <span className="text-[#ffd11a]">{clampResult}</span>
+            <span className="text-demo-accent">{clampResult}</span>
           </div>
           <input
             type="range"
@@ -103,9 +103,9 @@ export const MathUtilitiesDemo: React.FC = () => {
             max="150"
             value={clampValue}
             onChange={handleClampChange}
-            className="w-full accent-[#ffd11a]"
+            className="w-full accent-demo-accent"
           />
-          <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+          <div className="flex justify-between text-[10px] text-demo-text-muted mt-1">
             <span>-50</span>
             <span className="text-emerald-400">clamped to 0-100</span>
             <span>150</span>
@@ -114,9 +114,9 @@ export const MathUtilitiesDemo: React.FC = () => {
 
         {/* MapRange Demo */}
         <div>
-          <div className="flex justify-between text-xs text-slate-400 mb-2">
+          <div className="flex justify-between text-xs text-demo-text-secondary mb-2">
             <span>mapRange(value, inMin, inMax, outMin, outMax)</span>
-            <span className="text-[#ffd11a]">{mapRangeResult.toFixed(0)}</span>
+            <span className="text-demo-accent">{mapRangeResult.toFixed(0)}</span>
           </div>
           <input
             type="range"
@@ -124,18 +124,18 @@ export const MathUtilitiesDemo: React.FC = () => {
             max="100"
             value={mapRangeValue}
             onChange={handleMapRangeChange}
-            className="w-full accent-[#ffd11a]"
+            className="w-full accent-demo-accent"
           />
-          <div className="text-[10px] text-slate-500 mt-1">
+          <div className="text-[10px] text-demo-text-muted mt-1">
             Maps 0-100 → 0-1000
           </div>
         </div>
 
         {/* Snap Demo */}
         <div>
-          <div className="flex justify-between text-xs text-slate-400 mb-2">
+          <div className="flex justify-between text-xs text-demo-text-secondary mb-2">
             <span>snap(value, increment)</span>
-            <span className="text-[#ffd11a]">{snapResult}</span>
+            <span className="text-demo-accent">{snapResult}</span>
           </div>
           <input
             type="range"
@@ -143,13 +143,13 @@ export const MathUtilitiesDemo: React.FC = () => {
             max="100"
             value={snapValue}
             onChange={handleSnapChange}
-            className="w-full accent-[#ffd11a]"
+            className="w-full accent-demo-accent"
           />
           <div className="flex gap-1 mt-2">
             {Array.from({ length: 5 }, (_, i) => i * 25).map((val) => (
               <div
                 key={val}
-                className={`h-4 flex-1 rounded ${snapResult === val ? "bg-[#ffd11a]" : "bg-[#2a2a3a]"}`}
+                className={`h-4 flex-1 rounded ${snapResult === val ? "bg-demo-accent" : "bg-demo-border"}`}
               />
             ))}
           </div>
@@ -157,9 +157,9 @@ export const MathUtilitiesDemo: React.FC = () => {
 
         {/* Wrap Demo */}
         <div>
-          <div className="flex justify-between text-xs text-slate-400 mb-2">
+          <div className="flex justify-between text-xs text-demo-text-secondary mb-2">
             <span>wrap(value, min, max)</span>
-            <span className="text-[#ffd11a]">{wrapResult.toFixed(1)}</span>
+            <span className="text-demo-accent">{wrapResult.toFixed(1)}</span>
           </div>
           <input
             type="range"
@@ -167,18 +167,18 @@ export const MathUtilitiesDemo: React.FC = () => {
             max="200"
             value={wrapValue}
             onChange={handleWrapChange}
-            className="w-full accent-[#ffd11a]"
+            className="w-full accent-demo-accent"
           />
-          <div className="text-[10px] text-slate-500 mt-1">
+          <div className="text-[10px] text-demo-text-muted mt-1">
             Wraps value around 0-100 range
           </div>
         </div>
 
         {/* Damp Demo */}
         <div>
-          <div className="flex justify-between text-xs text-slate-400 mb-2">
+          <div className="flex justify-between text-xs text-demo-text-secondary mb-2">
             <span>damp(current, target, t, dt)</span>
-            <span className="text-[#ffd11a]">{dampResult.toFixed(2)}</span>
+            <span className="text-demo-accent">{dampResult.toFixed(2)}</span>
           </div>
           <input
             type="range"
@@ -186,9 +186,9 @@ export const MathUtilitiesDemo: React.FC = () => {
             max="100"
             value={dampValue}
             onChange={handleDampChange}
-            className="w-full accent-[#ffd11a]"
+            className="w-full accent-demo-accent"
           />
-          <div className="h-2 bg-[#2a2a3a] rounded-full mt-2 relative">
+          <div className="h-2 bg-demo-border rounded-full mt-2 relative">
             <div
               className="h-full bg-blue-400 rounded-full transition-all duration-100"
               style={{ width: `${dampResult}%` }}

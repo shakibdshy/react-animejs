@@ -26,7 +26,7 @@ const TimelineRevertDemo: React.FC = () => {
   return (
     <DemoSection title="timeline.revert()">
       <div className="space-y-6 w-full">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-demo-text-secondary">
           Reverts the timeline to its initial state and removes all styles
           applied by the animation. Unlike <code>reset()</code>, it completely
           undoes the animation's impact on the DOM.
@@ -38,7 +38,7 @@ const TimelineRevertDemo: React.FC = () => {
               ref={box1Ref}
               className="w-12 h-12 bg-blue-500 rounded-lg shadow-lg"
             />
-            <span className="text-[10px] text-slate-500 font-mono">
+            <span className="text-[10px] text-demo-text-muted font-mono">
               Target 1
             </span>
           </div>
@@ -47,7 +47,7 @@ const TimelineRevertDemo: React.FC = () => {
               ref={box2Ref}
               className="w-12 h-12 bg-emerald-500 rounded-lg shadow-lg"
             />
-            <span className="text-[10px] text-slate-500 font-mono">
+            <span className="text-[10px] text-demo-text-muted font-mono">
               Target 2
             </span>
           </div>
@@ -69,7 +69,7 @@ const TimelineRevertDemo: React.FC = () => {
           </button>
         </div>
 
-        <div className="text-xs text-slate-400 font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+        <div className="text-xs text-demo-text-secondary font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
           // Undoes everything and clears styles
           <br />
           controls.revert()

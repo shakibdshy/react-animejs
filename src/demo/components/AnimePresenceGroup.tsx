@@ -125,8 +125,8 @@ function ModeExample({
         </AnimePresence>
       </div>
 
-      <code className="text-sm font-bold text-[#ffd11a]">{mode}</code>
-      <span className="text-[10px] font-mono text-slate-500 text-center leading-relaxed">
+      <code className="text-sm font-bold text-demo-accent">{mode}</code>
+      <span className="text-[10px] font-mono text-demo-text-muted text-center leading-relaxed">
         {config.description}
       </span>
     </div>
@@ -208,15 +208,15 @@ function TabSwitcherDemo() {
   />`}
     >
       <div className="flex flex-col gap-4 w-full">
-        <div className="flex gap-1 bg-[#0a0a12] rounded-xl p-1 border border-[#2a2a3a]/50">
+        <div className="flex gap-1 bg-demo-bg rounded-xl p-1 border border-demo-border/50">
           {tabs.map((tab, i) => (
             <button
               key={tab.label}
               onClick={() => setActiveTab(i)}
               className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 ${
                 activeTab === i
-                  ? "bg-[#ffd11a] text-black shadow-[0_0_12px_rgba(255,209,26,0.3)]"
-                  : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
+                  ? "bg-demo-accent text-black shadow-[0_0_12px_var(--demo-accent)/0.3]"
+                  : "text-demo-text-muted hover:text-slate-300 hover:bg-white/5"
               }`}
             >
               {tab.label}
@@ -224,7 +224,7 @@ function TabSwitcherDemo() {
           ))}
         </div>
 
-        <div className="bg-[#0a0a12] rounded-xl p-6 border border-[#2a2a3a]/50 min-h-20 flex items-center justify-center">
+        <div className="bg-demo-bg rounded-xl p-6 border border-demo-border/50 min-h-20 flex items-center justify-center">
           <AnimePresence mode="popLayout">
             <AnimePresenceChild
               key={activeTab}
@@ -234,10 +234,10 @@ function TabSwitcherDemo() {
               ease="outQuad"
             >
               <div className="text-center">
-                <div className="text-sm font-bold text-[#ffd11a] mb-1">
+                <div className="text-sm font-bold text-demo-accent mb-1">
                   {tabs[activeTab].label}
                 </div>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-demo-text-secondary">
                   {tabs[activeTab].content}
                 </p>
               </div>
@@ -292,7 +292,7 @@ function NotificationDemo() {
       actions={
         <button
           onClick={addNotification}
-          className="px-3 py-1 text-xs font-bold rounded-lg bg-[#ffd11a]/20 text-[#ffd11a] hover:bg-[#ffd11a]/30 border border-[#ffd11a]/30 transition-colors"
+          className="px-3 py-1 text-xs font-bold rounded-lg bg-demo-accent/20 text-demo-accent hover:bg-demo-accent/30 border border-demo-accent/30 transition-colors"
         >
           + Notify
         </button>

@@ -62,7 +62,7 @@ export const SplitTextAdvancedPropsDemo: React.FC = () => {
             className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-tighter transition-all ${
               debugMode
                 ? 'bg-red-500 text-white'
-                : 'bg-slate-800 text-slate-400 hover:text-white'
+                : 'bg-demo-card text-demo-text-secondary hover:text-white'
             }`}
           >
             debug: {debugMode ? 'on' : 'off'}
@@ -71,8 +71,8 @@ export const SplitTextAdvancedPropsDemo: React.FC = () => {
             onClick={handleToggleSpaces}
             className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-tighter transition-all ${
               includeSpaces
-                ? 'bg-[#ffd11a] text-[#12121a]'
-                : 'bg-slate-800 text-slate-400 hover:text-white'
+                ? 'bg-demo-accent text-demo-bg'
+                : 'bg-demo-card text-demo-text-secondary hover:text-white'
             }`}
           >
             includeSpaces: {includeSpaces ? 'on' : 'off'}
@@ -86,8 +86,8 @@ export const SplitTextAdvancedPropsDemo: React.FC = () => {
               onClick={() => handleSetTemplate(mode)}
               className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-tighter transition-all ${
                 customTemplate === mode
-                  ? 'bg-[#ffd11a] text-[#12121a]'
-                  : 'bg-slate-800 text-slate-400 hover:text-white'
+                  ? 'bg-demo-accent text-demo-bg'
+                  : 'bg-demo-card text-demo-text-secondary hover:text-white'
               }`}
             >
               {mode}
@@ -95,7 +95,7 @@ export const SplitTextAdvancedPropsDemo: React.FC = () => {
           ))}
         </div>
 
-        <div className="bg-[#1a1a24]/50 rounded-2xl p-8 border border-white/5 min-h-30 flex items-center justify-center overflow-hidden">
+        <div className="bg-demo-card/50 rounded-2xl p-8 border border-white/5 min-h-30 flex items-center justify-center overflow-hidden">
           <AnimeTimeline
             loop
             autoplay
@@ -118,15 +118,15 @@ export const SplitTextAdvancedPropsDemo: React.FC = () => {
         </div>
 
         {targetElement && (
-          <div className="bg-[#1a1a24]/50 rounded-xl p-4 border border-white/5">
-            <p className="text-[10px] text-slate-400 font-mono mb-2">$target element info:</p>
-            <p className="text-[10px] text-slate-500 font-mono">
+          <div className="bg-demo-card/50 rounded-xl p-4 border border-white/5">
+            <p className="text-[10px] text-demo-text-secondary font-mono mb-2">$target element info:</p>
+            <p className="text-[10px] text-demo-text-muted font-mono">
               tag: {targetElement.tagName} | class: {targetElement.className}
             </p>
           </div>
         )}
 
-        <div className="text-[10px] text-slate-500 space-y-1 opacity-60 font-medium">
+        <div className="text-[10px] text-demo-text-muted space-y-1 opacity-60 font-medium">
           <p>• debug: Visualizes split boundaries with colored outlines</p>
           <p>• includeSpaces: Wraps space characters as separate elements</p>
           <p>• custom-wrap: Uses custom HTML string template for chars</p>

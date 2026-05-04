@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Heart, Play } from "lucide-react";
 import {
-  Animate,
+  Anime,
   AnimeProvider,
   fadeIn,
   fadeInUp,
@@ -96,7 +97,7 @@ const demoSections = [
       "Math, random, string, DOM and value utility functions",
   },
   {
-    title: "Animate Presence",
+    title: "AnimePresence",
     path: "/demo/animate-presence",
     description:
       "Enter/exit animations with sync, wait, and popLayout modes",
@@ -156,15 +157,18 @@ export const Route = createFileRoute("/")({ component: HomePage });
 function HomePage() {
   return (
     <AnimeProvider>
-      <div className="min-h-screen bg-[#0a0a0f] text-[#e0e0e0] p-8 font-sans">
+      <div className="min-h-screen bg-demo-bg text-demo-text p-8 font-sans">
         <header className="text-center mb-12 p-8">
           <Anime {...fadeInUp} autoplay>
-            <h1 className="text-5xl font-extrabold mb-4 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-              🎬 React Anime.js
+            <h1 className="text-5xl font-extrabold mb-4 inline-flex items-center gap-4 justify-center">
+              <Play className="w-8 h-8 text-demo-accent" />
+              <span className="bg-linear-to-r from-demo-accent to-amber-500 bg-clip-text text-transparent">
+                React Anime.js
+              </span>
             </h1>
           </Anime>
           <Anime {...fadeIn} delay={200} autoplay>
-            <p className="text-xl text-[#888] font-medium tracking-tight">
+            <p className="text-xl text-demo-text-secondary font-medium tracking-tight">
               A comprehensive React wrapper for Anime.js v4
             </p>
           </Anime>
@@ -175,20 +179,22 @@ function HomePage() {
             <Link
               key={section.path}
               to={section.path}
-              className="block bg-[#1a1a24] rounded-2xl p-6 border border-[#2a2a3a] hover:border-[#ffd11a]/40 transition-all duration-300 hover:shadow-lg hover:shadow-[#ffd11a]/10 group"
+              className="block bg-demo-card rounded-2xl p-6 border border-demo-border hover:border-demo-accent/40 transition-all duration-300 hover:shadow-lg hover:shadow-demo-accent/10 group cursor-pointer"
             >
-              <h3 className="text-lg font-bold text-white mb-2 group-hover:text-[#ffd11a] transition-colors">
+              <h3 className="text-lg font-bold text-demo-text mb-2 group-hover:text-demo-accent transition-colors duration-200">
                 {section.title}
               </h3>
-              <p className="text-sm text-slate-500 leading-relaxed">
+              <p className="text-sm text-demo-text-secondary leading-relaxed">
                 {section.description}
               </p>
             </Link>
           ))}
         </div>
 
-        <footer className="text-center p-12 text-[#888]">
-          <p>Built with ❤️ using React + Anime.js v4</p>
+        <footer className="text-center p-12 text-demo-text-secondary">
+          <p className="inline-flex items-center gap-2">
+            Built with <Heart className="w-4 h-4 text-demo-accent" /> using React + Anime.js v4
+          </p>
         </footer>
       </div>
     </AnimeProvider>

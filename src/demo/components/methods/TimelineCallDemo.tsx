@@ -26,7 +26,7 @@ const TimelineCallDemo: React.FC = () => {
   return (
     <DemoSection title="timeline.call()">
       <div className="space-y-6">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-demo-text-secondary">
           Executes a function at a specific position in the timeline. Perfect
           for triggering non-animation logic between steps.
         </p>
@@ -36,7 +36,7 @@ const TimelineCallDemo: React.FC = () => {
             className="w-10 h-10 bg-linear-to-br from-pink-400 to-pink-600 rounded shadow-lg"
           />
           <div className="flex-1 bg-black/30 rounded p-2 h-full overflow-hidden">
-            <div className="text-[10px] text-slate-500 uppercase font-bold mb-1">
+            <div className="text-[10px] text-demo-text-muted uppercase font-bold mb-1">
               Execution Log
             </div>
             {log.map((msg, i) => (
@@ -59,7 +59,7 @@ const TimelineCallDemo: React.FC = () => {
           </button>
         </div>
 
-        <div className="text-xs text-slate-400 font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+        <div className="text-xs text-demo-text-secondary font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
           timeline.call(() =&gt; console.log('Hi!'))
         </div>
       </div>

@@ -22,24 +22,24 @@ const TimelineSyncDemo: React.FC = () => {
   return (
     <DemoSection title="timeline.sync()">
       <div className="space-y-6">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-demo-text-secondary">
           Synchronizes another timeline or WAAPI animation with the current
           timeline. Both animations will play in sync.
         </p>
         <div className="space-y-4">
-          <div className="h-16 bg-slate-800/50 rounded-lg flex items-center px-6">
+          <div className="h-16 bg-demo-border/50 rounded-lg flex items-center px-6">
             <div
               ref={box1Ref}
               className="w-8 h-8 bg-blue-500 rounded shadow-lg"
             />
-            <span className="ml-4 text-xs text-slate-500">Parent Timeline</span>
+            <span className="ml-4 text-xs text-demo-text-muted">Parent Timeline</span>
           </div>
-          <div className="h-16 bg-slate-800/50 rounded-lg flex items-center px-6">
+          <div className="h-16 bg-demo-border/50 rounded-lg flex items-center px-6">
             <div
               ref={box2Ref}
               className="w-8 h-8 bg-emerald-500 rounded shadow-lg"
             />
-            <span className="ml-4 text-xs text-slate-500">
+            <span className="ml-4 text-xs text-demo-text-muted">
               Synced Child Timeline
             </span>
           </div>
@@ -60,7 +60,7 @@ const TimelineSyncDemo: React.FC = () => {
           </button>
         </div>
 
-        <div className="text-xs text-slate-400 font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+        <div className="text-xs text-demo-text-secondary font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
           timeline.sync(otherTimeline, 0)
         </div>
       </div>

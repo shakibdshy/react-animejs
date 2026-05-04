@@ -46,19 +46,19 @@ export function TimerPropertiesDemo() {
           Play
         </button>
         <button
-          className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg transition-all"
+          className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest bg-demo-card border border-demo-border text-demo-text-muted hover:text-white rounded-lg transition-all"
           onClick={controls.pause}
         >
           Pause
         </button>
         <button
-          className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg transition-all"
+          className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest bg-demo-card border border-demo-border text-demo-text-muted hover:text-white rounded-lg transition-all"
           onClick={controls.reverse}
         >
           Reverse
         </button>
         <button
-          className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg transition-all"
+          className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest bg-demo-card border border-demo-border text-demo-text-muted hover:text-white rounded-lg transition-all"
           onClick={() => controls.setPlaybackRate(state.speed === 1 ? 2 : 1)}
         >
           Toggle Speed
@@ -70,7 +70,7 @@ export function TimerPropertiesDemo() {
 
 function PropertyCard({ label, value, color }: { label: string; value: string | number; color: string }) {
   return (
-    <div className="flex flex-col gap-1 p-3 bg-[#0a0a10] border border-[#2a2a3a] rounded-lg">
+    <div className="flex flex-col gap-1 p-3 bg-demo-bg border border-demo-border rounded-lg">
       <span className="text-[9px] uppercase tracking-widest text-[#666] font-bold">{label}</span>
       <span className={`font-mono text-xl font-bold ${color}`}>{value}</span>
     </div>
@@ -79,7 +79,7 @@ function PropertyCard({ label, value, color }: { label: string; value: string | 
 
 function BooleanIndicator({ label, active }: { label: string; active: boolean }) {
   return (
-    <div className={`flex flex-col items-center gap-1 p-2 rounded border transition-colors ${active ? "bg-indigo-500/10 border-indigo-500/50" : "bg-[#050508] border-[#2a2a3a]"}`}>
+    <div className={`flex flex-col items-center gap-1 p-2 rounded border transition-colors ${active ? "bg-indigo-500/10 border-indigo-500/50" : "bg-demo-bg border-demo-border"}`}>
       <span className={`text-[8px] uppercase font-bold ${active ? "text-indigo-400" : "text-[#444]"}`}>{label}</span>
       <div className={`w-1.5 h-1.5 rounded-full ${active ? "bg-indigo-500 shadow-[0_0_5px_rgba(99,102,241,0.8)]" : "bg-[#222]"}`} />
     </div>

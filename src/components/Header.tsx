@@ -1,9 +1,11 @@
 import { Link } from '@tanstack/react-router'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Home,
   Menu,
+  Moon,
+  Sun,
   Webhook,
   X,
   Zap,
@@ -37,38 +39,56 @@ const demoLinks = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isDark, setIsDark] = useState(true)
+
+  useEffect(() => {
+    const stored = localStorage.getItem('demo-theme')
+    const preferDark = stored !== null ? stored === 'dark' : true
+    setIsDark(preferDark)
+    document.documentElement.classList.toggle('dark', preferDark)
+  }, [])
+
+  const toggleTheme = () => {
+    const next = !isDark
+    setIsDark(next)
+    document.documentElement.classList.toggle('dark', next)
+    localStorage.setItem('demo-theme', next ? 'dark' : 'light')
+  }
 
   return (
     <>
-      <header className="p-4 flex items-center bg-gray-800 text-white shadow-lg">
+      <header className="p-4 flex items-center bg-demo-surface text-demo-text border-b border-demo-border">
         <button
           onClick={() => setIsOpen(true)}
-          className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+          className="p-2 hover:bg-demo-card-hover rounded-lg transition-colors duration-200 cursor-pointer"
           aria-label="Open menu"
         >
           <Menu size={24} />
         </button>
-        <h1 className="ml-4 text-xl font-semibold">
-          <Link to="/">
-            <img
-              src="/tanstack-word-logo-white.svg"
-              alt="TanStack Logo"
-              className="h-10"
-            />
+        <h1 className="ml-4 text-xl font-bold flex-1">
+          <Link to="/" className="text-demo-accent hover:text-demo-accent/80 transition-colors duration-200">
+            React Anime.js
           </Link>
         </h1>
+        <button
+          onClick={toggleTheme}
+          className="p-2 hover:bg-demo-card-hover rounded-lg transition-colors duration-200 cursor-pointer text-demo-text-secondary hover:text-demo-accent"
+          aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {isDark ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
       </header>
 
       <aside
-        className={`fixed top-0 left-0 h-full w-80 bg-gray-900 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
+        className={`fixed top-0 left-0 h-full w-80 bg-demo-bg text-demo-text shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col border-r border-demo-border ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <h2 className="text-xl font-bold">Navigation</h2>
+        <div className="flex items-center justify-between p-4 border-b border-demo-border">
+          <h2 className="text-xl font-bold text-demo-accent">Navigation</h2>
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+            className="p-2 hover:bg-demo-card-hover rounded-lg transition-colors duration-200 cursor-pointer"
             aria-label="Close menu"
           >
             <X size={24} />
@@ -79,17 +99,17 @@ export default function Header() {
           <Link
             to="/"
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-demo-card-hover transition-colors duration-200 mb-2 cursor-pointer"
             activeProps={{
               className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+                'flex items-center gap-3 p-3 rounded-lg bg-demo-card-hover text-demo-accent transition-colors duration-200 mb-2 cursor-pointer',
             }}
           >
             <Home size={20} />
             <span className="font-medium">Home</span>
           </Link>
 
-          <div className="mt-4 mb-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          <div className="mt-4 mb-2 px-3 text-xs font-semibold text-demo-text-muted uppercase tracking-wider">
             Demo Sections
           </div>
 
@@ -98,10 +118,10 @@ export default function Header() {
               key={to}
               to={to}
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-1"
+              className="flex items-center gap-3 p-3 rounded-lg hover:bg-demo-card-hover transition-colors duration-200 mb-1 cursor-pointer"
               activeProps={{
                 className:
-                  'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-1',
+                  'flex items-center gap-3 p-3 rounded-lg bg-demo-card-hover text-demo-accent transition-colors duration-200 mb-1 cursor-pointer',
               }}
             >
               <Icon size={18} />
@@ -109,14 +129,14 @@ export default function Header() {
             </Link>
           ))}
 
-          <div className="mt-4 border-t border-gray-700 pt-4">
+          <div className="mt-4 border-t border-demo-border pt-4">
             <Link
               to="/mcp"
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
+              className="flex items-center gap-3 p-3 rounded-lg hover:bg-demo-card-hover transition-colors duration-200 mb-2 cursor-pointer"
               activeProps={{
                 className:
-                  'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+                  'flex items-center gap-3 p-3 rounded-lg bg-demo-card-hover text-demo-accent transition-colors duration-200 mb-2 cursor-pointer',
               }}
             >
               <Webhook size={20} />

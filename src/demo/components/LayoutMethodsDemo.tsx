@@ -54,21 +54,21 @@ export const LayoutMethodsDemo: React.FC = () => {
         <div className="flex gap-2">
           <button
             onClick={useRecordAnimate}
-            className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-blue-400 rounded-lg transition-all"
+            className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-blue-400 rounded-lg transition-all"
             title="record() + animate()"
           >
             <Zap size={16} />
           </button>
           <button
             onClick={useUpdate}
-            className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-green-400 rounded-lg transition-all"
+            className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-green-400 rounded-lg transition-all"
             title="update()"
           >
             <Play size={16} />
           </button>
           <button
             onClick={useRevert}
-            className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-red-400 rounded-lg transition-all"
+            className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-red-400 rounded-lg transition-all"
             title="revert()"
           >
             <RotateCcw size={16} />
@@ -87,9 +87,9 @@ export const LayoutMethodsDemo: React.FC = () => {
         {/* Method Indicator */}
         <div className="flex items-center gap-3 bg-black/20 px-4 py-3 rounded-xl border border-white/5">
           <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-          <span className="text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em]">
+          <span className="text-[10px] font-mono text-demo-text-muted uppercase tracking-[0.2em]">
             Active Method:{" "}
-            <span className="text-[#ffd11a] ml-1">{lastMethod || "Idle"}</span>
+            <span className="text-demo-accent ml-1">{lastMethod || "Idle"}</span>
           </span>
         </div>
 
@@ -105,7 +105,7 @@ export const LayoutMethodsDemo: React.FC = () => {
             <AnimeLayoutItem
               key={item}
               layoutId={`method-item-${item}`}
-              className="h-12 flex items-center justify-center rounded-xl bg-[#ffd11a]/10 border border-[#ffd11a]/20 text-[#ffd11a] font-bold text-sm shadow-sm"
+              className="h-12 flex items-center justify-center rounded-xl bg-demo-accent/10 border border-demo-accent/20 text-demo-accent font-bold text-sm shadow-sm"
             >
               ITEM {item}
             </AnimeLayoutItem>
@@ -113,7 +113,7 @@ export const LayoutMethodsDemo: React.FC = () => {
         </AnimeLayout>
 
         {/* Method descriptions */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-[10px] text-slate-500 font-mono uppercase tracking-widest leading-relaxed mt-2 opacity-60">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-[10px] text-demo-text-muted font-mono uppercase tracking-widest leading-relaxed mt-2 opacity-60">
           <span className="text-blue-400">Zap</span>{" "}
           <span>Record & Animate</span>
           <span className="text-green-400">Play</span>{" "}

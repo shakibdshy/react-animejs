@@ -169,7 +169,7 @@ function ShapeComparisonDemo() {
       <div className="flex flex-col gap-4 w-full">
         <button
           onClick={handleReplay}
-          className="self-center px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#ffd11a] text-[#12121a] rounded-lg hover:bg-[#ffd11a]/90 transition-colors"
+          className="self-center px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-accent text-demo-bg rounded-lg hover:bg-demo-accent/90 transition-colors"
         >
           Replay All
         </button>
@@ -187,9 +187,9 @@ function ShapeComparisonDemo() {
                   ease="outCubic"
                 >
                   <div
-                    className="w-full h-28 rounded-xl bg-linear-to-br from-[#ffd11a]/30 to-[#ffd11a]/5 border border-[#ffd11a]/20 flex items-center justify-center"
+                    className="w-full h-28 rounded-xl bg-linear-to-br from-demo-accent/30 to-demo-accent/5 border border-demo-accent/20 flex items-center justify-center"
                   >
-                    <span className="text-xs font-bold text-[#ffd11a] uppercase">
+                    <span className="text-xs font-bold text-demo-accent uppercase">
                       {shape}
                     </span>
                   </div>

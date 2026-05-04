@@ -32,17 +32,17 @@ export const ArrayOfTargetsDemo: React.FC = () => {
     <DemoSection title="Array of Targets">
       <div className="flex flex-col gap-6 w-full">
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-4 bg-[#1a1a24] p-4 rounded-lg">
+          <div className="flex items-center gap-4 bg-demo-card p-4 rounded-lg">
             <div className="array-target w-12 h-12 bg-indigo-500 rounded-lg"></div>
             <span className="text-xs text-gray-400">.array-target (DOM)</span>
           </div>
           
-          <div className="flex items-center gap-4 bg-[#1a1a24] p-4 rounded-lg">
+          <div className="flex items-center gap-4 bg-demo-card p-4 rounded-lg">
             <div className="array-target w-12 h-12 bg-purple-500 rounded-full"></div>
             <span className="text-xs text-gray-400">.array-target (DOM)</span>
           </div>
 
-          <div className="bg-[#1a1a24] p-4 rounded-lg border border-[#2a2a3a] font-mono text-sm">
+          <div className="bg-demo-card p-4 rounded-lg border border-demo-border font-mono text-sm">
             <div className="flex justify-between items-center">
               <span className="text-indigo-400">vector2D.x (JS):</span>
               <span className="text-amber-400">{jsValue}</span>

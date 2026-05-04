@@ -80,7 +80,7 @@ export const ScopeRefreshDemo: React.FC = () => {
           </button>
           <button
             onClick={handleRefresh}
-            className="flex items-center gap-1 px-2 py-1 bg-[#ffd11a]/20 hover:bg-[#ffd11a]/30 border border-[#ffd11a]/30 rounded-lg text-[#ffd11a] text-xs transition-all"
+            className="flex items-center gap-1 px-2 py-1 bg-demo-accent/20 hover:bg-demo-accent/30 border border-demo-accent/30 rounded-lg text-demo-accent text-xs transition-all"
           >
             <RefreshCw size={12} />
             Refresh
@@ -145,18 +145,18 @@ scopeRef.current?.refresh();`}
         {/* Stats */}
         <div className="flex gap-6 text-xs">
           <div className="flex items-center gap-2">
-            <span className="text-slate-500">Elements:</span>
-            <span className="font-mono text-[#ffd11a]">{boxCount}</span>
+            <span className="text-demo-text-muted">Elements:</span>
+            <span className="font-mono text-demo-accent">{boxCount}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-slate-500">Refreshes:</span>
+            <span className="text-demo-text-muted">Refreshes:</span>
             <span className="font-mono text-cyan-400">{refreshCount}</span>
           </div>
         </div>
 
         {/* Info */}
-        <div className="text-[10px] text-slate-500 text-center max-w-sm">
-          Add or remove elements, then click <span className="text-[#ffd11a]">Refresh</span> to
+        <div className="text-[10px] text-demo-text-muted text-center max-w-sm">
+          Add or remove elements, then click <span className="text-demo-accent">Refresh</span> to
           re-run constructors and pick up the DOM changes.
         </div>
       </div>

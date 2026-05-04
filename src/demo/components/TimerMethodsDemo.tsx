@@ -64,9 +64,9 @@ export function TimerMethodsDemo() {
     <DemoSection title="Timer Control Methods">
       <div className="flex flex-col gap-6 w-full">
         {/* Progress and Time Display */}
-        <div className="flex flex-col gap-4 p-6 bg-[#0a0a10] border border-[#2a2a3a] rounded-xl shadow-inner relative overflow-hidden">
+        <div className="flex flex-col gap-4 p-6 bg-demo-bg border border-demo-border rounded-xl shadow-inner relative overflow-hidden">
           <div className="flex justify-between items-center relative z-10">
-            <span className="text-xs uppercase tracking-widest text-[#888] font-bold">
+            <span className="text-xs uppercase tracking-widest text-demo-text-secondary font-bold">
               progression
             </span>
             <span className="font-mono text-2xl font-bold text-indigo-400">
@@ -75,7 +75,7 @@ export function TimerMethodsDemo() {
             </span>
           </div>
           
-          <div className="h-2 w-full bg-[#1a1a25] rounded-full overflow-hidden relative z-10">
+          <div className="h-2 w-full bg-demo-card rounded-full overflow-hidden relative z-10">
             <div 
               ref={progressRef}
               className="h-full bg-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.5)] transition-[width] duration-75 ease-linear"
@@ -109,7 +109,7 @@ export function TimerMethodsDemo() {
           <ControlButton onClick={() => controls.stretch(10000)} label="stretch(10s)" disabled={isReverted} />
         </div>
 
-        <div className="mt-2 px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#555] flex justify-between">
+        <div className="mt-2 px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-[#555] flex justify-between">
            <span>Status: {isReverted ? "REVERTED" : isReady ? (isRunning ? "PLAYING" : "PAUSED") : "NOT READY"} {state.reversed ? "(REVERSED)" : ""}</span>
            <span>Duration: 5s</span>
         </div>
@@ -138,7 +138,7 @@ function ControlButton({
           ? "bg-indigo-600 border-indigo-500 text-white hover:bg-indigo-500" 
           : danger
             ? "bg-red-950/20 border-red-900/50 text-red-500 hover:bg-red-900/40"
-            : "bg-[#1e1e2a] border-[#2a2a3a] text-[#aaa] hover:text-white hover:bg-[#2a2a3a]"
+            : "bg-demo-card border-demo-border text-demo-text-muted hover:text-white hover:bg-demo-border"
       }`}
       onClick={onClick}
       disabled={disabled}

@@ -52,13 +52,13 @@ export const AnimatableRevertDemo: React.FC = () => {
     >
       <div
         ref={containerRef}
-        className="w-full h-full min-h-[160px] bg-[#1a1a24]/50 rounded-2xl border border-white/5 relative flex items-center justify-center flex-col gap-8 group overflow-hidden"
+        className="w-full h-full min-h-[160px] bg-demo-card/50 rounded-2xl border border-white/5 relative flex items-center justify-center flex-col gap-8 group overflow-hidden"
       >
         <div className="flex gap-2 relative z-10 pointer-events-none">
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="circle-revert w-6 h-6 rounded-full bg-[#ffd11a] opacity-90 shadow-lg shadow-[#ffd11a]/20"
+              className="circle-revert w-6 h-6 rounded-full bg-demo-accent opacity-90 shadow-lg shadow-demo-accent/20"
             />
           ))}
         </div>
@@ -70,8 +70,8 @@ export const AnimatableRevertDemo: React.FC = () => {
             relative z-20 px-6 py-2 rounded-xl font-bold text-[10px] tracking-widest uppercase transition-all
             ${
               isActive
-                ? "bg-[#ffd11a] text-[#12121a] hover:scale-105 active:scale-95 cursor-pointer shadow-[0_0_20px_rgba(255,209,26,0.2)]"
-                : "bg-slate-800 text-slate-500 cursor-not-allowed opacity-50"
+                ? "bg-demo-accent text-demo-bg hover:scale-105 active:scale-95 cursor-pointer shadow-[0_0_20px_rgba(255,209,26,0.2)]"
+                : "bg-demo-card text-demo-text-muted cursor-not-allowed opacity-50"
             }
           `}
         >

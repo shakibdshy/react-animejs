@@ -61,7 +61,7 @@ function SlideCard({ slide }: { slide: SlideData }) {
       </div>
       <div className="flex flex-col gap-1.5 min-w-0">
         <h3 className="text-lg font-bold text-white">{slide.title}</h3>
-        <p className="text-sm text-slate-400 leading-relaxed">
+        <p className="text-sm text-demo-text-secondary leading-relaxed">
           {slide.description}
         </p>
       </div>
@@ -229,15 +229,15 @@ function TransitionPickerDemo() {
     >
       <div className="flex flex-col gap-4 w-full">
         {/* Transition selector */}
-        <div className="flex gap-1 bg-[#0a0a12] rounded-xl p-1 border border-[#2a2a3a]/50">
+        <div className="flex gap-1 bg-demo-bg rounded-xl p-1 border border-demo-border/50">
           {transitions.map((t) => (
             <button
               key={t}
               onClick={() => setSelected(t)}
               className={`flex-1 px-2 py-1.5 rounded-lg text-xs font-bold uppercase transition-all duration-200 ${
                 selected === t
-                  ? "bg-[#ffd11a] text-black shadow-[0_0_12px_rgba(255,209,26,0.3)]"
-                  : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
+                  ? "bg-demo-accent text-black shadow-[0_0_12px_var(--demo-accent)/0.3]"
+                  : "text-demo-text-muted hover:text-slate-300 hover:bg-white/5"
               }`}
             >
               {t}

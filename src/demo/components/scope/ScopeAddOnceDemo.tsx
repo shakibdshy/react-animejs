@@ -104,8 +104,8 @@ export const ScopeAddOnceDemo: React.FC = () => {
           {/* Animated elements */}
           <div className="flex gap-8 items-center min-h-20">
             <div className="flex flex-col items-center gap-2">
-              <div className="add-box w-12 h-12 rounded-xl bg-linear-to-br from-[#ffd11a] to-[#ff8c00] shadow-lg shadow-[#ffd11a]/30" />
-              <span className="text-[10px] text-[#ffd11a] font-mono">animate</span>
+              <div className="add-box w-12 h-12 rounded-xl bg-linear-to-br from-demo-accent to-[#ff8c00] shadow-lg shadow-demo-accent/30" />
+              <span className="text-[10px] text-demo-accent font-mono">animate</span>
             </div>
             <div className="flex flex-col items-center gap-2">
               <div className="once-box w-12 h-12 rounded-xl bg-linear-to-br from-[#8b5cf6] to-[#7c3aed] shadow-lg shadow-violet-500/30" />
@@ -117,13 +117,13 @@ export const ScopeAddOnceDemo: React.FC = () => {
         {/* Run counts */}
         <div className="flex gap-6 text-xs">
           <div className="flex items-center gap-2">
-            <span className="text-slate-500">animate runs:</span>
-            <span className="font-mono text-[#ffd11a] bg-[#ffd11a]/10 px-2 py-0.5 rounded">
+            <span className="text-demo-text-muted">animate runs:</span>
+            <span className="font-mono text-demo-accent bg-demo-accent/10 px-2 py-0.5 rounded">
               {runCount}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-slate-500">animateOnce runs:</span>
+            <span className="text-demo-text-muted">animateOnce runs:</span>
             <span className="font-mono text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded">
               {onceCount}
             </span>
@@ -131,9 +131,9 @@ export const ScopeAddOnceDemo: React.FC = () => {
         </div>
 
         {/* Info */}
-        <div className="text-[10px] text-slate-500 text-center max-w-sm">
+        <div className="text-[10px] text-demo-text-muted text-center max-w-sm">
           Restart to see both constructors run. Notice{' '}
-          <code className="text-[#ffd11a]">animate</code> increments but{' '}
+          <code className="text-demo-accent">animate</code> increments but{' '}
           <code className="text-violet-400">animateOnce</code> stays at 1.
         </div>
       </div>

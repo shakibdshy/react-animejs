@@ -56,11 +56,11 @@ export const ScopeBasicDemo: React.FC = () => {
         key={count}
       >
         <div className="flex gap-4 items-center">
-          <div className="scope-box w-12 h-12 rounded-xl bg-linear-to-br from-[#ffd11a] to-[#ff8c00] shadow-lg shadow-[#ffd11a]/30" />
+          <div className="scope-box w-12 h-12 rounded-xl bg-linear-to-br from-demo-accent to-[#ff8c00] shadow-lg shadow-demo-accent/30" />
           <div className="scope-box w-10 h-10 rounded-xl bg-linear-to-br from-[#ff6b6b] to-[#ee5a5a] shadow-lg shadow-[#ff6b6b]/30" />
           <div className="scope-box w-8 h-8 rounded-xl bg-linear-to-br from-[#4ecdc4] to-[#44a08d] shadow-lg shadow-[#4ecdc4]/30" />
         </div>
-        <div className="text-xs text-slate-500 flex items-center gap-2">
+        <div className="text-xs text-demo-text-muted flex items-center gap-2">
           <span
             className={`w-2 h-2 rounded-full ${isReady ? "bg-green-500" : "bg-red-500"}`}
           />

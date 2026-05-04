@@ -64,7 +64,7 @@ const TimelinePlaybackMethodsDemo: React.FC = () => {
   return (
     <DemoSection title="Timeline Playback & Utility Methods">
       <div className="w-full space-y-6">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-demo-text-secondary">
           These 11 methods control the playback state and engine lifecycle of
           the timeline.
         </p>
@@ -75,7 +75,7 @@ const TimelinePlaybackMethodsDemo: React.FC = () => {
             className="w-12 h-12 bg-linear-to-br from-indigo-400 to-indigo-600 rounded-lg shadow-xl shadow-indigo-500/20"
           />
 
-          <div className="absolute top-2 right-4 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+          <div className="absolute top-2 right-4 text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
             Last Method:{" "}
             <span className="text-indigo-400 font-bold">{currentMethod}</span>
           </div>
@@ -102,7 +102,7 @@ const TimelinePlaybackMethodsDemo: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-800">
           <div className="space-y-3">
-            <span className="text-[10px] font-bold text-slate-500 uppercase flex items-center gap-2">
+            <span className="text-[10px] font-bold text-demo-text-muted uppercase flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-orange-500" /> Seek &
               Stretch
             </span>
@@ -111,7 +111,7 @@ const TimelinePlaybackMethodsDemo: React.FC = () => {
                 onClick={() =>
                   runMethod("seek(50%)", () => controls.seek("50%"))
                 }
-                className="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-[10px] font-bold"
+                className="flex-1 px-3 py-2 bg-demo-card hover:bg-slate-700 text-slate-300 rounded-md text-[10px] font-bold"
               >
                 SEEK 50%
               </button>
@@ -119,7 +119,7 @@ const TimelinePlaybackMethodsDemo: React.FC = () => {
                 onClick={() =>
                   runMethod("seek(end)", () => controls.seek("end"))
                 }
-                className="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-[10px] font-bold"
+                className="flex-1 px-3 py-2 bg-demo-card hover:bg-slate-700 text-slate-300 rounded-md text-[10px] font-bold"
               >
                 SEEK 'END'
               </button>
@@ -127,7 +127,7 @@ const TimelinePlaybackMethodsDemo: React.FC = () => {
                 onClick={() =>
                   runMethod("stretch(4s)", () => controls.stretch(4000))
                 }
-                className="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-[10px] font-bold"
+                className="flex-1 px-3 py-2 bg-demo-card hover:bg-slate-700 text-slate-300 rounded-md text-[10px] font-bold"
               >
                 STRETCH 4s
               </button>
@@ -136,19 +136,19 @@ const TimelinePlaybackMethodsDemo: React.FC = () => {
 
           <div className="space-y-2 bg-black/40 p-3 rounded-lg border border-slate-800/50">
             <div className="flex justify-between text-[10px]">
-              <span className="text-slate-500">Progress:</span>
+              <span className="text-demo-text-muted">Progress:</span>
               <span className="text-indigo-400 font-mono">
                 {(state.progress * 100).toFixed(1)}%
               </span>
             </div>
             <div className="flex justify-between text-[10px]">
-              <span className="text-slate-500">Time:</span>
+              <span className="text-demo-text-muted">Time:</span>
               <span className="text-indigo-400 font-mono">
                 {~~state.currentTime}ms
               </span>
             </div>
             <div className="flex justify-between text-[10px]">
-              <span className="text-slate-500">Paused:</span>
+              <span className="text-demo-text-muted">Paused:</span>
               <span
                 className={state.paused ? "text-amber-500" : "text-emerald-500"}
               >

@@ -8,7 +8,7 @@ export const Route = createFileRoute("/demo")({
 function DemoLayout() {
   return (
     <AnimeProvider>
-      <div className="min-h-screen bg-[#0a0a0f] text-[#e0e0e0] p-8 font-sans">
+      <div className="min-h-screen bg-demo-bg text-demo-text p-8 font-sans">
         <Outlet />
       </div>
     </AnimeProvider>

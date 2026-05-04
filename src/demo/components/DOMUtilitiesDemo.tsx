@@ -80,17 +80,17 @@ export const DOMUtilitiesDemo: React.FC = () => {
         {/* $ Demo */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <span className="text-xs text-slate-400">$(selector, context)</span>
+            <span className="text-xs text-demo-text-secondary">$(selector, context)</span>
             <button
               onClick={handleDollarSign}
-              className="text-xs bg-[#ffd11a] text-black px-3 py-1 rounded-full font-medium hover:bg-[#ffd11a]/80 transition-colors"
+              className="text-xs bg-demo-accent text-black px-3 py-1 rounded-full font-medium hover:bg-demo-accent/80 transition-colors"
             >
               Query
             </button>
           </div>
           <div
             ref={box1Ref}
-            className="demo-box w-full h-12 bg-[#2a2a3a] rounded-lg flex items-center justify-center text-xs text-slate-400 border-2 border-[#3a3a4a] transition-all duration-300"
+            className="demo-box w-full h-12 bg-demo-border rounded-lg flex items-center justify-center text-xs text-demo-text-secondary border-2 border-demo-border-hover transition-all duration-300"
             style={box1Style ? { borderColor: '#ffd11a' } : {}}
           >
             $(".demo-box") selects this element
@@ -108,7 +108,7 @@ export const DOMUtilitiesDemo: React.FC = () => {
         {/* Get Demo */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <span className="text-xs text-slate-400">get(element, property)</span>
+            <span className="text-xs text-demo-text-secondary">get(element, property)</span>
             <button
               onClick={handleGet}
               className="text-xs bg-[#45b7d1] text-black px-3 py-1 rounded-full font-medium hover:bg-[#45b7d1]/80 transition-colors"
@@ -118,7 +118,7 @@ export const DOMUtilitiesDemo: React.FC = () => {
           </div>
           <div
             ref={box2Ref}
-            className="w-full h-12 bg-[#2a2a3a] rounded-lg flex items-center justify-center text-xs text-slate-400 border-2 border-[#3a3a4a] transition-all duration-300"
+            className="w-full h-12 bg-demo-border rounded-lg flex items-center justify-center text-xs text-demo-text-secondary border-2 border-demo-border-hover transition-all duration-300"
             style={box2Style ? { borderColor: '#45b7d1' } : {}}
           >
             Click "Get Value" to read transform
@@ -136,7 +136,7 @@ export const DOMUtilitiesDemo: React.FC = () => {
         {/* Set Demo */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <span className="text-xs text-slate-400">set(element, properties)</span>
+            <span className="text-xs text-demo-text-secondary">set(element, properties)</span>
             <button
               onClick={handleSet}
               className="text-xs bg-[#96ceb4] text-black px-3 py-1 rounded-full font-medium hover:bg-[#96ceb4]/80 transition-colors"
@@ -146,7 +146,7 @@ export const DOMUtilitiesDemo: React.FC = () => {
           </div>
           <div
             ref={box3Ref}
-            className="w-full h-12 bg-[#2a2a3a] rounded-lg flex items-center justify-center text-xs text-slate-400 border-2 border-[#3a3a4a] transition-all duration-300"
+            className="w-full h-12 bg-demo-border rounded-lg flex items-center justify-center text-xs text-demo-text-secondary border-2 border-demo-border-hover transition-all duration-300"
             style={box3Style ? { backgroundColor: '#ff6b6b', borderRadius: '50%' } : {}}
           >
             Click "Set Styles" to change shape

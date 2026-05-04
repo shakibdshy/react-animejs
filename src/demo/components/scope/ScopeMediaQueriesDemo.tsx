@@ -106,21 +106,21 @@ code={`useAnimeScope({ mediaQueries: { isSmall: '(max-width: 200px)' } })\nuseAn
         {/* Status indicators */}
         <div className="flex gap-6 text-xs">
           <div className="flex items-center gap-2">
-            <span className="text-slate-500">Size:</span>
+            <span className="text-demo-text-muted">Size:</span>
             <span
-              className={`font-mono ${matches.isSmall ? "text-[#2dd4bf]" : "text-[#ffd11a]"}`}
+              className={`font-mono ${matches.isSmall ? "text-[#2dd4bf]" : "text-demo-accent"}`}
             >
               {matches.isSmall ? "Small (≤200px)" : "Normal (>200px)"}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-slate-500">Direction:</span>
+            <span className="text-demo-text-muted">Direction:</span>
             <span className="text-slate-300 font-mono">
               {matches.isSmall ? "Vertical ↕" : "Horizontal ↔"}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-slate-500">Reduce Motion:</span>
+            <span className="text-demo-text-muted">Reduce Motion:</span>
             <span
               className={`font-mono ${matches.reduceMotion ? "text-orange-400" : "text-green-400"}`}
             >

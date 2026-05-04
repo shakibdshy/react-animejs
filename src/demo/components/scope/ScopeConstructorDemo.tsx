@@ -169,21 +169,21 @@ export const ScopeConstructorDemo: React.FC = () => {
 
   return (
     <DemoSection title="Scope: Constructor Function">
-      <div className="w-full bg-[#1a1a24] rounded-3xl p-6 border border-[#2a2a3a] shadow-xl">
+      <div className="w-full bg-demo-card rounded-3xl p-6 border border-demo-border shadow-xl">
         {/* Header */}
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h4 className="text-[#ffd11a] font-bold text-xl tracking-tight">
+            <h4 className="text-demo-accent font-bold text-xl tracking-tight">
               Constructor Function + Defaults
             </h4>
-            <p className="text-[10px] text-slate-500 font-mono mt-1 uppercase tracking-wider">
+            <p className="text-[10px] text-demo-text-muted font-mono mt-1 uppercase tracking-wider">
               Uses scope constructor with conditional logic based on container width
             </p>
           </div>
           <div className="flex gap-2">
             <button
               onClick={handleRefresh}
-              className="p-2 hover:bg-white/5 rounded-full text-slate-400 hover:text-[#ffd11a] transition-all"
+              className="p-2 hover:bg-white/5 rounded-full text-demo-text-secondary hover:text-demo-accent transition-all"
               title="Refresh Scope"
             >
               <RotateCcw className="w-4 h-4" />
@@ -196,18 +196,18 @@ export const ScopeConstructorDemo: React.FC = () => {
           <div
             ref={ref as React.RefObject<HTMLDivElement>}
             style={{ width: iframeWidth }}
-            className="relative bg-[#0f0f13] rounded-xl border-2 border-[#2a2a3a] transition-colors duration-200 overflow-hidden"
+            className="relative bg-demo-bg rounded-xl border-2 border-demo-border transition-colors duration-200 overflow-hidden"
           >
             {/* Content area */}
             <div className="relative min-h-35 flex items-center justify-center p-4">
               <div
                 ref={squareRef}
-                className="constructor-square w-12 h-12 rounded-lg bg-linear-to-br from-[#ffd11a] to-[#ff8c00] shadow-lg shadow-[#ffd11a]/30"
+                className="constructor-square w-12 h-12 rounded-lg bg-linear-to-br from-demo-accent to-[#ff8c00] shadow-lg shadow-demo-accent/30"
                 style={{
                   cursor: mode === "draggable" ? "grab" : "default",
                 }}
               >
-                <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-[#1a1a24]">
+                <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-demo-card">
                   {mode === "animate" ? "🔄" : "👆"}
                 </div>
               </div>
@@ -217,17 +217,17 @@ export const ScopeConstructorDemo: React.FC = () => {
             <div
               onMouseDown={handleMouseDown}
               className={`absolute right-0 top-0 bottom-0 w-6 flex items-center justify-center cursor-ew-resize transition-colors ${
-                isDraggingResize ? "bg-[#ffd11a]/20" : "hover:bg-[#ffd11a]/10"
+                isDraggingResize ? "bg-demo-accent/20" : "hover:bg-demo-accent/10"
               }`}
             >
-              <GripVertical className="w-4 h-4 text-[#ffd11a]/60" />
+              <GripVertical className="w-4 h-4 text-demo-accent/60" />
             </div>
 
             {/* Labels */}
-            <div className="absolute bottom-2 right-8 text-[10px] text-[#ffd11a]/60 font-mono whitespace-nowrap">
+            <div className="absolute bottom-2 right-8 text-[10px] text-demo-accent/60 font-mono whitespace-nowrap">
               resize container »
             </div>
-            <div className="absolute top-2 right-8 text-[10px] text-[#ffd11a]/80 font-mono">
+            <div className="absolute top-2 right-8 text-[10px] text-demo-accent/80 font-mono">
               {Math.round(iframeWidth)}px
             </div>
           </div>
@@ -236,42 +236,42 @@ export const ScopeConstructorDemo: React.FC = () => {
         {/* Status indicators */}
         <div className="flex flex-wrap gap-4 mb-4">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-slate-500 uppercase tracking-widest">Viewport:</span>
+            <span className="text-[10px] text-demo-text-muted uppercase tracking-widest">Viewport:</span>
             <span
               className={`font-mono text-xs ${
-                isSmall ? "text-[#ffd11a]" : "text-green-400"
+                isSmall ? "text-demo-accent" : "text-green-400"
               }`}
             >
               {isSmall ? `Small (≤${SMALL_THRESHOLD}px)` : `Normal (>${SMALL_THRESHOLD}px)`}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-slate-500 uppercase tracking-widest">Mode:</span>
+            <span className="text-[10px] text-demo-text-muted uppercase tracking-widest">Mode:</span>
             <span className="font-mono text-xs text-slate-300">
               {mode === "animate" ? "Animation only 🔄" : "Draggable 👆"}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-slate-500 uppercase tracking-widest">Defaults:</span>
-            <span className="font-mono text-xs text-slate-400">ease=linear, duration=2000ms</span>
+            <span className="text-[10px] text-demo-text-muted uppercase tracking-widest">Defaults:</span>
+            <span className="font-mono text-xs text-demo-text-secondary">ease=linear, duration=2000ms</span>
           </div>
         </div>
 
         {/* Debug info */}
-        <div className="p-3 rounded-xl bg-black/40 border border-[#2a2a3a]">
+        <div className="p-3 rounded-xl bg-black/40 border border-demo-border">
           <div className="flex items-center gap-2">
             <div
               className={`w-2 h-2 rounded-full shadow-[0_0_8px] ${
                 isReady ? "bg-green-500 shadow-green-500/50" : "bg-red-500 shadow-transparent"
               }`}
             />
-            <span className="text-[10px] font-mono text-slate-400">{debugInfo}</span>
+            <span className="text-[10px] font-mono text-demo-text-secondary">{debugInfo}</span>
           </div>
         </div>
 
         {/* Code example */}
-        <div className="mt-4 p-4 rounded-xl bg-[#0a0a0f] border border-[#2a2a3a] overflow-x-auto">
-          <pre className="text-[10px] font-mono text-slate-400 leading-relaxed">
+        <div className="mt-4 p-4 rounded-xl bg-demo-bg border border-demo-border overflow-x-auto">
+          <pre className="text-[10px] font-mono text-demo-text-secondary leading-relaxed">
             {`// Similar to vanilla JS pattern:
 createScope({
   mediaQueries: { isSmall: '(max-width: 200px)' },

@@ -6,8 +6,8 @@ import { DemoSection } from "./DemoSection";
 
 function ScrollHint({ label = "Scroll inside the panel below" }: { label?: string }) {
   return (
-    <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.25em] text-slate-500">
-      <ArrowDown className="h-3.5 w-3.5 text-[#ffd11a]" />
+    <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.25em] text-demo-text-muted">
+      <ArrowDown className="h-3.5 w-3.5 text-demo-accent" />
       {label}
     </div>
   );
@@ -25,7 +25,7 @@ function Panel({
   return (
     <div
       ref={containerRef}
-      className={`relative h-72 overflow-y-auto rounded-2xl border border-[#2a2a3a] bg-linear-to-b from-[#09090e] via-[#0d0d15] to-[#09090e] ${className}`}
+      className={`relative h-72 overflow-y-auto rounded-2xl border border-demo-border bg-linear-to-b from-[#09090e] via-[#0d0d15] to-[#09090e] ${className}`}
     >
       {children}
     </div>
@@ -42,7 +42,7 @@ function MetricPill({
   tone?: string;
 }) {
   return (
-    <div className="rounded-xl border border-white/5 bg-black/20 px-3 py-2 text-[10px] font-mono uppercase tracking-[0.2em] text-slate-500">
+    <div className="rounded-xl border border-white/5 bg-black/20 px-3 py-2 text-[10px] font-mono uppercase tracking-[0.2em] text-demo-text-muted">
       {label} <span className={tone}>{value}</span>
     </div>
   );
@@ -50,17 +50,17 @@ function MetricPill({
 
 function ScrollLinkedIntro() {
   return (
-    <div className="rounded-[2rem] border border-[#2a2a3a] bg-linear-to-br from-[#11111a] via-[#0e1018] to-[#0a0a10] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.28)]">
+    <div className="rounded-[2rem] border border-demo-border bg-linear-to-br from-[#11111a] via-[#0e1018] to-[#0a0a10] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.28)]">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl space-y-3">
-          <div className="text-[10px] font-mono uppercase tracking-[0.34em] text-[#ffd11a]">
+          <div className="text-[10px] font-mono uppercase tracking-[0.34em] text-demo-accent">
             Observer-Driven Motion Studies
           </div>
           <h3 className="text-2xl font-black uppercase tracking-[0.12em] text-white">
             Derive Styles Directly From ScrollObserver Progress
           </h3>
-          <p className="max-w-xl text-sm leading-6 text-slate-400">
-            These examples intentionally stay on <code className="text-[#ffd11a]">useAnimeOnScroll()</code>
+          <p className="max-w-xl text-sm leading-6 text-demo-text-secondary">
+            These examples intentionally stay on <code className="text-demo-accent">useAnimeOnScroll()</code>
             because the observer is the source of truth. Each card maps raw
             progress into transforms, blur, opacity, clip-path, and color instead
             of just triggering one animation instance.
@@ -71,7 +71,7 @@ function ScrollLinkedIntro() {
           <MetricPill
             label="preferred api"
             value="useAnimeOnScroll"
-            tone="text-[#ffd11a]"
+            tone="text-demo-accent"
           />
           <MetricPill
             label="best for"
@@ -117,7 +117,7 @@ function DepthStackDemo() {
         <ScrollHint />
         <Panel containerRef={containerRef}>
           <div className="flex h-180 flex-col items-center justify-center px-6 py-10">
-            <div className="mb-6 text-center text-xs text-slate-500">
+            <div className="mb-6 text-center text-xs text-demo-text-muted">
               Foreground layers pull upward while distant layers sink deeper into the scene
             </div>
 
@@ -151,7 +151,7 @@ function DepthStackDemo() {
                     >
                       {layer.label}
                     </div>
-                    <div className="text-xs text-slate-500">
+                    <div className="text-xs text-demo-text-muted">
                       Layer {index + 1} drift {layer.drift.toFixed(2)}
                     </div>
                   </div>
@@ -270,7 +270,7 @@ function ConveyorDemo() {
           <div className="flex h-155 flex-col items-center justify-center gap-6 px-6 py-10">
             <div
               ref={ref}
-              className="w-full max-w-sm overflow-hidden rounded-[1.75rem] border border-[#2a2a3a] bg-[#12121a]"
+              className="w-full max-w-sm overflow-hidden rounded-[1.75rem] border border-demo-border bg-demo-bg"
             >
               <div
                 className="flex w-[400%] transition-transform duration-75"
@@ -288,7 +288,7 @@ function ConveyorDemo() {
                     }}
                   >
                     <div className="text-center">
-                      <div className="text-[10px] font-mono uppercase tracking-[0.34em] text-slate-500">
+                      <div className="text-[10px] font-mono uppercase tracking-[0.34em] text-demo-text-muted">
                         panel {index + 1}
                       </div>
                       <div className="mt-2 text-2xl font-black uppercase tracking-[0.28em] text-white">
@@ -301,7 +301,7 @@ function ConveyorDemo() {
             </div>
 
             <div className="grid w-full max-w-sm grid-cols-3 gap-3">
-              <MetricPill label="progress" value={`${Math.round(state.progress * 100)}%`} tone="text-[#ffd11a]" />
+              <MetricPill label="progress" value={`${Math.round(state.progress * 100)}%`} tone="text-demo-accent" />
               <MetricPill label="velocity" value={state.velocity.toFixed(2)} tone="text-cyan-400" />
               <MetricPill label="scroll" value={`${Math.round(state.scroll)}`} tone="text-fuchsia-400" />
             </div>
@@ -339,7 +339,7 @@ function MorphTileDemo() {
         <ScrollHint />
         <Panel containerRef={containerRef}>
           <div className="flex h-160 flex-col items-center justify-center gap-5 px-6 py-10">
-            <div className="text-center text-xs text-slate-500">
+            <div className="text-center text-xs text-demo-text-muted">
               The object tightens into a rounded capsule as it crosses the center band
             </div>
 
@@ -367,7 +367,7 @@ function MorphTileDemo() {
             </div>
 
             <div className="grid w-full max-w-sm grid-cols-3 gap-3">
-              <MetricPill label="scale" value={scale.toFixed(2)} tone="text-[#ffd11a]" />
+              <MetricPill label="scale" value={scale.toFixed(2)} tone="text-demo-accent" />
               <MetricPill label="rotate" value={`${Math.round(rotate)}deg`} tone="text-cyan-400" />
               <MetricPill label="radius" value={`${Math.round(radius)}px`} tone="text-fuchsia-400" />
             </div>
@@ -425,18 +425,18 @@ function SpectrumMeterDemo() {
                 <div className="mt-3 text-2xl font-black text-white">
                   {Math.round(progress * 100)}%
                 </div>
-                <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.3em] text-slate-400">
+                <div className="mt-1 text-[10px] font-mono uppercase tracking-[0.3em] text-demo-text-secondary">
                   chroma
                 </div>
               </div>
             </div>
 
             <div className="w-full max-w-sm space-y-2">
-              <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.22em] text-slate-500">
+              <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.22em] text-demo-text-muted">
                 <span>hue {Math.round(hue)}</span>
                 <span>arc {Math.round(arc)}deg</span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-slate-800/60">
+              <div className="h-2 overflow-hidden rounded-full bg-demo-card/60">
                 <div
                   className="h-full transition-[width] duration-75"
                   style={{
@@ -495,13 +495,13 @@ function CopyRevealDemo() {
                 }}
               >
                 <div
-                  className="text-3xl font-black uppercase text-[#ffd11a]"
+                  className="text-3xl font-black uppercase text-demo-accent"
                   style={{ letterSpacing: `${0.1 + progress * 0.22}em` }}
                 >
                   Scroll Linked
                 </div>
               </div>
-              <div className="mt-4 text-sm text-slate-400">
+              <div className="mt-4 text-sm text-demo-text-secondary">
                 Motion, contrast, and typography all respond to the same scroll observer.
               </div>
             </div>
@@ -528,7 +528,7 @@ function WaveBarDemo() {
       title="wave bars"
       description="A reactive equalizer where each bar samples the same observer progress with a slightly shifted phase."
       actions={
-        <div className="rounded-lg bg-white/5 p-2 text-slate-400">
+        <div className="rounded-lg bg-white/5 p-2 text-demo-text-secondary">
           <Waves className="h-4 w-4" />
         </div>
       }
@@ -569,7 +569,7 @@ function WaveBarDemo() {
             </div>
 
             <div className="grid w-full max-w-sm grid-cols-2 gap-3">
-              <MetricPill label="offset start" value={`${Math.round(state.offsetStart)}`} tone="text-[#ffd11a]" />
+              <MetricPill label="offset start" value={`${Math.round(state.offsetStart)}`} tone="text-demo-accent" />
               <MetricPill label="offset end" value={`${Math.round(state.offsetEnd)}`} tone="text-cyan-400" />
             </div>
           </div>

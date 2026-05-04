@@ -79,7 +79,7 @@ export const ScopeMethodsDemo: React.FC = () => {
         <div className="flex flex-wrap gap-2 justify-center">
           <button
             onClick={() => methods.pulse?.()}
-            className="px-3 py-1.5 bg-[#ffd11a]/10 hover:bg-[#ffd11a]/20 border border-[#ffd11a]/30 rounded-lg text-[#ffd11a] text-xs font-medium transition-all"
+            className="px-3 py-1.5 bg-demo-accent/10 hover:bg-demo-accent/20 border border-demo-accent/30 rounded-lg text-demo-accent text-xs font-medium transition-all"
           >
             pulse()
           </button>
@@ -110,8 +110,8 @@ export const ScopeMethodsDemo: React.FC = () => {
         </div>
 
         {/* Log output */}
-        <div className="w-full max-w-xs bg-black/30 rounded-lg p-3 border border-[#2a2a3a]">
-          <div className="text-[10px] text-slate-500 mb-2 uppercase tracking-wider">
+        <div className="w-full max-w-xs bg-black/30 rounded-lg p-3 border border-demo-border">
+          <div className="text-[10px] text-demo-text-muted mb-2 uppercase tracking-wider">
             Console
           </div>
           <div className="space-y-1 font-mono text-[11px] max-h-24 overflow-y-auto">

@@ -34,8 +34,8 @@ export const SplitTextCjkDemo: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-tighter transition-all ${
                 lang === l
-                  ? 'bg-[#ffd11a] text-[#12121a]'
-                  : 'bg-slate-800 text-slate-400 hover:text-white'
+                  ? 'bg-demo-accent text-demo-bg'
+                  : 'bg-demo-card text-demo-text-secondary hover:text-white'
               }`}
             >
               {l}
@@ -43,7 +43,7 @@ export const SplitTextCjkDemo: React.FC = () => {
           ))}
         </div>
 
-        <div className="bg-[#1a1a24]/50 rounded-2xl p-8 border border-white/5 min-h-30 flex items-center justify-center overflow-hidden">
+        <div className="bg-demo-card/50 rounded-2xl p-8 border border-white/5 min-h-30 flex items-center justify-center overflow-hidden">
           <AnimeTimeline key={lang} loop autoplay defaults={{ ease: 'outBack', duration: 400 }}>
             <SplitText
               ref={splitRef}
@@ -68,7 +68,7 @@ export const SplitTextCjkDemo: React.FC = () => {
           </AnimeTimeline>
         </div>
 
-        <div className="text-[10px] text-slate-500 space-y-1 opacity-60 font-medium">
+        <div className="text-[10px] text-demo-text-muted space-y-1 opacity-60 font-medium">
           <p>• Uses Intl.Segmenter for word boundaries</p>
           <p>• Continuous declarative loop animation</p>
         </div>

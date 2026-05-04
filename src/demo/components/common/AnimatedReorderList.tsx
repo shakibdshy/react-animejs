@@ -128,19 +128,19 @@ export function ReorderListPreset({
         <div className="flex gap-2 justify-center">
           <button
             onClick={shuffle}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#ffd11a] text-[#12121a] rounded-lg hover:bg-[#ffd11a]/90 transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-accent text-demo-bg rounded-lg hover:bg-demo-accent/90 transition-colors"
           >
             Shuffle
           </button>
           <button
             onClick={reverse}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#2a2a3a] text-[#e0e0e0] rounded-lg hover:bg-[#3a3a4a] transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text rounded-lg hover:bg-demo-border-hover transition-colors"
           >
             Reverse
           </button>
           <button
             onClick={reset}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#2a2a3a] text-slate-400 rounded-lg hover:bg-[#3a3a4a] hover:text-[#e0e0e0] transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text-secondary rounded-lg hover:bg-demo-border-hover hover:text-demo-text transition-colors"
           >
             Reset
           </button>
@@ -160,7 +160,7 @@ export function ReorderListPreset({
       >
         {items.map((item, index) => (
           <AnimeLayoutItem key={item.id} layoutId={item.id}>
-            <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#2a2a3a] bg-[#12121a] hover:border-white/10 transition-colors group">
+            <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-demo-border bg-demo-bg hover:border-white/10 transition-colors group">
               {/* Drag handle dots */}
               <div className="flex flex-col gap-0.5 cursor-grab active:cursor-grabbing">
                 <svg width="12" height="12" viewBox="0 0 12 12" className="text-slate-600">
@@ -178,14 +178,14 @@ export function ReorderListPreset({
               />
 
               {/* Label */}
-              <span className="flex-1 text-sm font-bold text-[#e0e0e0]">{item.label}</span>
+              <span className="flex-1 text-sm font-bold text-demo-text">{item.label}</span>
 
               {/* Move buttons */}
               <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => move(index, index - 1)}
                   disabled={index === 0}
-                  className="w-6 h-6 flex items-center justify-center rounded bg-white/5 text-slate-500 hover:text-white hover:bg-white/10 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+                  className="w-6 h-6 flex items-center justify-center rounded bg-white/5 text-demo-text-muted hover:text-white hover:bg-white/10 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
                 >
                   <svg
                     width="12"
@@ -203,7 +203,7 @@ export function ReorderListPreset({
                 <button
                   onClick={() => move(index, index + 1)}
                   disabled={index === items.length - 1}
-                  className="w-6 h-6 flex items-center justify-center rounded bg-white/5 text-slate-500 hover:text-white hover:bg-white/10 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+                  className="w-6 h-6 flex items-center justify-center rounded bg-white/5 text-demo-text-muted hover:text-white hover:bg-white/10 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
                 >
                   <svg
                     width="12"

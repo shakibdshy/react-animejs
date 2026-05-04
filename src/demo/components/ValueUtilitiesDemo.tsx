@@ -62,10 +62,10 @@ export const ValueUtilitiesDemo: React.FC = () => {
         {/* Round Demo */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <span className="text-xs text-slate-400">round(value)</span>
+            <span className="text-xs text-demo-text-secondary">round(value)</span>
             <button
               onClick={handleRound}
-              className="text-xs bg-[#ffd11a] text-black px-3 py-1 rounded-full font-medium hover:bg-[#ffd11a]/80 transition-colors"
+              className="text-xs bg-demo-accent text-black px-3 py-1 rounded-full font-medium hover:bg-demo-accent/80 transition-colors"
             >
               Round
             </button>
@@ -77,18 +77,18 @@ export const ValueUtilitiesDemo: React.FC = () => {
             step="0.0001"
             value={roundValue}
             onChange={(e) => setRoundValue(parseFloat(e.target.value))}
-            className="w-full accent-[#ffd11a]"
+            className="w-full accent-demo-accent"
           />
           <div className="flex justify-between text-xs mt-2">
-            <span className="text-slate-500">{roundValue.toFixed(4)}</span>
-            <span className="text-[#ffd11a] font-bold">{roundResult}</span>
+            <span className="text-demo-text-muted">{roundValue.toFixed(4)}</span>
+            <span className="text-demo-accent font-bold">{roundResult}</span>
           </div>
         </div>
 
         {/* KeepTime Demo */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <span className="text-xs text-slate-400">keepTime(constructor)</span>
+            <span className="text-xs text-demo-text-secondary">keepTime(constructor)</span>
             <button
               onClick={handleKeepTime}
               className="text-xs bg-[#4ecdc4] text-black px-3 py-1 rounded-full font-medium hover:bg-[#4ecdc4]/80 transition-colors"
@@ -100,10 +100,10 @@ export const ValueUtilitiesDemo: React.FC = () => {
             ref={box2Ref}
             className="w-12 h-12 bg-[#4ecdc4] rounded-lg"
           />
-          <div className="text-[10px] text-slate-500 mt-2">
+          <div className="text-[10px] text-demo-text-muted mt-2">
             keepTime preserves animation progress when recreated
           </div>
-          <div className="text-xs text-[#ffd11a] font-mono mt-1">
+          <div className="text-xs text-demo-accent font-mono mt-1">
             Elapsed: {keepTimeElapsed.toFixed(0)}ms
           </div>
         </div>

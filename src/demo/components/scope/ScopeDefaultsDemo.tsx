@@ -70,7 +70,7 @@ export const ScopeDefaultsDemo: React.FC = () => {
           <select
             value={ease}
             onChange={(e) => setEase(e.target.value)}
-            className="bg-black/30 border border-[#2a2a3a] rounded-lg px-2 py-1 text-xs text-slate-300 focus:outline-none focus:border-[#ffd11a]/50"
+            className="bg-black/30 border border-demo-border rounded-lg px-2 py-1 text-xs text-slate-300 focus:outline-none focus:border-demo-accent/50"
           >
             {EASINGS.map((e) => (
               <option key={e} value={e}>
@@ -85,7 +85,7 @@ export const ScopeDefaultsDemo: React.FC = () => {
             step={100}
             value={duration}
             onChange={(e) => setDuration(Number(e.target.value))}
-            className="w-20 accent-[#ffd11a]"
+            className="w-20 accent-demo-accent"
             title={`Duration: ${duration}ms`}
           />
         </div>
@@ -104,22 +104,22 @@ export const ScopeDefaultsDemo: React.FC = () => {
         className="w-full flex flex-col gap-4 items-start pl-4"
       >
         <div className="flex items-center gap-4 w-full">
-          <div className="defaults-box-1 w-10 h-10 rounded-xl bg-linear-to-br from-[#ffd11a] to-[#ff8c00] shadow-lg shadow-[#ffd11a]/30" />
-          <span className="text-xs text-slate-500 font-mono">rotate: 180°</span>
+          <div className="defaults-box-1 w-10 h-10 rounded-xl bg-linear-to-br from-demo-accent to-[#ff8c00] shadow-lg shadow-demo-accent/30" />
+          <span className="text-xs text-demo-text-muted font-mono">rotate: 180°</span>
         </div>
         <div className="flex items-center gap-4 w-full">
           <div className="defaults-box-2 w-10 h-10 rounded-xl bg-linear-to-br from-[#06b6d4] to-[#0891b2] shadow-lg shadow-cyan-500/30" />
-          <span className="text-xs text-slate-500 font-mono">scale: 1.2x</span>
+          <span className="text-xs text-demo-text-muted font-mono">scale: 1.2x</span>
         </div>
         <div className="flex items-center gap-4 w-full">
           <div className="defaults-box-3 w-10 h-10 rounded-xl bg-linear-to-br from-[#10b981] to-[#059669] shadow-lg shadow-emerald-500/30" />
-          <span className="text-xs text-slate-500 font-mono">
+          <span className="text-xs text-demo-text-muted font-mono">
             borderRadius: 50%
           </span>
         </div>
 
         {/* Current defaults display */}
-        <div className="mt-2 w-full flex gap-4 justify-center text-[10px] text-slate-500 font-mono">
+        <div className="mt-2 w-full flex gap-4 justify-center text-[10px] text-demo-text-muted font-mono">
           <span>ease: {ease}</span>
           <span>•</span>
           <span>duration: {duration}ms</span>

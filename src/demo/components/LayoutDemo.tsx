@@ -67,28 +67,28 @@ export const LayoutDemo: React.FC = () => {
         <div className="flex gap-1 bg-black/20 p-1 rounded-xl">
           <button
             onClick={() => setGridColumns(2)}
-            className={`p-1.5 rounded-lg transition-all ${cols === 2 ? "bg-[#ffd11a] text-[#12121a]" : "text-slate-500 hover:text-white"}`}
+            className={`p-1.5 rounded-lg transition-all ${cols === 2 ? "bg-demo-accent text-demo-bg" : "text-demo-text-muted hover:text-white"}`}
             title="2 Columns"
           >
             <Columns size={12} />
           </button>
           <button
             onClick={() => setGridColumns(3)}
-            className={`p-1.5 rounded-lg transition-all ${cols === 3 ? "bg-[#ffd11a] text-[#12121a]" : "text-slate-500 hover:text-white"}`}
+            className={`p-1.5 rounded-lg transition-all ${cols === 3 ? "bg-demo-accent text-demo-bg" : "text-demo-text-muted hover:text-white"}`}
             title="3 Columns"
           >
             <Grid3X3 size={12} />
           </button>
           <button
             onClick={() => setGridColumns(4)}
-            className={`p-1.5 rounded-lg transition-all ${cols === 4 ? "bg-[#ffd11a] text-[#12121a]" : "text-slate-500 hover:text-white"}`}
+            className={`p-1.5 rounded-lg transition-all ${cols === 4 ? "bg-demo-accent text-demo-bg" : "text-demo-text-muted hover:text-white"}`}
             title="4 Columns"
           >
             <Grid2X2 size={12} />
           </button>
           <button
             onClick={toggleItem}
-            className={`p-1.5 rounded-lg transition-all ${isHidden ? "bg-orange-500 text-white" : "text-slate-500 hover:text-white"}`}
+            className={`p-1.5 rounded-lg transition-all ${isHidden ? "bg-orange-500 text-white" : "text-demo-text-muted hover:text-white"}`}
             title="Toggle Item 4"
           >
             <Split size={12} />
@@ -115,7 +115,7 @@ export const LayoutDemo: React.FC = () => {
             key={n}
             layoutId={`item-${n}`}
             data-layout-demo-item={n}
-            className="h-12 flex items-center justify-center rounded-xl bg-[#ffd11a]/10 border border-[#ffd11a]/20 text-[#ffd11a] font-bold text-sm shadow-sm transition-colors hover:bg-[#ffd11a]/20 cursor-pointer"
+            className="h-12 flex items-center justify-center rounded-xl bg-demo-accent/10 border border-demo-accent/20 text-demo-accent font-bold text-sm shadow-sm transition-colors hover:bg-demo-accent/20 cursor-pointer"
             onClick={n === 4 ? toggleItem : undefined}
           >
             {n}

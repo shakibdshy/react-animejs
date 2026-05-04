@@ -45,7 +45,7 @@ export const LayoutStaggerDemo: React.FC = () => {
         <div className="flex gap-2">
           <button
             onClick={toggleLayout}
-            className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-[#ffd11a] rounded-lg transition-all"
+            className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-demo-accent rounded-lg transition-all"
             title="Toggle orientation"
           >
             <Layout size={16} className={isRow ? "rotate-90" : ""} />
@@ -70,11 +70,11 @@ export const LayoutStaggerDemo: React.FC = () => {
         {/* Controls */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-black/20 p-4 rounded-2xl border border-white/5">
           <div className="flex flex-col gap-2">
-            <div className="flex justify-between text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+            <div className="flex justify-between text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
               <label className="flex items-center gap-1.5">
                 <Target size={10} /> Stagger From
               </label>
-              <span className="text-[#ffd11a] capitalize">{staggerFrom}</span>
+              <span className="text-demo-accent capitalize">{staggerFrom}</span>
             </div>
             <div className="flex gap-1">
               {(["first", "center", "last"] as const).map((pos) => (
@@ -83,8 +83,8 @@ export const LayoutStaggerDemo: React.FC = () => {
                   onClick={() => setStaggerFrom(pos)}
                   className={`flex-1 py-1 text-[10px] font-bold uppercase rounded-md transition-all ${
                     staggerFrom === pos
-                      ? "bg-[#ffd11a] text-[#12121a]"
-                      : "bg-white/5 text-slate-500 hover:bg-white/10"
+                      ? "bg-demo-accent text-demo-bg"
+                      : "bg-white/5 text-demo-text-muted hover:bg-white/10"
                   }`}
                 >
                   {pos}
@@ -94,11 +94,11 @@ export const LayoutStaggerDemo: React.FC = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <div className="flex justify-between text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+            <div className="flex justify-between text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
               <label className="flex items-center gap-1.5">
                 <Sliders size={10} /> Stagger Delay
               </label>
-              <span className="text-[#ffd11a]">{staggerDelay}ms</span>
+              <span className="text-demo-accent">{staggerDelay}ms</span>
             </div>
             <input
               type="range"
@@ -106,7 +106,7 @@ export const LayoutStaggerDemo: React.FC = () => {
               max="200"
               value={staggerDelay}
               onChange={(e) => setStaggerDelay(Number(e.target.value))}
-              className="w-full h-1 bg-slate-800 rounded-full appearance-none cursor-pointer accent-[#ffd11a]"
+              className="w-full h-1 bg-demo-card rounded-full appearance-none cursor-pointer accent-demo-accent"
             />
           </div>
         </div>
@@ -122,7 +122,7 @@ export const LayoutStaggerDemo: React.FC = () => {
           {items.map((item, index) => (
             <AnimeLayoutItem
               key={item}
-              className="stagger-item flex-1 flex items-center justify-center rounded-xl bg-[#ffd11a]/5 border border-[#ffd11a]/10 text-[#ffd11a] font-bold text-lg shadow-sm"
+              className="stagger-item flex-1 flex items-center justify-center rounded-xl bg-demo-accent/5 border border-demo-accent/10 text-demo-accent font-bold text-lg shadow-sm"
               style={{
                 borderColor: `hsla(${200 + index * 25}, 70%, 50%, 0.3)`,
                 backgroundColor: `hsla(${200 + index * 25}, 70%, 50%, 0.1)`,

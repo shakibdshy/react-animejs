@@ -57,18 +57,18 @@ export const ScopeKeepTimeDemo: React.FC = () => {
       description="Using AnimeScope component with ref to call keepTime() - preserve animation progress when refreshing the scope."
       actions={
         <div className="flex gap-2 items-center">
-          <label className="flex items-center gap-2 text-xs text-slate-400">
+          <label className="flex items-center gap-2 text-xs text-demo-text-secondary">
             <input
               type="checkbox"
               checked={preserveTime}
               onChange={(e) => setPreserveTime(e.target.checked)}
-              className="accent-[#ffd11a]"
+              className="accent-demo-accent"
             />
             Keep Time
           </label>
           <button
             onClick={handleRefresh}
-            className="flex items-center gap-1 px-2 py-1 bg-[#ffd11a]/20 hover:bg-[#ffd11a]/30 border border-[#ffd11a]/30 rounded-lg text-[#ffd11a] text-xs transition-all"
+            className="flex items-center gap-1 px-2 py-1 bg-demo-accent/20 hover:bg-demo-accent/30 border border-demo-accent/30 rounded-lg text-demo-accent text-xs transition-all"
           >
             <RefreshCw size={12} />
             Refresh
@@ -107,8 +107,8 @@ scopeRef.current?.refresh();`}
         >
           {/* Animated element */}
           <div className="w-full flex items-center justify-center min-h-20">
-            <div className="keeptime-box w-14 h-14 rounded-xl bg-linear-to-br from-[#ffd11a] to-[#ff8c00] shadow-lg shadow-[#ffd11a]/30 flex items-center justify-center">
-              <Clock className="w-6 h-6 text-[#1a1a24]" />
+            <div className="keeptime-box w-14 h-14 rounded-xl bg-linear-to-br from-demo-accent to-[#ff8c00] shadow-lg shadow-demo-accent/30 flex items-center justify-center">
+              <Clock className="w-6 h-6 text-demo-card" />
             </div>
           </div>
         </AnimeScope>
@@ -116,7 +116,7 @@ scopeRef.current?.refresh();`}
         {/* Progress display */}
         <div className="flex gap-6 text-xs">
           <div className="flex flex-col items-center gap-1">
-            <span className="text-slate-500 text-[10px] uppercase tracking-wider">
+            <span className="text-demo-text-muted text-[10px] uppercase tracking-wider">
               Before Refresh
             </span>
             <span className="font-mono text-lg text-slate-300">
@@ -125,7 +125,7 @@ scopeRef.current?.refresh();`}
           </div>
           <div className="flex items-center text-slate-600">{"->"}</div>
           <div className="flex flex-col items-center gap-1">
-            <span className="text-slate-500 text-[10px] uppercase tracking-wider">
+            <span className="text-demo-text-muted text-[10px] uppercase tracking-wider">
               After Refresh
             </span>
             <span
@@ -141,11 +141,11 @@ scopeRef.current?.refresh();`}
         {/* Status */}
         <div className="flex gap-4 text-xs">
           <div className="flex items-center gap-2">
-            <span className="text-slate-500">Refreshes:</span>
-            <span className="font-mono text-[#ffd11a]">{refreshCount}</span>
+            <span className="text-demo-text-muted">Refreshes:</span>
+            <span className="font-mono text-demo-accent">{refreshCount}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-slate-500">Mode:</span>
+            <span className="text-demo-text-muted">Mode:</span>
             <span
               className={`font-mono ${
                 preserveTime ? "text-green-400" : "text-red-400"
@@ -157,7 +157,7 @@ scopeRef.current?.refresh();`}
         </div>
 
         {/* Info */}
-        <div className="text-[10px] text-slate-500 text-center max-w-sm">
+        <div className="text-[10px] text-demo-text-muted text-center max-w-sm">
           {preserveTime ? (
             <>
               With <code className="text-green-400">keepTime()</code>, animation

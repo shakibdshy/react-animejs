@@ -31,7 +31,7 @@ export const JsObjectDemo: React.FC = () => {
   return (
     <DemoSection title="JavaScript Object Targets">
       <div className="flex flex-col items-center gap-6 w-full">
-        <div className="bg-[#1a1a24] p-6 rounded-xl border border-[#2a2a3a] w-full font-mono text-sm">
+        <div className="bg-demo-card p-6 rounded-xl border border-demo-border w-full font-mono text-sm">
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
               <span className="text-gray-500">const vector2D = {'{'}</span>
@@ -50,7 +50,7 @@ export const JsObjectDemo: React.FC = () => {
           </div>
         </div>
 
-        <div className="relative w-full h-40 bg-[#1a1a24] rounded-xl overflow-hidden border border-[#2a2a3a]">
+        <div className="relative w-full h-40 bg-demo-card rounded-xl overflow-hidden border border-demo-border">
           {/* Grid background */}
           <div className="absolute inset-0 opacity-10" 
                style={{ backgroundImage: 'radial-gradient(#6366f1 1px, transparent 1px)', backgroundSize: '20px 20px' }} />

@@ -104,7 +104,7 @@ export const ScopeRevertDemo: React.FC = () => {
           )}
           <button
             onClick={handleReset}
-            className="p-1.5 hover:bg-white/5 rounded-lg text-slate-400 hover:text-white transition-colors"
+            className="p-1.5 hover:bg-white/5 rounded-lg text-demo-text-secondary hover:text-white transition-colors"
             title="Reset"
           >
             <RotateCcw size={14} />
@@ -128,7 +128,7 @@ export const ScopeRevertDemo: React.FC = () => {
         {/* Status display */}
         <div className="flex flex-col items-center gap-2">
           <div className="flex items-center gap-3">
-            <span className="text-xs text-slate-500">Status:</span>
+            <span className="text-xs text-demo-text-muted">Status:</span>
             <span
               className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                 status === "idle"
@@ -144,9 +144,9 @@ export const ScopeRevertDemo: React.FC = () => {
             </span>
           </div>
 
-          <div className="text-[11px] text-slate-500 font-mono">
+          <div className="text-[11px] text-demo-text-muted font-mono">
             Active animations:{" "}
-            <span className="text-[#ffd11a]">{animationCount}</span>
+            <span className="text-demo-accent">{animationCount}</span>
           </div>
         </div>
 

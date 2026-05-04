@@ -83,9 +83,9 @@ function MultipleTogglesDemo() {
         {Object.entries(settings).map(([key, val]) => (
           <div
             key={key}
-            className="flex items-center justify-between bg-[#1a1a24] p-3 rounded-xl border border-[#2a2a3a]"
+            className="flex items-center justify-between bg-demo-card p-3 rounded-xl border border-demo-border"
           >
-            <span className="text-sm capitalize text-[#e0e0e0]">
+            <span className="text-sm capitalize text-demo-text">
               {key.replace(/([A-Z])/g, " $1").trim()}
             </span>
             <ToggleSwitch checked={val} onChange={update(key)} />

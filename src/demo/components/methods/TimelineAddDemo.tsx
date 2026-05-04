@@ -33,12 +33,12 @@ export const TimelineAddDemo: React.FC = () => {
     >
       <div
         ref={boxRef}
-        className="w-16 h-16 bg-[#ffd11a] rounded-xl shadow-[0_0_20px_rgba(255,209,26,0.2)]"
+        className="w-16 h-16 bg-demo-accent rounded-xl shadow-[0_0_20px_rgba(255,209,26,0.2)]"
       />
 
       <button
         onClick={handleAddAnimation}
-        className="absolute bottom-4 right-4 px-4 py-2 bg-[#ffd11a] hover:bg-[#ffe066] text-[#12121a] rounded-lg transition-all font-bold text-xs uppercase tracking-tighter"
+        className="absolute bottom-4 right-4 px-4 py-2 bg-demo-accent hover:bg-[#ffe066] text-demo-bg rounded-lg transition-all font-bold text-xs uppercase tracking-tighter"
       >
         Add & Play
       </button>

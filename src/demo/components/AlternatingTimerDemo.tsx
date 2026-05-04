@@ -14,17 +14,17 @@ export function AlternatingTimerDemo() {
 
   if (!isMounted) {
     return (
-      <div className="flex flex-col items-center gap-8 p-8 bg-[#050508] border border-[#2a2a3a] rounded-xl">
+      <div className="flex flex-col items-center gap-8 p-8 bg-demo-bg border border-demo-border rounded-xl">
         <div className="text-[#666]">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 p-8 bg-[#050508] border border-[#2a2a3a] rounded-xl">
+    <div className="flex flex-col items-center gap-8 p-8 bg-demo-bg border border-demo-border rounded-xl">
       <div className="flex gap-12 w-full justify-center">
-        <div className="flex flex-col items-center gap-2 p-6 bg-[#0a0a10] border border-[#2a2a3a] rounded-lg">
-          <span className="text-xs uppercase tracking-widest text-[#888] font-bold">
+        <div className="flex flex-col items-center gap-2 p-6 bg-demo-bg border border-demo-border rounded-lg">
+          <span className="text-xs uppercase tracking-widest text-demo-text-secondary font-bold">
             loops count
           </span>
           <span
@@ -35,8 +35,8 @@ export function AlternatingTimerDemo() {
           </span>
         </div>
 
-        <div className="flex flex-col items-center gap-2 p-6 bg-[#0a0a10] border border-[#2a2a3a] rounded-lg">
-          <span className="text-xs uppercase tracking-widest text-[#888] font-bold">
+        <div className="flex flex-col items-center gap-2 p-6 bg-demo-bg border border-demo-border rounded-lg">
+          <span className="text-xs uppercase tracking-widest text-demo-text-secondary font-bold">
             iteration time
           </span>
           <span

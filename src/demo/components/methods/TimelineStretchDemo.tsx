@@ -31,7 +31,7 @@ const TimelineStretchDemo: React.FC = () => {
   return (
     <DemoSection title="timeline.stretch()">
       <div className="space-y-6 w-full">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-demo-text-secondary">
           Modifies the total duration of the timeline while maintaining the
           current progress percentage. The speed of the animation adjusts to fit
           the new duration.
@@ -43,7 +43,7 @@ const TimelineStretchDemo: React.FC = () => {
             className="w-12 h-12 bg-linear-to-br from-cyan-400 to-blue-600 rounded-lg shadow-xl shadow-blue-500/20"
           />
 
-          <div className="absolute top-2 right-4 text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+          <div className="absolute top-2 right-4 text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
             Timeline Duration:{" "}
             <span className="text-cyan-400 font-bold">
               {Math.round(state.duration)}ms
@@ -82,7 +82,7 @@ const TimelineStretchDemo: React.FC = () => {
                 className={`px-3 py-1.5 rounded-md text-[10px] font-bold uppercase transition-all ${
                   duration === d
                     ? "bg-cyan-500 text-white"
-                    : "bg-slate-800 text-slate-400 hover:bg-slate-700"
+                    : "bg-demo-card text-demo-text-secondary hover:bg-slate-700"
                 }`}
               >
                 {d / 1000}s
@@ -91,7 +91,7 @@ const TimelineStretchDemo: React.FC = () => {
           </div>
         </div>
 
-        <div className="text-xs text-slate-400 font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+        <div className="text-xs text-demo-text-secondary font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
           // Stretch duration while playing
           <br />
           controls.stretch({duration})

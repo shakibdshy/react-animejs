@@ -26,8 +26,8 @@ export function ReversedTimerDemo() {
   return (
     <DemoSection title="Reversed Timer">
       <div className="flex gap-12 w-full justify-center">
-        <div className="flex flex-col items-center gap-2 p-6 bg-[#0a0a10] border border-[#2a2a3a] rounded-lg">
-          <span className="text-xs uppercase tracking-widest text-[#888] font-bold">
+        <div className="flex flex-col items-center gap-2 p-6 bg-demo-bg border border-demo-border rounded-lg">
+          <span className="text-xs uppercase tracking-widest text-demo-text-secondary font-bold">
             iteration time
           </span>
           <span
@@ -38,8 +38,8 @@ export function ReversedTimerDemo() {
           </span>
         </div>
 
-        <div className="flex flex-col items-center gap-2 p-6 bg-[#0a0a10] border border-[#2a2a3a] rounded-lg">
-          <span className="text-xs uppercase tracking-widest text-[#888] font-bold">
+        <div className="flex flex-col items-center gap-2 p-6 bg-demo-bg border border-demo-border rounded-lg">
+          <span className="text-xs uppercase tracking-widest text-demo-text-secondary font-bold">
             current time
           </span>
           <span
@@ -60,13 +60,13 @@ export function ReversedTimerDemo() {
           Play
         </button>
         <button
-          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] hover:bg-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg active:scale-95 transition-all"
+          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border hover:bg-demo-border text-demo-text-muted hover:text-white rounded-lg active:scale-95 transition-all"
           onClick={controls.pause}
         >
           Pause
         </button>
         <button
-          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] hover:bg-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg active:scale-95 transition-all"
+          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border hover:bg-demo-border text-demo-text-muted hover:text-white rounded-lg active:scale-95 transition-all"
           onClick={() => controls.restart()}
         >
           Restart

@@ -135,33 +135,33 @@ export function Counter({
           translateY={[8, 0]}
           opacity={[0, 1]}
         >
-          <span className={`font-mono font-black text-[#ffd11a] tabular-nums ${sizeMap[size]}`}>
+          <span className={`font-mono font-black text-demo-accent tabular-nums ${sizeMap[size]}`}>
             {displayValue}
           </span>
         </Anime>
       </div>
 
-      {label && <span className="text-xs text-slate-500 uppercase tracking-widest">{label}</span>}
+      {label && <span className="text-xs text-demo-text-muted uppercase tracking-widest">{label}</span>}
 
       <div className="flex gap-2 mt-2">
         {!hasStarted || isComplete ? (
           <button
             onClick={handleStart}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#ffd11a] text-[#12121a] rounded-lg hover:bg-[#ffd11a]/90 transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-accent text-demo-bg rounded-lg hover:bg-demo-accent/90 transition-colors"
           >
             {isComplete ? 'Restart' : 'Start'}
           </button>
         ) : isRunning ? (
           <button
             onClick={handlePause}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#2a2a3a] text-[#e0e0e0] rounded-lg hover:bg-[#3a3a4a] transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text rounded-lg hover:bg-demo-border-hover transition-colors"
           >
             Pause
           </button>
         ) : (
           <button
             onClick={handleResume}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#ffd11a] text-[#12121a] rounded-lg hover:bg-[#ffd11a]/90 transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-accent text-demo-bg rounded-lg hover:bg-demo-accent/90 transition-colors"
           >
             Resume
           </button>
@@ -169,7 +169,7 @@ export function Counter({
         {hasStarted && (
           <button
             onClick={handleReset}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#2a2a3a] text-slate-400 rounded-lg hover:bg-[#3a3a4a] hover:text-[#e0e0e0] transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text-secondary rounded-lg hover:bg-demo-border-hover hover:text-demo-text transition-colors"
           >
             Reset
           </button>

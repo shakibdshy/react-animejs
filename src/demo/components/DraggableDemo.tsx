@@ -21,7 +21,7 @@ function BasicDraggable() {
       <h4 className="text-sm font-semibold text-gray-300">Basic Draggable</h4>
       <div
         ref={containerRef}
-        className="w-full h-48 bg-[#050508] border border-[#2a2a3a] border-dashed rounded-xl flex items-center justify-center relative overflow-hidden"
+        className="w-full h-48 bg-demo-bg border border-demo-border border-dashed rounded-xl flex items-center justify-center relative overflow-hidden"
       >
         <div
           ref={ref}
@@ -30,7 +30,7 @@ function BasicDraggable() {
           👆 Drag
         </div>
       </div>
-      <div className="px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#888] grid grid-cols-2 gap-2">
+      <div className="px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-demo-text-secondary grid grid-cols-2 gap-2">
         <div>
           Position: ({Math.round(position.x)}, {Math.round(position.y)})
         </div>
@@ -77,14 +77,14 @@ function TriggerDemo() {
       </p>
       <div
         ref={containerRef}
-        className="w-full h-40 bg-[#050508] border border-[#2a2a3a] border-dashed rounded-xl flex items-center justify-center relative overflow-hidden"
+        className="w-full h-40 bg-demo-bg border border-demo-border border-dashed rounded-xl flex items-center justify-center relative overflow-hidden"
       >
         <div
           ref={ref}
-          className={`w-48 bg-[#1a1a2e] border border-[#2a2a3a] rounded-xl shadow-lg select-none ${isDragging ? "shadow-2xl" : ""}`}
+          className={`w-48 bg-[#1a1a2e] border border-demo-border rounded-xl shadow-lg select-none ${isDragging ? "shadow-2xl" : ""}`}
         >
           {/* Drag Handle */}
-          <div className="drag-handle bg-[#2a2a3a] rounded-t-xl px-3 py-2 cursor-grab active:cursor-grabbing flex items-center gap-2 hover:bg-[#3a3a4a] transition-colors">
+          <div className="drag-handle bg-demo-border rounded-t-xl px-3 py-2 cursor-grab active:cursor-grabbing flex items-center gap-2 hover:bg-demo-border-hover transition-colors">
             <span className="text-gray-400 text-lg">≡</span>
             <span className="text-xs text-gray-400">Drag here</span>
           </div>
@@ -97,7 +97,7 @@ function TriggerDemo() {
           </div>
         </div>
       </div>
-      <div className="px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#888]">
+      <div className="px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-demo-text-secondary">
         Position: ({Math.round(position.x)}, {Math.round(position.y)})
       </div>
     </div>
@@ -141,7 +141,7 @@ function AxisConstrainedDraggable() {
       </h4>
       <div
         ref={containerRef}
-        className="w-full h-48 bg-[#050508] border border-[#2a2a3a] border-dashed rounded-xl flex items-center justify-center gap-8 relative overflow-hidden"
+        className="w-full h-48 bg-demo-bg border border-demo-border border-dashed rounded-xl flex items-center justify-center gap-8 relative overflow-hidden"
       >
         <div
           ref={xRef}
@@ -156,7 +156,7 @@ function AxisConstrainedDraggable() {
           ↕ Y
         </div>
       </div>
-      <div className="px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#888] flex gap-4">
+      <div className="px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-demo-text-secondary flex gap-4">
         <span>
           X-only: ({Math.round(xPos.x)}, {Math.round(xPos.y)})
         </span>
@@ -213,7 +213,7 @@ function ContainerFrictionDemo() {
       </p>
       <div
         ref={containerRef}
-        className="w-full h-48 bg-[#050508] border border-[#2a2a3a] border-dashed rounded-xl flex items-center justify-center gap-8 relative overflow-hidden"
+        className="w-full h-48 bg-demo-bg border border-demo-border border-dashed rounded-xl flex items-center justify-center gap-8 relative overflow-hidden"
       >
         <div
           ref={lowRef}
@@ -230,7 +230,7 @@ function ContainerFrictionDemo() {
           <span className="text-[8px] opacity-70">Rigid</span>
         </div>
       </div>
-      <div className="px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#888]">
+      <div className="px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-demo-text-secondary">
         <span className="text-red-400">
           Elastic: ({Math.round(lowPos.x)}, {Math.round(lowPos.y)})
         </span>
@@ -287,7 +287,7 @@ function SpringPhysicsDemo() {
       </h4>
       <div
         ref={containerRef}
-        className="w-full h-48 bg-[#050508] border border-[#2a2a3a] border-dashed rounded-xl flex items-center justify-center gap-6 relative overflow-hidden"
+        className="w-full h-48 bg-demo-bg border border-demo-border border-dashed rounded-xl flex items-center justify-center gap-6 relative overflow-hidden"
       >
         <div
           ref={bouncyRef}
@@ -311,7 +311,7 @@ function SpringPhysicsDemo() {
           <span className="text-[8px]">Heavy</span>
         </div>
       </div>
-      <div className="px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#888]">
+      <div className="px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-demo-text-secondary">
         <span className="text-yellow-400">Bouncy: stiff=200, damp=8</span>
         <span className="mx-2">|</span>
         <span className="text-cyan-400">Smooth: stiff=100, damp=20</span>
@@ -374,7 +374,7 @@ function VelocityDemo() {
       <h4 className="text-sm font-semibold text-gray-300">Velocity Settings</h4>
       <div
         ref={containerRef}
-        className="w-full h-48 bg-[#050508] border border-[#2a2a3a] border-dashed rounded-xl flex items-center justify-center gap-6 relative overflow-hidden"
+        className="w-full h-48 bg-demo-bg border border-demo-border border-dashed rounded-xl flex items-center justify-center gap-6 relative overflow-hidden"
       >
         <div
           ref={fastRef}
@@ -398,7 +398,7 @@ function VelocityDemo() {
           <span className="text-[8px]">Min=100</span>
         </div>
       </div>
-      <div className="px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#888]">
+      <div className="px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-demo-text-secondary">
         <span className="text-red-400">
           3x: v={Math.round(Math.hypot(fastVel.x, fastVel.y))}
         </span>
@@ -464,7 +464,7 @@ function DragSpeedDemo() {
       <p className="text-xs text-gray-500">How fast element follows cursor</p>
       <div
         ref={containerRef}
-        className="w-full h-48 bg-[#050508] border border-[#2a2a3a] border-dashed rounded-xl flex items-center justify-center gap-6 relative overflow-hidden"
+        className="w-full h-48 bg-demo-bg border border-demo-border border-dashed rounded-xl flex items-center justify-center gap-6 relative overflow-hidden"
       >
         <div
           ref={slowRef}
@@ -488,7 +488,7 @@ function DragSpeedDemo() {
           <span className="text-[8px]">2x</span>
         </div>
       </div>
-      <div className="px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#888]">
+      <div className="px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-demo-text-secondary">
         <span className="text-blue-400">
           Slow: ({Math.round(slowPos.x)}, {Math.round(slowPos.y)})
         </span>
@@ -527,14 +527,14 @@ function SnappingDraggable() {
     gridLines.push(
       <div
         key={`v-${i}`}
-        className="absolute top-0 bottom-0 w-px bg-[#2a2a3a] opacity-50"
+        className="absolute top-0 bottom-0 w-px bg-demo-border opacity-50"
         style={{ left: `${(i / 6) * 100}%` }}
       />,
     );
     gridLines.push(
       <div
         key={`h-${i}`}
-        className="absolute left-0 right-0 h-px bg-[#2a2a3a] opacity-50"
+        className="absolute left-0 right-0 h-px bg-demo-border opacity-50"
         style={{ top: `${(i / 4) * 100}%` }}
       />,
     );
@@ -547,7 +547,7 @@ function SnappingDraggable() {
       </h4>
       <div
         ref={containerRef}
-        className="w-full h-48 bg-[#050508] border border-[#2a2a3a] rounded-xl flex items-center justify-center relative overflow-hidden"
+        className="w-full h-48 bg-demo-bg border border-demo-border rounded-xl flex items-center justify-center relative overflow-hidden"
       >
         {gridLines}
         <div
@@ -557,7 +557,7 @@ function SnappingDraggable() {
           🧲
         </div>
       </div>
-      <div className="px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#888]">
+      <div className="px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-demo-text-secondary">
         <span>
           Position: ({Math.round(position.x)}, {Math.round(position.y)})
         </span>
@@ -606,7 +606,7 @@ function ReleaseEaseDemo() {
       <h4 className="text-sm font-semibold text-gray-300">Release Easing</h4>
       <div
         ref={containerRef}
-        className="w-full h-48 bg-[#050508] border border-[#2a2a3a] border-dashed rounded-xl flex items-center justify-center gap-6 relative overflow-hidden"
+        className="w-full h-48 bg-demo-bg border border-demo-border border-dashed rounded-xl flex items-center justify-center gap-6 relative overflow-hidden"
       >
         <div
           ref={outRef}
@@ -630,7 +630,7 @@ function ReleaseEaseDemo() {
           <span className="text-[8px]">bounce</span>
         </div>
       </div>
-      <div className="px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#888]">
+      <div className="px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-demo-text-secondary">
         Try flicking each element to see the different easing effects!
       </div>
     </div>
@@ -672,7 +672,7 @@ function CursorDemo() {
       </h4>
       <div
         ref={containerRef}
-        className="w-full h-40 bg-[#050508] border border-[#2a2a3a] border-dashed rounded-xl flex items-center justify-center gap-8 relative overflow-hidden"
+        className="w-full h-40 bg-demo-bg border border-demo-border border-dashed rounded-xl flex items-center justify-center gap-8 relative overflow-hidden"
       >
         <div
           ref={customRef}
@@ -732,7 +732,7 @@ function ControlledDraggable() {
       <h4 className="text-sm font-semibold text-gray-300">Control Methods</h4>
       <div
         ref={containerRef}
-        className="w-full h-48 bg-[#050508] border border-[#2a2a3a] border-dashed rounded-xl flex items-center justify-center relative overflow-hidden"
+        className="w-full h-48 bg-demo-bg border border-demo-border border-dashed rounded-xl flex items-center justify-center relative overflow-hidden"
       >
         <div
           ref={ref}
@@ -796,7 +796,7 @@ function ControlledDraggable() {
           ♻️ Refresh
         </button>
       </div>
-      <div className="px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#888]">
+      <div className="px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-demo-text-secondary">
         Position: ({Math.round(position.x)}, {Math.round(position.y)}) | Status:{" "}
         {isDisabled ? "🔒 Disabled" : "✅ Enabled"}
       </div>
@@ -837,7 +837,7 @@ function CallbackDraggable() {
       <div className="flex gap-4">
         <div
           ref={containerRef}
-          className="flex-1 h-48 bg-[#050508] border border-[#2a2a3a] border-dashed rounded-xl flex items-center justify-center relative overflow-hidden"
+          className="flex-1 h-48 bg-demo-bg border border-demo-border border-dashed rounded-xl flex items-center justify-center relative overflow-hidden"
         >
           <div
             ref={ref}
@@ -846,7 +846,7 @@ function CallbackDraggable() {
             📡
           </div>
         </div>
-        <div className="w-48 bg-[#050508] border border-[#2a2a3a] rounded-xl p-3 font-mono text-[10px]">
+        <div className="w-48 bg-demo-bg border border-demo-border rounded-xl p-3 font-mono text-[10px]">
           <div className="text-gray-400 mb-2 font-semibold">Event Log:</div>
           {events.length === 0 ? (
             <div className="text-gray-600 italic">Drag to see events...</div>
@@ -863,7 +863,7 @@ function CallbackDraggable() {
           )}
         </div>
       </div>
-      <div className="px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#888]">
+      <div className="px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-demo-text-secondary">
         Position: ({Math.round(position.x)}, {Math.round(position.y)})
       </div>
     </div>
@@ -909,7 +909,7 @@ function DragThresholdDemo() {
       </p>
       <div
         ref={containerRef}
-        className="w-full h-40 bg-[#050508] border border-[#2a2a3a] border-dashed rounded-xl flex items-center justify-center gap-8 relative overflow-hidden"
+        className="w-full h-40 bg-demo-bg border border-demo-border border-dashed rounded-xl flex items-center justify-center gap-8 relative overflow-hidden"
       >
         <div
           ref={noThreshRef}
@@ -928,7 +928,7 @@ function DragThresholdDemo() {
           <span className="text-[8px] opacity-70">30px delay</span>
         </div>
       </div>
-      <div className="px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#888]">
+      <div className="px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-demo-text-secondary">
         <span className="text-cyan-400">
           Immediate:{" "}
           {noThreshGrab ? (noThreshDrag ? "Dragging" : "Grabbed") : "Idle"}
@@ -959,7 +959,7 @@ export function DraggableDemo() {
         <BasicDraggable />
 
         {/* Settings Section */}
-        <div className="border-t border-[#2a2a3a] pt-8">
+        <div className="border-t border-demo-border pt-8">
           <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
             <span className="text-green-400">⚙️</span> Settings
           </h3>
@@ -974,7 +974,7 @@ export function DraggableDemo() {
         </div>
 
         {/* Physics Section */}
-        <div className="border-t border-[#2a2a3a] pt-8">
+        <div className="border-t border-demo-border pt-8">
           <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
             <span className="text-blue-400">🔬</span> Physics & Animation
           </h3>
@@ -987,7 +987,7 @@ export function DraggableDemo() {
         </div>
 
         {/* Methods & Callbacks Section */}
-        <div className="border-t border-[#2a2a3a] pt-8">
+        <div className="border-t border-demo-border pt-8">
           <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
             <span className="text-purple-400">🎮</span> Methods & Callbacks
           </h3>

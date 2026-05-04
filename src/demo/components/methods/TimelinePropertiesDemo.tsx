@@ -35,7 +35,7 @@ const TimelinePropertiesDemo: React.FC = () => {
     color?: string;
   }) => (
     <div className="flex justify-between items-center py-1 border-b border-white/5 last:border-0">
-      <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">
+      <span className="text-[10px] uppercase tracking-wider text-demo-text-muted font-bold">
         {label}
       </span>
       <span className={`text-[11px] font-mono ${color}`}>{String(value)}</span>
@@ -45,7 +45,7 @@ const TimelinePropertiesDemo: React.FC = () => {
   return (
     <DemoSection title="Timeline Properties">
       <div className="space-y-6 w-full">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-demo-text-secondary">
           Reactive access to all Timeline instance properties. These values
           update automatically as the animation progresses.
         </p>
@@ -73,13 +73,13 @@ const TimelinePropertiesDemo: React.FC = () => {
               </button>
               <button
                 onClick={() => controls.pause()}
-                className="flex-1 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-colors text-xs font-bold uppercase"
+                className="flex-1 px-4 py-2 bg-demo-card hover:bg-slate-700 text-slate-300 rounded-lg transition-colors text-xs font-bold uppercase"
               >
                 Pause
               </button>
               <button
                 onClick={() => controls.restart()}
-                className="flex-1 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-colors text-xs font-bold uppercase"
+                className="flex-1 px-4 py-2 bg-demo-card hover:bg-slate-700 text-slate-300 rounded-lg transition-colors text-xs font-bold uppercase"
               >
                 Restart
               </button>
@@ -87,7 +87,7 @@ const TimelinePropertiesDemo: React.FC = () => {
           </div>
 
           <div className="bg-black/40 p-4 rounded-xl border border-slate-800 space-y-1">
-            <PropertyRow label="ID" value={state.id} color="text-slate-400" />
+            <PropertyRow label="ID" value={state.id} color="text-demo-text-secondary" />
             <PropertyRow label="Progress" value={state.progress.toFixed(4)} />
             <PropertyRow
               label="Current Time"
@@ -96,7 +96,7 @@ const TimelinePropertiesDemo: React.FC = () => {
             <PropertyRow
               label="Duration"
               value={`${state.duration}ms`}
-              color="text-slate-400"
+              color="text-demo-text-secondary"
             />
             <PropertyRow
               label="Paused"
@@ -106,21 +106,21 @@ const TimelinePropertiesDemo: React.FC = () => {
             <PropertyRow
               label="Began"
               value={state.began}
-              color={state.began ? "text-emerald-500" : "text-slate-500"}
+              color={state.began ? "text-emerald-500" : "text-demo-text-muted"}
             />
             <PropertyRow
               label="Completed"
               value={state.completed}
-              color={state.completed ? "text-emerald-500" : "text-slate-500"}
+              color={state.completed ? "text-emerald-500" : "text-demo-text-muted"}
             />
             <PropertyRow
               label="Reversed"
               value={state.reversed}
-              color={state.reversed ? "text-pink-500" : "text-slate-500"}
+              color={state.reversed ? "text-pink-500" : "text-demo-text-muted"}
             />
 
             <div className="mt-4 pt-4 border-t border-white/10">
-              <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold block mb-2">
+              <span className="text-[10px] uppercase tracking-wider text-demo-text-muted font-bold block mb-2">
                 Labels
               </span>
               <div className="grid grid-cols-2 gap-2">
@@ -130,7 +130,7 @@ const TimelinePropertiesDemo: React.FC = () => {
                       key={name}
                       className="flex justify-between bg-white/5 rounded px-2 py-1"
                     >
-                      <span className="text-[9px] text-slate-400 uppercase">
+                      <span className="text-[9px] text-demo-text-secondary uppercase">
                         {name}
                       </span>
                       <span className="text-[9px] text-indigo-400 font-mono">

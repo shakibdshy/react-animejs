@@ -80,19 +80,19 @@ function BasicReorderDemo() {
         <div className="flex gap-2 justify-center">
           <button
             onClick={() => setItems((prev) => shuffleArray(prev))}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#ffd11a] text-[#12121a] rounded-lg hover:bg-[#ffd11a]/90 transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-accent text-demo-bg rounded-lg hover:bg-demo-accent/90 transition-colors"
           >
             Shuffle
           </button>
           <button
             onClick={() => setItems((prev) => [...prev].reverse())}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#2a2a3a] text-[#e0e0e0] rounded-lg hover:bg-[#3a3a4a] transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text rounded-lg hover:bg-demo-border-hover transition-colors"
           >
             Reverse
           </button>
           <button
             onClick={() => setItems(COLOR_ITEMS)}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#2a2a3a] text-slate-400 rounded-lg hover:bg-[#3a3a4a] hover:text-[#e0e0e0] transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text-secondary rounded-lg hover:bg-demo-border-hover hover:text-demo-text transition-colors"
           >
             Reset
           </button>
@@ -111,15 +111,15 @@ function BasicReorderDemo() {
               key={item.id}
               layoutId={item.id}
             >
-              <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#2a2a3a] bg-[#12121a]">
+              <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-demo-border bg-demo-bg">
                 <div
                   className="w-10 h-10 rounded-full shrink-0"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="flex-1 text-sm font-bold text-[#e0e0e0]">
+                <span className="flex-1 text-sm font-bold text-demo-text">
                   {item.label}
                 </span>
-                <span className="text-xs text-slate-500 font-mono">{item.id}</span>
+                <span className="text-xs text-demo-text-muted font-mono">{item.id}</span>
               </div>
             </AnimeLayoutItem>
           ))}
@@ -154,7 +154,7 @@ function MoveUpDownDemo() {
         className="w-full"
       >
         {(item, index) => (
-          <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#2a2a3a] bg-[#12121a] hover:border-white/10 transition-colors group">
+          <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-demo-border bg-demo-bg hover:border-white/10 transition-colors group">
             <div className="flex flex-col gap-0.5 cursor-grab active:cursor-grabbing">
               <svg width="12" height="12" viewBox="0 0 12 12" className="text-slate-600">
                 <circle cx="3" cy="3" r="1.5" fill="currentColor" />
@@ -167,14 +167,14 @@ function MoveUpDownDemo() {
               className="w-3 h-3 rounded-full shrink-0"
               style={{ backgroundColor: item.color }}
             />
-            <span className="flex-1 text-sm font-bold text-[#e0e0e0]">
+            <span className="flex-1 text-sm font-bold text-demo-text">
               {item.label}
             </span>
             <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
               <button
                 onClick={() => setItems((prev) => moveItem(prev, index, index - 1))}
                 disabled={index === 0}
-                className="w-6 h-6 flex items-center justify-center rounded bg-white/5 text-slate-500 hover:text-white hover:bg-white/10 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+                className="w-6 h-6 flex items-center justify-center rounded bg-white/5 text-demo-text-muted hover:text-white hover:bg-white/10 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 15l-6-6-6 6" />
@@ -183,7 +183,7 @@ function MoveUpDownDemo() {
               <button
                 onClick={() => setItems((prev) => moveItem(prev, index, index + 1))}
                 disabled={index === items.length - 1}
-                className="w-6 h-6 flex items-center justify-center rounded bg-white/5 text-slate-500 hover:text-white hover:bg-white/10 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+                className="w-6 h-6 flex items-center justify-center rounded bg-white/5 text-demo-text-muted hover:text-white hover:bg-white/10 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M6 9l6 6 6-6" />
@@ -247,14 +247,14 @@ function AddRemoveDemo() {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Item label..."
-            className="flex-1 px-3 py-1.5 text-sm bg-[#0a0a12] border border-[#2a2a3a] rounded-lg text-[#e0e0e0] placeholder:text-slate-600"
+            className="flex-1 px-3 py-1.5 text-sm bg-demo-bg border border-demo-border rounded-lg text-demo-text placeholder:text-slate-600"
             onKeyDown={(e) => {
               if (e.key === "Enter") addItem();
             }}
           />
           <button
             onClick={addItem}
-            className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#ffd11a] text-[#12121a] rounded-lg hover:bg-[#ffd11a]/90 transition-colors"
+            className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-accent text-demo-bg rounded-lg hover:bg-demo-accent/90 transition-colors"
           >
             Add
           </button>
@@ -270,17 +270,17 @@ function AddRemoveDemo() {
                 duration={300}
                 ease="outCubic"
               >
-                <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-[#2a2a3a] bg-[#12121a]">
+                <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-demo-border bg-demo-bg">
                   <div
                     className="w-3 h-3 rounded-full shrink-0"
                     style={{ backgroundColor: item.color }}
                   />
-                  <span className="flex-1 text-sm font-medium text-[#e0e0e0]">
+                  <span className="flex-1 text-sm font-medium text-demo-text">
                     {item.label}
                   </span>
                   <button
                     onClick={() => removeItem(item.id)}
-                    className="w-6 h-6 flex items-center justify-center rounded bg-white/5 text-slate-500 hover:text-[#ff4d6a] hover:bg-white/10 transition-all"
+                    className="w-6 h-6 flex items-center justify-center rounded bg-white/5 text-demo-text-muted hover:text-[#ff4d6a] hover:bg-white/10 transition-all"
                   >
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <line x1="18" y1="6" x2="6" y2="18" />
@@ -339,26 +339,26 @@ function GridReorderDemo() {
           <div className="flex gap-2">
             <button
               onClick={() => setItems((prev) => shuffleArray(prev))}
-              className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#ffd11a] text-[#12121a] rounded-lg hover:bg-[#ffd11a]/90 transition-colors"
+              className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-accent text-demo-bg rounded-lg hover:bg-demo-accent/90 transition-colors"
             >
               Shuffle
             </button>
             <button
               onClick={() => setItems((prev) => [...prev].reverse())}
-              className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#2a2a3a] text-[#e0e0e0] rounded-lg hover:bg-[#3a3a4a] transition-colors"
+              className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text rounded-lg hover:bg-demo-border-hover transition-colors"
             >
               Reverse
             </button>
           </div>
-          <div className="flex gap-1 bg-[#0a0a12] rounded-lg p-0.5 border border-[#2a2a3a]/50">
+          <div className="flex gap-1 bg-demo-bg rounded-lg p-0.5 border border-demo-border/50">
             {[2, 3, 4].map((n) => (
               <button
                 key={n}
                 onClick={() => changeColumns(n)}
                 className={`px-2.5 py-1 rounded-md text-xs font-bold uppercase transition-all ${
                     cols === n
-                      ? "bg-[#ffd11a] text-black"
-                      : "text-slate-500 hover:text-slate-300"
+                      ? "bg-demo-accent text-black"
+                      : "text-demo-text-muted hover:text-slate-300"
                 }`}
               >
                 {n}c
@@ -380,14 +380,14 @@ function GridReorderDemo() {
           {items.map((item) => (
               <AnimeLayoutItem key={item.id} layoutId={item.id}>
                 <div
-                  className="flex items-center justify-center gap-2 px-3 py-4 rounded-xl border border-[#2a2a3a] bg-[#12121a] hover:border-white/10 transition-colors cursor-pointer"
+                  className="flex items-center justify-center gap-2 px-3 py-4 rounded-xl border border-demo-border bg-demo-bg hover:border-white/10 transition-colors cursor-pointer"
                   style={{ minHeight: 60 }}
                 >
                   <div
                     className="w-3 h-3 rounded-full shrink-0"
                     style={{ backgroundColor: item.color }}
                   />
-                  <span className="text-sm font-bold text-[#e0e0e0]">
+                  <span className="text-sm font-bold text-demo-text">
                     {item.label}
                   </span>
                 </div>
@@ -434,7 +434,7 @@ function SequenceReorderDemo() {
         <button
           onClick={runSequence}
           disabled={running}
-          className="self-center px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#ffd11a] text-[#12121a] rounded-lg hover:bg-[#ffd11a]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="self-center px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-accent text-demo-bg rounded-lg hover:bg-demo-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {running ? "Running..." : "Play Sequence"}
         </button>
@@ -446,14 +446,14 @@ function SequenceReorderDemo() {
           className="w-full"
         >
           {(item) => (
-            <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#2a2a3a] bg-[#12121a]">
+            <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-demo-border bg-demo-bg">
               <div
                 className="w-10 h-10 rounded-lg flex items-center justify-center text-xs font-black"
                 style={{ backgroundColor: item.color + "20", color: "#12121a" }}
               >
                 {item.icon}
               </div>
-              <span className="flex-1 text-sm font-bold text-[#e0e0e0]">
+              <span className="flex-1 text-sm font-bold text-demo-text">
                 {item.label}
               </span>
             </div>

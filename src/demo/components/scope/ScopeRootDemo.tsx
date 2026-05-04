@@ -59,9 +59,9 @@ animate('.scoped-box', {...}) // Only matches inside scope`}
         {/* Outer container - NOT in scope */}
         <div
           ref={outerRef}
-          className="w-full p-4 rounded-xl bg-[#1a1a24] border border-[#2a2a3a]"
+          className="w-full p-4 rounded-xl bg-demo-card border border-demo-border"
         >
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-3">
+          <div className="text-[10px] text-demo-text-muted uppercase tracking-wider mb-3">
             Outside Scope (not animated)
           </div>
           <div className="flex gap-3">
@@ -95,8 +95,8 @@ animate('.scoped-box', {...}) // Only matches inside scope`}
         </div>
 
         {/* Explanation */}
-        <div className="text-[11px] text-slate-500 text-center">
-          The same CSS selector <code className="text-[#ffd11a]">.scoped-box</code>{" "}
+        <div className="text-[11px] text-demo-text-muted text-center">
+          The same CSS selector <code className="text-demo-accent">.scoped-box</code>{" "}
           is used in both containers, but only elements inside the scope root are
           animated.
         </div>

@@ -32,8 +32,8 @@ export function PlaybackRateDemo() {
   return (
     <DemoSection title="Playback Rate Control">
       <div className="flex gap-12 w-full justify-center">
-        <div className="flex flex-col items-center gap-2 p-6 bg-[#0a0a10] border border-[#2a2a3a] rounded-lg">
-          <span className="text-xs uppercase tracking-widest text-[#888] font-bold">
+        <div className="flex flex-col items-center gap-2 p-6 bg-demo-bg border border-demo-border rounded-lg">
+          <span className="text-xs uppercase tracking-widest text-demo-text-secondary font-bold">
             current time
           </span>
           <span
@@ -44,8 +44,8 @@ export function PlaybackRateDemo() {
           </span>
         </div>
 
-        <div className="flex flex-col items-center gap-2 p-6 bg-[#0a0a10] border border-[#2a2a3a] rounded-lg">
-          <span className="text-xs uppercase tracking-widest text-[#888] font-bold">
+        <div className="flex flex-col items-center gap-2 p-6 bg-demo-bg border border-demo-border rounded-lg">
+          <span className="text-xs uppercase tracking-widest text-demo-text-secondary font-bold">
             playback rate
           </span>
           <span
@@ -59,7 +59,7 @@ export function PlaybackRateDemo() {
 
       <div className="mt-8 w-full">
         <div className="flex items-center gap-4 mb-4">
-          <span className="text-xs uppercase tracking-widest text-[#888] font-bold whitespace-nowrap">
+          <span className="text-xs uppercase tracking-widest text-demo-text-secondary font-bold whitespace-nowrap">
             Speed Control
           </span>
           <input
@@ -69,7 +69,7 @@ export function PlaybackRateDemo() {
             step="0.1"
             value={playbackRate}
             onChange={(e) => handlePlaybackRateChange(Number(e.target.value))}
-            className="flex-1 h-2 bg-[#1a1a25] rounded-lg appearance-none cursor-pointer accent-indigo-500"
+            className="flex-1 h-2 bg-demo-card rounded-lg appearance-none cursor-pointer accent-indigo-500"
           />
           <span className="text-sm font-mono text-indigo-400 font-bold min-w-[60px] text-right">
             {playbackRate.toFixed(1)}x
@@ -84,7 +84,7 @@ export function PlaybackRateDemo() {
               className={`px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-lg transition-all ${
                 playbackRate === rate
                   ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20"
-                  : "bg-[#1e1e2a] border border-[#2a2a3a] text-[#aaa] hover:text-white"
+                  : "bg-demo-card border border-demo-border text-demo-text-muted hover:text-white"
               }`}
             >
               {rate}x
@@ -92,7 +92,7 @@ export function PlaybackRateDemo() {
           ))}
           <button
             onClick={() => handlePlaybackRateChange(1)}
-            className="px-4 py-2 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg transition-all"
+            className="px-4 py-2 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border text-demo-text-muted hover:text-white rounded-lg transition-all"
           >
             Reset
           </button>
@@ -107,13 +107,13 @@ export function PlaybackRateDemo() {
             Play
           </button>
           <button
-            className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] hover:bg-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg active:scale-95 transition-all"
+            className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border hover:bg-demo-border text-demo-text-muted hover:text-white rounded-lg active:scale-95 transition-all"
             onClick={controls.pause}
           >
             Pause
           </button>
           <button
-            className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] hover:bg-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg active:scale-95 transition-all"
+            className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border hover:bg-demo-border text-demo-text-muted hover:text-white rounded-lg active:scale-95 transition-all"
             onClick={() => controls.restart()}
           >
             Restart

@@ -42,12 +42,12 @@ export const AnimatableDurationDemo: React.FC = () => {
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="circle-duration w-4 h-4 rounded-full bg-[#ffd11a] shadow-[0_0_15px_rgba(255,209,26,0.3)]"
+              className="circle-duration w-4 h-4 rounded-full bg-demo-accent shadow-[0_0_15px_var(--demo-accent)/0.3]"
               style={{ opacity: 1 - i * 0.15 }}
             />
           ))}
         </div>
-        <div className="absolute bottom-4 text-[10px] text-slate-500 font-mono uppercase tracking-widest opacity-50">
+        <div className="absolute bottom-4 text-[10px] text-demo-text-muted font-mono uppercase tracking-widest opacity-50">
           Tail follows mouse
         </div>
       </div>

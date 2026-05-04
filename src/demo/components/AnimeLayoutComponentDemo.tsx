@@ -54,14 +54,14 @@ export const AnimeLayoutComponentDemo: React.FC = () => {
         <div className="flex gap-1 bg-black/20 p-1 rounded-xl">
           <button
             onClick={addItem}
-            className="p-1.5 bg-[#ffd11a] text-[#12121a] rounded-lg transition-all hover:scale-105 active:scale-95"
+            className="p-1.5 bg-demo-accent text-demo-bg rounded-lg transition-all hover:scale-105 active:scale-95"
             title="Add Item"
           >
             <Plus size={12} />
           </button>
           <button
             onClick={() => layoutRef.current?.refresh()}
-            className="p-1.5 text-slate-500 hover:text-[#ffd11a] rounded-lg transition-all"
+            className="p-1.5 text-demo-text-muted hover:text-demo-accent rounded-lg transition-all"
             title="Refresh Layout"
           >
             <RefreshCw size={12} />
@@ -89,8 +89,8 @@ export const AnimeLayoutComponentDemo: React.FC = () => {
               onClick={() => changeColumns(n)}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all ${
                 cols === n
-                  ? "bg-[#ffd11a] text-[#12121a] shadow-lg shadow-[#ffd11a]/20"
-                  : "bg-white/5 text-slate-500 hover:bg-white/10"
+                  ? "bg-demo-accent text-demo-bg shadow-lg shadow-demo-accent/20"
+                  : "bg-white/5 text-demo-text-muted hover:bg-white/10"
               }`}
             >
               {n === 2 ? (
@@ -120,7 +120,7 @@ export const AnimeLayoutComponentDemo: React.FC = () => {
             <AnimeLayoutItem
               key={id}
               layoutId={`item-${id}`}
-              className="h-12 flex items-center justify-center rounded-xl bg-linear-to-br from-[#ffd11a]/20 to-[#f59e0b]/20 border border-[#ffd11a]/20 text-[#ffd11a] font-bold text-sm shadow-sm cursor-pointer hover:from-[#ffd11a] hover:to-[#f59e0b] hover:text-[#12121a] transition-all"
+              className="h-12 flex items-center justify-center rounded-xl bg-linear-to-br from-demo-accent/20 to-[#f59e0b]/20 border border-demo-accent/20 text-demo-accent font-bold text-sm shadow-sm cursor-pointer hover:from-demo-accent hover:to-[#f59e0b] hover:text-demo-bg transition-all"
               onClick={() => removeItem(id)}
             >
               {id}

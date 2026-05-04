@@ -104,7 +104,7 @@ export function AnimatedSlider<T>({
   return (
     <div className={`flex flex-col items-center gap-6 w-full ${className}`}>
       {/* Slide viewport */}
-      <div className="relative w-full overflow-hidden rounded-2xl border border-[#2a2a3a] bg-[#12121a]">
+      <div className="relative w-full overflow-hidden rounded-2xl border border-demo-border bg-demo-bg">
         <div className="relative w-full min-h-60 flex items-center justify-center">
           <AnimePresence mode="sync">
             <AnimePresenceChild
@@ -171,8 +171,8 @@ export function AnimatedSlider<T>({
               onClick={() => goTo(i)}
               className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                 i === current
-                  ? 'bg-[#ffd11a] shadow-[0_0_8px_rgba(255,209,26,0.5)] scale-125'
-                  : 'bg-[#2a2a3a] hover:bg-[#3a3a4a]'
+                  ? 'bg-demo-accent shadow-[0_0_8px_var(--demo-accent)/0.5] scale-125'
+                  : 'bg-demo-border hover:bg-demo-border-hover'
               }`}
             />
           ))}

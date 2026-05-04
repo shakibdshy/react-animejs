@@ -52,7 +52,7 @@ export const LayoutEnterExitDemo: React.FC = () => {
         <div className="flex gap-1 bg-black/20 p-1 rounded-xl">
           <button
             onClick={addItem}
-            className="p-1.5 bg-[#ffd11a] text-[#12121a] rounded-lg transition-all hover:scale-105 active:scale-95"
+            className="p-1.5 bg-demo-accent text-demo-bg rounded-lg transition-all hover:scale-105 active:scale-95"
             title="Add Item"
           >
             <Plus size={12} />
@@ -60,7 +60,7 @@ export const LayoutEnterExitDemo: React.FC = () => {
           <button
             onClick={removeFirst}
             disabled={items.length === 0}
-            className="p-1.5 text-slate-500 hover:text-orange-500 rounded-lg transition-all disabled:opacity-20"
+            className="p-1.5 text-demo-text-muted hover:text-orange-500 rounded-lg transition-all disabled:opacity-20"
             title="Remove First"
           >
             <ChevronFirst size={12} />
@@ -68,7 +68,7 @@ export const LayoutEnterExitDemo: React.FC = () => {
           <button
             onClick={removeLast}
             disabled={items.length === 0}
-            className="p-1.5 text-slate-500 hover:text-orange-500 rounded-lg transition-all disabled:opacity-20"
+            className="p-1.5 text-demo-text-muted hover:text-orange-500 rounded-lg transition-all disabled:opacity-20"
             title="Remove Last"
           >
             <ChevronLast size={12} />
@@ -107,7 +107,7 @@ export const LayoutEnterExitDemo: React.FC = () => {
             <AnimeLayoutItem
               key={id}
               layoutId={`item-${id}`}
-              className="w-16 h-16 flex items-center justify-center rounded-2xl bg-[#ffd11a]/10 border border-[#ffd11a]/20 text-[#ffd11a] font-bold text-lg shadow-sm cursor-pointer group hover:bg-[#ffd11a] hover:text-[#12121a] transition-all"
+              className="w-16 h-16 flex items-center justify-center rounded-2xl bg-demo-accent/10 border border-demo-accent/20 text-demo-accent font-bold text-lg shadow-sm cursor-pointer group hover:bg-demo-accent hover:text-demo-bg transition-all"
               onClick={() => removeItem(id)}
             >
               <span className="group-hover:hidden">{id}</span>
@@ -124,7 +124,7 @@ export const LayoutEnterExitDemo: React.FC = () => {
         {/* Live Status */}
         <div className="flex gap-4">
           <div className="flex-1 bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
-            <span className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">
+            <span className="text-[9px] text-demo-text-muted uppercase tracking-widest mb-1">
               Entering
             </span>
             <span className="text-green-500 font-mono font-bold">
@@ -132,7 +132,7 @@ export const LayoutEnterExitDemo: React.FC = () => {
             </span>
           </div>
           <div className="flex-1 bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
-            <span className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">
+            <span className="text-[9px] text-demo-text-muted uppercase tracking-widest mb-1">
               Leaving
             </span>
             <span className="text-red-500 font-mono font-bold">
@@ -140,8 +140,8 @@ export const LayoutEnterExitDemo: React.FC = () => {
             </span>
           </div>
           <div className="flex-1 bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
-            <span className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">Total</span>
-            <span className="text-[#ffd11a] font-mono font-bold">{items.length}</span>
+            <span className="text-[9px] text-demo-text-muted uppercase tracking-widest mb-1">Total</span>
+            <span className="text-demo-accent font-mono font-bold">{items.length}</span>
           </div>
         </div>
       </div>

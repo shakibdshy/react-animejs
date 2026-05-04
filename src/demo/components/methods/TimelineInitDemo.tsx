@@ -19,7 +19,7 @@ const TimelineInitDemo: React.FC = () => {
   return (
     <DemoSection title="timeline.init()">
       <div className="space-y-6">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-demo-text-secondary">
           Manually initializes the values of all elements in a timeline. By
           default, children are initialized when the playhead reaches them.
           init() forces an immediate render of initial states.
@@ -38,7 +38,7 @@ const TimelineInitDemo: React.FC = () => {
             disabled={initialized}
             className={`px-4 py-2 rounded-lg transition-colors text-sm font-medium ${
               initialized
-                ? "bg-slate-800 text-slate-500"
+                ? "bg-demo-card text-demo-text-muted"
                 : "bg-yellow-500 hover:bg-yellow-600 text-black"
             }`}
           >
@@ -61,7 +61,7 @@ const TimelineInitDemo: React.FC = () => {
           </button>
         </div>
 
-        <div className="text-xs text-slate-400 font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+        <div className="text-xs text-demo-text-secondary font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
           controls.init() // Forces elements to start values
         </div>
       </div>

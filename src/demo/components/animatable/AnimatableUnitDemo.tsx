@@ -13,8 +13,8 @@ function Clock({
 }) {
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="w-24 h-24 rounded-full border-2 border-[#2a2a3a] relative flex items-center justify-center bg-[#12121a] shadow-inner">
-        <div className="w-1.5 h-1.5 rounded-full bg-[#2a2a3a] z-10" />
+      <div className="w-24 h-24 rounded-full border-2 border-demo-border relative flex items-center justify-center bg-demo-bg shadow-inner">
+        <div className="w-1.5 h-1.5 rounded-full bg-demo-border z-10" />
         <div
           ref={clockRef}
           className="absolute w-0.5 h-10 origin-bottom bottom-1/2 rounded-full"
@@ -23,7 +23,7 @@ function Clock({
         {[...Array(12)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-0.5 h-1.5 bg-[#2a2a3a]"
+            className="absolute w-0.5 h-1.5 bg-demo-border"
             style={{
               transform: `rotate(${i * 30}deg) translateY(-44px)`,
             }}
@@ -31,7 +31,7 @@ function Clock({
         ))}
       </div>
       {label && (
-        <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-1">
+        <span className="text-[10px] font-mono text-demo-text-muted uppercase tracking-widest mt-1">
           {label}
         </span>
       )}
@@ -86,7 +86,7 @@ export const AnimatableUnitDemo: React.FC = () => {
         className="w-full h-full flex flex-col items-center justify-center cursor-crosshair pb-4"
       >
         <Clock clockRef={clockRef} />
-        <div className="mt-4 text-[10px] text-slate-500 font-mono uppercase tracking-widest opacity-50">
+        <div className="mt-4 text-[10px] text-demo-text-muted font-mono uppercase tracking-widest opacity-50">
           Move cursor to rotate
         </div>
       </div>

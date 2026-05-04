@@ -55,8 +55,8 @@ export function TimerCallbacksDemo() {
       <div className="flex flex-col gap-6 w-full">
         {/* Status Indicators */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center justify-between p-4 bg-[#0a0a10] border border-[#2a2a3a] rounded-lg">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#888]">
+          <div className="flex items-center justify-between p-4 bg-demo-bg border border-demo-border rounded-lg">
+            <span className="text-xs font-bold uppercase tracking-widest text-demo-text-secondary">
               onUpdate pulse
             </span>
             <div 
@@ -65,8 +65,8 @@ export function TimerCallbacksDemo() {
               }`}
             />
           </div>
-          <div className="flex items-center justify-between p-4 bg-[#0a0a10] border border-[#2a2a3a] rounded-lg">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#888]">
+          <div className="flex items-center justify-between p-4 bg-demo-bg border border-demo-border rounded-lg">
+            <span className="text-xs font-bold uppercase tracking-widest text-demo-text-secondary">
               Status
             </span>
             <span className={`text-xs font-mono font-bold ${isRunning ? "text-indigo-400" : "text-[#555]"}`}>
@@ -80,7 +80,7 @@ export function TimerCallbacksDemo() {
           <span className="text-[10px] uppercase tracking-widest text-[#666] font-bold ml-1">
             Callback Event Log (Latest 10)
           </span>
-          <div className="h-48 bg-[#050508] border border-[#2a2a3a] rounded-xl p-4 overflow-y-auto font-mono text-[11px] flex flex-col gap-1 shadow-inner">
+          <div className="h-48 bg-demo-bg border border-demo-border rounded-xl p-4 overflow-y-auto font-mono text-[11px] flex flex-col gap-1 shadow-inner">
             {logs.length === 0 ? (
               <div className="text-[#333] italic text-center mt-16">Waiting for events...</div>
             ) : (
@@ -105,14 +105,14 @@ export function TimerCallbacksDemo() {
             Play (with Promise)
           </button>
           <button
-            className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] hover:bg-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg active:scale-95 transition-all"
+            className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border hover:bg-demo-border text-demo-text-muted hover:text-white rounded-lg active:scale-95 transition-all"
             onClick={controls.pause}
             disabled={!isRunning}
           >
             Pause
           </button>
           <button
-            className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] hover:bg-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg active:scale-95 transition-all"
+            className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border hover:bg-demo-border text-demo-text-muted hover:text-white rounded-lg active:scale-95 transition-all"
             onClick={() => { setLogs([]); controls.restart(); }}
           >
             Restart

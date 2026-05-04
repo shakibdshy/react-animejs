@@ -66,7 +66,7 @@ export const HighFidelityTimePosition: React.FC = () => {
           <span className="w-2 h-8 bg-amber-500 rounded-full inline-block" />
           High Fidelity Recreation
         </h2>
-        <p className="text-slate-400 text-sm max-w-lg">
+        <p className="text-demo-text-secondary text-sm max-w-lg">
           This component matches the aesthetic and logic of the official
           Anime.js documentation's "Time Position" interactive demonstration.
         </p>
@@ -76,16 +76,16 @@ export const HighFidelityTimePosition: React.FC = () => {
       <div className="relative bg-[#302c11] rounded-[40px] p-6 sm:p-10 overflow-hidden shadow-[0_20px_50px_rgba(48,44,17,0.4)] border border-[#48421a]/50">
         {/* Card Header */}
         <div className="flex justify-between items-center mb-12">
-          <h3 className="text-[#ffd11a] text-2xl sm:text-3xl font-bold tracking-tight">
+          <h3 className="text-demo-accent text-2xl sm:text-3xl font-bold tracking-tight">
             Time position
           </h3>
           <div className="flex gap-4">
-            <button className="text-[#ffd11a]/60 hover:text-[#ffd11a] transition-colors p-2 hover:bg-[#48421a] rounded-lg">
+            <button className="text-demo-accent/60 hover:text-demo-accent transition-colors p-2 hover:bg-[#48421a] rounded-lg">
               <Edit2 className="w-6 h-6" />
             </button>
             <button
               onClick={() => controls.restart()}
-              className="text-[#ffd11a]/60 hover:text-[#ffd11a] transition-colors p-2 hover:bg-[#48421a] rounded-lg"
+              className="text-demo-accent/60 hover:text-demo-accent transition-colors p-2 hover:bg-[#48421a] rounded-lg"
             >
               <RotateCcw className="w-6 h-6" />
             </button>
@@ -97,12 +97,12 @@ export const HighFidelityTimePosition: React.FC = () => {
           {/* Ghosted (Start) Pyramid */}
           <div className="absolute left-10 flex flex-col items-center opacity-30 select-none">
             {/* Triangle Ghost */}
-            <div className="w-0 h-0 border-l-28 border-r-28 border-b-48 border-transparent border-b-[#ffd11a] mb-1" />
+            <div className="w-0 h-0 border-l-28 border-r-28 border-b-48 border-transparent border-b-demo-accent mb-1" />
             <div className="flex gap-1.5">
               {/* Square Ghost */}
-              <div className="w-14 h-14 bg-[#ffd11a] rounded-xl" />
+              <div className="w-14 h-14 bg-demo-accent rounded-xl" />
               {/* Circle Ghost */}
-              <div className="w-14 h-14 bg-[#ffd11a] rounded-full" />
+              <div className="w-14 h-14 bg-demo-accent rounded-full" />
             </div>
           </div>
 
@@ -111,18 +111,18 @@ export const HighFidelityTimePosition: React.FC = () => {
             {/* Triangle */}
             <div
               ref={triangleRef}
-              className="w-0 h-0 border-l-28 border-r-28 border-b-48 border-transparent border-b-[#ffd11a] mb-1"
+              className="w-0 h-0 border-l-28 border-r-28 border-b-48 border-transparent border-b-demo-accent mb-1"
             />
             <div className="flex gap-1.5">
               {/* Square */}
               <div
                 ref={squareRef}
-                className="w-14 h-14 bg-[#ffd11a] rounded-xl"
+                className="w-14 h-14 bg-demo-accent rounded-xl"
               />
               {/* Circle */}
               <div
                 ref={circleRef}
-                className="w-14 h-14 bg-[#ffd11a] rounded-full"
+                className="w-14 h-14 bg-demo-accent rounded-full"
               />
             </div>
           </div>
@@ -133,7 +133,7 @@ export const HighFidelityTimePosition: React.FC = () => {
               className="absolute inset-0 flex items-center justify-center bg-[#302c11]/20 cursor-pointer z-20 group"
               onClick={() => controls.play()}
             >
-              <div className="w-16 h-16 bg-[#ffd11a] rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 bg-demo-accent rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                 <div className="translate-x-1 border-t-10 border-t-transparent border-b-10 border-b-transparent border-l-18 border-l-[#302c11]" />
               </div>
             </div>
@@ -142,7 +142,7 @@ export const HighFidelityTimePosition: React.FC = () => {
 
         {/* Progress Display */}
         <div className="flex justify-end pr-2 mb-2">
-          <span className="text-[10px] font-mono text-[#ffd11a]/40 tracking-wider">
+          <span className="text-[10px] font-mono text-demo-accent/40 tracking-wider">
             PROGRESS: {Math.round(state.progress * 100)}%
           </span>
         </div>
@@ -163,14 +163,14 @@ export const HighFidelityTimePosition: React.FC = () => {
             <div className="absolute top-0 bottom-0 w-px bg-white/10 opacity-0 group-hover/timeline:opacity-100 transition-opacity pointer-events-none" />
 
             {/* Vertical markers */}
-            <div className="absolute left-0 top-0 bottom-0 border-l-2 border-[#ffd11a]/40 flex flex-col items-start gap-1 pointer-events-none">
-              <span className="text-[10px] font-bold text-[#ffd11a]/60 ml-2 tracking-widest">
+            <div className="absolute left-0 top-0 bottom-0 border-l-2 border-demo-accent/40 flex flex-col items-start gap-1 pointer-events-none">
+              <span className="text-[10px] font-bold text-demo-accent/60 ml-2 tracking-widest">
                 START
               </span>
-              <div className="h-full border-l-2 border-[#ffd11a]/40" />
+              <div className="h-full border-l-2 border-demo-accent/40" />
             </div>
 
-            <div className="absolute right-0 top-0 bottom-0 border-l-2 border-[#ffd11a]/80 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 border-l-2 border-demo-accent/80 pointer-events-none" />
 
             {/* Timeline Row 1: Square (Starts at 500ms) */}
             <div className="absolute top-2 w-full h-4 pointer-events-none">
@@ -178,18 +178,18 @@ export const HighFidelityTimePosition: React.FC = () => {
                 className="absolute h-full bg-[#48421a] rounded-full flex items-center px-0.5"
                 style={{ left: "50%", right: "0" }}
               >
-                <div className="w-2.5 h-2.5 bg-[#ffd11a]/60 rounded-xs mx-1" />
-                <div className="flex-1 h-3 bg-[#ffd11a]/40 rounded-full" />
+                <div className="w-2.5 h-2.5 bg-demo-accent/60 rounded-xs mx-1" />
+                <div className="flex-1 h-3 bg-demo-accent/40 rounded-full" />
               </div>
             </div>
 
             {/* Timeline Row 2: Circle (Starts at 0ms) */}
             <div className="absolute top-8 w-full h-5 pointer-events-none">
               <div
-                className="absolute h-full bg-[#ffd11a]/60 rounded-full flex items-center justify-center overflow-hidden"
+                className="absolute h-full bg-demo-accent/60 rounded-full flex items-center justify-center overflow-hidden"
                 style={{ left: "0%", right: "50%" }}
               >
-                <div className="w-full h-full bg-[#ffd11a]/20" />
+                <div className="w-full h-full bg-demo-accent/20" />
               </div>
             </div>
 
@@ -199,8 +199,8 @@ export const HighFidelityTimePosition: React.FC = () => {
                 className="absolute h-full bg-[#48421a] rounded-full flex items-center px-1"
                 style={{ left: "25%", right: "25%" }}
               >
-                <div className="w-0 h-0 border-l-6 border-r-6 border-b-10 border-transparent border-b-[#ffd11a]/60 mx-1" />
-                <div className="flex-1 h-3 bg-[#ffd11a]/40 rounded-full" />
+                <div className="w-0 h-0 border-l-6 border-r-6 border-b-10 border-transparent border-b-demo-accent/60 mx-1" />
+                <div className="flex-1 h-3 bg-demo-accent/40 rounded-full" />
               </div>
             </div>
 
@@ -209,8 +209,8 @@ export const HighFidelityTimePosition: React.FC = () => {
               className="absolute top-0 bottom-0 w-1 flex flex-col justify-between items-center z-30 pointer-events-none"
               style={{ left: `${state.progress * 100}%` }}
             >
-              <div className="w-3 h-3 bg-[#ffd11a] rounded-full shadow-[0_0_10px_#ffd11a] -translate-x-1/2" />
-              <div className="flex-1 w-[2px] bg-[#ffd11a] shadow-[0_0_10px_#ffd11a] -translate-x-1/2" />
+              <div className="w-3 h-3 bg-demo-accent rounded-full shadow-[0_0_10px_#ffd11a] -translate-x-1/2" />
+              <div className="flex-1 w-[2px] bg-demo-accent shadow-[0_0_10px_#ffd11a] -translate-x-1/2" />
             </div>
           </div>
         </div>

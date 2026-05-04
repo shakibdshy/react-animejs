@@ -55,19 +55,19 @@ function SpeedVariantsDemo() {
       <div className="flex items-start justify-around w-full gap-6">
         {/* <div className="flex flex-col items-center gap-2">
           <SpinningCube size={80} duration={6000} />
-          <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+          <span className="text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
             Slow
           </span>
         </div>
         <div className="flex flex-col items-center gap-2">
           <SpinningCube size={80} duration={3000} />
-          <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+          <span className="text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
             Medium
           </span>
         </div> */}
         <div className="flex flex-col items-center gap-2">
           <SpinningCube size={80} duration={1200} />
-          <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+          <span className="text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
             Fast
           </span>
         </div>
@@ -89,19 +89,19 @@ function SizeVariantsDemo() {
       <div className="flex items-center justify-around w-full gap-4 py-4">
         {/* <div className="flex flex-col items-center gap-2">
           <SpinningCube size={80} duration={3000} />
-          <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+          <span className="text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
             80px
           </span>
         </div> */}
         <div className="flex flex-col items-center gap-2">
           <SpinningCube size={120} duration={3000} />
-          <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+          <span className="text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
             120px
           </span>
         </div>
         {/* <div className="flex flex-col items-center gap-2">
           <SpinningCube size={180} duration={3000} />
-          <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+          <span className="text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
             180px
           </span>
         </div> */}
@@ -127,18 +127,18 @@ function InteractiveCubeDemo() {
         <div className="flex flex-col gap-4 w-full max-w-xs">
           {/* Axis selector */}
           <div className="flex flex-col gap-2">
-            <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+            <span className="text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
               Rotation Axis
             </span>
-            <div className="flex gap-1 bg-[#0a0a12] rounded-xl p-1 border border-[#2a2a3a]/50">
+            <div className="flex gap-1 bg-demo-bg rounded-xl p-1 border border-demo-border/50">
               {(["x", "y", "both"] as const).map((a) => (
                 <button
                   key={a}
                   onClick={() => setAxis(a)}
                   className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all duration-200 ${
                     axis === a
-                      ? "bg-[#ffd11a] text-black shadow-[0_0_12px_rgba(255,209,26,0.3)]"
-                      : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
+                      ? "bg-demo-accent text-black shadow-[0_0_12px_var(--demo-accent)/0.3]"
+                      : "text-demo-text-muted hover:text-slate-300 hover:bg-white/5"
                   }`}
                 >
                   {a}
@@ -150,10 +150,10 @@ function InteractiveCubeDemo() {
           {/* Speed slider */}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+              <span className="text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
                 Speed
               </span>
-              <span className="text-[10px] font-mono text-[#ffd11a]">
+              <span className="text-[10px] font-mono text-demo-accent">
                 {speed}ms
               </span>
             </div>
@@ -164,7 +164,7 @@ function InteractiveCubeDemo() {
               step={200}
               value={speed}
               onChange={(e) => setSpeed(Number(e.target.value))}
-              className="w-full accent-[#ffd11a]"
+              className="w-full accent-demo-accent"
             />
           </div>
         </div>

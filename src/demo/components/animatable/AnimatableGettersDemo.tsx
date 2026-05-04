@@ -47,9 +47,9 @@ export const AnimatableGettersDemo: React.FC = () => {
       code="const x = animatable.x()"
     >
       <div className="flex flex-col gap-6 w-full h-full">
-        <div className="flex justify-between font-mono text-[10px] text-[#ffd11a] px-2">
+        <div className="flex justify-between font-mono text-[10px] text-demo-accent px-2">
           <div className="flex flex-col">
-            <span className="text-slate-500 uppercase tracking-widest mb-1.5">
+            <span className="text-demo-text-muted uppercase tracking-widest mb-1.5">
               Position X
             </span>
             <span
@@ -60,7 +60,7 @@ export const AnimatableGettersDemo: React.FC = () => {
             </span>
           </div>
           <div className="flex flex-col text-right">
-            <span className="text-slate-500 uppercase tracking-widest mb-1.5">
+            <span className="text-demo-text-muted uppercase tracking-widest mb-1.5">
               Position Y
             </span>
             <span
@@ -74,13 +74,13 @@ export const AnimatableGettersDemo: React.FC = () => {
 
         <div
           ref={containerRef}
-          className="flex-1 min-h-[160px] bg-[#1a1a24]/50 rounded-2xl border border-white/5 relative flex items-center justify-center cursor-crosshair overflow-hidden"
+          className="flex-1 min-h-[160px] bg-demo-card/50 rounded-2xl border border-white/5 relative flex items-center justify-center cursor-crosshair overflow-hidden"
         >
           <div
             ref={circleRef}
-            className="w-12 h-12 rounded-full bg-[#ffd11a] shadow-[0_0_30px_rgba(255,209,26,0.3)] z-10"
+            className="w-12 h-12 rounded-full bg-demo-accent shadow-[0_0_30px_var(--demo-accent)/0.3] z-10"
           />
-          <div className="absolute text-[10px] font-mono text-slate-500 pointer-events-none uppercase tracking-[0.2em] opacity-30">
+          <div className="absolute text-[10px] font-mono text-demo-text-muted pointer-events-none uppercase tracking-[0.2em] opacity-30">
             Move mouse
           </div>
         </div>

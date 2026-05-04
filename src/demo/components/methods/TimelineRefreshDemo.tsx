@@ -37,7 +37,7 @@ const TimelineRefreshDemo: React.FC = () => {
   return (
     <DemoSection title="timeline.refresh()">
       <div className="space-y-6 w-full">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-demo-text-secondary">
           Recalculates all values in the timeline. Useful for function-based
           values that should change on every loop or manual trigger.
         </p>
@@ -89,7 +89,7 @@ const TimelineRefreshDemo: React.FC = () => {
           </button>
         </div>
 
-        <div className="text-xs text-slate-400 font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+        <div className="text-xs text-demo-text-secondary font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
           onLoop: self =&gt; self.refresh()
           <br />
           translateX: () =&gt; utils.random(0, 200)

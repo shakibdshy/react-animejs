@@ -16,8 +16,8 @@ export function DelayTimerDemo() {
   return (
     <DemoSection title="Timer with Delay (1000ms delay)">
       <div className="w-full max-w-sm">
-        <div className="flex flex-col items-center gap-2 p-6 bg-[#050508] border border-[#2a2a3a] rounded-xl shadow-inner">
-          <span className="text-[10px] uppercase tracking-widest text-[#888] font-semibold">
+        <div className="flex flex-col items-center gap-2 p-6 bg-demo-bg border border-demo-border rounded-xl shadow-inner">
+          <span className="text-[10px] uppercase tracking-widest text-demo-text-secondary font-semibold">
             Current Time
           </span>
           <span className="font-mono text-5xl font-bold text-indigo-400 [text-shadow:0_0_20px_rgba(129,140,248,0.4)]">
@@ -35,20 +35,20 @@ export function DelayTimerDemo() {
           Play
         </button>
         <button
-          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] hover:bg-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg active:scale-95 transition-all"
+          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border hover:bg-demo-border text-demo-text-muted hover:text-white rounded-lg active:scale-95 transition-all"
           onClick={controls.pause}
         >
           Pause
         </button>
         <button
-          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] hover:bg-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg active:scale-95 transition-all"
+          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border hover:bg-demo-border text-demo-text-muted hover:text-white rounded-lg active:scale-95 transition-all"
           onClick={() => controls.restart()}
         >
           Restart
         </button>
       </div>
 
-      <div className="mt-2 w-full px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-center">
+      <div className="mt-2 w-full px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-center">
         {state.currentTime === 0 && !state.paused && !state.began ? (
           <span className="text-amber-500 font-bold uppercase animate-pulse">
             ⏳ Delaying (1s)...

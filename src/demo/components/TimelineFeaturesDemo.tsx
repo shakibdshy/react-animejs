@@ -75,7 +75,7 @@ export const TimelineFeaturesDemo: React.FC = () => {
               </button>
             </div>
 
-            <div className="flex flex-col gap-4 bg-[#1a1a24] p-6 rounded-xl border border-[#2a2a3a]">
+            <div className="flex flex-col gap-4 bg-demo-card p-6 rounded-xl border border-demo-border">
               <div className="flex items-center gap-4">
                 <div ref={box1Ref} className="w-10 h-10 bg-indigo-500 rounded-sm shadow-lg"></div>
                 <span className="text-xs text-gray-400">Animation 1 (pos: 0)</span>
@@ -90,7 +90,7 @@ export const TimelineFeaturesDemo: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 text-xs font-mono bg-[#0f0f15] p-4 rounded-lg border border-[#2a2a3a]">
+            <div className="grid grid-cols-2 gap-4 text-xs font-mono bg-[#0f0f15] p-4 rounded-lg border border-demo-border">
               <div className="text-gray-500">Last Event:</div>
               <div className="text-amber-400">{lastEvent}</div>
               <div className="text-gray-500">Progress:</div>

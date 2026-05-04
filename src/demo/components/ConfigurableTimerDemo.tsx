@@ -116,8 +116,8 @@ export function ConfigurableTimerDemo() {
   return (
     <DemoSection title="Comprehensive Timer Configuration">
       <div className="flex gap-4 w-full mb-6">
-        <div className="flex-1 flex flex-col items-center gap-2 p-5 bg-[#050508] border border-[#2a2a3a] rounded-xl shadow-inner">
-          <span className="text-[10px] uppercase tracking-widest text-[#888] font-semibold">
+        <div className="flex-1 flex flex-col items-center gap-2 p-5 bg-demo-bg border border-demo-border rounded-xl shadow-inner">
+          <span className="text-[10px] uppercase tracking-widest text-demo-text-secondary font-semibold">
             Iteration Time
           </span>
           <span
@@ -127,8 +127,8 @@ export function ConfigurableTimerDemo() {
             0
           </span>
         </div>
-        <div className="flex-1 flex flex-col items-center gap-2 p-5 bg-[#050508] border border-[#2a2a3a] rounded-xl shadow-inner">
-          <span className="text-[10px] uppercase tracking-widest text-[#888] font-semibold">
+        <div className="flex-1 flex flex-col items-center gap-2 p-5 bg-demo-bg border border-demo-border rounded-xl shadow-inner">
+          <span className="text-[10px] uppercase tracking-widest text-demo-text-secondary font-semibold">
             Current Time
           </span>
           <span
@@ -138,8 +138,8 @@ export function ConfigurableTimerDemo() {
             0
           </span>
         </div>
-        <div className="flex-1 flex flex-col items-center gap-2 p-5 bg-[#050508] border border-[#2a2a3a] rounded-xl shadow-inner">
-          <span className="text-[10px] uppercase tracking-widest text-[#888] font-semibold">
+        <div className="flex-1 flex flex-col items-center gap-2 p-5 bg-demo-bg border border-demo-border rounded-xl shadow-inner">
+          <span className="text-[10px] uppercase tracking-widest text-demo-text-secondary font-semibold">
             Status
           </span>
           <span
@@ -152,23 +152,23 @@ export function ConfigurableTimerDemo() {
 
       <div className="grid grid-cols-2 gap-x-6 gap-y-4 w-full">
         <div className="flex flex-col gap-1.5">
-          <label className="text-[10px] uppercase tracking-widest text-[#888] font-bold">
+          <label className="text-[10px] uppercase tracking-widest text-demo-text-secondary font-bold">
             Duration (ms)
           </label>
           <input
             type="number"
-            className="bg-[#0a0a10] border border-[#2a2a3a] rounded-lg p-2.5 text-sm text-[#e0e0e0] focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+            className="bg-demo-bg border border-demo-border rounded-lg p-2.5 text-sm text-demo-text focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all"
             value={config.duration}
             onChange={(e) => updateConfig("duration", Number(e.target.value))}
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-[10px] uppercase tracking-widest text-[#888] font-bold">
+          <label className="text-[10px] uppercase tracking-widest text-demo-text-secondary font-bold">
             Loop Count
           </label>
           <input
             type="number"
-            className="bg-[#0a0a10] border border-[#2a2a3a] rounded-lg p-2.5 text-sm text-[#e0e0e0] focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+            className="bg-demo-bg border border-demo-border rounded-lg p-2.5 text-sm text-demo-text focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all"
             defaultValue={0}
             onChange={(e) => {
               const val = Number(e.target.value);
@@ -177,24 +177,24 @@ export function ConfigurableTimerDemo() {
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-[10px] uppercase tracking-widest text-[#888] font-bold">
+          <label className="text-[10px] uppercase tracking-widest text-demo-text-secondary font-bold">
             Loop Delay (ms)
           </label>
           <input
             type="number"
-            className="bg-[#0a0a10] border border-[#2a2a3a] rounded-lg p-2.5 text-sm text-[#e0e0e0] focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+            className="bg-demo-bg border border-demo-border rounded-lg p-2.5 text-sm text-demo-text focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all"
             value={config.loopDelay}
             onChange={(e) => updateConfig("loopDelay", Number(e.target.value))}
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-[10px] uppercase tracking-widest text-[#888] font-bold">
+          <label className="text-[10px] uppercase tracking-widest text-demo-text-secondary font-bold">
             Playback Rate
           </label>
           <input
             type="number"
             step="0.1"
-            className="bg-[#0a0a10] border border-[#2a2a3a] rounded-lg p-2.5 text-sm text-[#e0e0e0] focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+            className="bg-demo-bg border border-demo-border rounded-lg p-2.5 text-sm text-demo-text focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 transition-all"
             value={config.playbackRate}
             onChange={(e) =>
               updateConfig("playbackRate", Number(e.target.value))
@@ -202,7 +202,7 @@ export function ConfigurableTimerDemo() {
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-[10px] uppercase tracking-widest text-[#888] font-bold">
+          <label className="text-[10px] uppercase tracking-widest text-demo-text-secondary font-bold">
             Frame Rate (fps):{" "}
             <span ref={fpsDisplayRef} className="text-indigo-400">
               60
@@ -220,7 +220,7 @@ export function ConfigurableTimerDemo() {
           />
         </div>
         <div className="flex flex-col gap-2 pt-1">
-          <label className="flex items-center justify-between p-2.5 bg-[#1a1a25] border border-[#2a2a3a] rounded-lg cursor-pointer hover:bg-[#20202e] transition-colors">
+          <label className="flex items-center justify-between p-2.5 bg-demo-card border border-demo-border rounded-lg cursor-pointer hover:bg-[#20202e] transition-colors">
             <span className="text-[10px] uppercase tracking-widest text-[#ccc] font-medium">
               Alternate
             </span>
@@ -231,7 +231,7 @@ export function ConfigurableTimerDemo() {
               onChange={(e) => updateConfig("alternate", e.target.checked)}
             />
           </label>
-          <label className="flex items-center justify-between p-2.5 bg-[#1a1a25] border border-[#2a2a3a] rounded-lg cursor-pointer hover:bg-[#20202e] transition-colors">
+          <label className="flex items-center justify-between p-2.5 bg-demo-card border border-demo-border rounded-lg cursor-pointer hover:bg-[#20202e] transition-colors">
             <span className="text-[10px] uppercase tracking-widest text-[#ccc] font-medium">
               Reversed
             </span>
@@ -242,7 +242,7 @@ export function ConfigurableTimerDemo() {
               onChange={(e) => updateConfig("reversed", e.target.checked)}
             />
           </label>
-          <label className="flex items-center justify-between p-2.5 bg-[#1a1a25] border border-[#2a2a3a] rounded-lg cursor-pointer hover:bg-[#20202e] transition-colors">
+          <label className="flex items-center justify-between p-2.5 bg-demo-card border border-demo-border rounded-lg cursor-pointer hover:bg-[#20202e] transition-colors">
             <span className="text-[10px] uppercase tracking-widest text-[#ccc] font-medium">
               Autoplay
             </span>
@@ -264,26 +264,26 @@ export function ConfigurableTimerDemo() {
           Play
         </button>
         <button
-          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] hover:bg-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg active:scale-95 transition-all"
+          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border hover:bg-demo-border text-demo-text-muted hover:text-white rounded-lg active:scale-95 transition-all"
           onClick={controls.pause}
         >
           Pause
         </button>
         <button
-          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] hover:bg-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg active:scale-95 transition-all"
+          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border hover:bg-demo-border text-demo-text-muted hover:text-white rounded-lg active:scale-95 transition-all"
           onClick={() => controls.restart()}
         >
           Restart
         </button>
         <button
-          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1a1a25] border border-red-900/30 hover:bg-red-950/20 text-red-500/70 hover:text-red-400 rounded-lg active:scale-95 transition-all"
+          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-red-900/30 hover:bg-red-950/20 text-red-500/70 hover:text-red-400 rounded-lg active:scale-95 transition-all"
           onClick={() => controls.reset()}
         >
           Reset
         </button>
       </div>
 
-      <div className="mt-6 w-full px-4 py-2.5 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] flex justify-between items-center tracking-tighter">
+      <div className="mt-6 w-full px-4 py-2.5 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] flex justify-between items-center tracking-tighter">
         <span className="text-[#666]">
           Progress:{" "}
           <span ref={progressRef} className="text-indigo-400 font-bold">

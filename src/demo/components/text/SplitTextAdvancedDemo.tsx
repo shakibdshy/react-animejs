@@ -20,7 +20,7 @@ export const SplitTextAdvancedDemo: React.FC = () => {
       description="Official Anime.js v4 text splitter capabilities reproduced using react-animejs components."
     >
       <div className="flex flex-col gap-6 w-full">
-        <div className="bg-[#1a1a24]/50 rounded-2xl p-8 border border-white/5 min-h-30 flex items-center justify-center overflow-hidden">
+        <div className="bg-demo-card/50 rounded-2xl p-8 border border-white/5 min-h-30 flex items-center justify-center overflow-hidden">
           <AnimeTimeline loop autoplay defaults={{ ease: 'inOut(3)', duration: 650 }}>
             <SplitText
               ref={splitRef}
@@ -55,7 +55,7 @@ export const SplitTextAdvancedDemo: React.FC = () => {
           </AnimeTimeline>
         </div>
 
-        <div className="text-[10px] text-slate-500 space-y-1 opacity-60 font-medium">
+        <div className="text-[10px] text-demo-text-muted space-y-1 opacity-60 font-medium">
           <p>• Clean declarative implementation mimicking official anime.js demo</p>
           <p>• Uses dataset.line for alternating y-axis animations</p>
           <p>• Combines sequential timeline staggering</p>

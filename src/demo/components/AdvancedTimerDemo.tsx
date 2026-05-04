@@ -16,16 +16,16 @@ export function AdvancedTimerDemo() {
   return (
     <DemoSection title="Advanced Timer (Full Features)">
       <div className="flex gap-4 w-full">
-        <div className="flex-1 flex flex-col items-center gap-2 p-5 bg-[#050508] border border-[#2a2a3a] rounded-xl">
-          <span className="text-[10px] uppercase tracking-widest text-[#888] font-semibold">
+        <div className="flex-1 flex flex-col items-center gap-2 p-5 bg-demo-bg border border-demo-border rounded-xl">
+          <span className="text-[10px] uppercase tracking-widest text-demo-text-secondary font-semibold">
             Current Time
           </span>
           <span className="font-mono text-3xl font-bold text-green-500 [text-shadow:0_0_15px_rgba(34,197,94,0.4)]">
             {Math.round(state.currentTime)}
           </span>
         </div>
-        <div className="flex-1 flex flex-col items-center gap-2 p-5 bg-[#050508] border border-[#2a2a3a] rounded-xl">
-          <span className="text-[10px] uppercase tracking-widest text-[#888] font-semibold">
+        <div className="flex-1 flex flex-col items-center gap-2 p-5 bg-demo-bg border border-demo-border rounded-xl">
+          <span className="text-[10px] uppercase tracking-widest text-demo-text-secondary font-semibold">
             Callback Fired
           </span>
           <span className="font-mono text-3xl font-bold text-green-500 [text-shadow:0_0_15px_rgba(34,197,94,0.4)]">
@@ -43,20 +43,20 @@ export function AdvancedTimerDemo() {
           Play
         </button>
         <button
-          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] hover:bg-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg active:scale-95 transition-all"
+          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border hover:bg-demo-border text-demo-text-muted hover:text-white rounded-lg active:scale-95 transition-all"
           onClick={controls.pause}
         >
           Pause
         </button>
         <button
-          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-[#1e1e2a] border border-[#2a2a3a] hover:bg-[#2a2a3a] text-[#aaa] hover:text-white rounded-lg active:scale-95 transition-all"
+          className="px-5 py-2.5 text-xs font-bold uppercase tracking-widest bg-demo-card border border-demo-border hover:bg-demo-border text-demo-text-muted hover:text-white rounded-lg active:scale-95 transition-all"
           onClick={() => controls.restart()}
         >
           Restart
         </button>
       </div>
 
-      <div className="mt-4 px-4 py-2 bg-[#050508] border border-[#2a2a3a] rounded-lg font-mono text-[10px] text-[#666]">
+      <div className="mt-4 px-4 py-2 bg-demo-bg border border-demo-border rounded-lg font-mono text-[10px] text-[#666]">
         Frame Rate: 30fps | Progress: {Math.round(state.progress * 100)}%
       </div>
     </DemoSection>

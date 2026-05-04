@@ -152,7 +152,7 @@ export function Countdown({
       </div>
 
       {/* Progress ring */}
-      <div className="w-full max-w-50 h-1 bg-[#2a2a3a] rounded-full overflow-hidden mt-1">
+      <div className="w-full max-w-50 h-1 bg-demo-border rounded-full overflow-hidden mt-1">
         <Anime autoplay duration={300} ease="outCubic" width={`${progress * 100}%`}>
           <div
             className="h-full bg-[#ff4d6a] shadow-[0_0_10px_rgba(255,77,106,0.5)] rounded-full"
@@ -161,7 +161,7 @@ export function Countdown({
         </Anime>
       </div>
 
-      {label && <span className="text-xs text-slate-500 uppercase tracking-widest">{label}</span>}
+      {label && <span className="text-xs text-demo-text-muted uppercase tracking-widest">{label}</span>}
 
       <div className="flex gap-2 mt-2">
         {!isRunning && (remaining === from || isComplete) ? (
@@ -174,7 +174,7 @@ export function Countdown({
         ) : isRunning ? (
           <button
             onClick={handlePause}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#2a2a3a] text-[#e0e0e0] rounded-lg hover:bg-[#3a3a4a] transition-colors"
+            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text rounded-lg hover:bg-demo-border-hover transition-colors"
           >
             Pause
           </button>
@@ -188,7 +188,7 @@ export function Countdown({
         )}
         <button
           onClick={handleReset}
-          className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#2a2a3a] text-slate-400 rounded-lg hover:bg-[#3a3a4a] hover:text-[#e0e0e0] transition-colors"
+          className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text-secondary rounded-lg hover:bg-demo-border-hover hover:text-demo-text transition-colors"
         >
           Reset
         </button>

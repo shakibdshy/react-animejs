@@ -26,27 +26,27 @@ const TimelineRemoveDemo: React.FC = () => {
   return (
     <DemoSection title="timeline.remove()">
       <div className="space-y-6">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-demo-text-secondary">
           Removes specific targets or animation instances from the timeline. In
           this demo, clicking 'Remove Blue' will stop its animation while the
           green one continues.
         </p>
         <div className="space-y-3">
-          <div className="h-12 bg-slate-800/50 rounded-lg flex items-center px-6">
+          <div className="h-12 bg-demo-border/50 rounded-lg flex items-center px-6">
             <div
               ref={box1Ref}
               className={`w-8 h-8 bg-blue-500 rounded shadow-lg transition-opacity ${removed ? "opacity-50" : ""}`}
             />
-            <span className="ml-4 text-xs text-slate-500 italic">
+            <span className="ml-4 text-xs text-demo-text-muted italic">
               {removed ? "Removed" : "Active"}
             </span>
           </div>
-          <div className="h-12 bg-slate-800/50 rounded-lg flex items-center px-6">
+          <div className="h-12 bg-demo-border/50 rounded-lg flex items-center px-6">
             <div
               ref={box2Ref}
               className="w-8 h-8 bg-emerald-500 rounded shadow-lg"
             />
-            <span className="ml-4 text-xs text-slate-500 italic">
+            <span className="ml-4 text-xs text-demo-text-muted italic">
               Always Active
             </span>
           </div>
@@ -58,7 +58,7 @@ const TimelineRemoveDemo: React.FC = () => {
             disabled={removed}
             className={`px-4 py-2 rounded-lg transition-colors text-sm font-medium ${
               removed
-                ? "bg-slate-800 text-slate-500 cursor-not-allowed"
+                ? "bg-demo-card text-demo-text-muted cursor-not-allowed"
                 : "bg-red-500 hover:bg-red-600 text-white"
             }`}
           >
@@ -72,7 +72,7 @@ const TimelineRemoveDemo: React.FC = () => {
           </button>
         </div>
 
-        <div className="text-xs text-slate-400 font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+        <div className="text-xs text-demo-text-secondary font-mono bg-slate-900/50 p-3 rounded-lg border border-slate-800">
           controls.remove(box1Ref)
         </div>
       </div>

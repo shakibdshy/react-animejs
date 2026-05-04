@@ -64,8 +64,8 @@ export const SplitTextEffectsDemo: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-tighter transition-all ${
                 effectType === effect
-                  ? 'bg-[#ffd11a] text-[#12121a]'
-                  : 'bg-slate-800 text-slate-400 hover:text-white'
+                  ? 'bg-demo-accent text-demo-bg'
+                  : 'bg-demo-card text-demo-text-secondary hover:text-white'
               }`}
             >
               {effect}
@@ -73,7 +73,7 @@ export const SplitTextEffectsDemo: React.FC = () => {
           ))}
         </div>
 
-        <div className="bg-[#1a1a24]/50 rounded-2xl p-8 border border-white/5 min-h-30 flex items-center justify-center overflow-hidden">
+        <div className="bg-demo-card/50 rounded-2xl p-8 border border-white/5 min-h-30 flex items-center justify-center overflow-hidden">
           <AnimeTimeline
             key={effectType}
             loop
@@ -103,7 +103,7 @@ export const SplitTextEffectsDemo: React.FC = () => {
           </AnimeTimeline>
         </div>
 
-        <div className="text-[10px] text-slate-500 space-y-1 opacity-60 font-medium">
+        <div className="text-[10px] text-demo-text-muted space-y-1 opacity-60 font-medium">
           <p>• Effect: {effectDescriptions[effectType]}</p>
           <p>• Continuous declarative loop animation</p>
         </div>

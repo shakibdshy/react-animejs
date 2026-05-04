@@ -75,7 +75,7 @@ export function ToggleSwitch({
             style={{
               backgroundColor: isChecked ? '#ffd11a' : '#3a3a4a',
               boxShadow: isChecked
-                ? '0 0 8px rgba(255,209,26,0.3)'
+                ? '0 0 8px var(--demo-accent)/0.3'
                 : 'inset 0 1px 2px rgba(0,0,0,0.2)',
             }}
           />
@@ -118,7 +118,7 @@ export function ToggleSwitch({
           />
         </Anime>
       </div>
-      {label && <span className="text-sm text-[#e0e0e0] select-none">{label}</span>}
+      {label && <span className="text-sm text-demo-text select-none">{label}</span>}
     </label>
   );
 }

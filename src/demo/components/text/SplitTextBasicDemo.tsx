@@ -35,8 +35,8 @@ export const SplitTextBasicDemo: React.FC = () => {
               }}
               className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-tighter transition-all ${
                 splitMode === mode
-                  ? 'bg-[#ffd11a] text-[#12121a]'
-                  : 'bg-slate-800 text-slate-400 hover:text-white'
+                  ? 'bg-demo-accent text-demo-bg'
+                  : 'bg-demo-card text-demo-text-secondary hover:text-white'
               }`}
             >
               {mode}
@@ -44,7 +44,7 @@ export const SplitTextBasicDemo: React.FC = () => {
           ))}
         </div>
 
-        <div className="bg-[#1a1a24]/50 rounded-2xl p-8 border border-white/5 min-h-30 flex items-center justify-center">
+        <div className="bg-demo-card/50 rounded-2xl p-8 border border-white/5 min-h-30 flex items-center justify-center">
           {/* 
             Clean, developer-friendly declarative timeline logic.
             We don't need any useEffects, refs for imperative commands, or manual callbacks.
@@ -73,7 +73,7 @@ export const SplitTextBasicDemo: React.FC = () => {
           </AnimeTimeline>
         </div>
 
-        <div className="text-[10px] text-slate-500 space-y-1 opacity-60 font-medium">
+        <div className="text-[10px] text-demo-text-muted space-y-1 opacity-60 font-medium">
           <p>• Clean declarative implementation using Components</p>
           <p>• Switch modes to see different split levels</p>
         </div>

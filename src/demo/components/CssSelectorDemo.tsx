@@ -50,15 +50,15 @@ export const CssSelectorDemo: React.FC = () => {
   return (
     <DemoSection title="CSS Selector Targets">
       <div className="flex flex-col gap-4 w-full">
-        <div className="medium row flex items-center gap-4 bg-[#1a1a24] p-4 rounded-lg">
+        <div className="medium row flex items-center gap-4 bg-demo-card p-4 rounded-lg">
           <div className="css-selector-square w-12 h-12 bg-indigo-500 rounded-sm"></div>
           <span className="text-xs text-gray-400">.css-selector-square</span>
         </div>
-        <div className="medium row flex items-center gap-4 bg-[#1a1a24] p-4 rounded-lg">
+        <div className="medium row flex items-center gap-4 bg-demo-card p-4 rounded-lg">
           <div id="css-selector-id" className="css-selector-square w-12 h-12 bg-purple-500 rounded-sm"></div>
           <span className="text-xs text-gray-400">#css-selector-id</span>
         </div>
-        <div className="medium row flex items-center gap-4 bg-[#1a1a24] p-4 rounded-lg">
+        <div className="medium row flex items-center gap-4 bg-demo-card p-4 rounded-lg">
           <div className="css-selector-square w-12 h-12 bg-pink-500 rounded-sm"></div>
           <span className="text-xs text-gray-400">.row:nth-child(3) .css-selector-square</span>
         </div>

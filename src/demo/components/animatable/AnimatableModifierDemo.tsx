@@ -13,8 +13,8 @@ function Clock({
 }) {
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="w-20 h-20 rounded-full border-2 border-[#2a2a3a] relative flex items-center justify-center bg-[#12121a] shadow-inner">
-        <div className="w-1.5 h-1.5 rounded-full bg-[#2a2a3a] z-10" />
+      <div className="w-20 h-20 rounded-full border-2 border-demo-border relative flex items-center justify-center bg-demo-bg shadow-inner">
+        <div className="w-1.5 h-1.5 rounded-full bg-demo-border z-10" />
         <div
           ref={clockRef}
           className="absolute w-0.5 h-8 origin-bottom bottom-1/2 rounded-full"
@@ -23,7 +23,7 @@ function Clock({
         {[...Array(12)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-0.5 h-1 bg-[#2a2a3a]"
+            className="absolute w-0.5 h-1 bg-demo-border"
             style={{
               transform: `rotate(${i * 30}deg) translateY(-36px)`,
             }}
@@ -31,7 +31,7 @@ function Clock({
         ))}
       </div>
       {label && (
-        <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-1 text-center max-w-[80px]">
+        <span className="text-[10px] font-mono text-demo-text-muted uppercase tracking-widest mt-1 text-center max-w-[80px]">
           {label}
         </span>
       )}

@@ -26,6 +26,13 @@ export const Route = createRootRoute({
         href: appCss,
       },
     ],
+    scripts: [
+      {
+        children:
+          "(function(){try{var t=localStorage.getItem('demo-theme');if(t==='light'||t===null)document.documentElement.classList.remove('dark');else document.documentElement.classList.add('dark')}catch(e){}})()",
+        type: 'text/javascript',
+      },
+    ],
   }),
 
   shellComponent: RootDocument,

@@ -131,18 +131,18 @@ const scopeRef = useRef<AnimeScopeRef>(null);
           }}
         >
           {/* Animated element */}
-          <div className="props-box w-14 h-14 rounded-xl bg-linear-to-br from-[#ffd11a] to-[#ff8c00] shadow-lg shadow-[#ffd11a]/30 flex items-center justify-center">
-            <Info className="w-6 h-6 text-[#1a1a24]" />
+          <div className="props-box w-14 h-14 rounded-xl bg-linear-to-br from-demo-accent to-[#ff8c00] shadow-lg shadow-demo-accent/30 flex items-center justify-center">
+            <Info className="w-6 h-6 text-demo-card" />
           </div>
         </AnimeScope>
 
         {/* Properties display */}
         <div className="w-full max-w-md space-y-3">
           {/* root property */}
-          <div className="p-3 rounded-lg bg-[#1a1a24] border border-[#2a2a3a]">
+          <div className="p-3 rounded-lg bg-demo-card border border-demo-border">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-slate-400 font-mono">scope.root</span>
-              <span className="text-xs text-[#ffd11a] font-mono">
+              <span className="text-xs text-demo-text-secondary font-mono">scope.root</span>
+              <span className="text-xs text-demo-accent font-mono">
                 {scopeInfo?.rootTag || "null"}
               </span>
             </div>
@@ -152,9 +152,9 @@ const scopeRef = useRef<AnimeScopeRef>(null);
           </div>
 
           {/* matches property */}
-          <div className="p-3 rounded-lg bg-[#1a1a24] border border-[#2a2a3a]">
+          <div className="p-3 rounded-lg bg-demo-card border border-demo-border">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-slate-400 font-mono">scope.matches</span>
+              <span className="text-xs text-demo-text-secondary font-mono">scope.matches</span>
               <span className="text-xs text-cyan-400 font-mono">
                 {scopeInfo?.matchesCount || 0} queries
               </span>
@@ -166,7 +166,7 @@ const scopeRef = useRef<AnimeScopeRef>(null);
                   className={`px-2 py-0.5 rounded text-[10px] font-mono ${
                     value
                       ? "bg-green-500/20 text-green-400 border border-green-500/30"
-                      : "bg-slate-700 text-slate-400"
+                      : "bg-slate-700 text-demo-text-secondary"
                   }`}
                 >
                   {key}: {value ? "true" : "false"}
@@ -176,9 +176,9 @@ const scopeRef = useRef<AnimeScopeRef>(null);
           </div>
 
           {/* methods property */}
-          <div className="p-3 rounded-lg bg-[#1a1a24] border border-[#2a2a3a]">
+          <div className="p-3 rounded-lg bg-demo-card border border-demo-border">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-slate-400 font-mono">scope.methods</span>
+              <span className="text-xs text-demo-text-secondary font-mono">scope.methods</span>
               <span className="text-xs text-violet-400 font-mono">
                 {scopeInfo?.methodsCount || 0} methods
               </span>
@@ -202,7 +202,7 @@ const scopeRef = useRef<AnimeScopeRef>(null);
         </div>
 
         {/* Info */}
-        <div className="text-[10px] text-slate-500 text-center max-w-sm">
+        <div className="text-[10px] text-demo-text-muted text-center max-w-sm">
           These properties are accessible from the scope ref. Click the method buttons to call registered methods.
         </div>
       </div>

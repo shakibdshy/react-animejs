@@ -43,8 +43,8 @@ function toObserverSnapshot(observer: {
 
 function ScrollHint() {
   return (
-    <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.25em] text-slate-500">
-      <ArrowDown className="h-3.5 w-3.5 text-[#ffd11a]" />
+    <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.25em] text-demo-text-muted">
+      <ArrowDown className="h-3.5 w-3.5 text-demo-accent" />
       Scroll the inner panel
     </div>
   );
@@ -93,14 +93,14 @@ function ScrollPlaybackDemo() {
         <div className="flex gap-2">
           <button
             onClick={() => scrollObserver.current?.refresh()}
-            className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-cyan-400 rounded-lg transition-all"
+            className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-cyan-400 rounded-lg transition-all"
             title="Refresh observer"
           >
             <RefreshCw size={16} />
           </button>
           <button
             onClick={() => animationControls.restart()}
-            className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-[#ffd11a] rounded-lg transition-all"
+            className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-demo-accent rounded-lg transition-all"
             title="Restart animation"
           >
             <Zap size={16} />
@@ -127,30 +127,30 @@ function ScrollPlaybackDemo() {
 
         <div
           ref={containerRef}
-          className="relative h-64 overflow-y-auto rounded-2xl border border-[#2a2a3a] bg-linear-to-b from-[#09090e] via-[#101019] to-[#09090e]"
+          className="relative h-64 overflow-y-auto rounded-2xl border border-demo-border bg-linear-to-b from-[#09090e] via-[#101019] to-[#09090e]"
         >
           <div className="flex h-120 flex-col items-center justify-between px-5 py-6">
-            <div className="text-center text-xs text-slate-500">
+            <div className="text-center text-xs text-demo-text-muted">
               Scroll until the yellow chip reaches the middle band
             </div>
 
             <div className="relative flex w-full items-center justify-center">
-              <div className="pointer-events-none absolute inset-x-0 top-1/2 h-16 -translate-y-1/2 rounded-2xl border border-dashed border-[#ffd11a]/35 bg-[#ffd11a]/5" />
+              <div className="pointer-events-none absolute inset-x-0 top-1/2 h-16 -translate-y-1/2 rounded-2xl border border-dashed border-demo-accent/35 bg-demo-accent/5" />
               <div
                 ref={ref}
-                className="relative z-10 flex h-18 w-18 items-center justify-center rounded-3xl bg-linear-to-br from-[#ffd11a] to-[#ff8c37] text-xs font-black uppercase tracking-[0.2em] text-[#12121a] shadow-[0_12px_40px_rgba(255,209,26,0.25)]"
+                className="relative z-10 flex h-18 w-18 items-center justify-center rounded-3xl bg-linear-to-br from-demo-accent to-[#ff8c37] text-xs font-black uppercase tracking-[0.2em] text-demo-bg shadow-[0_12px_40px_rgba(255,209,26,0.25)]"
               >
                 Spin
               </div>
             </div>
 
-            <div className="text-center text-xs text-slate-500">
+            <div className="text-center text-xs text-demo-text-muted">
               Leaving the zone pauses or reverses based on scroll direction
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 text-[10px] font-mono uppercase tracking-[0.2em] text-slate-500">
+        <div className="grid grid-cols-2 gap-3 text-[10px] font-mono uppercase tracking-[0.2em] text-demo-text-muted">
           <div className="rounded-xl border border-white/5 bg-black/20 px-3 py-2">
             in view:{" "}
             <span
@@ -169,7 +169,7 @@ function ScrollPlaybackDemo() {
           </div>
           <div className="rounded-xl border border-white/5 bg-black/20 px-3 py-2">
             observer:{" "}
-            <span className="text-[#ffd11a]">
+            <span className="text-demo-accent">
               {Math.round(observerState.progress * 100)}%
             </span>
           </div>
@@ -231,7 +231,7 @@ function ScrollScrubDemo() {
       actions={
         <button
           onClick={() => scrollObserver.current?.refresh()}
-          className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-cyan-400 rounded-lg transition-all"
+          className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-cyan-400 rounded-lg transition-all"
           title="Refresh observer"
         >
           <Waves size={16} />
@@ -251,14 +251,14 @@ function ScrollScrubDemo() {
 
         <div
           ref={containerRef}
-          className="relative h-64 overflow-y-auto rounded-2xl border border-[#2a2a3a] bg-[#09090e]"
+          className="relative h-64 overflow-y-auto rounded-2xl border border-demo-border bg-demo-bg"
         >
-          <div className="pointer-events-none sticky top-4 z-10 mx-4 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-[10px] font-mono uppercase tracking-[0.22em] text-slate-500 backdrop-blur">
+          <div className="pointer-events-none sticky top-4 z-10 mx-4 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-[10px] font-mono uppercase tracking-[0.22em] text-demo-text-muted backdrop-blur">
             observer progress {Math.round(observerState.progress * 100)}%
           </div>
 
           <div className="flex h-155 flex-col items-center justify-between px-6 py-10">
-            <div className="text-center text-xs text-slate-500">
+            <div className="text-center text-xs text-demo-text-muted">
               Start outside the container viewport
             </div>
 
@@ -274,13 +274,13 @@ function ScrollScrubDemo() {
             </div>
 
             <div className="w-full max-w-60 space-y-2">
-              <div className="h-2 overflow-hidden rounded-full bg-slate-800/70">
+              <div className="h-2 overflow-hidden rounded-full bg-demo-card/70">
                 <div
                   className="h-full bg-linear-to-r from-cyan-400 via-sky-400 to-indigo-400 transition-[width] duration-75"
                   style={{ width: `${observerState.progress * 100}%` }}
                 />
               </div>
-              <div className="flex justify-between text-[10px] font-mono uppercase tracking-[0.2em] text-slate-500">
+              <div className="flex justify-between text-[10px] font-mono uppercase tracking-[0.2em] text-demo-text-muted">
                 <span>offset start {Math.round(observerState.offsetStart)}</span>
                 <span>offset end {Math.round(observerState.offsetEnd)}</span>
               </div>
@@ -333,17 +333,17 @@ function ScrollCallbacksDemo() {
 
         <div
           ref={containerRef}
-          className="relative h-64 overflow-y-auto rounded-2xl border border-[#2a2a3a] bg-[#09090e]"
+          className="relative h-64 overflow-y-auto rounded-2xl border border-demo-border bg-demo-bg"
         >
           <div className="sticky top-0 z-10 border-b border-white/5 bg-black/45 px-4 py-3 backdrop-blur">
-            <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.2em] text-slate-500">
+            <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.2em] text-demo-text-muted">
               <span>in view {String(isInView)}</span>
               <span>{backward ? "backward" : "forward"}</span>
             </div>
           </div>
 
           <div className="flex h-140 flex-col items-center justify-between px-5 py-8">
-            <div className="w-full rounded-2xl border border-dashed border-white/10 bg-white/2 px-4 py-3 text-center text-xs text-slate-500">
+            <div className="w-full rounded-2xl border border-dashed border-white/10 bg-white/2 px-4 py-3 text-center text-xs text-demo-text-muted">
               Directional callbacks fire as the observed block crosses the
               center threshold
             </div>
@@ -359,14 +359,14 @@ function ScrollCallbacksDemo() {
               target
             </div>
 
-            <div className="w-full rounded-2xl border border-dashed border-white/10 bg-white/2 px-4 py-3 text-center text-xs text-slate-500">
+            <div className="w-full rounded-2xl border border-dashed border-white/10 bg-white/2 px-4 py-3 text-center text-xs text-demo-text-muted">
               Scroll back up to trigger backward enter/leave callbacks
             </div>
           </div>
         </div>
 
         <div className="rounded-2xl border border-white/5 bg-black/20 p-3">
-          <div className="mb-2 text-[10px] font-mono uppercase tracking-[0.2em] text-slate-500">
+          <div className="mb-2 text-[10px] font-mono uppercase tracking-[0.2em] text-demo-text-muted">
             Recent Events
           </div>
           <div className="space-y-2">
@@ -454,7 +454,7 @@ function ScrollSmoothSyncDemo() {
       actions={
         <button
           onClick={() => scrollObserver.current?.refresh()}
-          className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-cyan-400 rounded-lg transition-all"
+          className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-cyan-400 rounded-lg transition-all"
           title="Refresh observer"
         >
           <RefreshCw size={16} />
@@ -474,12 +474,12 @@ function ScrollSmoothSyncDemo() {
 
         <div
           ref={containerRef}
-          className="relative h-64 overflow-y-auto rounded-2xl border border-[#2a2a3a] bg-linear-to-b from-[#09090e] via-[#0f1420] to-[#09090e]"
+          className="relative h-64 overflow-y-auto rounded-2xl border border-demo-border bg-linear-to-b from-[#09090e] via-[#0f1420] to-[#09090e]"
         >
           <div className="pointer-events-none absolute inset-x-4 top-1/2 h-18 -translate-y-1/2 rounded-3xl border border-dashed border-cyan-400/25 bg-cyan-400/6" />
 
           <div className="flex h-155 flex-col items-center justify-between px-6 py-10">
-            <div className="text-center text-xs text-slate-500">
+            <div className="text-center text-xs text-demo-text-muted">
               Smooth sync eases the scrub instead of matching scroll instantly
             </div>
 
@@ -494,11 +494,11 @@ function ScrollSmoothSyncDemo() {
             </div>
 
             <div className="w-full max-w-64 space-y-2">
-              <div className="flex justify-between text-[10px] font-mono uppercase tracking-[0.2em] text-slate-500">
+              <div className="flex justify-between text-[10px] font-mono uppercase tracking-[0.2em] text-demo-text-muted">
                 <span>progress {Math.round(observerState.progress * 100)}%</span>
                 <span>velocity {observerState.velocity.toFixed(2)}</span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-slate-800/80">
+              <div className="h-2 overflow-hidden rounded-full bg-demo-card/80">
                 <div
                   className="h-full bg-linear-to-r from-cyan-400 via-sky-400 to-emerald-400 transition-[width] duration-100"
                   style={{ width: `${observerState.progress * 100}%` }}
@@ -509,7 +509,7 @@ function ScrollSmoothSyncDemo() {
         </div>
 
         <div className="rounded-2xl border border-white/5 bg-black/20 p-3">
-          <div className="mb-2 text-[10px] font-mono uppercase tracking-[0.2em] text-slate-500">
+          <div className="mb-2 text-[10px] font-mono uppercase tracking-[0.2em] text-demo-text-muted">
             Sync Events
           </div>
           <div className="space-y-2">
@@ -554,7 +554,7 @@ function ScrollHorizontalAxisDemo() {
       actions={
         <button
           onClick={() => controls.refresh()}
-          className="p-2 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-cyan-400 rounded-lg transition-all"
+          className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-cyan-400 rounded-lg transition-all"
           title="Refresh observer"
         >
           <Waves size={16} />
@@ -568,14 +568,14 @@ function ScrollHorizontalAxisDemo() {
 })`}
     >
       <div className="flex w-full flex-col gap-4">
-        <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.25em] text-slate-500">
-          <ArrowDown className="h-3.5 w-3.5 rotate-[-90deg] text-[#ffd11a]" />
+        <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.25em] text-demo-text-muted">
+          <ArrowDown className="h-3.5 w-3.5 rotate-[-90deg] text-demo-accent" />
           Scroll sideways inside the panel
         </div>
 
         <div
           ref={containerRef}
-          className="relative overflow-x-auto overflow-y-hidden rounded-2xl border border-[#2a2a3a] bg-[#09090e]"
+          className="relative overflow-x-auto overflow-y-hidden rounded-2xl border border-demo-border bg-demo-bg"
         >
           <div className="w-[56rem] px-6 py-6">
             <div className="mb-4 flex gap-3">
@@ -614,9 +614,9 @@ function ScrollHorizontalAxisDemo() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 text-[10px] font-mono uppercase tracking-[0.2em] text-slate-500">
+        <div className="grid grid-cols-3 gap-3 text-[10px] font-mono uppercase tracking-[0.2em] text-demo-text-muted">
           <div className="rounded-xl border border-white/5 bg-black/20 px-3 py-2">
-            progress <span className="text-[#ffd11a]">{Math.round(state.progress * 100)}%</span>
+            progress <span className="text-demo-accent">{Math.round(state.progress * 100)}%</span>
           </div>
           <div className="rounded-xl border border-white/5 bg-black/20 px-3 py-2">
             scroll <span className="text-cyan-400">{Math.round(state.scroll)}</span>

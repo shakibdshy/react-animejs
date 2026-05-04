@@ -54,7 +54,7 @@ export const AnimatableSettersDemo: React.FC = () => {
     >
       <div
         ref={containerRef}
-        className="w-full h-full min-h-[160px] bg-[#1a1a24]/50 rounded-2xl border border-white/5 relative flex items-center justify-center cursor-crosshair overflow-hidden"
+        className="w-full h-full min-h-[160px] bg-demo-card/50 rounded-2xl border border-white/5 relative flex items-center justify-center cursor-crosshair overflow-hidden"
       >
         <div
           className="absolute inset-0 opacity-10"
