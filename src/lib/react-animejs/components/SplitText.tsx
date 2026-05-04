@@ -328,10 +328,7 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
 
   return (
     <div ref={containerRef}>
-      {cloneElement(
-        child,
-        mergeChildProps(child as ReactElement<any>, { className })
-      )}
+      {cloneElement(child, mergeChildProps(child as ReactElement<any>, { className }))}
     </div>
   );
 });

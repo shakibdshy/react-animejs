@@ -1,11 +1,6 @@
-import React, { useRef } from "react";
-import {
-  stagger,
-  useAnimatable,
-  useAnimatableEvent,
-  utils,
-} from "../../../index";
-import { DemoCard } from "../DemoCard";
+import React, { useRef } from 'react';
+import { stagger, useAnimatable, useAnimatableEvent, utils } from '@/lib/react-animejs';
+import { DemoCard } from '../DemoCard';
 
 export const AnimatableDurationDemo: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -13,13 +8,13 @@ export const AnimatableDurationDemo: React.FC = () => {
   const { animatable } = useAnimatable(
     {
       x: 0,
-      y: stagger(200, { from: "center", start: 200 }),
-      ease: "out(4)",
+      y: stagger(200, { from: 'center', start: 200 }),
+      ease: 'out(4)',
     },
-    ".circle-duration",
+    '.circle-duration'
   );
 
-  useAnimatableEvent(containerRef, "mousemove", (e: MouseEvent) => {
+  useAnimatableEvent(containerRef, 'mousemove', (e: MouseEvent) => {
     if (!animatable) return;
 
     const bounds = (e.currentTarget as HTMLElement).getBoundingClientRect();

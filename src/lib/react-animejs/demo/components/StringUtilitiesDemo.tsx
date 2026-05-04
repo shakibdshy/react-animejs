@@ -13,8 +13,8 @@ import {
  */
 export const StringUtilitiesDemo: React.FC = () => {
   const [roundPadValue, setRoundPadValue] = useState(3.14159);
-  const [padStartValue, setPadStartValue] = useState("42");
-  const [padEndValue, setPadEndValue] = useState("42");
+  const [padStartValue, setPadStartValue] = useState(42);
+  const [padEndValue, setPadEndValue] = useState(42);
   const [degValue, setDegValue] = useState(180);
   const [radValue, setRadValue] = useState(3.14159);
 
@@ -27,14 +27,14 @@ export const StringUtilitiesDemo: React.FC = () => {
 
   const handlePadStartChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPadStartValue(e.target.value);
+      setPadStartValue(parseFloat(e.target.value));
     },
     [],
   );
 
   const handlePadEndChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPadEndValue(e.target.value);
+      setPadEndValue(parseFloat(e.target.value));
     },
     [],
   );

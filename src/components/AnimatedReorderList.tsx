@@ -1,5 +1,9 @@
 import { useState, useCallback, useRef } from 'react';
-import { AnimeLayout, AnimeLayoutItem, type AnimeLayoutRef } from './AnimeLayout';
+import {
+  AnimeLayout,
+  AnimeLayoutItem,
+  type AnimeLayoutRef,
+} from '../lib/react-animejs/components/AnimeLayout';
 
 export interface AnimatedReorderListProps<T> {
   /** Items to render */

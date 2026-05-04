@@ -4,7 +4,8 @@ import { DemoCard } from "./DemoCard";
 import {
   AnimatedSlider,
   type SlideTransition,
-} from "../../components/AnimatedSlider";
+} from "@/components/AnimatedSlider";
+
 
 // =============================================================================
 // Slide content factory

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { DemoSection } from "./DemoSection";
 import { DemoCard } from "./DemoCard";
-import { Counter } from "../../components/Counter";
-import { Countdown } from "../../components/Countdown";
+import { Counter } from "@/components/Counter";
+import { Countdown } from "@/components/Countdown";
 
 function BasicCounterDemo() {
   const [value, setValue] = useState(0);

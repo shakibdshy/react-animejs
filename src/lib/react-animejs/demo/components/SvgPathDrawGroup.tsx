@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { DemoSection } from "./DemoSection";
 import { DemoCard } from "./DemoCard";
-import { AnimeDraw } from "../../components/AnimeDraw";
+import { AnimeDraw } from "../../../../components/AnimeDraw";
 
 // =============================================================================
 // SVG paths for demos

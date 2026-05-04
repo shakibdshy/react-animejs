@@ -1,7 +1,7 @@
-import { cloneElement, forwardRef, isValidElement, type ReactElement } from "react";
-import { svg } from "animejs";
-import type { AnimationState, PlaybackControls, UseAnimeOptions } from "../types";
-import { mergeChildProps, type SvgComponentRef, useSvgAnimation } from "./svg-component-utils";
+import { cloneElement, forwardRef, isValidElement, type ReactElement } from 'react';
+import { svg } from 'animejs';
+import type { AnimationState, PlaybackControls, UseAnimeOptions } from '../types';
+import { mergeChildProps, type SvgComponentRef, useSvgAnimation } from './svg-component-utils';
 
 type DrawableShape =
   | SVGPathElement
@@ -16,8 +16,7 @@ export interface AnimeDrawRef extends SvgComponentRef {
   controls: PlaybackControls;
 }
 
-export interface AnimeDrawProps
-  extends Omit<UseAnimeOptions, "targets" | "selector"> {
+export interface AnimeDrawProps extends Omit<UseAnimeOptions, 'targets' | 'selector'> {
   children: ReactElement;
   draw?: string | string[];
   onReady?: (api: AnimeDrawRef) => void;
@@ -29,7 +28,7 @@ export interface AnimeDrawProps
 export const AnimeDraw = forwardRef<AnimeDrawRef, AnimeDrawProps>(function AnimeDraw(
   {
     children,
-    draw = ["0 0", "0 1"],
+    draw = ['0 0', '0 1'],
     onReady,
     onControlsReady,
     onStateChange,
@@ -46,7 +45,7 @@ export const AnimeDraw = forwardRef<AnimeDrawRef, AnimeDrawProps>(function Anime
     onPause,
     ...animationProps
   },
-  ref,
+  ref
 ) {
   const { childRef } = useSvgAnimation<DrawableShape>({
     enabled,
@@ -75,11 +74,14 @@ export const AnimeDraw = forwardRef<AnimeDrawRef, AnimeDrawProps>(function Anime
   });
 
   if (!isValidElement(children)) {
-    console.warn("[react-animejs] AnimeDraw requires a single valid SVG element as child");
+    console.warn('[react-animejs] AnimeDraw requires a single valid SVG element as child');
     return children;
   }
 
-  return cloneElement(children, mergeChildProps(children as ReactElement<any>, { ref: childRef, className }));
+  return cloneElement(
+    children,
+    mergeChildProps(children as ReactElement<any>, { ref: childRef, className })
+  );
 });
 
 export default AnimeDraw;

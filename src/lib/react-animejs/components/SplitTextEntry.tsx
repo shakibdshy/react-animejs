@@ -23,33 +23,21 @@
  * ```
  */
 
-import {
-  forwardRef,
-  type RefObject,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from "react";
-import { stagger as animeStagger } from "animejs";
-import { useTimelineContext } from "../core";
-import { safeJsonStringify } from "../core/helpers";
-import type { SplitTextRef } from "./SplitText";
-import type {
-  AnimatableProperties,
-  PlaybackSettings,
-  TweenParameters,
-} from "../types";
+import { forwardRef, type RefObject, useEffect, useImperativeHandle, useRef } from 'react';
+import { stagger as animeStagger } from 'animejs';
+import { useTimelineContext } from '../core';
+import { safeJsonStringify } from '../core/helpers';
+import type { SplitTextRef } from './SplitText';
+import type { AnimatableProperties, PlaybackSettings, TweenParameters } from '../types';
 
 // =============================================================================
 // Types
 // =============================================================================
 
-export type SplitMode = "chars" | "words" | "lines";
+export type SplitMode = 'chars' | 'words' | 'lines';
 
 export interface SplitTextEntryProps
-  extends Partial<AnimatableProperties>,
-    TweenParameters,
-    Omit<PlaybackSettings, "autoplay"> {
+  extends Partial<AnimatableProperties>, TweenParameters, Omit<PlaybackSettings, 'autoplay'> {
   /**
    * Ref to the SplitText component instance.
    * Required to access the split elements.
@@ -97,107 +85,113 @@ export interface SplitTextEntryRef {
 // Component
 // =============================================================================
 
-export const SplitTextEntry = forwardRef<
-  SplitTextEntryRef,
-  SplitTextEntryProps
->(function SplitTextEntry(
-  {
-    splitRef,
-    splitMode = "chars",
-    stagger: staggerDelay,
-    position,
-    enabled = true,
-    ...animProps
-  },
-  ref,
-) {
-  const { timeline, controls, isReady } = useTimelineContext();
-  const addedRef = useRef(false);
-  const splitElementsRef = useRef<Element[]>([]);
+export const SplitTextEntry = forwardRef<SplitTextEntryRef, SplitTextEntryProps>(
+  function SplitTextEntry(
+    {
+      splitRef,
+      splitMode = 'chars',
+      stagger: staggerDelay,
+      position,
+      enabled = true,
+      ...animProps
+    },
+    ref
+  ) {
+    const { timeline, controls, isReady } = useTimelineContext();
+    const addedRef = useRef(false);
+    const splitElementsRef = useRef<Element[]>([]);
 
-  // Stabilise animProps by serialising — the rest-spread creates a new object
-  // reference every render which would otherwise cause the effect to loop.
-  const animPropsStr = safeJsonStringify(animProps);
+    // Stabilise animProps by serialising — the rest-spread creates a new object
+    // reference every render which would otherwise cause the effect to loop.
+    const animPropsStr = safeJsonStringify(animProps);
 
-  // Keep a ref to the latest animProps so the effect closure always uses
-  // the current values without re-running on every render.
-  const animPropsRef = useRef(animProps);
-  animPropsRef.current = animProps;
+    // Keep a ref to the latest animProps so the effect closure always uses
+    // the current values without re-running on every render.
+    const animPropsRef = useRef(animProps);
+    animPropsRef.current = animProps;
 
-  // Get split elements from SplitText ref
-  const getSplitElements = (): Element[] => {
-    const split = splitRef.current?.split;
-    if (!split) return [];
+    // Get split elements from SplitText ref
+    const getSplitElements = (): Element[] => {
+      const split = splitRef.current?.split;
+      if (!split) return [];
 
-    const elements =
-      splitMode === "chars"
-        ? split.chars
-        : splitMode === "words"
-          ? split.words
-          : split.lines;
+      const elements =
+        splitMode === 'chars' ? split.chars : splitMode === 'words' ? split.words : split.lines;
 
-    return elements as Element[];
-  };
+      return elements as Element[];
+    };
 
-  // Resolve the effective position
-  const resolvePosition = () => {
-    return position;
-  };
+    // Resolve the effective position
+    const resolvePosition = () => {
+      return position;
+    };
 
-  // Add animation directly to the timeline, bypassing the controls.add()
-  // abstraction which doesn't support the stagger position parameter correctly.
-  const addAnimationDirect = (elements: Element[]) => {
-    const tl = timeline.current;
-    if (!tl) return;
+    // Add animation directly to the timeline, bypassing the controls.add()
+    // abstraction which doesn't support the stagger position parameter correctly.
+    const addAnimationDirect = (elements: Element[]) => {
+      const tl = timeline.current;
+      if (!tl) return;
 
-    splitElementsRef.current = elements;
-    
-    // Create a copy of props to inject stagger if provided
-    const props = { ...animPropsRef.current };
-    if (staggerDelay !== undefined) {
-      props.delay = animeStagger(staggerDelay) as any;
-    }
-    
-    const pos = resolvePosition();
+      splitElementsRef.current = elements;
 
-    tl.add(elements as any, props as any, pos);
-    tl.init();
-    
-    // If the timeline started empty, it might have already completed.
-    if ((tl as any).completed || tl.currentTime >= tl.duration) {
-      tl.restart();
-    } else {
-      tl.play();
-    }
-    
-    addedRef.current = true;
-  };
+      // Create a copy of props to inject stagger if provided
+      const props = { ...animPropsRef.current };
+      if (staggerDelay !== undefined) {
+        props.delay = animeStagger(staggerDelay) as any;
+      }
 
-  useEffect(() => {
-    if (!enabled || !isReady || !timeline.current) return;
+      const pos = resolvePosition();
 
-    // Try to get split elements immediately
-    const elements = getSplitElements();
+      tl.add(elements as any, props as any, pos);
+      tl.init();
 
-    if (elements.length > 0) {
-      addAnimationDirect(elements);
-    } else {
-      // Elements not ready yet — poll briefly until available.
-      let attempts = 0;
-      const maxAttempts = 10;
-      const timer = setInterval(() => {
-        attempts++;
-        const retryElements = getSplitElements();
-        if (retryElements.length > 0) {
-          addAnimationDirect(retryElements);
+      // If the timeline started empty, it might have already completed.
+      if ((tl as any).completed || tl.currentTime >= tl.duration) {
+        tl.restart();
+      } else {
+        tl.play();
+      }
+
+      addedRef.current = true;
+    };
+
+    useEffect(() => {
+      if (!enabled || !isReady || !timeline.current) return;
+
+      // Try to get split elements immediately
+      const elements = getSplitElements();
+
+      if (elements.length > 0) {
+        addAnimationDirect(elements);
+      } else {
+        // Elements not ready yet — poll briefly until available.
+        let attempts = 0;
+        const maxAttempts = 10;
+        const timer = setInterval(() => {
+          attempts++;
+          const retryElements = getSplitElements();
+          if (retryElements.length > 0) {
+            addAnimationDirect(retryElements);
+            clearInterval(timer);
+          } else if (attempts >= maxAttempts) {
+            clearInterval(timer);
+          }
+        }, 20);
+
+        return () => {
           clearInterval(timer);
-        } else if (attempts >= maxAttempts) {
-          clearInterval(timer);
-        }
-      }, 20);
+          if (addedRef.current) {
+            try {
+              controls.remove(splitElementsRef.current);
+            } catch {
+              // Ignore cleanup errors
+            }
+            addedRef.current = false;
+          }
+        };
+      }
 
       return () => {
-        clearInterval(timer);
         if (addedRef.current) {
           try {
             controls.remove(splitElementsRef.current);
@@ -207,59 +201,48 @@ export const SplitTextEntry = forwardRef<
           addedRef.current = false;
         }
       };
-    }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [enabled, timeline, controls, isReady, splitMode, position, staggerDelay, animPropsStr]);
 
-    return () => {
-      if (addedRef.current) {
-        try {
-          controls.remove(splitElementsRef.current);
-        } catch {
-          // Ignore cleanup errors
-        }
-        addedRef.current = false;
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, timeline, controls, isReady, splitMode, position, staggerDelay, animPropsStr]);
+    // Expose imperative API
+    useImperativeHandle(
+      ref,
+      () => ({
+        replay: () => {
+          const tl = timeline.current;
+          if (!tl) return;
 
-  // Expose imperative API
-  useImperativeHandle(
-    ref,
-    () => ({
-      replay: () => {
-        const tl = timeline.current;
-        if (!tl) return;
+          const elements = getSplitElements();
+          if (elements.length > 0) {
+            controls.remove(elements);
+            const props = { ...animPropsRef.current };
+            if (staggerDelay !== undefined) {
+              props.delay = animeStagger(staggerDelay) as any;
+            }
+            const pos = resolvePosition();
+            tl.add(elements as any, props as any, pos);
+            tl.init();
 
-        const elements = getSplitElements();
-        if (elements.length > 0) {
-          controls.remove(elements);
-          const props = { ...animPropsRef.current };
-          if (staggerDelay !== undefined) {
-            props.delay = animeStagger(staggerDelay) as any;
+            if ((tl as any).completed || tl.currentTime >= tl.duration) {
+              tl.restart();
+            } else {
+              tl.play();
+            }
           }
-          const pos = resolvePosition();
-          tl.add(elements as any, props as any, pos);
-          tl.init();
-          
-          if ((tl as any).completed || tl.currentTime >= tl.duration) {
-            tl.restart();
-          } else {
-            tl.play();
+        },
+        remove: () => {
+          const elements = getSplitElements();
+          if (elements.length > 0) {
+            controls.remove(elements);
           }
-        }
-      },
-      remove: () => {
-        const elements = getSplitElements();
-        if (elements.length > 0) {
-          controls.remove(elements);
-        }
-      },
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [splitMode, position, staggerDelay, animPropsStr, controls, timeline],
-  );
+        },
+      }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [splitMode, position, staggerDelay, animPropsStr, controls, timeline]
+    );
 
-  return null;
-});
+    return null;
+  }
+);
 
 export default SplitTextEntry;

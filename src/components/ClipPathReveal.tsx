@@ -1,8 +1,8 @@
-import { useState, useCallback, useRef } from "react";
-import { Animate } from "./Animate";
-import type { PlaybackControls } from "../types";
+import { useState, useCallback, useRef } from 'react';
+import { Animate } from '../lib/react-animejs/components/Animate';
+import type { PlaybackControls } from '../lib/react-animejs/types';
 
-export type ClipPathShape = "circle" | "diamond" | "horizontal" | "vertical" | "star";
+export type ClipPathShape = 'circle' | 'diamond' | 'horizontal' | 'vertical' | 'star';
 
 export interface ClipPathRevealProps {
   /** Clip-path shape for the reveal */
@@ -25,47 +25,45 @@ export interface ClipPathRevealProps {
   children: React.ReactNode;
 }
 
-function getClipPathValues(
-  shape: ClipPathShape,
-): { from: string; to: string } {
+function getClipPathValues(shape: ClipPathShape): { from: string; to: string } {
   switch (shape) {
-    case "circle":
+    case 'circle':
       return {
-        from: "circle(0% at 50% 50%)",
-        to: "circle(75% at 50% 50%)",
+        from: 'circle(0% at 50% 50%)',
+        to: 'circle(75% at 50% 50%)',
       };
-    case "diamond":
+    case 'diamond':
       return {
-        from: "polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%)",
-        to: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
+        from: 'polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%)',
+        to: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
       };
-    case "horizontal":
+    case 'horizontal':
       return {
-        from: "inset(0% 50% 0% 50%)",
-        to: "inset(0% 0% 0% 0%)",
+        from: 'inset(0% 50% 0% 50%)',
+        to: 'inset(0% 0% 0% 0%)',
       };
-    case "vertical":
+    case 'vertical':
       return {
-        from: "inset(50% 0% 50% 0%)",
-        to: "inset(0% 0% 0% 0%)",
+        from: 'inset(50% 0% 50% 0%)',
+        to: 'inset(0% 0% 0% 0%)',
       };
-    case "star":
+    case 'star':
       return {
-        from: "polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%)",
-        to: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
+        from: 'polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%, 50% 50%)',
+        to: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
       };
   }
 }
 
 export function ClipPathReveal({
-  shape = "circle",
+  shape = 'circle',
   duration = 1200,
-  ease = "outCubic",
+  ease = 'outCubic',
   autoplay = false,
   loop = false,
   alternate = false,
   onComplete,
-  className = "",
+  className = '',
   children,
 }: ClipPathRevealProps) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -101,9 +99,7 @@ export function ClipPathReveal({
           onComplete?.();
         }}
       >
-        <div className="relative overflow-hidden">
-          {children}
-        </div>
+        <div className="relative overflow-hidden">{children}</div>
       </Animate>
 
       <div className="flex gap-2">

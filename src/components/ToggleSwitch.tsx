@@ -1,11 +1,11 @@
-import { useState, useCallback, useRef } from "react";
-import { Animate } from "./Animate";
+import { useState, useCallback, useRef } from 'react';
+import { Animate } from '@/lib/react-animejs/components/Animate';
 
 export interface ToggleSwitchProps {
   checked?: boolean;
   defaultChecked?: boolean;
   onChange?: (checked: boolean) => void;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   label?: string;
   disabled?: boolean;
   className?: string;
@@ -21,10 +21,10 @@ export function ToggleSwitch({
   checked: controlledChecked,
   defaultChecked = false,
   onChange,
-  size = "md",
+  size = 'md',
   label,
   disabled = false,
-  className = "",
+  className = '',
 }: ToggleSwitchProps) {
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
@@ -42,17 +42,17 @@ export function ToggleSwitch({
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === "Enter" || e.key === " ") {
+      if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         handleClick();
       }
     },
-    [handleClick],
+    [handleClick]
   );
 
   return (
     <label
-      className={`inline-flex items-center gap-3 cursor-${disabled ? "not-allowed" : "pointer"} ${className}`}
+      className={`inline-flex items-center gap-3 cursor-${disabled ? 'not-allowed' : 'pointer'} ${className}`}
       aria-disabled={disabled}
     >
       <div
@@ -68,15 +68,15 @@ export function ToggleSwitch({
           autoplay
           duration={300}
           ease="outCubic"
-          backgroundColor={isChecked ? "#ffd11a" : "#3a3a4a"}
+          backgroundColor={isChecked ? '#ffd11a' : '#3a3a4a'}
         >
           <div
             className="absolute inset-0 rounded-full"
             style={{
-              backgroundColor: isChecked ? "#ffd11a" : "#3a3a4a",
+              backgroundColor: isChecked ? '#ffd11a' : '#3a3a4a',
               boxShadow: isChecked
-                ? "0 0 8px rgba(255,209,26,0.3)"
-                : "inset 0 1px 2px rgba(0,0,0,0.2)",
+                ? '0 0 8px rgba(255,209,26,0.3)'
+                : 'inset 0 1px 2px rgba(0,0,0,0.2)',
             }}
           />
         </Animate>
@@ -95,7 +95,7 @@ export function ToggleSwitch({
               height: dims.thumb * 2,
               left: (dims.width - dims.thumb * 2) / 2,
               top: (dims.height - dims.thumb * 2) / 2,
-              backgroundColor: isChecked ? "#ffd11a" : "#6a6a7a",
+              backgroundColor: isChecked ? '#ffd11a' : '#6a6a7a',
               opacity: 0,
             }}
           />
@@ -113,14 +113,12 @@ export function ToggleSwitch({
               height: dims.thumb,
               top: (dims.height - dims.thumb) / 2,
               left: (dims.height - dims.thumb) / 2,
-              backgroundColor: disabled ? "#888" : "#12121a",
+              backgroundColor: disabled ? '#888' : '#12121a',
             }}
           />
         </Animate>
       </div>
-      {label && (
-        <span className="text-sm text-[#e0e0e0] select-none">{label}</span>
-      )}
+      {label && <span className="text-sm text-[#e0e0e0] select-none">{label}</span>}
     </label>
   );
 }

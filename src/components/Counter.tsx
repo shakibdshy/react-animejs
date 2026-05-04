@@ -1,6 +1,6 @@
-import { useState, useCallback, useRef } from "react";
-import { Animate } from "./Animate";
-import { useAnimeTimer } from "../hooks/use-anime-timer";
+import { useState, useCallback, useRef } from 'react';
+import { Animate } from '@/lib/react-animejs/components/Animate';
+import { useAnimeTimer } from '@/lib/react-animejs/hooks/use-anime-timer';
 
 export interface CounterProps {
   /** Starting value */
@@ -18,20 +18,20 @@ export interface CounterProps {
   /** Callback when counter completes */
   onComplete?: () => void;
   /** Number format: integer, padded, etc. */
-  format?: "integer" | "padded";
+  format?: 'integer' | 'padded';
   /** Label displayed below the counter */
   label?: string;
   /** Custom className */
   className?: string;
   /** Font size class */
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
 const sizeMap = {
-  sm: "text-3xl",
-  md: "text-5xl",
-  lg: "text-7xl",
-  xl: "text-9xl",
+  sm: 'text-3xl',
+  md: 'text-5xl',
+  lg: 'text-7xl',
+  xl: 'text-9xl',
 };
 
 export function Counter({
@@ -42,10 +42,10 @@ export function Counter({
   loop = false,
   onTick,
   onComplete,
-  format = "integer",
+  format = 'integer',
   label,
-  className = "",
-  size = "md",
+  className = '',
+  size = 'md',
 }: CounterProps) {
   const [value, setValue] = useState(from);
   const [hasStarted, setHasStarted] = useState(false);
@@ -65,10 +65,7 @@ export function Counter({
       tickCountRef.current += 1;
       const nextValue = from + tickCountRef.current * direction;
 
-      if (
-        (direction > 0 && nextValue > to) ||
-        (direction < 0 && nextValue < to)
-      ) {
+      if ((direction > 0 && nextValue > to) || (direction < 0 && nextValue < to)) {
         return;
       }
 
@@ -117,9 +114,9 @@ export function Counter({
   }, [controls, from]);
 
   const formatValue = (val: number): string => {
-    if (format === "padded") {
+    if (format === 'padded') {
       const maxDigits = String(Math.abs(to)).length;
-      return String(val).padStart(maxDigits, "0");
+      return String(val).padStart(maxDigits, '0');
     }
     return String(val);
   };
@@ -138,19 +135,13 @@ export function Counter({
           translateY={[8, 0]}
           opacity={[0, 1]}
         >
-          <span
-            className={`font-mono font-black text-[#ffd11a] tabular-nums ${sizeMap[size]}`}
-          >
+          <span className={`font-mono font-black text-[#ffd11a] tabular-nums ${sizeMap[size]}`}>
             {displayValue}
           </span>
         </Animate>
       </div>
 
-      {label && (
-        <span className="text-xs text-slate-500 uppercase tracking-widest">
-          {label}
-        </span>
-      )}
+      {label && <span className="text-xs text-slate-500 uppercase tracking-widest">{label}</span>}
 
       <div className="flex gap-2 mt-2">
         {!hasStarted || isComplete ? (
@@ -158,7 +149,7 @@ export function Counter({
             onClick={handleStart}
             className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#ffd11a] text-[#12121a] rounded-lg hover:bg-[#ffd11a]/90 transition-colors"
           >
-            {isComplete ? "Restart" : "Start"}
+            {isComplete ? 'Restart' : 'Start'}
           </button>
         ) : isRunning ? (
           <button

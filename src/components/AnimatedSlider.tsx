@@ -1,5 +1,8 @@
 import { useState, useCallback, useRef } from 'react';
-import { AnimatePresence, AnimatePresenceChild } from './AnimatePresence';
+import {
+  AnimatePresence,
+  AnimatePresenceChild,
+} from '@/lib/react-animejs/components/AnimatePresence';
 
 export type SlideDirection = 'left' | 'right';
 

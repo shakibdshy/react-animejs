@@ -6,7 +6,7 @@ import {
   AnimeLayoutItem,
   type AnimeLayoutRef,
 } from "../../components/AnimeLayout";
-import { AnimatedReorderList } from "../../components/AnimatedReorderList";
+import { AnimatedReorderList } from "../../../../components/AnimatedReorderList";
 import {
   AnimatePresence,
   AnimatePresenceChild,

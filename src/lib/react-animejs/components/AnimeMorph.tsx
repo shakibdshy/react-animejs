@@ -1,7 +1,12 @@
-import { cloneElement, forwardRef, isValidElement, type ReactElement, type RefObject } from "react";
-import { svg } from "animejs";
-import type { AnimationState, PlaybackControls, UseAnimeOptions } from "../types";
-import { mergeChildProps, resolveSvgElement, type SvgComponentRef, useSvgAnimation } from "./svg-component-utils";
+import { cloneElement, forwardRef, isValidElement, type ReactElement, type RefObject } from 'react';
+import { svg } from 'animejs';
+import type { AnimationState, PlaybackControls, UseAnimeOptions } from '../types';
+import {
+  mergeChildProps,
+  resolveSvgElement,
+  type SvgComponentRef,
+  useSvgAnimation,
+} from './svg-component-utils';
 
 type MorphableShape = SVGPathElement | SVGPolygonElement | SVGPolylineElement;
 
@@ -9,21 +14,23 @@ export interface AnimeMorphRef extends SvgComponentRef {
   controls: PlaybackControls;
 }
 
-export interface AnimeMorphProps
-  extends Omit<UseAnimeOptions, "targets" | "selector" | "d" | "points"> {
+export interface AnimeMorphProps extends Omit<
+  UseAnimeOptions,
+  'targets' | 'selector' | 'd' | 'points'
+> {
   children: ReactElement;
   to?: string | MorphableShape | RefObject<MorphableShape | null>;
   target?: MorphableShape | RefObject<MorphableShape | null>;
   precision?: number;
-  attribute?: "d" | "points";
+  attribute?: 'd' | 'points';
   onReady?: (api: AnimeMorphRef) => void;
   onControlsReady?: (controls: PlaybackControls) => void;
   onStateChange?: (state: AnimationState) => void;
   className?: string;
 }
 
-function getCurrentSvgAttribute(source: MorphableShape, attribute: "d" | "points") {
-  return source.getAttribute(attribute) ?? "";
+function getCurrentSvgAttribute(source: MorphableShape, attribute: 'd' | 'points') {
+  return source.getAttribute(attribute) ?? '';
 }
 
 export const AnimeMorph = forwardRef<AnimeMorphRef, AnimeMorphProps>(function AnimeMorph(
@@ -49,14 +56,14 @@ export const AnimeMorph = forwardRef<AnimeMorphRef, AnimeMorphProps>(function An
     onPause,
     ...animationProps
   },
-  ref,
+  ref
 ) {
   const { childRef } = useSvgAnimation<MorphableShape>({
     enabled,
     autoplay,
     deps,
     specificOptions: {
-      to: typeof to === "string" ? to : null, // only stringify strings safely
+      to: typeof to === 'string' ? to : null, // only stringify strings safely
       precision,
       attribute,
     },
@@ -77,13 +84,15 @@ export const AnimeMorph = forwardRef<AnimeMorphRef, AnimeMorphProps>(function An
     forwardedRef: ref,
     createConfig: (source) => {
       const morphTarget = resolveSvgElement(to ?? target);
-      if (!morphTarget && typeof to !== "string") return null;
+      if (!morphTarget && typeof to !== 'string') return null;
 
-      const morphAttribute = attribute ?? (source.tagName.toLowerCase() === "path" ? "d" : "points");
+      const morphAttribute =
+        attribute ?? (source.tagName.toLowerCase() === 'path' ? 'd' : 'points');
 
-      const morphValue = typeof to === "string"
-        ? [getCurrentSvgAttribute(source as MorphableShape, morphAttribute), to]
-        : svg.morphTo(morphTarget as MorphableShape, precision);
+      const morphValue =
+        typeof to === 'string'
+          ? [getCurrentSvgAttribute(source as MorphableShape, morphAttribute), to]
+          : svg.morphTo(morphTarget as MorphableShape, precision);
 
       return {
         target: source as MorphableShape,
@@ -93,11 +102,14 @@ export const AnimeMorph = forwardRef<AnimeMorphRef, AnimeMorphProps>(function An
   });
 
   if (!isValidElement(children)) {
-    console.warn("[react-animejs] AnimeMorph requires a single valid SVG element as child");
+    console.warn('[react-animejs] AnimeMorph requires a single valid SVG element as child');
     return children;
   }
 
-  return cloneElement(children, mergeChildProps(children as ReactElement<any>, { ref: childRef, className }));
+  return cloneElement(
+    children,
+    mergeChildProps(children as ReactElement<any>, { ref: childRef, className })
+  );
 });
 
 export default AnimeMorph;

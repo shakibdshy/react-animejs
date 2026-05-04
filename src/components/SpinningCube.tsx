@@ -1,6 +1,6 @@
-import { useState, useCallback, useRef } from "react";
-import { Animate } from "./Animate";
-import type { AnimationState, PlaybackControls } from "../types";
+import { useState, useCallback, useRef } from 'react';
+import { Animate } from '@/lib/react-animejs/components/Animate';
+import type { AnimationState, PlaybackControls } from '@/lib/react-animejs/types';
 
 export interface SpinningCubeProps {
   /** Cube size in px */
@@ -8,7 +8,7 @@ export interface SpinningCubeProps {
   /** Spin duration in ms */
   duration?: number;
   /** Rotation axis: x, y, or both */
-  axis?: "x" | "y" | "both";
+  axis?: 'x' | 'y' | 'both';
   /** Whether to auto-play on mount */
   autoplay?: boolean;
   /** Loop the rotation */
@@ -24,22 +24,19 @@ export interface SpinningCubeProps {
 export function SpinningCube({
   size = 120,
   duration = 3000,
-  axis = "both",
+  axis = 'both',
   autoplay = false,
   loop = true,
-  ease = "linear",
+  ease = 'linear',
   onLoop,
-  className = "",
+  className = '',
 }: SpinningCubeProps) {
   const [isPlaying, setIsPlaying] = useState(autoplay);
   const controlsRef = useRef<PlaybackControls | null>(null);
 
-  const handleControlsReady = useCallback(
-    (controls: PlaybackControls) => {
-      controlsRef.current = controls;
-    },
-    [],
-  );
+  const handleControlsReady = useCallback((controls: PlaybackControls) => {
+    controlsRef.current = controls;
+  }, []);
 
   const handlePause = useCallback(() => {
     controlsRef.current?.pause();
@@ -63,55 +60,55 @@ export function SpinningCube({
   const half = size / 2;
 
   const faceBase: React.CSSProperties = {
-    position: "absolute",
+    position: 'absolute',
     width: size,
     height: size,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     fontSize: size * 0.16,
     fontWeight: 800,
-    fontFamily: "monospace",
-    backfaceVisibility: "hidden",
+    fontFamily: 'monospace',
+    backfaceVisibility: 'hidden',
     border: `1px solid rgba(255, 209, 26, 0.15)`,
   };
 
   const faces = [
     {
-      label: "Front",
+      label: 'Front',
       transform: `translateZ(${half}px)`,
-      bg: "rgba(255, 209, 26, 0.08)",
-      color: "#ffd11a",
+      bg: 'rgba(255, 209, 26, 0.08)',
+      color: '#ffd11a',
     },
     {
-      label: "Back",
+      label: 'Back',
       transform: `rotateY(180deg) translateZ(${half}px)`,
-      bg: "rgba(255, 77, 106, 0.08)",
-      color: "#ff4d6a",
+      bg: 'rgba(255, 77, 106, 0.08)',
+      color: '#ff4d6a',
     },
     {
-      label: "Right",
+      label: 'Right',
       transform: `rotateY(90deg) translateZ(${half}px)`,
-      bg: "rgba(99, 179, 237, 0.08)",
-      color: "#63b3ed",
+      bg: 'rgba(99, 179, 237, 0.08)',
+      color: '#63b3ed',
     },
     {
-      label: "Left",
+      label: 'Left',
       transform: `rotateY(-90deg) translateZ(${half}px)`,
-      bg: "rgba(104, 211, 145, 0.08)",
-      color: "#68d391",
+      bg: 'rgba(104, 211, 145, 0.08)',
+      color: '#68d391',
     },
     {
-      label: "Top",
+      label: 'Top',
       transform: `rotateX(90deg) translateZ(${half}px)`,
-      bg: "rgba(183, 148, 244, 0.08)",
-      color: "#b794f4",
+      bg: 'rgba(183, 148, 244, 0.08)',
+      color: '#b794f4',
     },
     {
-      label: "Bottom",
+      label: 'Bottom',
       transform: `rotateX(-90deg) translateZ(${half}px)`,
-      bg: "rgba(246, 173, 85, 0.08)",
-      color: "#f6ad55",
+      bg: 'rgba(246, 173, 85, 0.08)',
+      color: '#f6ad55',
     },
   ];
 
@@ -121,7 +118,7 @@ export function SpinningCube({
       <div
         style={{
           perspective: size * 4,
-          perspectiveOrigin: "50% 50%",
+          perspectiveOrigin: '50% 50%',
         }}
       >
         <Animate
@@ -129,8 +126,8 @@ export function SpinningCube({
           duration={duration}
           loop={loop}
           ease={ease}
-          rotateX={axis === "y" ? undefined : "1turn"}
-          rotateY={axis === "x" ? undefined : "1turn"}
+          rotateX={axis === 'y' ? undefined : '1turn'}
+          rotateY={axis === 'x' ? undefined : '1turn'}
           onControlsReady={handleControlsReady}
           onLoop={onLoop}
           onStateChange={(state: AnimationState) => {
@@ -143,8 +140,8 @@ export function SpinningCube({
             style={{
               width: size,
               height: size,
-              position: "relative",
-              transformStyle: "preserve-3d",
+              position: 'relative',
+              transformStyle: 'preserve-3d',
             }}
           >
             {faces.map((face) => (

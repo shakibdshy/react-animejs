@@ -1,12 +1,6 @@
-import React, { useRef, useState, useCallback } from "react";
-import { DemoCard } from "./DemoCard";
-import {
-  $,
-  get,
-  set,
-  cleanInlineStyles,
-  remove,
-} from "../../utils/anime-utils";
+import React, { useRef, useState, useCallback } from 'react';
+import { DemoCard } from './DemoCard';
+import { $, get, set, remove } from '../../utils/anime-utils';
 
 /**
  * Demo for DOM utility functions: $, get, set, cleanInlineStyles, remove
@@ -15,52 +9,55 @@ export const DOMUtilitiesDemo: React.FC = () => {
   const box1Ref = useRef<HTMLDivElement>(null);
   const box2Ref = useRef<HTMLDivElement>(null);
   const box3Ref = useRef<HTMLDivElement>(null);
-  const [box1Style, setBox1Style] = useState("");
-  const [box2Style, setBox2Style] = useState("");
-  const [box3Style, setBox3Style] = useState("");
+  const [box1Style, setBox1Style] = useState('');
+  const [box2Style, setBox2Style] = useState('');
+  const [box3Style, setBox3Style] = useState('');
   const [removed, setRemoved] = useState(false);
 
   const handleDollarSign = useCallback(() => {
-    const el = $(".demo-box", document.body);
+    const el = $('.demo-box');
     if (el.length > 0) {
-      setBox1Style("border-color: #ffd11a");
-      setTimeout(() => setBox1Style(""), 1000);
+      setBox1Style('border-color: #ffd11a');
+      setTimeout(() => setBox1Style(''), 1000);
     }
   }, []);
 
   const handleGet = useCallback(() => {
     if (box2Ref.current) {
-      const transform = get(box2Ref.current, "transform");
+      const transform = get(box2Ref.current, 'transform');
       setBox2Style(`transform: ${transform}`);
-      setTimeout(() => setBox2Style(""), 1000);
+      setTimeout(() => setBox2Style(''), 1000);
     }
   }, []);
 
   const handleSet = useCallback(() => {
-    if (box3Ref.current) {
-      set(box3Ref.current, {
-        backgroundColor: "#ff6b6b",
-        borderRadius: "50%",
+    const el = box3Ref.current;
+    if (el) {
+      set(el, {
+        backgroundColor: '#ff6b6b',
+        borderRadius: '50%',
       });
-      setBox3Style("background: #ff6b6b; border-radius: 50%");
+      setBox3Style('background: #ff6b6b; border-radius: 50%');
       setTimeout(() => {
-        set(box3Ref.current, {
-          backgroundColor: "#1a1a24",
-          borderRadius: "8px",
+        set(el, {
+          backgroundColor: '#1a1a24',
+          borderRadius: '8px',
         });
-        setBox3Style("");
+        setBox3Style('');
       }, 1000);
     }
   }, []);
 
   const handleCleanStyles = useCallback(() => {
-    if (box1Ref.current) {
-      set(box1Ref.current, {
-        opacity: "0.5",
-        scale: "1.2",
+    const el = box1Ref.current;
+    if (el) {
+      set(el, {
+        opacity: '0.5',
+        scale: '1.2',
       });
       setTimeout(() => {
-        cleanInlineStyles(box1Ref.current, ["opacity", "scale"]);
+        el.style.opacity = '';
+        el.style.scale = '';
       }, 500);
     }
   }, []);
@@ -77,7 +74,7 @@ export const DOMUtilitiesDemo: React.FC = () => {
     <DemoCard
       title="DOM Utilities"
       description="$, get, set, cleanInlineStyles, remove"
-      code={`$(".demo-box") → ${box1Style ? "Found & styled" : "Click to test"}`}
+      code={`$(".demo-box") → ${box1Style ? 'Found & styled' : 'Click to test'}`}
     >
       <div className="w-full space-y-6">
         {/* $ Demo */}
@@ -94,7 +91,7 @@ export const DOMUtilitiesDemo: React.FC = () => {
           <div
             ref={box1Ref}
             className="demo-box w-full h-12 bg-[#2a2a3a] rounded-lg flex items-center justify-center text-xs text-slate-400 border-2 border-[#3a3a4a] transition-all duration-300"
-            style={box1Style ? { borderColor: "#ffd11a" } : {}}
+            style={box1Style ? { borderColor: '#ffd11a' } : {}}
           >
             $(".demo-box") selects this element
           </div>
@@ -122,7 +119,7 @@ export const DOMUtilitiesDemo: React.FC = () => {
           <div
             ref={box2Ref}
             className="w-full h-12 bg-[#2a2a3a] rounded-lg flex items-center justify-center text-xs text-slate-400 border-2 border-[#3a3a4a] transition-all duration-300"
-            style={box2Style ? { borderColor: "#45b7d1" } : {}}
+            style={box2Style ? { borderColor: '#45b7d1' } : {}}
           >
             Click "Get Value" to read transform
           </div>
@@ -150,11 +147,7 @@ export const DOMUtilitiesDemo: React.FC = () => {
           <div
             ref={box3Ref}
             className="w-full h-12 bg-[#2a2a3a] rounded-lg flex items-center justify-center text-xs text-slate-400 border-2 border-[#3a3a4a] transition-all duration-300"
-            style={
-              box3Style
-                ? { backgroundColor: "#ff6b6b", borderRadius: "50%" }
-                : {}
-            }
+            style={box3Style ? { backgroundColor: '#ff6b6b', borderRadius: '50%' } : {}}
           >
             Click "Set Styles" to change shape
           </div>

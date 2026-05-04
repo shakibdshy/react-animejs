@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { DemoSection } from "./DemoSection";
 import { DemoCard } from "./DemoCard";
-import { ClipPathReveal } from "../../components/ClipPathReveal";
+import { ClipPathReveal } from "../../../../components/ClipPathReveal";
 
 // =============================================================================
 // Shared content block used inside reveals
