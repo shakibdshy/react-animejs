@@ -141,9 +141,9 @@ vi.mock("animejs", () => {
   };
 });
 
-import { AnimeDraw } from "../AnimeDraw";
-import { AnimeMorph } from "../AnimeMorph";
-import { AnimeMotionPath } from "../AnimeMotionPath";
+import { AnimeDraw } from "../components/AnimeDraw";
+import { AnimeMorph } from "../components/AnimeMorph";
+import { AnimeMotionPath } from "../components/AnimeMotionPath";
 
 afterEach(() => {
   cleanup();

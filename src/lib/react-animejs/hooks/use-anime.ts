@@ -24,7 +24,7 @@ import {
   isPlainObject,
   resolveTarget,
   safeJsonStringify,
-  useAnimeScope,
+  useScopeContext,
 } from "../core";
 
 type ScrollObserverCallbackKey =
@@ -154,7 +154,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
   // ==========================================================================
 
   // Get parent scope context (if inside AnimeProvider)
-  const scopeContext = useAnimeScope();
+  const scopeContext = useScopeContext();
 
   // ==========================================================================
   // State

@@ -12,7 +12,7 @@ import {
   extractAnimationState,
   resolveTarget,
   safeJsonStringify,
-  useAnimeScope,
+  useScopeContext,
 } from "../core";
 
 function normalizeSingleElement(
@@ -40,7 +40,7 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
   const timelineRef = useRef<Timeline | null>(null);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
 
-  const scopeContext = useAnimeScope();
+  const scopeContext = useScopeContext();
 
   const [state, setState] = useState(DEFAULT_ANIMATION_STATE);
   const [isReady, setIsReady] = useState(false);

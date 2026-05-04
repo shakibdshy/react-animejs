@@ -3,7 +3,7 @@ import {
   AnimeLayout,
   AnimeLayoutItem,
   type AnimeLayoutRef,
-} from '../lib/react-animejs/components/AnimeLayout';
+} from '@/lib/react-animejs/components/AnimeLayout';
 
 export interface AnimatedReorderListProps<T> {
   /** Items to render */

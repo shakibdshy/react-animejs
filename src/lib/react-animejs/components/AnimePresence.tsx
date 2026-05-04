@@ -1,5 +1,5 @@
 /**
- * AnimatePresence - Enter/Exit animation controller
+ * AnimePresence - Enter/Exit animation controller
  *
  * Manages mounted/unmounted states with animations.
  * Uses native anime.js animation format with [from, to] array syntax.
@@ -23,7 +23,7 @@ import { useAnime } from "../hooks/use-anime";
 // Types
 // =============================================================================
 
-export interface AnimatePresenceProps {
+export interface AnimePresenceProps {
   /**
    * Children to animate. Only direct children with a `key` prop will be tracked.
    */
@@ -50,7 +50,7 @@ export interface AnimatePresenceProps {
   initial?: boolean;
 }
 
-export interface AnimatePresenceChildProps {
+export interface AnimePresenceChildProps {
   /**
    * Enter animation using native anime.js format.
    * Supports [from, to] arrays: { opacity: [0, 1], scale: [0.6, 1] }
@@ -182,15 +182,15 @@ function AnimatedChild({
 }
 
 // =============================================================================
-// AnimatePresence Component
+// AnimePresence Component
 // =============================================================================
 
-export function AnimatePresence({
+export function AnimePresence({
   children,
   mode = "sync",
   onExitComplete,
   initial = true,
-}: AnimatePresenceProps) {
+}: AnimePresenceProps) {
   const isInitialRender = useRef(true);
   const presentChildren = useRef(new Map<string | number, ReactElement>());
   const exitingChildren = useRef(new Map<string | number, ReactElement>());
@@ -246,8 +246,8 @@ export function AnimatePresence({
   // Render present children
   if (!shouldWaitForExit) {
     presentChildren.current.forEach((child, key) => {
-      const childProps = child.props as AnimatePresenceChildProps;
-      const isPresenceChild = child.type === AnimatePresenceChild;
+      const childProps = child.props as AnimePresenceChildProps;
+      const isPresenceChild = child.type === AnimePresenceChild;
 
       const presenceProps = isPresenceChild ? childProps : (childProps as any);
       const renderedChild =
@@ -276,8 +276,8 @@ export function AnimatePresence({
 
   // Render exiting children
   exitingChildren.current.forEach((child, key) => {
-    const childProps = child.props as AnimatePresenceChildProps;
-    const isPresenceChild = child.type === AnimatePresenceChild;
+    const childProps = child.props as AnimePresenceChildProps;
+    const isPresenceChild = child.type === AnimePresenceChild;
 
     const presenceProps = isPresenceChild ? childProps : (childProps as any);
     const renderedChild =
@@ -306,13 +306,13 @@ export function AnimatePresence({
 }
 
 // =============================================================================
-// AnimatePresenceChild — declarative wrapper
+// AnimePresenceChild — declarative wrapper
 // =============================================================================
 
-export function AnimatePresenceChild({
+export function AnimePresenceChild({
   children,
-}: AnimatePresenceChildProps & { children: ReactElement }) {
+}: AnimePresenceChildProps & { children: ReactElement }) {
   return children;
 }
 
-export default AnimatePresence;
+export default AnimePresence;

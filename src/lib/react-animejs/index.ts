@@ -19,6 +19,7 @@ export { useAnimeDraggable } from './hooks/use-anime-draggable';
 export { useAnimeOnScroll } from './hooks/use-anime-onscroll';
 export { useAnimeControls } from './hooks/use-anime-controls';
 export { useAnimeWAAPI } from './hooks/use-anime-waapi';
+export { useAnimeScope } from './hooks';
 export { useAnimatable, useAnimatableEvent } from './hooks/use-animatable';
 export type {
   AnimatableConfig,
@@ -33,16 +34,16 @@ export type { AnimeController } from './hooks/use-anime-controls';
 // =============================================================================
 
 export { AnimeProvider } from './core/scope-context';
-export { Animate } from './components/Animate';
-export type { AnimateProps } from './components/Animate';
+export { Anime } from './components/Anime';
+export type { AnimeProps } from './components/Anime';
 export { AnimeMorph } from './components/AnimeMorph';
 export type { AnimeMorphProps, AnimeMorphRef } from './components/AnimeMorph';
 export { AnimeDraw } from './components/AnimeDraw';
 export type { AnimeDrawProps, AnimeDrawRef } from './components/AnimeDraw';
 export { AnimeMotionPath } from './components/AnimeMotionPath';
 export type { AnimeMotionPathProps, AnimeMotionPathRef } from './components/AnimeMotionPath';
-export { AnimatePresence, AnimatePresenceChild } from './components/AnimatePresence';
-export type { AnimatePresenceProps, AnimatePresenceChildProps } from './components/AnimatePresence';
+export { AnimePresence, AnimePresenceChild } from './components/AnimePresence';
+export type { AnimePresenceProps, AnimePresenceChildProps } from './components/AnimePresence';
 export { AnimeLayout, AnimeLayoutItem } from './components/AnimeLayout';
 export type {
   AnimeLayoutProps,
@@ -62,7 +63,7 @@ export type { AnimeWAAPIProps, AnimeWAAPIRef } from './components/AnimeWAAPI';
 // Core Utilities
 // =============================================================================
 
-export { useAnimeScope, useScopedRoot } from './core';
+export { useScopeContext, useScopedRoot } from './core';
 
 // =============================================================================
 // Presets & Helpers

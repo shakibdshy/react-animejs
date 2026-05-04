@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { Animate } from '@/lib/react-animejs/components/Animate';
+import { Anime } from '@/lib/react-animejs/components/Anime';
 
 export interface CountdownProps {
   /** Starting value (seconds) */
@@ -137,7 +137,7 @@ export function Countdown({
   return (
     <div className={`flex flex-col items-center gap-3 ${className}`}>
       <div className="relative overflow-hidden">
-        <Animate
+        <Anime
           autoplay
           key={remaining}
           duration={400}
@@ -148,17 +148,17 @@ export function Countdown({
           <span className={`font-mono font-black text-[#ff4d6a] tabular-nums ${sizeMap[size]}`}>
             {displayValue}
           </span>
-        </Animate>
+        </Anime>
       </div>
 
       {/* Progress ring */}
       <div className="w-full max-w-50 h-1 bg-[#2a2a3a] rounded-full overflow-hidden mt-1">
-        <Animate autoplay duration={300} ease="outCubic" width={`${progress * 100}%`}>
+        <Anime autoplay duration={300} ease="outCubic" width={`${progress * 100}%`}>
           <div
             className="h-full bg-[#ff4d6a] shadow-[0_0_10px_rgba(255,77,106,0.5)] rounded-full"
             style={{ width: `${progress * 100}%` }}
           />
-        </Animate>
+        </Anime>
       </div>
 
       {label && <span className="text-xs text-slate-500 uppercase tracking-widest">{label}</span>}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { DemoSection } from "./DemoSection";
 import { DemoCard } from "./DemoCard";
-import { ToggleSwitch } from "@/components/ToggleSwitch";
+import { ToggleSwitch } from "@/demo/components/common/ToggleSwitch";
 
 function BasicToggleDemo() {
   const [checked, setChecked] = useState(false);

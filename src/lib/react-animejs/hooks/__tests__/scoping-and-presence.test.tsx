@@ -272,14 +272,27 @@ vi.mock("animejs", () => {
   };
 });
 
+// Vitest mock helper — declared so TypeScript accepts the import
+// even though animejs doesn't export __mock at runtime.
+declare module "animejs" {
+  interface AnimeMockData {
+    animateCalls: Array<Record<string, unknown>>;
+    onScrollCalls: Array<Record<string, unknown>>;
+    timelineCalls: Array<Record<string, unknown>>;
+    waapiCalls: Array<Record<string, unknown>>;
+    reset: () => void;
+    completeAll: () => void;
+  }
+  const __mock: AnimeMockData;
+}
 import { __mock } from "animejs";
 import { AnimeTimeline } from "../../components/AnimeTimeline";
 import { AnimeWAAPI } from "../../components/AnimeWAAPI";
-import { AnimatePresence, AnimatePresenceChild } from "../../components/AnimatePresence";
+import { AnimePresence, AnimePresenceChild } from "../../components/AnimePresence";
 import {
   AnimeProvider,
   ScopeContext,
-  useAnimeScope as useProviderScope,
+  useScopeContext as useProviderScope,
 } from "../../core/scope-context";
 import { useAnime } from "../use-anime";
 import { useAnimeControls } from "../use-anime-controls";
@@ -652,8 +665,8 @@ describe("scoped selector handling", () => {
   });
 });
 
-describe("AnimatePresence modes", () => {
-  it("keeps AnimatePresenceChild props off the rendered child element", async () => {
+describe("AnimePresence modes", () => {
+  it("keeps AnimePresenceChild props off the rendered child element", async () => {
     const receivedProps = vi.fn();
 
     const SpyChild = React.forwardRef<
@@ -669,16 +682,16 @@ describe("AnimatePresence modes", () => {
     });
 
     render(
-      <AnimatePresence>
-        <AnimatePresenceChild
+      <AnimePresence>
+        <AnimePresenceChild
           key="spy"
           enter={{ opacity: [0, 1] }}
           exit={{ opacity: [1, 0] }}
           duration={300}
         >
           <SpyChild label="visible" />
-        </AnimatePresenceChild>
-      </AnimatePresence>,
+        </AnimePresenceChild>
+      </AnimePresence>,
     );
 
     await waitFor(() => {
@@ -694,31 +707,31 @@ describe("AnimatePresence modes", () => {
 
   it("wait mode delays entering children until exits finish", async () => {
     const { rerender } = render(
-      <AnimatePresence mode="wait">
-        <AnimatePresenceChild
+      <AnimePresence mode="wait">
+        <AnimePresenceChild
           key="first"
           enter={{ opacity: [0, 1] }}
           exit={{ opacity: [1, 0] }}
           duration={300}
         >
           <div data-testid="first">first</div>
-        </AnimatePresenceChild>
-      </AnimatePresence>,
+        </AnimePresenceChild>
+      </AnimePresence>,
     );
 
     expect(screen.getByTestId("first")).not.toBeNull();
 
     rerender(
-      <AnimatePresence mode="wait">
-        <AnimatePresenceChild
+      <AnimePresence mode="wait">
+        <AnimePresenceChild
           key="second"
           enter={{ opacity: [0, 1] }}
           exit={{ opacity: [1, 0] }}
           duration={300}
         >
           <div data-testid="second">second</div>
-        </AnimatePresenceChild>
-      </AnimatePresence>,
+        </AnimePresenceChild>
+      </AnimePresence>,
     );
 
     expect(screen.getByTestId("first")).not.toBeNull();
@@ -750,29 +763,29 @@ describe("AnimatePresence modes", () => {
       } as DOMRect);
 
     const { rerender } = render(
-      <AnimatePresence mode="popLayout">
-        <AnimatePresenceChild
+      <AnimePresence mode="popLayout">
+        <AnimePresenceChild
           key="first"
           enter={{ opacity: [0, 1] }}
           exit={{ opacity: [1, 0] }}
           duration={300}
         >
           <div data-testid="first">first</div>
-        </AnimatePresenceChild>
-      </AnimatePresence>,
+        </AnimePresenceChild>
+      </AnimePresence>,
     );
 
     rerender(
-      <AnimatePresence mode="popLayout">
-        <AnimatePresenceChild
+      <AnimePresence mode="popLayout">
+        <AnimePresenceChild
           key="second"
           enter={{ opacity: [0, 1] }}
           exit={{ opacity: [1, 0] }}
           duration={300}
         >
           <div data-testid="second">second</div>
-        </AnimatePresenceChild>
-      </AnimatePresence>,
+        </AnimePresenceChild>
+      </AnimePresence>,
     );
 
     await waitFor(() => {

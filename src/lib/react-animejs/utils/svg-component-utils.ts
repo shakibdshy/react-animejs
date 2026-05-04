@@ -17,7 +17,7 @@ import {
   extractAnimationState,
   isRef,
   safeJsonStringify,
-  useAnimeScope,
+  useScopeContext,
 } from "../core";
 
 export interface SvgComponentRef {
@@ -195,7 +195,7 @@ export function useSvgAnimation<TSvg extends SVGElement = SVGElement>({
 }: SvgAnimationOptions) {
   const childRef = useRef<TSvg | null>(null);
   const animationRef = useRef<JSAnimation | null>(null);
-  const scopeContext = useAnimeScope();
+  const scopeContext = useScopeContext();
   const readyNotifiedRef = useRef(false);
   const controlsNotifiedRef = useRef(false);
 

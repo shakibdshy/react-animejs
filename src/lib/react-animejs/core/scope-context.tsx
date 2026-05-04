@@ -174,14 +174,17 @@ export function AnimeProvider({
 // =============================================================================
 
 /**
- * Hook to access the anime scope context
+ * Hook to access the current scope context
+ *
+ * Returns the current AnimeScope context, or the default (unscoped) value.
+ * Use inside `<AnimeProvider>` or `<AnimeScope>` children to read the scope.
  *
  * @returns The current scope context
  *
  * @example
  * ```tsx
  * function MyComponent() {
- *   const { scope, isScoped } = useAnimeScope();
+ *   const { scope, isScoped } = useScopeContext();
  *
  *   useEffect(() => {
  *     if (scope) {
@@ -191,7 +194,7 @@ export function AnimeProvider({
  * }
  * ```
  */
-export function useAnimeScope(): AnimeScopeContext {
+export function useScopeContext(): AnimeScopeContext {
   return useContext(ScopeContext);
 }
 

@@ -19,7 +19,7 @@ import {
   extractAnimationState,
   resolveTarget,
   safeJsonStringify,
-  useAnimeScope,
+  useScopeContext,
 } from "../core";
 
 /**
@@ -33,7 +33,7 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
 ): UseAnimeWAAPIReturn<T> {
   const targetRef = useRef<T | null>(null);
   const animationRef = useRef<WAAPIAnimation | null>(null);
-  const scopeContext = useAnimeScope();
+  const scopeContext = useScopeContext();
 
   const [animationState, setAnimationState] = useState<AnimationState>(
     DEFAULT_ANIMATION_STATE,

@@ -11,7 +11,7 @@ import { useAnime } from '../hooks/use-anime';
 import type { AnimationState, PlaybackControls, UseAnimeOptions } from '../types';
 import { mergeChildProps } from '../utils/svg-component-utils';
 
-export interface AnimateProps extends Omit<UseAnimeOptions, 'targets' | 'selector'> {
+export interface AnimeProps extends Omit<UseAnimeOptions, 'targets' | 'selector'> {
   children: ReactElement;
   onControlsReady?: (controls: PlaybackControls) => void;
   onStateChange?: (state: AnimationState) => void;
@@ -20,7 +20,7 @@ export interface AnimateProps extends Omit<UseAnimeOptions, 'targets' | 'selecto
   playOnMount?: boolean;
 }
 
-export const Animate = forwardRef<HTMLElement | SVGElement, AnimateProps>(function Animate(
+export const Anime = forwardRef<HTMLElement | SVGElement, AnimeProps>(function Anime(
   { children, onControlsReady, onStateChange, playOnMount, className, ...animationProps },
   forwardedRef
 ) {
@@ -45,11 +45,11 @@ export const Animate = forwardRef<HTMLElement | SVGElement, AnimateProps>(functi
   useImperativeHandle(forwardedRef, () => ref.current as HTMLElement | SVGElement, [ref]);
 
   if (!isValidElement(children)) {
-    console.warn('[react-animejs] Animate requires a single valid React element as child');
+    console.warn('[react-animejs] Anime requires a single valid React element as child');
     return children;
   }
 
   return cloneElement(children, mergeChildProps(children as ReactElement<any>, { ref, className }));
 });
 
-export default Animate;
+export default Anime;

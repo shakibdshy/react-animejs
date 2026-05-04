@@ -21,7 +21,7 @@ import {
   extractAnimationState,
   resolveTarget,
   safeJsonStringify,
-  useAnimeScope,
+  useScopeContext,
 } from "../core";
 
 function resolveSyncTarget(target: unknown) {
@@ -91,7 +91,7 @@ export function useAnimeTimeline(
   // Context
   // ==========================================================================
 
-  const scopeContext = useAnimeScope();
+  const scopeContext = useScopeContext();
 
   // ==========================================================================
   // State

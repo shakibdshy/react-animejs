@@ -1,5 +1,4 @@
 import { act, render, renderHook, waitFor } from "@testing-library/react";
-import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("animejs", () => {

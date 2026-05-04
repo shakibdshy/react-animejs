@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
-import { Animate } from '../lib/react-animejs/components/Animate';
-import type { PlaybackControls } from '../lib/react-animejs/types';
+import { Anime } from '@/lib/react-animejs/components/Anime';
+import type { PlaybackControls } from '@/lib/react-animejs/types';
 
 export type ClipPathShape = 'circle' | 'diamond' | 'horizontal' | 'vertical' | 'star';
 
@@ -86,7 +86,7 @@ export function ClipPathReveal({
 
   return (
     <div className={`flex flex-col items-center gap-6 ${className}`}>
-      <Animate
+      <Anime
         autoplay={autoplay}
         duration={duration}
         ease={ease}
@@ -100,7 +100,7 @@ export function ClipPathReveal({
         }}
       >
         <div className="relative overflow-hidden">{children}</div>
-      </Animate>
+      </Anime>
 
       <div className="flex gap-2">
         {!isPlaying ? (

@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { Animate } from '@/lib/react-animejs/components/Animate';
+import { Anime } from '@/lib/react-animejs/components/Anime';
 
 export interface ToggleSwitchProps {
   checked?: boolean;
@@ -64,7 +64,7 @@ export function ToggleSwitch({
         className="relative inline-flex items-center"
         style={{ width: dims.width, height: dims.height }}
       >
-        <Animate
+        <Anime
           autoplay
           duration={300}
           ease="outCubic"
@@ -79,8 +79,8 @@ export function ToggleSwitch({
                 : 'inset 0 1px 2px rgba(0,0,0,0.2)',
             }}
           />
-        </Animate>
-        <Animate
+        </Anime>
+        <Anime
           key={rippleKeyRef.current}
           autoplay
           duration={400}
@@ -99,8 +99,8 @@ export function ToggleSwitch({
               opacity: 0,
             }}
           />
-        </Animate>
-        <Animate
+        </Anime>
+        <Anime
           autoplay
           duration={300}
           ease="outCubic"
@@ -116,7 +116,7 @@ export function ToggleSwitch({
               backgroundColor: disabled ? '#888' : '#12121a',
             }}
           />
-        </Animate>
+        </Anime>
       </div>
       {label && <span className="text-sm text-[#e0e0e0] select-none">{label}</span>}
     </label>

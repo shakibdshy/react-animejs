@@ -2,7 +2,7 @@
  * Core module exports
  */
 
-export { AnimeProvider, useAnimeScope, useScopedRoot } from "./scope-context";
+export { AnimeProvider, useScopeContext, useScopedRoot } from "./scope-context";
 export {
   TimelineContext,
   useTimelineContext,

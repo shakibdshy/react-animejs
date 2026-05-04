@@ -33,7 +33,7 @@ import {
   createSafeCallback,
   resolveTarget,
   safeJsonStringify,
-  useAnimeScope,
+  useScopeContext,
 } from "../core";
 
 const DEFAULT_SCROLL_OBSERVER_STATE: ScrollObserverState = {
@@ -131,7 +131,7 @@ export function useAnimeOnScroll<
   const containerRef = useRef<C | null>(null);
   const observerRef = useRef<ScrollObserver | null>(null);
 
-  const scopeContext = useAnimeScope();
+  const scopeContext = useScopeContext();
 
   const [state, setState] = useState<ScrollObserverState>(
     DEFAULT_SCROLL_OBSERVER_STATE,

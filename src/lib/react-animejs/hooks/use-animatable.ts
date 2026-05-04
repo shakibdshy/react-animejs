@@ -13,7 +13,7 @@ import type {
   Easing,
   JSAnimation,
 } from "../types";
-import { resolveTarget, useAnimeScope } from "../core";
+import { resolveTarget, useScopeContext } from "../core";
 
 // =============================================================================
 // Types
@@ -127,7 +127,7 @@ export function useAnimatable<T extends HTMLElement | SVGElement = HTMLElement>(
   const internalRef = useRef<T | null>(null);
   const animatableRef = useRef<AnimatableInstance | null>(null);
   const [isReady, setIsReady] = useState(false);
-  const scopeContext = useAnimeScope();
+  const scopeContext = useScopeContext();
 
   const configKey = useMemo(() => {
     try {

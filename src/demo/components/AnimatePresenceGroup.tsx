@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { DemoSection } from "./DemoSection";
 import { DemoCard } from "./DemoCard";
 import {
-  AnimatePresence,
-  AnimatePresenceChild,
-} from "@/lib/react-animejs/components/AnimatePresence";
+  AnimePresence,
+  AnimePresenceChild,
+} from "@/lib/react-animejs/components/AnimePresence";
 
 // =============================================================================
 // SVG Icons
@@ -103,8 +103,8 @@ function ModeExample({
     <div className="flex flex-col items-center gap-4">
       {/* Container sized to hold the circle */}
       <div className="w-20 h-20 relative flex items-center justify-center">
-        <AnimatePresence mode={mode}>
-          <AnimatePresenceChild
+        <AnimePresence mode={mode}>
+          <AnimePresenceChild
             key={String(state)}
             enter={config.enter}
             exit={config.exit}
@@ -121,8 +121,8 @@ function ModeExample({
             >
               {icon}
             </div>
-          </AnimatePresenceChild>
-        </AnimatePresence>
+          </AnimePresenceChild>
+        </AnimePresence>
       </div>
 
       <code className="text-sm font-bold text-[#ffd11a]">{mode}</code>
@@ -137,12 +137,12 @@ function ModeExample({
 // Main Modes Demo — three modes side by side, single toggle
 // =============================================================================
 
-function AnimatePresenceModesDemo() {
+function AnimePresenceModesDemo() {
   const [state, setState] = useState(true);
 
   return (
     <DemoCard
-      title="AnimatePresence Modes"
+      title="AnimePresence Modes"
       description="Each mode has a distinct animation style — sync crossfades, wait fades sequentially, popLayout pops in-place"
       state={{ progress: state ? 1 : 0 }}
       code={`// sync — crossfade
@@ -200,8 +200,8 @@ function TabSwitcherDemo() {
       title="Tab Switcher"
       description="Animated tab content with popLayout mode"
       state={{ progress: activeTab / (tabs.length - 1) }}
-      code={`<AnimatePresence mode="popLayout">
-  <AnimatePresenceChild
+      code={`<AnimePresence mode="popLayout">
+  <AnimePresenceChild
     key={tab}
     enter={{ opacity: [0, 1], translateY: [10, 0] }}
     exit={{ opacity: [1, 0], translateY: [0, -10] }}
@@ -225,8 +225,8 @@ function TabSwitcherDemo() {
         </div>
 
         <div className="bg-[#0a0a12] rounded-xl p-6 border border-[#2a2a3a]/50 min-h-20 flex items-center justify-center">
-          <AnimatePresence mode="popLayout">
-            <AnimatePresenceChild
+          <AnimePresence mode="popLayout">
+            <AnimePresenceChild
               key={activeTab}
               enter={{ opacity: [0, 1], translateY: [10, 0], scale: [0.95, 1] }}
               exit={{ opacity: [1, 0], translateY: [0, -10], scale: [1, 0.95] }}
@@ -241,8 +241,8 @@ function TabSwitcherDemo() {
                   {tabs[activeTab].content}
                 </p>
               </div>
-            </AnimatePresenceChild>
-          </AnimatePresence>
+            </AnimePresenceChild>
+          </AnimePresence>
         </div>
       </div>
     </DemoCard>
@@ -299,16 +299,16 @@ function NotificationDemo() {
       }
       controls={{ restart: clearAll }}
       state={{ progress: Math.min(notifications.length / 4, 1) }}
-      code={`<AnimatePresence mode="sync">
-  <AnimatePresenceChild
+      code={`<AnimePresence mode="sync">
+  <AnimePresenceChild
     enter={{ opacity: [0, 1], translateX: [-60, 0] }}
     exit={{ opacity: [1, 0], translateX: [0, 60] }}
   />`}
     >
       <div className="flex flex-col gap-2 w-full max-w-sm mx-auto min-h-15">
-        <AnimatePresence mode="sync">
+        <AnimePresence mode="sync">
           {notifications.map(({ id, type, message, icon }) => (
-            <AnimatePresenceChild
+            <AnimePresenceChild
               key={id}
               enter={{ opacity: [0, 1], translateX: [-60, 0], scale: [0.9, 1] }}
               exit={{ opacity: [1, 0], translateX: [0, 60], scale: [1, 0.9] }}
@@ -323,9 +323,9 @@ function NotificationDemo() {
                 <span className="text-xs font-medium flex-1">{message}</span>
                 <span className="text-[10px] opacity-50 hover:opacity-100">&times;</span>
               </div>
-            </AnimatePresenceChild>
+            </AnimePresenceChild>
           ))}
-        </AnimatePresence>
+        </AnimePresence>
 
         {notifications.length === 0 && (
           <div className="text-xs text-slate-600 text-center py-4">
@@ -341,10 +341,10 @@ function NotificationDemo() {
 // Export
 // =============================================================================
 
-export const AnimatePresenceGroup: React.FC = () => {
+export const AnimePresenceGroup: React.FC = () => {
   return (
     <DemoSection title="Animate Presence">
-      <AnimatePresenceModesDemo />
+      <AnimePresenceModesDemo />
       <TabSwitcherDemo />
       <NotificationDemo />
     </DemoSection>

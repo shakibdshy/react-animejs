@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { Animate } from '@/lib/react-animejs/components/Animate';
+import { Anime } from '@/lib/react-animejs/components/Anime';
 import type { AnimationState, PlaybackControls } from '@/lib/react-animejs/types';
 
 export interface SpinningCubeProps {
@@ -121,7 +121,7 @@ export function SpinningCube({
           perspectiveOrigin: '50% 50%',
         }}
       >
-        <Animate
+        <Anime
           autoplay={autoplay}
           duration={duration}
           loop={loop}
@@ -158,7 +158,7 @@ export function SpinningCube({
               </div>
             ))}
           </div>
-        </Animate>
+        </Anime>
       </div>
 
       {/* Controls */}

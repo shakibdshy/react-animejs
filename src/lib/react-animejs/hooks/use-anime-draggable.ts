@@ -24,7 +24,7 @@ import type {
   UseAnimeDraggableOptions,
   UseAnimeDraggableReturn,
 } from "../types";
-import { createSafeCallback, safeJsonStringify, useAnimeScope } from "../core";
+import { createSafeCallback, safeJsonStringify, useScopeContext } from "../core";
 
 // =============================================================================
 // Default State
@@ -116,7 +116,7 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
   // Context
   // ==========================================================================
 
-  const scopeContext = useAnimeScope();
+  const scopeContext = useScopeContext();
 
   // ==========================================================================
   // State

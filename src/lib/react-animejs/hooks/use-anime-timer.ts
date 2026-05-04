@@ -19,7 +19,7 @@ import {
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
   safeJsonStringify,
-  useAnimeScope,
+  useScopeContext,
 } from "../core";
 
 // =============================================================================
@@ -76,7 +76,7 @@ export function useAnimeTimer(
   // ==========================================================================
 
   // Get parent scope context
-  const scopeContext = useAnimeScope();
+  const scopeContext = useScopeContext();
 
   // ==========================================================================
   // State

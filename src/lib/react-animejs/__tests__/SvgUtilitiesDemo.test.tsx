@@ -45,7 +45,7 @@ vi.mock("@/lib/react-animejs/components", () => ({
   },
 }));
 
-import { SvgUtilitiesDemo } from "./SvgUtilitiesDemo";
+import { SvgUtilitiesDemo } from "@/demo/components/SvgUtilitiesDemo";
 
 describe("SvgUtilitiesDemo", () => {
   afterEach(() => {

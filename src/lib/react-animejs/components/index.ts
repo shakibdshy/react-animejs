@@ -2,8 +2,8 @@
  * Components module exports
  */
 
-export { Animate } from './Animate';
-export type { AnimateProps } from './Animate';
+export { Anime } from './Anime';
+export type { AnimeProps } from './Anime';
 export { AnimeMorph } from './AnimeMorph';
 export type { AnimeMorphProps, AnimeMorphRef } from './AnimeMorph';
 export { AnimeDraw } from './AnimeDraw';
@@ -11,8 +11,8 @@ export type { AnimeDrawProps, AnimeDrawRef } from './AnimeDraw';
 export { AnimeMotionPath } from './AnimeMotionPath';
 export type { AnimeMotionPathProps, AnimeMotionPathRef } from './AnimeMotionPath';
 
-export { AnimatePresence, AnimatePresenceChild } from './AnimatePresence';
-export type { AnimatePresenceProps, AnimatePresenceChildProps } from './AnimatePresence';
+export { AnimePresence, AnimePresenceChild } from './AnimePresence';
+export type { AnimePresenceProps, AnimePresenceChildProps } from './AnimePresence';
 
 export { AnimeLayout, AnimeLayoutItem } from './AnimeLayout';
 export type {

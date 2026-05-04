@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { DemoSection } from "./DemoSection";
 import { DemoCard } from "./DemoCard";
-import { SpinningCube } from "@/components/SpinningCube";
+import { SpinningCube } from "@/demo/components/common/SpinningCube";
 
 function BasicCubeDemo() {
   return (

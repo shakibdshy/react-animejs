@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AnimatePresenceGroup } from "@/demo/components/AnimatePresenceGroup";
+import { AnimePresenceGroup } from "@/demo/components/AnimePresenceGroup";
 
 export const Route = createFileRoute("/demo/animate-presence")({
-  component: AnimatePresencePage,
+  component: AnimePresencePage,
 });
 
-function AnimatePresencePage() {
-  return <AnimatePresenceGroup />;
+function AnimePresencePage() {
+  return <AnimePresenceGroup />;
 }

@@ -1,8 +1,8 @@
 import { useState, useCallback, useRef } from 'react';
 import {
-  AnimatePresence,
-  AnimatePresenceChild,
-} from '@/lib/react-animejs/components/AnimatePresence';
+  AnimePresence,
+  AnimePresenceChild,
+} from '@/lib/react-animejs/components/AnimePresence';
 
 export type SlideDirection = 'left' | 'right';
 
@@ -106,8 +106,8 @@ export function AnimatedSlider<T>({
       {/* Slide viewport */}
       <div className="relative w-full overflow-hidden rounded-2xl border border-[#2a2a3a] bg-[#12121a]">
         <div className="relative w-full min-h-60 flex items-center justify-center">
-          <AnimatePresence mode="sync">
-            <AnimatePresenceChild
+          <AnimePresence mode="sync">
+            <AnimePresenceChild
               key={current}
               enter={enter}
               exit={exit}
@@ -115,8 +115,8 @@ export function AnimatedSlider<T>({
               ease={ease}
             >
               <div className="w-full">{children(items[current], current)}</div>
-            </AnimatePresenceChild>
-          </AnimatePresence>
+            </AnimePresenceChild>
+          </AnimePresence>
         </div>
 
         {/* Arrow buttons */}

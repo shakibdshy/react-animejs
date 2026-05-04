@@ -7,7 +7,7 @@
 
 import React, { useRef, useState } from "react";
 import { AnimeTimeline, SplitText } from "@/lib/react-animejs/components";
-import { TimelineEntry } from "@/components/TimelineEntry";
+import { TimelineEntry } from "@/demo/components/common/TimelineEntry";
 import type { SplitTextRef, AnimeTimelineRef } from "@/lib/react-animejs/components";
 import type { TextSplitter } from "animejs";
 import { stagger } from "@/lib/react-animejs";

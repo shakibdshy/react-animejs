@@ -158,16 +158,16 @@ function HomePage() {
     <AnimeProvider>
       <div className="min-h-screen bg-[#0a0a0f] text-[#e0e0e0] p-8 font-sans">
         <header className="text-center mb-12 p-8">
-          <Animate {...fadeInUp} autoplay>
+          <Anime {...fadeInUp} autoplay>
             <h1 className="text-5xl font-extrabold mb-4 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
               🎬 React Anime.js
             </h1>
-          </Animate>
-          <Animate {...fadeIn} delay={200} autoplay>
+          </Anime>
+          <Anime {...fadeIn} delay={200} autoplay>
             <p className="text-xl text-[#888] font-medium tracking-tight">
               A comprehensive React wrapper for Anime.js v4
             </p>
-          </Animate>
+          </Anime>
         </header>
 
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

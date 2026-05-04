@@ -6,11 +6,11 @@ import {
   AnimeLayoutItem,
   type AnimeLayoutRef,
 } from "@/lib/react-animejs/components/AnimeLayout";
-import { AnimatedReorderList } from "@/components/AnimatedReorderList";
+import { AnimatedReorderList } from "@/demo/components/common/AnimatedReorderList";
 import {
-  AnimatePresence,
-  AnimatePresenceChild,
-} from "@/lib/react-animejs/components/AnimatePresence";
+  AnimePresence,
+  AnimePresenceChild,
+} from "@/lib/react-animejs/components/AnimePresence";
 
 // =============================================================================
 // Helpers
@@ -198,7 +198,7 @@ function MoveUpDownDemo() {
 }
 
 // =============================================================================
-// Add & Remove — uses AnimatePresence (lower-level)
+// Add & Remove — uses AnimePresence (lower-level)
 // =============================================================================
 
 function AddRemoveDemo() {
@@ -229,16 +229,16 @@ function AddRemoveDemo() {
       title="Add & Remove"
       description="Add and remove items with enter/exit animations"
       state={{ progress: items.length / 10 }}
-      code={`<AnimatePresence mode="sync">
+      code={`<AnimePresence mode="sync">
   {items.map(item => (
-    <AnimatePresenceChild
+    <AnimePresenceChild
       key={item.id}
       enter={{ opacity: [0, 1], translateY: [20, 0] }}
       exit={{ opacity: [1, 0], translateY: [0, -20] }}>
       <Item />
-    </AnimatePresenceChild>
+    </AnimePresenceChild>
   ))}
-</AnimatePresence>`}
+</AnimePresence>`}
     >
       <div className="flex flex-col gap-4 w-full">
         <div className="flex gap-2">
@@ -261,9 +261,9 @@ function AddRemoveDemo() {
         </div>
 
         <div className="flex flex-col" style={{ gap: 8 }}>
-          <AnimatePresence>
+          <AnimePresence>
             {items.map((item) => (
-              <AnimatePresenceChild
+              <AnimePresenceChild
                 key={item.id}
                 enter={{ opacity: [0, 1], translateY: [20, 0] }}
                 exit={{ opacity: [1, 0], translateY: [0, -20] }}
@@ -288,9 +288,9 @@ function AddRemoveDemo() {
                     </svg>
                   </button>
                 </div>
-              </AnimatePresenceChild>
+              </AnimePresenceChild>
             ))}
-          </AnimatePresence>
+          </AnimePresence>
         </div>
       </div>
     </DemoCard>

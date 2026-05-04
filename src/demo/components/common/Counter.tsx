@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { Animate } from '@/lib/react-animejs/components/Animate';
+import { Anime } from '@/lib/react-animejs/components/Anime';
 import { useAnimeTimer } from '@/lib/react-animejs/hooks/use-anime-timer';
 
 export interface CounterProps {
@@ -127,7 +127,7 @@ export function Counter({
   return (
     <div className={`flex flex-col items-center gap-3 ${className}`}>
       <div className="relative overflow-hidden">
-        <Animate
+        <Anime
           autoplay
           key={value}
           duration={duration * 0.6}
@@ -138,7 +138,7 @@ export function Counter({
           <span className={`font-mono font-black text-[#ffd11a] tabular-nums ${sizeMap[size]}`}>
             {displayValue}
           </span>
-        </Animate>
+        </Anime>
       </div>
 
       {label && <span className="text-xs text-slate-500 uppercase tracking-widest">{label}</span>}
