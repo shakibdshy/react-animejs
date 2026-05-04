@@ -11,9 +11,6 @@ export { useAnimeOnScroll } from "./use-anime-onscroll";
 export { useAnimeControls } from "./use-anime-controls";
 export { useAnimeWAAPI } from "./use-anime-waapi";
 export { useAnimatable } from "./use-animatable";
-export {
-  useAnimeScope,
-  useAnimeScope as useCreateScope,
-} from "./use-anime-scope";
+export { useAnimeScope } from "./use-anime-scope";
 export { useSplitText } from "./use-split-text";
 export type { AnimeController } from "./use-anime-controls";

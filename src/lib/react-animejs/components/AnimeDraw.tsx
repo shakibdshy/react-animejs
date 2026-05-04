@@ -1,7 +1,7 @@
 import { cloneElement, forwardRef, isValidElement, type ReactElement } from 'react';
 import { svg } from 'animejs';
 import type { AnimationState, PlaybackControls, UseAnimeOptions } from '../types';
-import { mergeChildProps, type SvgComponentRef, useSvgAnimation } from './svg-component-utils';
+import { mergeChildProps, type SvgComponentRef, useSvgAnimation } from '../utils/svg-component-utils';
 
 type DrawableShape =
   | SVGPathElement

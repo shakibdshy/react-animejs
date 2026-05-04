@@ -15,7 +15,7 @@ import {
   resolveSvgElement,
   type SvgComponentRef,
   useSvgAnimation,
-} from './svg-component-utils';
+} from '../utils/svg-component-utils';
 
 export interface AnimeMotionPathRef extends SvgComponentRef {
   controls: PlaybackControls;

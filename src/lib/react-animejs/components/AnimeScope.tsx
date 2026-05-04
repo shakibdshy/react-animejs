@@ -27,7 +27,7 @@ import React, {
   useRef,
 } from "react";
 import { animate, utils } from "animejs";
-import { useAnimeScope as useCreateScope } from "../hooks/use-anime-scope";
+import { useAnimeScope } from "../hooks/use-anime-scope";
 import { ScopeContext } from "../core/scope-context";
 import type { AnimeScopeContext as ContextType } from "../types";
 import type {
@@ -228,7 +228,7 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
     revert,
     refresh,
     keepTime,
-  } = useCreateScope<T>({
+  } = useAnimeScope<T>({
     mediaQueries,
     defaults,
     enabled,

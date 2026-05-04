@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CoreFeaturesGroup } from "@/lib/react-animejs/demo/components/CoreFeaturesGroup";
+import { CoreFeaturesGroup } from "@/demo/components/CoreFeaturesGroup";
 
 export const Route = createFileRoute("/demo/core-features")({
   component: CoreFeaturesPage,

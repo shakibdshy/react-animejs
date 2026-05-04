@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import MethodsGroup from "@/lib/react-animejs/demo/components/MethodsGroup";
+import MethodsGroup from "@/demo/components/MethodsGroup";
 
 export const Route = createFileRoute("/demo/methods")({
   component: MethodsPage,

@@ -6,7 +6,7 @@ import {
   resolveSvgElement,
   type SvgComponentRef,
   useSvgAnimation,
-} from './svg-component-utils';
+} from '../utils/svg-component-utils';
 
 type MorphableShape = SVGPathElement | SVGPolygonElement | SVGPolylineElement;
 

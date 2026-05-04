@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { LayoutGroup } from "@/lib/react-animejs/demo/components/LayoutGroup";
+import { LayoutGroup } from "@/demo/components/LayoutGroup";
 
 export const Route = createFileRoute("/demo/layout")({
   component: LayoutPage,

@@ -25,7 +25,6 @@ export {
   isPlainObject,
   isFunction,
   safeJsonStringify,
-  stagger,
   buildCallbackConfig,
   cleanUndefinedValues,
 } from "./helpers";

@@ -20,7 +20,6 @@ export { useAnimeOnScroll } from './hooks/use-anime-onscroll';
 export { useAnimeControls } from './hooks/use-anime-controls';
 export { useAnimeWAAPI } from './hooks/use-anime-waapi';
 export { useAnimatable, useAnimatableEvent } from './hooks/use-animatable';
-export { useAnimeScope as useCreateScope } from './hooks/use-anime-scope';
 export type {
   AnimatableConfig,
   AnimatableInstance,
@@ -57,33 +56,13 @@ export { AnimeTimeline } from './components/AnimeTimeline';
 export type { AnimeTimelineProps, AnimeTimelineRef } from './components/AnimeTimeline';
 export { AnimeWAAPI } from './components/AnimeWAAPI';
 export type { AnimeWAAPIProps, AnimeWAAPIRef } from './components/AnimeWAAPI';
-export { ToggleSwitch } from '@/components/ToggleSwitch';
-export type { ToggleSwitchProps } from '@/components/ToggleSwitch';
-export { Counter } from '@/components/Counter';
-export type { CounterProps } from '@/components/Counter';
-export { Countdown } from '@/components/Countdown';
-export type { CountdownProps } from '@/components/Countdown';
-export { SpinningCube } from '@/components/SpinningCube';
-export type { SpinningCubeProps } from '@/components/SpinningCube';
-export { ClipPathReveal } from '@/components/ClipPathReveal';
-export type { ClipPathRevealProps, ClipPathShape } from '@/components/ClipPathReveal';
-export { AnimatedSlider } from '@/components/AnimatedSlider';
-export type {
-  AnimatedSliderProps,
-  SlideDirection,
-  SlideTransition,
-} from '@/components/AnimatedSlider';
-export { AnimatedReorderList } from '@/components/AnimatedReorderList';
-export type {
-  AnimatedReorderListProps,
-  ReorderListPresetProps,
-} from '@/components/AnimatedReorderList';
+
 
 // =============================================================================
 // Core Utilities
 // =============================================================================
 
-export { useAnimeScope, useScopedRoot, stagger } from './core';
+export { useAnimeScope, useScopedRoot } from './core';
 
 // =============================================================================
 // Presets & Helpers
@@ -134,6 +113,7 @@ export {
   outStagger,
   randomStagger,
   createStagger,
+  stagger,
 } from './utils/stagger-helpers';
 
 // =============================================================================

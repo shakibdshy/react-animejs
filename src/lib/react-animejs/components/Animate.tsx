@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { useAnime } from '../hooks/use-anime';
 import type { AnimationState, PlaybackControls, UseAnimeOptions } from '../types';
-import { mergeChildProps } from './svg-component-utils';
+import { mergeChildProps } from '../utils/svg-component-utils';
 
 export interface AnimateProps extends Omit<UseAnimeOptions, 'targets' | 'selector'> {
   children: ReactElement;

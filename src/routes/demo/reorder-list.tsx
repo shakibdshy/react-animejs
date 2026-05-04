@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ReorderListDemoGroup } from "@/lib/react-animejs/demo/components/ReorderListDemoGroup";
+import { ReorderListDemoGroup } from "@/demo/components/ReorderListDemoGroup";
 
 export const Route = createFileRoute("/demo/reorder-list")({
   component: ReorderListPage,

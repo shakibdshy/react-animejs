@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ScrollLinkedAnimationsGroup } from "@/lib/react-animejs/demo/components/ScrollLinkedAnimationsGroup";
+import { ScrollLinkedAnimationsGroup } from "@/demo/components/ScrollLinkedAnimationsGroup";
 
 export const Route = createFileRoute("/demo/scroll-linked-animations")({
   component: ScrollLinkedAnimationsPage,

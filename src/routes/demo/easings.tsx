@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { EasingsGroup } from "@/lib/react-animejs/demo/components/EasingsGroup";
+import { EasingsGroup } from "@/demo/components/EasingsGroup";
 
 export const Route = createFileRoute("/demo/easings")({
   component: EasingsPage,

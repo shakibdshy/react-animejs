@@ -34,36 +34,11 @@ export type {
 export { AnimeTimeline } from './AnimeTimeline';
 export type { AnimeTimelineProps, AnimeTimelineRef } from './AnimeTimeline';
 
-export { TimelineEntry } from '../../../components/TimelineEntry';
-export type { TimelineEntryProps, TimelineEntryRef } from '../../../components/TimelineEntry';
-
 export { AnimeWAAPI } from './AnimeWAAPI';
 export type { AnimeWAAPIProps, AnimeWAAPIRef } from './AnimeWAAPI';
 
 export { SplitText } from './SplitText';
 export type { SplitTextProps, SplitTextRef } from './SplitText';
 
-export { ToggleSwitch } from '@/components/ToggleSwitch';
-export type { ToggleSwitchProps } from '@/components/ToggleSwitch';
-
 export { SplitTextEntry } from './SplitTextEntry';
 export type { SplitTextEntryProps, SplitTextEntryRef, SplitMode } from './SplitTextEntry';
-
-export { Counter } from '@/components/Counter';
-export type { CounterProps } from '@/components/Counter';
-
-export { Countdown } from '@/components/Countdown';
-export type { CountdownProps } from '@/components/Countdown';
-
-export { SpinningCube } from '@/components/SpinningCube';
-export type { SpinningCubeProps } from '@/components/SpinningCube';
-
-export { ClipPathReveal } from '@/components/ClipPathReveal';
-export type { ClipPathRevealProps, ClipPathShape } from '@/components/ClipPathReveal';
-
-export { AnimatedSlider } from '@/components/AnimatedSlider';
-export type {
-  AnimatedSliderProps,
-  SlideDirection,
-  SlideTransition,
-} from '@/components/AnimatedSlider';

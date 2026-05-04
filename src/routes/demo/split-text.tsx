@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import SplitTextGroup from "@/lib/react-animejs/demo/components/SplitTextGroup";
+import SplitTextGroup from "@/demo/components/SplitTextGroup";
 
 export const Route = createFileRoute("/demo/split-text")({
   component: SplitTextPage,
