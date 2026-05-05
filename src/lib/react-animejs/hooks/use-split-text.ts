@@ -20,7 +20,7 @@ export interface UseSplitTextOptions {
   /**
    * Ref to the target element containing text
    */
-  target: RefObject<HTMLElement | SVGElement | null>;
+  target: RefObject<Element | null>;
 
   /**
    * Text splitter parameters
@@ -48,7 +48,7 @@ export interface UseSplitTextReturn {
   /**
    * Ref to attach to the target element
    */
-  ref: RefObject<HTMLElement | SVGElement | null>;
+  ref: RefObject<Element | null>;
 
   /**
    * The TextSplitter instance
@@ -176,7 +176,7 @@ export function useSplitText(
 
     try {
       const parsedParams = JSON.parse(paramsStr);
-      const split = splitText(element as HTMLElement, parsedParams);
+      const split = splitText(element, parsedParams);
 
       if (onReadyRef.current) {
         onReadyRef.current(split);

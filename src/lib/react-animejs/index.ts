@@ -60,6 +60,17 @@ export type { AnimeWAAPIProps, AnimeWAAPIRef } from './components/AnimeWAAPI';
 
 
 // =============================================================================
+// =============================================================================
+// Text Scramble
+// =============================================================================
+
+export { useAnimeScramble } from './hooks/use-anime-scramble';
+export type {
+  UseAnimeScrambleOptions,
+  UseAnimeScrambleReturn,
+} from './types/scramble-text';
+
+// =============================================================================
 // Core Utilities
 // =============================================================================
 
@@ -192,6 +203,9 @@ export type {
   UseAnimeOnScrollControls,
   UseAnimeOnScrollReturn,
 
+  // ScrambleText types
+  ScrambleTextParams,
+
   // Scope types
   ScopeMediaQueries,
   ScopeMediaMatches,
@@ -236,6 +250,9 @@ export {
   utils,
   engine,
   waapi,
+  globals,
 } from 'animejs';
 
 export * as events from 'animejs/events';
+
+export { scrambleText } from 'animejs/text';

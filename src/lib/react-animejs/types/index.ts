@@ -123,3 +123,10 @@ export type {
   UseAnimeOnScrollControls,
   UseAnimeOnScrollReturn,
 } from "./events";
+
+export type { ScrambleTextParams } from "animejs";
+
+export type {
+  UseAnimeScrambleOptions,
+  UseAnimeScrambleReturn,
+} from "./scramble-text";

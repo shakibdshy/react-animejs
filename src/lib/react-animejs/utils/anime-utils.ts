@@ -29,4 +29,7 @@ export {
   padEnd,
   degToRad,
   radToDeg,
+  forEachChildren,
+  addChild,
+  removeChild,
 } from "animejs/utils";

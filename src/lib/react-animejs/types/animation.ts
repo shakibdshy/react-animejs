@@ -187,8 +187,10 @@ export interface StaggerOptions {
 
   /**
    * Direction of stagger
+   * Supports "first", "last", "center", "edges", "random", explicit index,
+   * or [x, y] normalized coordinates for grid origin
    */
-  from?: "first" | "last" | "center" | "edges" | number;
+  from?: "first" | "last" | "center" | "edges" | "random" | number | [number, number];
 
   /**
    * Easing for stagger timing
@@ -196,9 +198,11 @@ export interface StaggerOptions {
   easing?: Easing;
 
   /**
-   * Grid configuration for 2D stagger [columns, rows]
+   * Grid configuration for 2D stagger.
+   * - [columns, rows]: explicit grid dimensions
+   * - true: auto-compute grid from element positions
    */
-  grid?: [number, number];
+  grid?: [number, number] | boolean;
 
   /**
    * Axis for grid stagger

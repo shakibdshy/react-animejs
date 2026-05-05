@@ -78,6 +78,13 @@ export interface PlaybackSettings {
   playbackEase?: Easing;
 
   /**
+   * Execution order priority within the engine tick loop.
+   * Higher values execute first.
+   * @default 0
+   */
+  priority?: number;
+
+  /**
    * Whether the animation should persist in the engine after completion
    * @default false
    */
@@ -508,7 +515,7 @@ export type PropertyValue =
   | PropertyKeyframe
   | PropertyKeyframe[]
   | (string | number)[] // Keyframe values array (any length)
-  | ((target: Element, index: number, total: number) => string | number);
+  | ((target: Element, index: number, targets: Element[], prevTween?: unknown) => string | number);
 
 // =============================================================================
 // Utility Types

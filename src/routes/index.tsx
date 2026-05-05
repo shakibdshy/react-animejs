@@ -150,6 +150,12 @@ const demoSections = [
     description:
       "Parallax, fade-in, horizontal scrub, scale/rotate, color shift, and progress indicators",
   },
+  {
+    title: "Scramble Text",
+    path: "/demo/scramble-text",
+    description:
+      "Text scramble/reveal effect with custom chars, reveal rate, cursor, and looping",
+  },
 ] as const;
 
 export const Route = createFileRoute("/")({ component: HomePage });

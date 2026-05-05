@@ -24,6 +24,7 @@ export const DEFAULT_PLAYBACK_SETTINGS: Required<PlaybackSettings> = {
   frameRate: null as unknown as number,
   playbackRate: 1,
   playbackEase: null as unknown as any,
+  priority: 0,
   persist: false,
 };
 
@@ -66,6 +67,7 @@ export const PLAYBACK_SETTING_KEYS = [
   "frameRate",
   "playbackRate",
   "playbackEase",
+  "priority",
   "persist",
 ] as const;
 

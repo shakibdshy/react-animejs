@@ -13,4 +13,5 @@ export { useAnimeWAAPI } from "./use-anime-waapi";
 export { useAnimatable } from "./use-animatable";
 export { useAnimeScope } from "./use-anime-scope";
 export { useSplitText } from "./use-split-text";
+export { useAnimeScramble } from "./use-anime-scramble";
 export type { AnimeController } from "./use-anime-controls";

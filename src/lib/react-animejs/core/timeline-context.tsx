@@ -7,7 +7,7 @@
 
 import { createContext, useContext } from "react";
 import type { RefObject } from "react";
-import type { Timeline, TimelineControls, AnimationState } from "../types";
+import type { AnimationState, Timeline, TimelineControls } from "../types";
 
 export interface TimelineContextValue {
   /**
