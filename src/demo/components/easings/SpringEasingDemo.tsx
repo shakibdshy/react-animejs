@@ -1,56 +1,59 @@
-import React, { useRef, useState } from "react";
-import { useAnime } from "@/lib/react-animejs/hooks";
-import { spring } from "@/lib/react-animejs";
-import { RotateCcw } from "lucide-react";
+import React, { useMemo, useRef, useState } from 'react';
+import { useAnime } from '@/lib/react-animejs/hooks';
+import { spring } from '@/lib/react-animejs';
+import { RotateCcw } from 'lucide-react';
 
 const springPresets = [
   {
-    name: "snappy",
+    name: 'snappy',
     config: { bounce: -0.25, duration: 300 },
-    label: "{ bounce: -0.25, duration: 300 }",
+    label: '{ bounce: -0.25, duration: 300 }',
   },
   {
-    name: "default",
+    name: 'default',
     config: { bounce: 0.5, duration: 628 },
-    label: "{ bounce: 0.5, duration: 628 }",
+    label: '{ bounce: 0.5, duration: 628 }',
   },
   {
-    name: "bouncy",
+    name: 'bouncy',
     config: { bounce: 0.75, duration: 500 },
-    label: "{ bounce: 0.75, duration: 500 }",
+    label: '{ bounce: 0.75, duration: 500 }',
   },
   {
-    name: "physics",
+    name: 'physics',
     config: { stiffness: 90, damping: 14 },
-    label: "{ stiffness: 90, damping: 14 }",
+    label: '{ stiffness: 90, damping: 14 }',
   },
   {
-    name: "heavy",
+    name: 'heavy',
     config: { stiffness: 60, damping: 8, mass: 2 },
-    label: "{ stiffness: 60, damping: 8, mass: 2 }",
+    label: '{ stiffness: 60, damping: 8, mass: 2 }',
   },
 ];
 
 export const SpringEasingDemo: React.FC = () => {
-  const boxRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+  const ref0 = useRef<HTMLDivElement>(null);
+  const ref1 = useRef<HTMLDivElement>(null);
+  const boxRefs = useMemo(() => [ref0, ref1], []);
   const [presetIndex, setPresetIndex] = useState(1);
   const preset = springPresets[presetIndex];
 
-  const easing = spring(preset.config as Parameters<typeof spring>[0]);
-
-  const { controls, state, isPlaying } = useAnime(
-    {
-      targets: boxRefs,
-      translateX: "15rem",
-      scale: [0.8, 1.1],
-      ease: easing,
-      stagger: 150,
-      autoplay: false,
-      loop: true,
-      alternate: true,
-      deps: [presetIndex],
-    },
+  const easing = useMemo(
+    () => spring(preset.config as Parameters<typeof spring>[0]),
+    [presetIndex]
   );
+
+  const { controls, state, isPlaying } = useAnime({
+    targets: boxRefs,
+    translateX: '15rem',
+    scale: [0.8, 1.1],
+    ease: easing,
+    stagger: 150,
+    autoplay: false,
+    loop: true,
+    alternate: true,
+    deps: [presetIndex],
+  });
 
   return (
     <div className="w-full bg-demo-card rounded-3xl p-6 border border-demo-border shadow-xl">
@@ -80,7 +83,7 @@ export const SpringEasingDemo: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-demo-bg rounded-2xl p-8 relative min-h-[200px] flex items-center justify-start overflow-hidden border border-demo-border/50">
+      <div className="bg-demo-bg rounded-2xl p-8 relative min-h-50 flex items-center justify-start overflow-hidden border border-demo-border/50">
         <div className="flex flex-col gap-4 w-full">
           {boxRefs.map((ref, i) => (
             <div key={i} className="flex items-center gap-4">

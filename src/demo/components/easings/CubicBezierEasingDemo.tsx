@@ -1,43 +1,46 @@
-import React, { useRef, useState } from "react";
-import { useAnime } from "@/lib/react-animejs/hooks";
-import { cubicBezier } from "@/lib/react-animejs";
-import { RotateCcw } from "lucide-react";
+import React, { useMemo, useRef, useState } from 'react';
+import { useAnime } from '@/lib/react-animejs/hooks';
+import { cubicBezier } from '@/lib/react-animejs';
+import { RotateCcw } from 'lucide-react';
 
 const bezierPresets = [
-  { name: "easeInOut", values: [0.42, 0, 0.58, 1] as [number, number, number, number] },
-  { name: "easeOut", values: [0, 0, 0.58, 1] as [number, number, number, number] },
-  { name: "easeIn", values: [0.42, 0, 1, 1] as [number, number, number, number] },
-  { name: "snap", values: [0.5, 0, 0.9, 0.3] as [number, number, number, number] },
-  { name: "smooth", values: [0.1, 0.7, 0.5, 1] as [number, number, number, number] },
-  { name: "anticipate", values: [0.7, 0.1, 0.5, 0.9] as [number, number, number, number] },
+  { name: 'easeInOut', values: [0.42, 0, 0.58, 1] as [number, number, number, number] },
+  { name: 'easeOut', values: [0, 0, 0.58, 1] as [number, number, number, number] },
+  { name: 'easeIn', values: [0.42, 0, 1, 1] as [number, number, number, number] },
+  { name: 'snap', values: [0.5, 0, 0.9, 0.3] as [number, number, number, number] },
+  { name: 'smooth', values: [0.1, 0.7, 0.5, 1] as [number, number, number, number] },
+  { name: 'anticipate', values: [0.7, 0.1, 0.5, 0.9] as [number, number, number, number] },
 ];
 
 export const CubicBezierEasingDemo: React.FC = () => {
-  const boxRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+  const ref0 = useRef<HTMLDivElement>(null);
+  const ref1 = useRef<HTMLDivElement>(null);
+  const ref2 = useRef<HTMLDivElement>(null);
+  const boxRefs = useMemo(() => [ref0, ref1, ref2], []);
   const [presetIndex, setPresetIndex] = useState(0);
   const preset = bezierPresets[presetIndex];
-  const easing = cubicBezier(...preset.values);
+  const easing = useMemo(() => cubicBezier(...preset.values), [presetIndex]);
 
-  const { controls, state, isPlaying } = useAnime(
-    {
-      targets: boxRefs,
-      translateX: "15rem",
-      duration: 2000,
-      ease: easing,
-      stagger: 200,
-      autoplay: false,
-      loop: true,
-      alternate: true,
-      deps: [presetIndex],
-    },
-  );
+  const { controls, state, isPlaying } = useAnime({
+    targets: boxRefs,
+    translateX: '15rem',
+    duration: 2000,
+    ease: easing,
+    stagger: 200,
+    autoplay: false,
+    loop: true,
+    alternate: true,
+    deps: [presetIndex],
+  });
 
   return (
     <div className="w-full bg-demo-card rounded-3xl p-6 border border-demo-border shadow-xl">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h4 className="text-demo-accent font-bold text-xl lowercase">cubicBezier</h4>
-          <p className="text-xs text-demo-text-muted mt-1">Custom Bézier curves for precise control</p>
+          <p className="text-xs text-demo-text-muted mt-1">
+            Custom Bézier curves for precise control
+          </p>
         </div>
         <div className="flex gap-2 items-center">
           <select
@@ -60,7 +63,7 @@ export const CubicBezierEasingDemo: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-demo-bg rounded-2xl p-8 relative min-h-[200px] flex items-center justify-start overflow-hidden border border-demo-border/50">
+      <div className="bg-demo-bg rounded-2xl p-8 relative min-h-50 flex items-center justify-start overflow-hidden border border-demo-border/50">
         <div className="flex flex-col gap-4 w-full">
           {boxRefs.map((ref, i) => (
             <div key={i} className="flex items-center gap-4">
@@ -85,9 +88,7 @@ export const CubicBezierEasingDemo: React.FC = () => {
       </div>
 
       <div className="mt-4 text-[10px] text-demo-text-secondary font-mono bg-black/30 p-2.5 rounded-lg border border-demo-border overflow-x-auto">
-        <code className="text-demo-accent/80">
-          cubicBezier({preset.values.join(", ")})
-        </code>
+        <code className="text-demo-accent/80">cubicBezier({preset.values.join(', ')})</code>
       </div>
     </div>
   );

@@ -1,29 +1,29 @@
-import React, { useRef, useState } from "react";
-import { useAnime } from "@/lib/react-animejs/hooks";
-import { steps } from "@/lib/react-animejs";
-import { RotateCcw } from "lucide-react";
+import React, { useMemo, useRef, useState } from 'react';
+import { useAnime } from '@/lib/react-animejs/hooks';
+import { steps } from '@/lib/react-animejs';
+import { RotateCcw } from 'lucide-react';
 
 export const StepsEasingDemo: React.FC = () => {
-  const boxRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+  const ref0 = useRef<HTMLDivElement>(null);
+  const ref1 = useRef<HTMLDivElement>(null);
+  const boxRefs = useMemo(() => [ref0, ref1], []);
   const [stepCount, setStepCount] = useState(4);
   const [fromStart, setFromStart] = useState(false);
 
-  const easing = steps(stepCount, fromStart);
+  const easing = useMemo(() => steps(stepCount, fromStart), [stepCount, fromStart]);
 
-  const { controls, state, isPlaying } = useAnime(
-    {
-      targets: boxRefs,
-      translateX: "15rem",
-      rotate: 360,
-      duration: 2000,
-      ease: easing,
-      stagger: 100,
-      autoplay: false,
-      loop: true,
-      alternate: true,
-      deps: [stepCount, fromStart],
-    },
-  );
+  const { controls, state, isPlaying } = useAnime({
+    targets: boxRefs,
+    translateX: '15rem',
+    rotate: 360,
+    duration: 2000,
+    ease: easing,
+    stagger: 100,
+    autoplay: false,
+    loop: true,
+    alternate: true,
+    deps: [stepCount, fromStart],
+  });
 
   return (
     <div className="w-full bg-demo-card rounded-3xl p-6 border border-demo-border shadow-xl">
@@ -48,11 +48,11 @@ export const StepsEasingDemo: React.FC = () => {
             onClick={() => setFromStart(!fromStart)}
             className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-tighter transition-all ${
               fromStart
-                ? "bg-demo-accent text-demo-bg"
-                : "bg-demo-card text-demo-text-secondary hover:text-white"
+                ? 'bg-demo-accent text-demo-bg'
+                : 'bg-demo-card text-demo-text-secondary hover:text-white'
             }`}
           >
-            {fromStart ? "start" : "end"}
+            {fromStart ? 'start' : 'end'}
           </button>
           <button
             onClick={() => controls.restart()}
@@ -63,7 +63,7 @@ export const StepsEasingDemo: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-demo-bg rounded-2xl p-8 relative min-h-[200px] flex items-center justify-start overflow-hidden border border-demo-border/50">
+      <div className="bg-demo-bg rounded-2xl p-8 relative min-h-50 flex items-center justify-start overflow-hidden border border-demo-border/50">
         <div className="flex flex-col gap-4 w-full">
           {boxRefs.map((ref, i) => (
             <div key={i} className="flex items-center gap-4">
@@ -89,7 +89,8 @@ export const StepsEasingDemo: React.FC = () => {
 
       <div className="mt-4 text-[10px] text-demo-text-secondary font-mono bg-black/30 p-2.5 rounded-lg border border-demo-border overflow-x-auto">
         <code className="text-demo-accent/80">
-          steps({stepCount}{fromStart ? ", true" : ""})
+          steps({stepCount}
+          {fromStart ? ', true' : ''})
         </code>
       </div>
     </div>

@@ -1,29 +1,30 @@
-import React, { useRef, useState } from "react";
-import { useAnime } from "@/lib/react-animejs/hooks";
-import { irregular } from "@/lib/react-animejs";
-import { RotateCcw, Shuffle } from "lucide-react";
+import React, { useMemo, useRef, useState } from 'react';
+import { useAnime } from '@/lib/react-animejs/hooks';
+import { irregular } from '@/lib/react-animejs';
+import { RotateCcw, Shuffle } from 'lucide-react';
 
 export const IrregularEasingDemo: React.FC = () => {
-  const boxRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+  const ref0 = useRef<HTMLDivElement>(null);
+  const ref1 = useRef<HTMLDivElement>(null);
+  const ref2 = useRef<HTMLDivElement>(null);
+  const boxRefs = useMemo(() => [ref0, ref1, ref2], []);
   const [stepCount, setStepCount] = useState(10);
   const [randomness, setRandomness] = useState(1);
 
-  const easing = irregular(stepCount, randomness);
+  const easing = useMemo(() => irregular(stepCount, randomness), [stepCount, randomness]);
 
-  const { controls, state, isPlaying } = useAnime(
-    {
-      targets: boxRefs,
-      translateX: "15rem",
-      rotate: 360,
-      duration: 2000,
-      ease: easing,
-      stagger: 150,
-      autoplay: false,
-      loop: true,
-      alternate: true,
-      deps: [stepCount, randomness],
-    },
-  );
+  const { controls, state, isPlaying } = useAnime({
+    targets: boxRefs,
+    translateX: '15rem',
+    rotate: 360,
+    duration: 2000,
+    ease: easing,
+    stagger: 150,
+    autoplay: false,
+    loop: true,
+    alternate: true,
+    deps: [stepCount, randomness],
+  });
 
   const randomize = () => {
     setStepCount(Math.floor(Math.random() * 15) + 5);
@@ -54,7 +55,7 @@ export const IrregularEasingDemo: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-demo-bg rounded-2xl p-8 relative min-h-[200px] flex items-center justify-start overflow-hidden border border-demo-border/50">
+      <div className="bg-demo-bg rounded-2xl p-8 relative min-h-50 flex items-center justify-start overflow-hidden border border-demo-border/50">
         <div className="flex flex-col gap-4 w-full">
           {boxRefs.map((ref, i) => (
             <div key={i} className="flex items-center gap-4">
