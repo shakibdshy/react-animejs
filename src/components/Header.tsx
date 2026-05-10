@@ -85,7 +85,7 @@ export default function Header() {
         </button>
         <h1 className="ml-4 text-xl font-bold flex-1">
           <Link to="/" className="text-demo-accent hover:text-demo-accent/80 transition-colors duration-200">
-            React Anime.js
+            React AnimeJS
           </Link>
         </h1>
         <button
@@ -125,6 +125,19 @@ export default function Header() {
           >
             <Home size={20} />
             <span className="font-medium">Home</span>
+          </Link>
+
+          <Link
+            to="/demos"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-demo-card-hover transition-colors duration-200 mb-2 cursor-pointer"
+            activeProps={{
+              className:
+                'flex items-center gap-3 p-3 rounded-lg bg-demo-card-hover text-demo-accent transition-colors duration-200 mb-2 cursor-pointer',
+            }}
+          >
+            <Layout size={20} />
+            <span className="font-medium">Components Gallery</span>
           </Link>
 
           <div className="mt-4 mb-2 px-3 text-xs font-semibold text-demo-text-muted uppercase tracking-wider">

@@ -36,7 +36,7 @@ export const LandingPage = memo(function LandingPage({
               eyebrow="v2.0 \u2014 React animation library"
               words={['Animations', 'that', 'flow.']}
               description="The animation power of anime.js, wrapped in beautiful React components. Zero boilerplate. Production-ready."
-              primaryCta={{ label: 'See the demos \u2192', href: '#demos' }}
+              primaryCta={{ label: 'See the demos \u2192', href: '/demos' }}
               secondaryCta={{
                 label: 'npm install react-animejs',
                 href: '#install',

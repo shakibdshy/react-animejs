@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as DemosRouteImport } from './routes/demos'
 import { Route as DemoRouteRouteImport } from './routes/demo/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoUtilitiesRouteImport } from './routes/demo/utilities'
@@ -40,6 +41,11 @@ import { Route as DemoAnimatePresenceRouteImport } from './routes/demo/animate-p
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemosRoute = DemosRouteImport.update({
+  id: '/demos',
+  path: '/demos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoRouteRoute = DemoRouteRouteImport.update({
@@ -177,6 +183,7 @@ const DemoAnimatePresenceRoute = DemoAnimatePresenceRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
+  '/demos': typeof DemosRoute
   '/mcp': typeof McpRoute
   '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/animated-slider': typeof DemoAnimatedSliderRoute
@@ -206,6 +213,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
+  '/demos': typeof DemosRoute
   '/mcp': typeof McpRoute
   '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/animated-slider': typeof DemoAnimatedSliderRoute
@@ -236,6 +244,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
+  '/demos': typeof DemosRoute
   '/mcp': typeof McpRoute
   '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/animated-slider': typeof DemoAnimatedSliderRoute
@@ -267,6 +276,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/demo'
+    | '/demos'
     | '/mcp'
     | '/demo/animate-presence'
     | '/demo/animated-slider'
@@ -296,6 +306,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/demo'
+    | '/demos'
     | '/mcp'
     | '/demo/animate-presence'
     | '/demo/animated-slider'
@@ -325,6 +336,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/demo'
+    | '/demos'
     | '/mcp'
     | '/demo/animate-presence'
     | '/demo/animated-slider'
@@ -355,6 +367,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DemoRouteRoute: typeof DemoRouteRouteWithChildren
+  DemosRoute: typeof DemosRoute
   McpRoute: typeof McpRoute
 }
 
@@ -365,6 +378,13 @@ declare module '@tanstack/react-router' {
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demos': {
+      id: '/demos'
+      path: '/demos'
+      fullPath: '/demos'
+      preLoaderRoute: typeof DemosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo': {
@@ -613,6 +633,7 @@ const DemoRouteRouteWithChildren = DemoRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DemoRouteRoute: DemoRouteRouteWithChildren,
+  DemosRoute: DemosRoute,
   McpRoute: McpRoute,
 }
 export const routeTree = rootRouteImport

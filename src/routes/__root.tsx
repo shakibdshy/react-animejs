@@ -1,10 +1,10 @@
-import { createRootRoute, HeadContent, Scripts, useLocation } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+import { createRootRoute, HeadContent, Scripts, useLocation } from '@tanstack/react-router';
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
+import { TanStackDevtools } from '@tanstack/react-devtools';
 
-import Header from '../components/Header'
+import Header from '../components/Header';
 
-import appCss from '../styles.css?url'
+import appCss from '../styles.css?url';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -49,11 +49,11 @@ export const Route = createRootRoute({
   }),
 
   shellComponent: RootDocument,
-})
+});
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const location = useLocation()
-  const isLanding = location.pathname === '/'
+  const location = useLocation();
+  const hideHeader = location.pathname === '/' || location.pathname === '/demos';
 
   return (
     <html lang="en">
@@ -61,7 +61,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {!isLanding && <Header />}
+        {!hideHeader && <Header />}
         {children}
         <TanStackDevtools
           config={{
@@ -77,5 +77,5 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
-  )
+  );
 }

@@ -1,10 +1,11 @@
 import { memo, useCallback, useEffect, useState } from 'react';
+import { Link } from '@tanstack/react-router';
 import { cn } from '@/landing/utils/cn';
 import type { NavItem } from '@/landing/types';
 
 const defaultNavItems: NavItem[] = [
   { label: 'Features', href: '#features' },
-  { label: 'Components', href: '#demos' },
+  { label: 'Components', href: '/demos' },
   { label: 'Docs', href: '#code' },
   { label: 'Community', href: '#testimonials' },
 ];
@@ -50,15 +51,27 @@ export const LandingHeader = memo(function LandingHeader({
         React AnimeJS <em className="not-italic text-landing-accent">{'\u2726'}</em>
       </a>
       <nav className="flex items-center gap-8" aria-label="Main navigation">
-        {navItems.map((item) => (
-          <a
-            key={item.href}
-            href={item.href}
-            className="text-sm text-landing-muted font-medium hover:text-landing-fg transition-colors duration-200 no-underline hidden sm:block"
-          >
-            {item.label}
-          </a>
-        ))}
+        {navItems.map((item) => {
+          const isRoute = item.href.startsWith('/');
+          const linkClass = 'text-sm text-landing-muted font-medium hover:text-landing-fg transition-colors duration-200 no-underline hidden sm:block';
+          return isRoute ? (
+            <Link
+              key={item.href}
+              to={item.href}
+              className={linkClass}
+            >
+              {item.label}
+            </Link>
+          ) : (
+            <a
+              key={item.href}
+              href={item.href}
+              className={linkClass}
+            >
+              {item.label}
+            </a>
+          );
+        })}
         <button
           onClick={toggleTheme}
           className="bg-transparent border border-landing-border rounded-full w-10 h-10 cursor-pointer text-base text-landing-muted flex items-center justify-center hover:bg-landing-surface hover:text-landing-fg transition-all duration-200"

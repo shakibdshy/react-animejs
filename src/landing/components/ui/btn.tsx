@@ -1,4 +1,5 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
+import { Link } from '@tanstack/react-router';
 import { cn } from '@/landing/utils/cn';
 
 interface BtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -25,7 +26,12 @@ export const Btn = memo(function Btn({
   const classes = cn(base, variants[variant], className);
 
   if (href) {
-    return (
+    const isRoute = href.startsWith('/');
+    return isRoute ? (
+      <Link to={href} className={classes}>
+        {children}
+      </Link>
+    ) : (
       <a href={href} className={classes}>
         {children}
       </a>

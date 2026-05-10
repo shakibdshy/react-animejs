@@ -234,4 +234,23 @@ code {
   .dark .landing-code-tag { color: oklch(70% 0.12 35); }
   .dark .landing-code-attr { color: oklch(65% 0.15 200); }
   .dark .landing-code-val { color: oklch(70% 0.15 145); }
+
+  @keyframes orbit {
+    0% { transform: rotate(0deg) translateX(22px) rotate(0deg); }
+    100% { transform: rotate(360deg) translateX(22px) rotate(-360deg); }
+  }
+
+  @keyframes cubeRotate {
+    0% { transform: rotateX(0deg) rotateY(0deg); }
+    100% { transform: rotateX(360deg) rotateY(360deg); }
+  }
+
+  .cube-face-front  { transform: translateZ(24px); }
+  .cube-face-back   { transform: rotateY(180deg) translateZ(24px); }
+  .cube-face-right  { transform: rotateY(90deg) translateZ(24px); }
+  .cube-face-left   { transform: rotateY(-90deg) translateZ(24px); }
+  .cube-face-top    { transform: rotateX(90deg) translateZ(24px); }
+  .cube-face-bottom { transform: rotateX(-90deg) translateZ(24px); }
+
+  .no-scroll { overflow: hidden !important; }
 }

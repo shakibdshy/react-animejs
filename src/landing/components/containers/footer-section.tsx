@@ -1,10 +1,11 @@
 import { memo } from 'react';
+import { Link } from '@tanstack/react-router';
 import { cn } from '@/landing/utils/cn';
 import { useScrollReveal } from '@/landing/hooks/use-scroll-reveal';
 import type { FooterColumn, NavItem } from '@/landing/types';
 
 const defaultProductLinks: NavItem[] = [
-  { label: 'Components', href: '#demos' },
+  { label: 'Components', href: '/demos' },
   { label: 'Documentation', href: '#code' },
   { label: 'Install', href: '#install' },
   { label: 'Changelog', href: '#' },
@@ -78,15 +79,27 @@ export const FooterSection = memo(function FooterSection({
               <h4 className="text-xs uppercase tracking-widest text-landing-muted mb-4 landing-font-mono">
                 {col.heading}
               </h4>
-              {col.links.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="block text-sm text-landing-muted mb-2.5 hover:text-landing-fg transition-colors duration-200 no-underline"
-                >
-                  {link.label}
-                </a>
-              ))}
+              {col.links.map((link) => {
+                const linkClass = "block text-sm text-landing-muted mb-2.5 hover:text-landing-fg transition-colors duration-200 no-underline";
+                const isRoute = link.href.startsWith('/');
+                return isRoute ? (
+                  <Link
+                    key={link.label}
+                    to={link.href}
+                    className={linkClass}
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    className={linkClass}
+                  >
+                    {link.label}
+                  </a>
+                );
+              })}
             </div>
           ))}
         </div>
