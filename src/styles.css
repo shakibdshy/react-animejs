@@ -64,6 +64,15 @@ code {
   --demo-text-secondary: oklch(0.45 0.015 260);
   --demo-text-muted: oklch(0.6 0.01 260);
   --demo-accent: oklch(0.65 0.2 85);
+
+  /* Landing — Editorial Monocle (light) */
+  --landing-bg: oklch(97% 0.012 80);
+  --landing-surface: oklch(99% 0.005 80);
+  --landing-fg: oklch(20% 0.02 60);
+  --landing-muted: oklch(48% 0.015 60);
+  --landing-border: oklch(89% 0.012 80);
+  --landing-accent: oklch(58% 0.16 35);
+  --landing-accent-dim: oklch(45% 0.10 35);
 }
 
 .dark {
@@ -111,6 +120,15 @@ code {
   --demo-text-secondary: oklch(0.6 0.02 260);
   --demo-text-muted: oklch(0.4 0.015 260);
   --demo-accent: oklch(0.85 0.15 85);
+
+  /* Landing — Editorial Monocle (dark) */
+  --landing-bg: oklch(9% 0.008 60);
+  --landing-surface: oklch(13% 0.01 60);
+  --landing-fg: oklch(92% 0.008 60);
+  --landing-muted: oklch(50% 0.012 60);
+  --landing-border: oklch(20% 0.01 60);
+  --landing-accent: oklch(64% 0.18 35);
+  --landing-accent-dim: oklch(45% 0.12 35);
 }
 
 @theme inline {
@@ -162,6 +180,16 @@ code {
   --color-demo-text-secondary: var(--demo-text-secondary);
   --color-demo-text-muted: var(--demo-text-muted);
   --color-demo-accent: var(--demo-accent);
+
+  /* Landing — Editorial Monocle tokens */
+  --color-landing-bg: var(--landing-bg);
+  --color-landing-surface: var(--landing-surface);
+  --color-landing-fg: var(--landing-fg);
+  --color-landing-muted: var(--landing-muted);
+  --color-landing-border: var(--landing-border);
+  --color-landing-accent: var(--landing-accent);
+  --color-landing-accent-dim: var(--landing-accent-dim);
+  --radius-landing: 6px;
 }
 
 @layer base {
@@ -171,4 +199,39 @@ code {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer utilities {
+  .landing-font-display {
+    font-family: 'Iowan Old Style', Charter, Georgia, serif;
+  }
+  .landing-font-mono {
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', ui-monospace, monospace;
+  }
+  .landing-scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--landing-muted), transparent);
+    animation: landingScrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes landingScrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.5); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+  .landing-code-kw { color: oklch(65% 0.2 35); }
+  .landing-code-fn { color: oklch(70% 0.12 200); }
+  .landing-code-str { color: oklch(70% 0.15 145); }
+  .landing-code-cm { color: var(--landing-muted); font-style: italic; }
+  .landing-code-num { color: oklch(75% 0.15 280); }
+  .landing-code-tag { color: oklch(70% 0.12 35); }
+  .landing-code-attr { color: oklch(65% 0.15 200); }
+  .landing-code-val { color: oklch(70% 0.15 145); }
+  .dark .landing-code-kw { color: oklch(65% 0.2 35); }
+  .dark .landing-code-fn { color: oklch(70% 0.12 200); }
+  .dark .landing-code-str { color: oklch(70% 0.15 145); }
+  .dark .landing-code-cm { color: var(--landing-muted); }
+  .dark .landing-code-num { color: oklch(75% 0.15 280); }
+  .dark .landing-code-tag { color: oklch(70% 0.12 35); }
+  .dark .landing-code-attr { color: oklch(65% 0.15 200); }
+  .dark .landing-code-val { color: oklch(70% 0.15 145); }
 }
