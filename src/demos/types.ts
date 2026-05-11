@@ -5,6 +5,7 @@ export interface DemoSection {
   path: string;
   description: string;
   category: DemoCategory;
+  componentId: string;
 }
 
 export interface DemoPropRow {

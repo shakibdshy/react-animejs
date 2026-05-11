@@ -38,7 +38,7 @@ export function useDetailOverlay(filteredDemos: DemoSection[]) {
       setActiveDemo(demo);
       setIsOpen(true);
       document.body.classList.add("no-scroll");
-      const hashPath = demo.path.replace("/demo/", "");
+      const hashPath = demo.componentId;
       history.pushState(null, "", `#${hashPath}`);
     },
     [filteredDemos]
@@ -50,7 +50,7 @@ export function useDetailOverlay(filteredDemos: DemoSection[]) {
     setCurrentIndex(-1);
     document.body.classList.remove("no-scroll");
     if (activeDemo) {
-      const hashPath = activeDemo.path.replace("/demo/", "");
+      const hashPath = activeDemo.componentId;
       if (location.hash === `#${hashPath}`) {
         history.pushState(
           null,
@@ -93,7 +93,7 @@ export function useDetailOverlay(filteredDemos: DemoSection[]) {
         if (isOpen) closeDetail();
         return;
       }
-      const idx = filteredDemos.findIndex((d) => d.path === `/demo/${hash}`);
+      const idx = filteredDemos.findIndex((d) => d.componentId === hash);
       if (idx >= 0 && idx !== currentIndex) {
         openDetail(idx);
       }
@@ -105,7 +105,7 @@ export function useDetailOverlay(filteredDemos: DemoSection[]) {
   useEffect(() => {
     const hash = location.hash.replace("#", "");
     if (hash) {
-      const idx = filteredDemos.findIndex((d) => d.path === `/demo/${hash}`);
+      const idx = filteredDemos.findIndex((d) => d.componentId === hash);
       if (idx >= 0) {
         const timer = setTimeout(() => openDetail(idx), 300);
         return () => clearTimeout(timer);

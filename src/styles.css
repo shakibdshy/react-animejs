@@ -53,17 +53,17 @@ code {
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.871 0.006 286.286);
 
-  /* Demo tokens (light mode) */
-  --demo-bg: oklch(0.97 0.005 260);
-  --demo-surface: oklch(0.95 0.008 260);
-  --demo-card: oklch(0.93 0.01 260);
-  --demo-card-hover: oklch(0.9 0.012 260);
-  --demo-border: oklch(0.85 0.015 260);
-  --demo-border-hover: oklch(0.75 0.02 260);
-  --demo-text: oklch(0.15 0.01 260);
-  --demo-text-secondary: oklch(0.45 0.015 260);
-  --demo-text-muted: oklch(0.6 0.01 260);
-  --demo-accent: oklch(0.65 0.2 85);
+  /* Demo tokens — unified to Editorial Monocle (light) */
+  --demo-bg: oklch(97% 0.012 80);
+  --demo-surface: oklch(99% 0.005 80);
+  --demo-card: oklch(99% 0.005 80);
+  --demo-card-hover: oklch(95% 0.01 80);
+  --demo-border: oklch(89% 0.012 80);
+  --demo-border-hover: oklch(80% 0.015 80);
+  --demo-text: oklch(20% 0.02 60);
+  --demo-text-secondary: oklch(48% 0.015 60);
+  --demo-text-muted: oklch(55% 0.015 60);
+  --demo-accent: oklch(58% 0.16 35);
 
   /* Landing — Editorial Monocle (light) */
   --landing-bg: oklch(97% 0.012 80);
@@ -109,17 +109,17 @@ code {
   --sidebar-border: oklch(0.274 0.006 286.033);
   --sidebar-ring: oklch(0.442 0.017 285.786);
 
-  /* Demo-specific tokens (dark theme) */
-  --demo-bg: oklch(0.11 0.015 260);
-  --demo-surface: oklch(0.16 0.018 260);
-  --demo-card: oklch(0.19 0.02 260);
-  --demo-card-hover: oklch(0.22 0.025 260);
-  --demo-border: oklch(0.25 0.025 260);
-  --demo-border-hover: oklch(0.35 0.04 260);
-  --demo-text: oklch(0.93 0.01 260);
-  --demo-text-secondary: oklch(0.6 0.02 260);
-  --demo-text-muted: oklch(0.4 0.015 260);
-  --demo-accent: oklch(0.85 0.15 85);
+  /* Demo tokens — unified to Editorial Monocle (dark) */
+  --demo-bg: oklch(9% 0.008 60);
+  --demo-surface: oklch(13% 0.01 60);
+  --demo-card: oklch(13% 0.01 60);
+  --demo-card-hover: oklch(17% 0.012 60);
+  --demo-border: oklch(20% 0.01 60);
+  --demo-border-hover: oklch(28% 0.015 60);
+  --demo-text: oklch(92% 0.008 60);
+  --demo-text-secondary: oklch(50% 0.012 60);
+  --demo-text-muted: oklch(42% 0.012 60);
+  --demo-accent: oklch(64% 0.18 35);
 
   /* Landing — Editorial Monocle (dark) */
   --landing-bg: oklch(9% 0.008 60);

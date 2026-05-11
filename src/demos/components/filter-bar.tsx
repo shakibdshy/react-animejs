@@ -37,16 +37,16 @@ export const FilterBar = memo(function FilterBar({
       />
       {CATEGORIES.map((cat) => (
         <button
-          key={cat}
-          onClick={() => onCategoryChange(cat)}
+          key={cat.id}
+          onClick={() => onCategoryChange(cat.id)}
           className={`px-4 py-2 rounded-full border text-[13px] landing-font-mono cursor-pointer transition-all duration-200 whitespace-nowrap capitalize ${
-            category === cat
+            category === cat.id
               ? 'bg-landing-accent text-landing-bg border-landing-accent'
               : 'bg-transparent text-landing-muted border-landing-border hover:border-landing-accent hover:text-landing-accent'
           }`}
-          aria-pressed={category === cat}
+          aria-pressed={category === cat.id}
         >
-          {cat}
+          {cat.label}
         </button>
       ))}
       <span className="landing-font-mono text-xs text-landing-muted ml-auto">

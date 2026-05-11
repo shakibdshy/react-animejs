@@ -58,35 +58,6 @@ function SvgPulsePreview() {
   );
 }
 
-function SvgPathDrawPreview() {
-  useAnime({
-    selector: '.demo-prev-path',
-    strokeDashoffset: ['0%', '100%'],
-    duration: 1500,
-    ease: 'inOutQuad' as never,
-    loop: true,
-    direction: 'alternate',
-    delay: 1000,
-  });
-
-  return (
-    <div className="w-25 h-10">
-      <svg width="100" height="40" viewBox="0 0 100 40">
-        <path
-          className="demo-prev-path"
-          d="M5,20 Q20,5 35,20 T65,20 T95,20"
-          fill="none"
-          stroke="var(--color-landing-accent)"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeDasharray="200"
-          strokeDashoffset="0"
-        />
-      </svg>
-    </div>
-  );
-}
-
 function CounterPreview() {
   const targetRef = useRef({ val: 0 });
   const spanRef = useRef<HTMLSpanElement>(null);
@@ -286,7 +257,6 @@ function ScramblePreview() {
 const previewComponents: Record<string, React.FC> = {
   'stagger-boxes': StaggerBoxesPreview,
   'svg-pulse': SvgPulsePreview,
-  'svg-path-draw': SvgPathDrawPreview,
   counter: CounterPreview,
   'bars-grow': BarsGrowPreview,
   'ring-orbit': RingOrbitPreview,

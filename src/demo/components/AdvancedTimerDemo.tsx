@@ -1,5 +1,5 @@
-import { useAnimeTimer } from "@/lib/react-animejs";
-import { DemoSection } from "./DemoSection";
+import { useAnimeTimer } from '@/lib/react-animejs';
+import { DemoSection } from './DemoSection';
 
 /**
  * Advanced Timer demonstration with LCD display

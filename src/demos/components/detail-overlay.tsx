@@ -1,5 +1,9 @@
-import { memo, useCallback, useMemo, useState } from 'react';
-import { demoDetails, demoSections } from '../data';
+import { Suspense, memo, useCallback, useMemo, useState } from 'react';
+import { Link } from '@tanstack/react-router';
+import { ArrowLeft, ArrowRight, Check, ExternalLink, X } from 'lucide-react';
+import { AnimeProvider } from '@/lib/react-animejs';
+import { demoDetails } from '../data/index';
+import { getDemoPreview } from './demo-previews';
 import type { DemoSection } from '../types';
 
 interface DetailOverlayProps {
@@ -27,12 +31,12 @@ export const DetailOverlay = memo(function DetailOverlay({
 }: DetailOverlayProps) {
   const [copied, setCopied] = useState(false);
 
-  const globalIndex = useMemo(() => {
-    if (!activeDemo) return 0;
-    return demoSections.findIndex((d) => d.path === activeDemo.path);
-  }, [activeDemo]);
+  const detail = activeDemo ? (demoDetails[activeDemo.componentId] ?? null) : null;
 
-  const detail = demoDetails[globalIndex] ?? null;
+  const PreviewComponent = useMemo(() => {
+    if (!activeDemo) return undefined;
+    return getDemoPreview(activeDemo.componentId);
+  }, [activeDemo]);
 
   const handleCopy = useCallback(async () => {
     if (!detail) return;
@@ -87,36 +91,46 @@ export const DetailOverlay = memo(function DetailOverlay({
               <button
                 onClick={onPrev}
                 disabled={!canGoPrev}
-                className="px-4 py-2 rounded-full border border-landing-border text-sm landing-font-mono text-landing-muted hover:border-landing-accent hover:text-landing-accent disabled:opacity-30 disabled:cursor-not-allowed transition-all bg-landing-surface"
+                className="px-4 py-2 rounded-full border border-landing-border text-sm landing-font-mono text-landing-muted hover:border-landing-accent hover:text-landing-accent disabled:opacity-30 disabled:cursor-not-allowed transition-all bg-landing-surface flex items-center gap-2"
               >
-                ← Previous
+                <ArrowLeft size={14} />
+                Previous
               </button>
               <button
                 onClick={onNext}
                 disabled={!canGoNext}
-                className="px-4 py-2 rounded-full border border-landing-border text-sm landing-font-mono text-landing-muted hover:border-landing-accent hover:text-landing-accent disabled:opacity-30 disabled:cursor-not-allowed transition-all bg-landing-surface"
+                className="px-4 py-2 rounded-full border border-landing-border text-sm landing-font-mono text-landing-muted hover:border-landing-accent hover:text-landing-accent disabled:opacity-30 disabled:cursor-not-allowed transition-all bg-landing-surface flex items-center gap-2"
               >
-                Next →
+                Next
+                <ArrowRight size={14} />
               </button>
               <button
                 onClick={onClose}
-                className="ml-2 w-10 h-10 rounded-full border border-landing-border flex items-center justify-center text-lg text-landing-muted hover:border-red-500 hover:text-red-400 transition-all bg-landing-surface"
+                className="ml-2 w-10 h-10 rounded-full border border-landing-border flex items-center justify-center text-landing-muted hover:border-red-500 hover:text-red-400 transition-all bg-landing-surface"
                 aria-label="Close"
               >
-                ✕
+                <X size={16} />
               </button>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="flex flex-col">
-              <h2 className="landing-font-display text-[32px] leading-tight mb-3">
+              <h2 className="landing-font-display text-4xl leading-tight mb-3">
                 {activeDemo.title}
               </h2>
-              <div className="flex items-center gap-3 mb-8">
+              <div className="flex items-center gap-3 mb-6">
                 <span className="landing-font-mono text-[11px] tracking-widest uppercase text-landing-accent bg-landing-accent/10 px-3 py-1 rounded-full border border-landing-accent/20">
                   {activeDemo.category}
                 </span>
+                <Link
+                  to={activeDemo.path as never}
+                  onClick={onClose}
+                  className="landing-font-mono text-[11px] tracking-wider uppercase text-landing-muted hover:text-landing-accent bg-landing-surface px-3 py-1 rounded-full border border-landing-border hover:border-landing-accent/30 transition-all no-underline flex items-center gap-1.5"
+                >
+                  Open full page
+                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                </Link>
               </div>
 
               <div className="relative flex-1">
@@ -124,9 +138,11 @@ export const DetailOverlay = memo(function DetailOverlay({
                   <h3 className="landing-font-display text-sm text-landing-fg">Code</h3>
                   <button
                     onClick={handleCopy}
-                    className="landing-font-mono text-sm text-landing-muted hover:text-landing-accent transition-colors px-4 py-2 rounded-lg border border-landing-border hover:border-landing-accent/40 bg-landing-surface"
+                    className="landing-font-mono text-sm text-landing-muted hover:text-landing-accent transition-colors px-4 py-2 rounded-lg border border-landing-border hover:border-landing-accent/40 bg-landing-surface flex items-center gap-1.5"
                   >
-                    {copied ? 'Copied ✓' : 'Copy'}
+                    {copied ? (
+                      <><Check size={14} className="text-green-500" /> Copied</>
+                    ) : 'Copy'}
                   </button>
                 </div>
                 <div className="rounded-xl overflow-hidden border border-landing-border bg-(--color-landing-bg) shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">
@@ -140,14 +156,52 @@ export const DetailOverlay = memo(function DetailOverlay({
             <div className="flex flex-col gap-6">
               <p className="text-[15px] text-landing-muted leading-[1.65]">{detail.summary}</p>
 
-              <div className="rounded-xl overflow-hidden border border-landing-border bg-landing-surface flex-1 min-h-55 flex flex-col">
-                <div className="flex items-center gap-2 px-5 py-3.5 border-b border-landing-border">
+              <div className="rounded-xl overflow-hidden border border-landing-border bg-landing-surface flex-1 min-h-80 flex flex-col">
+                <div className="flex items-center justify-between px-5 py-3.5 border-b border-landing-border">
                   <span className="text-sm font-bold text-landing-fg landing-font-display">
                     Live preview
                   </span>
+                  <Link
+                    to={activeDemo.path as never}
+                    onClick={onClose}
+                    className="landing-font-mono text-[11px] text-landing-muted hover:text-landing-accent transition-colors no-underline flex items-center gap-1.5"
+                  >
+                    View full page
+                    <ExternalLink size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Link>
                 </div>
-                <div className="flex-1 flex items-center justify-center p-5 bg-landing-accent/5">
-                  <PreviewStage demoIndex={globalIndex} />
+                <div className="flex-1 overflow-auto p-4 bg-demo-bg">
+                  {PreviewComponent ? (
+                    <Suspense
+                      fallback={
+                        <div className="flex items-center justify-center h-full min-h-60">
+                          <div className="landing-font-mono text-sm text-landing-muted animate-pulse">
+                            Loading component...
+                          </div>
+                        </div>
+                      }
+                    >
+                      <AnimeProvider>
+                        <PreviewComponent />
+                      </AnimeProvider>
+                    </Suspense>
+                  ) : (
+                    <div className="flex items-center justify-center h-full min-h-60">
+                      <div className="text-center">
+                        <div className="landing-font-mono text-sm text-landing-accent mb-2">
+                          Preview on dedicated page
+                        </div>
+                        <Link
+                          to={activeDemo.path as never}
+                          onClick={onClose}
+                          className="landing-font-mono text-xs text-landing-muted hover:text-landing-accent transition-colors no-underline flex items-center gap-1.5"
+                        >
+                          Open full demo page
+                          <ArrowRight size={12} />
+                        </Link>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -202,7 +256,8 @@ export const DetailOverlay = memo(function DetailOverlay({
                 onClick={onPrev}
                 className="landing-font-display text-lg text-landing-muted hover:text-landing-accent transition-colors flex items-center gap-2"
               >
-                ← Previous
+                <ArrowLeft size={18} />
+                Previous
               </button>
             ) : (
               <div />
@@ -212,7 +267,8 @@ export const DetailOverlay = memo(function DetailOverlay({
                 onClick={onNext}
                 className="landing-font-display text-lg text-landing-muted hover:text-landing-accent transition-colors flex items-center gap-2"
               >
-                Next →
+                Next
+                <ArrowRight size={18} />
               </button>
             ) : (
               <div />
@@ -223,29 +279,3 @@ export const DetailOverlay = memo(function DetailOverlay({
     </div>
   );
 });
-
-function PreviewStage({ demoIndex }: { demoIndex: number }) {
-  const previewAnims = [
-    'Stagger boxes',
-    'SVG pulse',
-    'SVG path drawing',
-    'Counter',
-    'Bars grow',
-    'Ring orbit',
-    'Bounce dots',
-    'Scale box',
-    'Cube rotate',
-    'Clip reveal',
-    'Scramble text',
-  ];
-  const label = previewAnims[demoIndex % previewAnims.length];
-
-  return (
-    <div className="text-center">
-      <div className="landing-font-mono text-sm text-landing-accent mb-2">{label}</div>
-      <div className="text-[12px] text-landing-muted">
-        Preview available on the dedicated demo page
-      </div>
-    </div>
-  );
-}

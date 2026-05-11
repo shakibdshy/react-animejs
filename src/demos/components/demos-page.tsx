@@ -96,7 +96,7 @@ export const DemosPage = memo(function DemosPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
               {filtered.map((demo, i) => (
                 <GalleryCard
-                  key={demo.path}
+                  key={demo.componentId}
                   demo={demo}
                   demoIndex={i}
                   onClick={() => openDetail(i)}
