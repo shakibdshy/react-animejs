@@ -1,6 +1,7 @@
 import type { RefObject } from "react";
 import type { ScrambleTextParams } from "animejs";
-import type { Easing, PlaybackControls } from "./common";
+import type { PlaybackControls } from './common';
+import type { Easing } from './easing';
 import type { JSAnimation } from "./animation";
 
 export type { ScrambleTextParams };

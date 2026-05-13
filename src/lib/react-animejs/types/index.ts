@@ -12,11 +12,6 @@ export type {
   AnimationState,
   AnimationTarget,
   AnimationTargets,
-  EasingName,
-  EasingPattern,
-  EasingFunction,
-  Easing,
-  SpringParams,
   PropertyKeyframe,
   PropertyValue,
   DeepPartial,
@@ -24,6 +19,15 @@ export type {
 } from "./common";
 
 export { INITIAL_ANIMATION_STATE } from "./common";
+
+// Easing types
+export type {
+  EasingName,
+  EasingPattern,
+  EasingFunction,
+  Easing,
+  SpringParams,
+} from "./easing";
 
 // Animation types
 export type {

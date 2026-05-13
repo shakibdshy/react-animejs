@@ -3,6 +3,7 @@
  */
 
 import type { RefObject } from "react";
+import type { Easing } from './easing';
 
 // =============================================================================
 // Playback Settings
@@ -364,132 +365,13 @@ export type AnimationTarget =
  */
 export type AnimationTargets = AnimationTarget | AnimationTarget[];
 
-// =============================================================================
-// Easing Types
-// =============================================================================
-
-/**
- * Built-in easing function names
- */
-export type EasingName =
-  | "linear"
-  | "none"
-  // Power easings (no function name, just type)
-  | "in"
-  | "out"
-  | "inOut"
-  | "outIn"
-  // Quad
-  | "inQuad"
-  | "outQuad"
-  | "inOutQuad"
-  | "outInQuad"
-  // Cubic
-  | "inCubic"
-  | "outCubic"
-  | "inOutCubic"
-  | "outInCubic"
-  // Quart
-  | "inQuart"
-  | "outQuart"
-  | "inOutQuart"
-  | "outInQuart"
-  // Quint
-  | "inQuint"
-  | "outQuint"
-  | "inOutQuint"
-  | "outInQuint"
-  // Sine
-  | "inSine"
-  | "outSine"
-  | "inOutSine"
-  | "outInSine"
-  // Circ
-  | "inCirc"
-  | "outCirc"
-  | "inOutCirc"
-  | "outInCirc"
-  // Expo
-  | "inExpo"
-  | "outExpo"
-  | "inOutExpo"
-  | "outInExpo"
-  // Bounce
-  | "inBounce"
-  | "outBounce"
-  | "inOutBounce"
-  | "outInBounce"
-  // Back (parameterized)
-  | "inBack"
-  | "outBack"
-  | "inOutBack"
-  | "outInBack"
-  // Elastic (parameterized)
-  | "inElastic"
-  | "outElastic"
-  | "inOutElastic"
-  | "outInElastic";
-
-/**
- * Anime.js 4.x easing string patterns
- */
-export type EasingPattern =
-  | `in(${number})`
-  | `out(${number})`
-  | `inOut(${number})`
-  | `outIn(${number})`
-  | `spring(${number})`
-  | `spring(${number}, ${number})`
-  | `steps(${number})`
-  | `steps(${number}, start)`
-  | `steps(${number}, end)`
-  | `cubicBezier(${number}, ${number}, ${number}, ${number})`
-  | `linear(${number}, ${number})`
-  | `irregular(${number})`
-  | `irregular(${number}, ${number})`;
-
-/**
- * Custom easing function
- */
-export type EasingFunction = (t: number) => number;
-
-import type { Spring as AnimeSpring } from "animejs";
-
-/**
- * All valid easing types
- */
-export type Easing =
-  | EasingName
-  | EasingPattern
-  | EasingFunction
-  | AnimeSpring
-  | (string & {});
-
-/**
- * Spring easing parameters for physics-based animations
- */
-export interface SpringParams {
-  bounce?: number;
-  duration?: number;
-  stiffness?: number;
-  damping?: number;
-  mass?: number;
-  velocity?: number;
-  onComplete?: () => void;
-}
-
-/**
- * Spring easing parameters for physics-based animations
- */
-export interface SpringParams {
-  bounce?: number;
-  duration?: number;
-  stiffness?: number;
-  damping?: number;
-  mass?: number;
-  velocity?: number;
-  onComplete?: () => void;
-}
+export type {
+  EasingName,
+  EasingPattern,
+  EasingFunction,
+  Easing,
+  SpringParams,
+} from './easing';
 
 // =============================================================================
 // Value Types

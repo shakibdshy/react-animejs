@@ -13,7 +13,7 @@
  */
 
 import type { RefObject } from "react";
-import type { Easing } from "./common";
+import type { Easing } from './easing';
 
 // =============================================================================
 // Axis-Specific Parameters
