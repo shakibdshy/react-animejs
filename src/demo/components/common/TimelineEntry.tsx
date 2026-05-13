@@ -9,7 +9,7 @@ import {
   useRef,
 } from 'react';
 import { useTimelineContext } from '@/lib/react-animejs/core';
-import { resolveTarget, safeJsonStringify } from '@/lib/react-animejs/core/helpers';
+import { resolveTarget, safeJsonStringify } from '@/lib/react-animejs/core';
 import type {
   AnimatableProperties,
   AnimationTargets,

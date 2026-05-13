@@ -26,7 +26,7 @@
 import { forwardRef, type RefObject, useEffect, useImperativeHandle, useRef } from 'react';
 import { stagger as animeStagger } from 'animejs';
 import { useTimelineContext } from '../core';
-import { safeJsonStringify } from '../core/helpers';
+import { safeJsonStringify } from '../core';
 import type { SplitTextRef } from './SplitText';
 import type { AnimatableProperties, PlaybackSettings, TweenParameters } from '../types';
 

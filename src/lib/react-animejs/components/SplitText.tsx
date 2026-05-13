@@ -18,7 +18,7 @@ import {
 } from 'react';
 import { splitText } from 'animejs';
 import type { TextSplitter, TextSplitterParams } from 'animejs';
-import { safeJsonStringify } from '../core/helpers';
+import { safeJsonStringify } from '../core';
 import { mergeChildProps } from '../utils/svg-component-utils';
 
 export interface SplitTextRef {
