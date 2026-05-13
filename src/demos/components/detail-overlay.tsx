@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Check, ExternalLink, X } from 'lucide-react';
 import { AnimeProvider } from '@/lib/react-animejs';
 import { demoDetails } from '../data/index';
 import { getDemoPreview } from './demo-previews';
+import { CodeBlock } from './code-block';
 import type { DemoSection } from '../types';
 
 interface DetailOverlayProps {
@@ -146,9 +147,9 @@ export const DetailOverlay = memo(function DetailOverlay({
                   </button>
                 </div>
                 <div className="rounded-xl overflow-hidden border border-landing-border bg-(--color-landing-bg) shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">
-                  <pre className="p-5 overflow-x-auto text-[13px] leading-[1.6] landing-font-mono text-landing-fg whitespace-pre">
-                    <code>{detail.code}</code>
-                  </pre>
+                  <div className="p-5 overflow-x-auto">
+                    <CodeBlock code={detail.code} />
+                  </div>
                 </div>
               </div>
             </div>

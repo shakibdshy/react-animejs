@@ -729,7 +729,7 @@ export const OnScrollPreview = memo(function OnScrollPreview(_props: PreviewProp
           className="w-full h-52 rounded-xl border border-landing-border border-dashed bg-landing-bg/40 overflow-y-auto overscroll-contain relative"
         >
           <div className="h-16" />
-          <div ref={ref} className="relative h-104">
+          <div ref={ref} className="relative h-900">
             <div className="sticky top-0 h-52 flex items-center justify-center">
               <div
                 className="relative w-full max-w-xs overflow-hidden rounded-xl"
