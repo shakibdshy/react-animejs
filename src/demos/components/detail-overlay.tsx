@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { ArrowLeft, ArrowRight, Check, ExternalLink, X } from 'lucide-react';
 import { AnimeProvider } from '@/lib/react-animejs';
 import { demoDetails } from '../data/index';
-import { getDemoPreview } from './demo-previews';
+import { getDemoPreview } from './previews';
 import { CodeBlock } from './code-block';
 import type { DemoSection } from '../types';
 
