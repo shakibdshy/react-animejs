@@ -47,24 +47,42 @@ export type AnimeLayoutMode =
   | "manual" // User controls when animations happen
   | "auto"; // Auto-animate on children changes
 
+export interface AnimeTransformProperties {
+  translateX?: number | string;
+  translateY?: number | string;
+  translateZ?: number | string;
+  rotate?: number | string;
+  rotateX?: number | string;
+  rotateY?: number | string;
+  rotateZ?: number | string;
+  scale?: number | string;
+  scaleX?: number | string;
+  scaleY?: number | string;
+  scaleZ?: number | string;
+  skew?: number | string;
+  skewX?: number | string;
+  skewY?: number | string;
+  perspective?: number | string;
+}
+
 /**
  * Animation parameters for enter/leave/swap states
  */
 export interface AnimeLayoutStateParams {
   /** Initial state for entering elements */
-  enterFrom?: Partial<CSSProperties> & {
+  enterFrom?: Partial<CSSProperties> & AnimeTransformProperties & {
     duration?: number;
     ease?: string;
     delay?: number;
   };
   /** Final state for leaving elements */
-  leaveTo?: Partial<CSSProperties> & {
+  leaveTo?: Partial<CSSProperties> & AnimeTransformProperties & {
     duration?: number;
     ease?: string;
     delay?: number;
   };
   /** Intermediate state during swap */
-  swapAt?: Partial<CSSProperties>;
+  swapAt?: Partial<CSSProperties> & AnimeTransformProperties;
 }
 
 /**
@@ -134,11 +152,11 @@ export interface AnimeLayoutProps
   /** Callback when animation state changes */
   onStateChange?: (state: AnimationState) => void;
 
-  /** Callback when elements enter/leave/swap */
   onLayoutChange?: (info: {
     entering: Element[];
     leaving: Element[];
     swapping: Element[];
+    animating: Element[];
   }) => void;
 
   /** Additional HTML attributes for the wrapper */
@@ -178,6 +196,9 @@ export interface AnimeLayoutRef extends UseAnimeLayoutControls {
 
   /** Elements currently swapping position */
   swapping: Element[];
+
+  /** Elements currently animating */
+  animating: Element[];
 
   /** Force a layout animation with current settings */
   refresh: (params?: LayoutAnimationParams) => Timeline | null;
@@ -396,6 +417,7 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
       entering,
       leaving,
       swapping,
+      animating,
     } = useAnimeLayout<HTMLDivElement>({
       children: childrenSelector || ".anime-layout-item",
       duration,
@@ -482,6 +504,7 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
         entering,
         leaving,
         swapping,
+        animating,
         refresh,
         getElement,
       }),
@@ -497,6 +520,7 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
         entering,
         leaving,
         swapping,
+        animating,
         refresh,
         getElement,
       ],
@@ -527,10 +551,10 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
 
     // Notify on layout changes
     useEffect(() => {
-      if (entering.length > 0 || leaving.length > 0 || swapping.length > 0) {
-        onLayoutChange?.({ entering, leaving, swapping });
+      if (entering.length > 0 || leaving.length > 0 || swapping.length > 0 || animating.length > 0) {
+        onLayoutChange?.({ entering, leaving, swapping, animating });
       }
-    }, [entering, leaving, swapping, onLayoutChange]);
+    }, [entering, leaving, swapping, animating, onLayoutChange]);
 
     // Auto-animate on children changes (when mode is 'auto')
     useEffect(() => {

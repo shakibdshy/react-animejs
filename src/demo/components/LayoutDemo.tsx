@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   AnimeLayout,
   AnimeLayoutItem,
   type AnimeLayoutRef,
-} from "@/lib/react-animejs/components/AnimeLayout";
-import { DemoCard } from "./DemoCard";
-import { Columns, Grid2X2, Grid3X3, Split } from "lucide-react";
+} from '@/lib/react-animejs/components/AnimeLayout';
+import { DemoCard } from '@/landing/components/base/demo-card';
+import { DemoBox } from '@/landing/components/base/demo-box';
 
 export const LayoutDemo: React.FC = () => {
   const layoutRef = useRef<AnimeLayoutRef>(null);
@@ -18,10 +18,7 @@ export const LayoutDemo: React.FC = () => {
         const root = layout.root as HTMLElement;
         root.style.gridTemplateColumns = `repeat(${nextCols}, minmax(0, 1fr))`;
       },
-      {
-        duration: 800,
-        ease: "outExpo",
-      },
+      { duration: 800, ease: 'outExpo' }
     );
     setCols(nextCols);
   }, []);
@@ -31,92 +28,61 @@ export const LayoutDemo: React.FC = () => {
     layoutRef.current?.update(
       (layout) => {
         const root = layout.root as HTMLElement;
-        const item = root.querySelector(
-          '[data-layout-demo-item="4"]',
-        ) as HTMLElement | null;
+        const item = root.querySelector('[data-layout-demo-item="4"]') as HTMLElement | null;
         if (!item) return;
-        item.style.display = nextHidden ? "none" : "";
+        item.style.display = nextHidden ? 'none' : '';
       },
       {
         duration: 600,
-        ease: "outExpo",
+        ease: 'outExpo',
         enterFrom: { opacity: 0, scale: 0.5 },
         leaveTo: { opacity: 0, scale: 0.5 },
-      },
+      }
     );
     setIsHidden(nextHidden);
   }, [isHidden]);
-
-  const playDemo = useCallback(() => {
-    const sequence = [2, 4, 3];
-    let i = 0;
-    const interval = setInterval(() => {
-      setGridColumns(sequence[i]);
-      i++;
-      if (i >= sequence.length) clearInterval(interval);
-    }, 1000);
-  }, [setGridColumns]);
 
   const items = useMemo(() => Array.from({ length: 8 }, (_, i) => i + 1), []);
 
   return (
     <DemoCard
-      title="automatic layout"
-      description="Fluid transitions between different grid configurations. Using <AnimeLayout> component."
-      actions={
-        <div className="flex gap-1 bg-black/20 p-1 rounded-xl">
-          <button
-            onClick={() => setGridColumns(2)}
-            className={`p-1.5 rounded-lg transition-all ${cols === 2 ? "bg-demo-accent text-demo-bg" : "text-demo-text-muted hover:text-white"}`}
-            title="2 Columns"
+      title="<Automatic Layout>"
+      description="Fluid transitions between different grid configurations."
+      footer={
+        <>
+          <label className="text-xs text-landing-muted landing-font-mono">Columns</label>
+          <select
+            value={cols}
+            onChange={(e) => setGridColumns(Number(e.target.value))}
+            className="bg-landing-bg text-landing-fg border border-landing-border rounded px-2 py-1 text-xs landing-font-mono"
           >
-            <Columns size={12} />
-          </button>
-          <button
-            onClick={() => setGridColumns(3)}
-            className={`p-1.5 rounded-lg transition-all ${cols === 3 ? "bg-demo-accent text-demo-bg" : "text-demo-text-muted hover:text-white"}`}
-            title="3 Columns"
-          >
-            <Grid3X3 size={12} />
-          </button>
-          <button
-            onClick={() => setGridColumns(4)}
-            className={`p-1.5 rounded-lg transition-all ${cols === 4 ? "bg-demo-accent text-demo-bg" : "text-demo-text-muted hover:text-white"}`}
-            title="4 Columns"
-          >
-            <Grid2X2 size={12} />
-          </button>
+            <option value="2">2 Columns</option>
+            <option value="3">3 Columns</option>
+            <option value="4">4 Columns</option>
+          </select>
+          <label className="text-xs text-landing-muted landing-font-mono ml-4">Item 4</label>
           <button
             onClick={toggleItem}
-            className={`p-1.5 rounded-lg transition-all ${isHidden ? "bg-orange-500 text-white" : "text-demo-text-muted hover:text-white"}`}
-            title="Toggle Item 4"
+            className={`px-3 py-1 rounded text-xs font-mono transition-all cursor-pointer ${isHidden ? 'bg-landing-accent/20 text-landing-accent border border-landing-accent/30' : 'bg-landing-bg text-landing-fg border border-landing-border'}`}
           >
-            <Split size={12} />
+            {isHidden ? 'Hidden' : 'Visible'}
           </button>
-        </div>
+        </>
       }
-      controls={{
-        play: playDemo,
-        restart: () => setGridColumns(3),
-      }}
-      state={layoutRef.current?.state}
-      isPlaying={layoutRef.current?.isAnimating}
-      code={`<AnimeLayout ref={layoutRef}>...</AnimeLayout>`}
     >
       <AnimeLayout
         ref={layoutRef}
         duration={800}
         ease="outExpo"
-        className="w-full flex-1 min-h-[160px] grid gap-3"
+        className="w-full grid gap-3"
         style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
       >
         {items.map((n) => (
           <AnimeLayoutItem
             key={n}
-            layoutId={`item-${n}`}
             data-layout-demo-item={n}
-            className="h-12 flex items-center justify-center rounded-xl bg-demo-accent/10 border border-demo-accent/20 text-demo-accent font-bold text-sm shadow-sm transition-colors hover:bg-demo-accent/20 cursor-pointer"
-            onClick={n === 4 ? toggleItem : undefined}
+            as={DemoBox}
+            className="w-full flex items-center justify-center font-bold"
           >
             {n}
           </AnimeLayoutItem>
@@ -125,5 +91,4 @@ export const LayoutDemo: React.FC = () => {
     </DemoCard>
   );
 };
-
 export default LayoutDemo;

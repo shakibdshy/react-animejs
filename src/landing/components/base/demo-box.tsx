@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { cn } from '@/landing/utils/cn';
 
-interface DemoBoxProps {
+interface DemoBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   size?: 'sm' | 'md' | 'lg';
   outline?: boolean;
@@ -15,6 +15,8 @@ export const DemoBox = memo(function DemoBox({
   outline = false,
   muted = false,
   className,
+  style,
+  ...props
 }: DemoBoxProps) {
   const sizes = {
     sm: 'w-10 h-10 text-sm',
@@ -36,13 +38,13 @@ export const DemoBox = memo(function DemoBox({
         muted && !outline && 'bg-transparent',
         className
       )}
-      style={
-        muted && !outline
-          ? {
-              background: 'color-mix(in oklch, var(--landing-muted) 15%, transparent)',
-            }
-          : undefined
-      }
+      style={{
+        ...(muted && !outline
+          ? { background: 'color-mix(in oklch, var(--landing-muted) 15%, transparent)' }
+          : {}),
+        ...style,
+      }}
+      {...props}
     >
       {children}
     </div>

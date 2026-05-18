@@ -1,16 +1,16 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from 'react';
 import {
   AnimeLayout,
   AnimeLayoutItem,
   type AnimeLayoutRef,
-} from "@/lib/react-animejs/components/AnimeLayout";
-import { DemoCard } from "./DemoCard";
-import { Play, RotateCcw, Zap } from "lucide-react";
+} from '@/lib/react-animejs/components/AnimeLayout';
+import { DemoCard } from '@/landing/components/base/demo-card';
+import { DemoBox } from '@/landing/components/base/demo-box';
+import { DemoBtn } from '@/landing/components/base/demo-btn';
 
 export const LayoutMethodsDemo: React.FC = () => {
   const layoutRef = useRef<AnimeLayoutRef>(null);
   const [cols, setCols] = useState(2);
-  const [lastMethod, setLastMethod] = useState<string | null>(null);
 
   const useRecordAnimate = useCallback(() => {
     if (!layoutRef.current) return;
@@ -22,7 +22,6 @@ export const LayoutMethodsDemo: React.FC = () => {
       setCols(nextCols);
     }
     layoutRef.current.animate({ duration: 500 });
-    setLastMethod("record() → animate()");
   }, [cols]);
 
   const useUpdate = useCallback(() => {
@@ -32,15 +31,13 @@ export const LayoutMethodsDemo: React.FC = () => {
         const root = layout.root as HTMLElement;
         root.style.gridTemplateColumns = `repeat(${nextCols}, minmax(0, 1fr))`;
       },
-      { duration: 700, ease: "outBack" },
+      { duration: 700, ease: 'outBack' }
     );
     setCols(nextCols);
-    setLastMethod("update()");
   }, [cols]);
 
   const useRevert = useCallback(() => {
     layoutRef.current?.revert();
-    setLastMethod("revert()");
     setCols(2);
   }, []);
 
@@ -48,82 +45,53 @@ export const LayoutMethodsDemo: React.FC = () => {
 
   return (
     <DemoCard
-      title="layout methods"
-      description="Directly control the layout engine. Using <AnimeLayout> component."
-      actions={
-        <div className="flex gap-2">
-          <button
+      title="<Layout Methods>"
+      description="Directly control the layout engine with programmatic methods."
+      footer={
+        <div className="flex flex-wrap gap-2 w-full">
+          <DemoBtn
+            variant="outline"
             onClick={useRecordAnimate}
-            className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-blue-400 rounded-lg transition-all"
-            title="record() + animate()"
+            className="flex-1 text-[11px] px-3 py-1.5 border-blue-500/50 hover:bg-blue-500/10 hover:text-blue-400"
           >
-            <Zap size={16} />
-          </button>
-          <button
+            record() & animate()
+          </DemoBtn>
+          <DemoBtn
+            variant="outline"
             onClick={useUpdate}
-            className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-green-400 rounded-lg transition-all"
-            title="update()"
+            className="flex-1 text-[11px] px-3 py-1.5 border-green-500/50 hover:bg-green-500/10 hover:text-green-400"
           >
-            <Play size={16} />
-          </button>
-          <button
+            update()
+          </DemoBtn>
+          <DemoBtn
+            variant="outline"
             onClick={useRevert}
-            className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-red-400 rounded-lg transition-all"
-            title="revert()"
+            className="flex-1 text-[11px] px-3 py-1.5 border-red-500/50 hover:bg-red-500/10 hover:text-red-400"
           >
-            <RotateCcw size={16} />
-          </button>
+            revert()
+          </DemoBtn>
         </div>
       }
-      controls={{
-        play: useUpdate,
-        restart: useRevert,
-      }}
-      state={layoutRef.current?.state}
-      isPlaying={layoutRef.current?.isAnimating}
-      code={lastMethod ? `controls.${lastMethod}` : `// choose a method above`}
     >
-      <div className="flex flex-col gap-6 w-full h-full">
-        {/* Method Indicator */}
-        <div className="flex items-center gap-3 bg-black/20 px-4 py-3 rounded-xl border border-white/5">
-          <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-          <span className="text-[10px] font-mono text-demo-text-muted uppercase tracking-[0.2em]">
-            Active Method:{" "}
-            <span className="text-demo-accent ml-1">{lastMethod || "Idle"}</span>
-          </span>
-        </div>
-
-        {/* Layout Container */}
-        <AnimeLayout
-          ref={layoutRef}
-          duration={600}
-          ease="outExpo"
-          className="flex-1 grid gap-3 p-1 min-h-[160px]"
-          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
-        >
-          {items.map((item) => (
-            <AnimeLayoutItem
-              key={item}
-              layoutId={`method-item-${item}`}
-              className="h-12 flex items-center justify-center rounded-xl bg-demo-accent/10 border border-demo-accent/20 text-demo-accent font-bold text-sm shadow-sm"
-            >
-              ITEM {item}
-            </AnimeLayoutItem>
-          ))}
-        </AnimeLayout>
-
-        {/* Method descriptions */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-[10px] text-demo-text-muted font-mono uppercase tracking-widest leading-relaxed mt-2 opacity-60">
-          <span className="text-blue-400">Zap</span>{" "}
-          <span>Record & Animate</span>
-          <span className="text-green-400">Play</span>{" "}
-          <span>Update Callback</span>
-          <span className="text-red-400">Rotate</span>{" "}
-          <span>Revert Styles</span>
-        </div>
-      </div>
+      <AnimeLayout
+        ref={layoutRef}
+        duration={600}
+        ease="outExpo"
+        className="w-full grid gap-3 min-h-[120px]"
+        style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
+      >
+        {items.map((item) => (
+          <AnimeLayoutItem
+            key={item}
+            layoutId={`method-item-${item}`}
+            as={DemoBox}
+            className="w-full flex items-center justify-center font-bold text-xs"
+          >
+            {item}
+          </AnimeLayoutItem>
+        ))}
+      </AnimeLayout>
     </DemoCard>
   );
 };
-
 export default LayoutMethodsDemo;

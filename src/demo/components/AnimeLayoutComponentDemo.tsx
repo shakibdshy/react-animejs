@@ -1,11 +1,14 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from 'react';
 import {
   AnimeLayout,
   AnimeLayoutItem,
   type AnimeLayoutRef,
-} from "@/lib/react-animejs/components/AnimeLayout";
-import { DemoCard } from "./DemoCard";
-import { Columns, Grid2X2, Grid3X3, Plus, RefreshCw } from "lucide-react";
+} from '@/lib/react-animejs/components/AnimeLayout';
+import { DemoCard } from "@/landing/components/base/demo-card";
+import { DemoBox } from "@/landing/components/base/demo-box";
+import { DemoBtn } from "@/landing/components/base/demo-btn";
+import { Trash2 } from 'lucide-react';
+import { flushSync } from 'react-dom';
 
 export const AnimeLayoutComponentDemo: React.FC = () => {
   const layoutRef = useRef<AnimeLayoutRef>(null);
@@ -13,130 +16,94 @@ export const AnimeLayoutComponentDemo: React.FC = () => {
   const [counter, setCounter] = useState(5);
   const [cols, setCols] = useState(4);
 
-  const addItem = () => {
-    setItems((prev) => [...prev, counter]);
+  const addItem = useCallback(() => {
+    const newId = counter;
     setCounter((c) => c + 1);
-  };
+    layoutRef.current?.update(() => {
+      flushSync(() => {
+        setItems((prev) => [...prev, newId]);
+      });
+    });
+  }, [counter]);
 
-  const removeItem = (id: number) => {
-    setItems((prev) => prev.filter((item) => item !== id));
-  };
+  const removeItem = useCallback((id: number) => {
+    layoutRef.current?.update(() => {
+      flushSync(() => {
+        setItems((prev) => prev.filter((item) => item !== id));
+      });
+    });
+  }, []);
 
-  const changeColumns = (newCols: number) => {
+  const changeColumns = useCallback((newCols: number) => {
     layoutRef.current?.update(
       (layout) => {
         const root = layout.root as HTMLElement;
         root.style.gridTemplateColumns = `repeat(${newCols}, 1fr)`;
       },
-      { duration: 600, ease: "outExpo" },
+      { duration: 600, ease: 'outExpo' }
     );
     setCols(newCols);
-  };
-
-  const playDemo = () => {
-    addItem();
-    setTimeout(() => {
-      changeColumns(cols === 4 ? 2 : 4);
-    }, 600);
-  };
-
-  const isAnimating = layoutRef.current?.state
-    ? !layoutRef.current.state.paused &&
-      layoutRef.current.state.began &&
-      !layoutRef.current.state.completed
-    : false;
+  }, []);
 
   return (
     <DemoCard
-      title="declarative layout"
-      description="Declarative component-based layout. Click 'Play' to auto-scale."
-      actions={
-        <div className="flex gap-1 bg-black/20 p-1 rounded-xl">
-          <button
-            onClick={addItem}
-            className="p-1.5 bg-demo-accent text-demo-bg rounded-lg transition-all hover:scale-105 active:scale-95"
-            title="Add Item"
+      title="<Declarative>"
+      description="Component-based layout with automatic DOM reconciliation mode."
+      footer={
+        <>
+          <label className="text-xs text-landing-muted landing-font-mono">Columns</label>
+          <select
+            value={cols}
+            onChange={(e) => changeColumns(Number(e.target.value))}
+            className="bg-landing-bg text-landing-fg border border-landing-border rounded px-2 py-1 text-xs landing-font-mono"
           >
-            <Plus size={12} />
-          </button>
+            <option value="2">2 Columns</option>
+            <option value="3">3 Columns</option>
+            <option value="4">4 Columns</option>
+          </select>
+
           <button
             onClick={() => layoutRef.current?.refresh()}
-            className="p-1.5 text-demo-text-muted hover:text-demo-accent rounded-lg transition-all"
-            title="Refresh Layout"
+            className="ml-auto text-[11px] font-mono text-landing-muted hover:text-landing-fg cursor-pointer uppercase tracking-widest border border-landing-border px-3 py-1.5 rounded-lg hover:bg-landing-surface"
           >
-            <RefreshCw size={12} />
+            Force Refresh
           </button>
-        </div>
+        </>
       }
-      controls={{
-        play: playDemo,
-        restart: () => {
-          setItems([1, 2, 3, 4]);
-          setCounter(5);
-          setCols(4);
-        },
-      }}
-      state={layoutRef.current?.state}
-      isPlaying={isAnimating}
-      code={`<AnimeLayout mode="auto" />`}
     >
-      <div className="flex flex-col gap-6 w-full h-full">
-        {/* Column Selectors */}
-        <div className="flex justify-center gap-2">
-          {[2, 3, 4].map((n) => (
-            <button
-              key={n}
-              onClick={() => changeColumns(n)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all ${
-                cols === n
-                  ? "bg-demo-accent text-demo-bg shadow-lg shadow-demo-accent/20"
-                  : "bg-white/5 text-demo-text-muted hover:bg-white/10"
-              }`}
-            >
-              {n === 2 ? (
-                <Columns size={12} />
-              ) : n === 3 ? (
-                <Grid3X3 size={12} />
-              ) : (
-                <Grid2X2 size={12} />
-              )}
-              {n} Columns
-            </button>
-          ))}
-        </div>
-
-        {/* AnimeLayout Component Area */}
-        <AnimeLayout
-          ref={layoutRef}
-          mode="auto"
-          duration={500}
-          ease="outExpo"
-          enterFrom={{ opacity: 0, transform: "scale(0.8) translateY(20px)" }}
-          leaveTo={{ opacity: 0, transform: "scale(0.8) translateY(-20px)" }}
-          className="flex-1 grid gap-3 p-1 min-h-[160px]"
-          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
-        >
-          {items.map((id) => (
-            <AnimeLayoutItem
-              key={id}
-              layoutId={`item-${id}`}
-              className="h-12 flex items-center justify-center rounded-xl bg-linear-to-br from-demo-accent/20 to-[#f59e0b]/20 border border-demo-accent/20 text-demo-accent font-bold text-sm shadow-sm cursor-pointer hover:from-demo-accent hover:to-[#f59e0b] hover:text-demo-bg transition-all"
-              onClick={() => removeItem(id)}
-            >
-              {id}
-            </AnimeLayoutItem>
-          ))}
-          {items.length === 0 && (
-            <div className="col-span-full h-32 flex items-center justify-center border-2 border-dashed border-white/5 rounded-2xl text-slate-600 text-sm font-mono uppercase tracking-widest leading-loose text-center">
-              Layout Empty
-              <br />
-              Click + to begin
-            </div>
-          )}
-        </AnimeLayout>
+      <AnimeLayout
+        ref={layoutRef}
+        duration={500}
+        ease="outExpo"
+        enterFrom={{ opacity: 0, translateY: 20, scale: 0.8 }}
+        leaveTo={{ opacity: 0, translateY: -20, scale: 0.8 }}
+        className="w-full grid gap-3 min-h-[140px]"
+        style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
+      >
+        {items.map((id) => (
+          <AnimeLayoutItem
+            key={id}
+            layoutId={`auto-item-${id}`}
+            as={DemoBox}
+            className="w-full flex items-center justify-center cursor-pointer group hover:bg-landing-accent hover:text-landing-bg transition-colors font-bold"
+            onClick={() => removeItem(id)}
+          >
+            <span className="group-hover:hidden">{id}</span>
+            <Trash2 size={16} className="hidden group-hover:block" />
+          </AnimeLayoutItem>
+        ))}
+        {items.length === 0 && (
+          <div className="col-span-full h-24 flex flex-col items-center justify-center border-2 border-dashed border-landing-border/40 rounded-2xl text-landing-muted text-[11px] font-mono uppercase tracking-widest text-center bg-landing-surface/30">
+            Empty
+            <br />
+            Click + to begin
+          </div>
+        )}
+      </AnimeLayout>
+      <div className="mt-6 flex justify-center w-full">
+        <DemoBtn onClick={addItem}>Add Item</DemoBtn>
       </div>
     </DemoCard>
   );
 };
-
 export default AnimeLayoutComponentDemo;

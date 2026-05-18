@@ -44,4 +44,6 @@ export interface UseAnimeLayoutReturn<T extends HTMLElement = HTMLElement> {
   leaving: Element[];
   /** Elements swapping position (populated after animate/update) */
   swapping: Element[];
+  /** Elements currently animating (populated after animate/update) */
+  animating: Element[];
 }

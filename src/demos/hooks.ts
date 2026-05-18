@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import type { FilterCategory } from "./data";
-import { demoSections } from "./data";
-import type { DemoSection } from "./types";
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { FilterCategory } from './data';
+import { demoSections } from './data';
+import type { DemoSection } from './types';
 
 export function useDemoFilter() {
-  const [category, setCategory] = useState<FilterCategory>("all");
-  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState<FilterCategory>('all');
+  const [search, setSearch] = useState('');
 
   const filtered = useMemo(() => {
     return demoSections.filter((d) => {
-      if (category !== "all" && d.category !== category) return false;
+      if (category !== 'all' && d.category !== category) return false;
       if (search) {
         const q = search.toLowerCase();
         return (
@@ -37,9 +37,9 @@ export function useDetailOverlay(filteredDemos: DemoSection[]) {
       setCurrentIndex(demoIndexInFiltered);
       setActiveDemo(demo);
       setIsOpen(true);
-      document.body.classList.add("no-scroll");
+      document.body.classList.add('no-scroll');
       const hashPath = demo.componentId;
-      history.pushState(null, "", `#${hashPath}`);
+      history.pushState(null, '', `#${hashPath}`);
     },
     [filteredDemos]
   );
@@ -48,15 +48,11 @@ export function useDetailOverlay(filteredDemos: DemoSection[]) {
     setIsOpen(false);
     setActiveDemo(null);
     setCurrentIndex(-1);
-    document.body.classList.remove("no-scroll");
+    document.body.classList.remove('no-scroll');
     if (activeDemo) {
       const hashPath = activeDemo.componentId;
       if (location.hash === `#${hashPath}`) {
-        history.pushState(
-          null,
-          "",
-          window.location.pathname + window.location.search
-        );
+        history.pushState(null, '', window.location.pathname + window.location.search);
       }
     }
   }, [activeDemo]);
@@ -77,18 +73,18 @@ export function useDetailOverlay(filteredDemos: DemoSection[]) {
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeDetail();
-      if (e.key === "ArrowRight") goNext();
-      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === 'Escape') closeDetail();
+      if (e.key === 'ArrowRight') goNext();
+      if (e.key === 'ArrowLeft') goPrev();
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, closeDetail, goNext, goPrev]);
 
   useEffect(() => {
     const handlePopState = () => {
-      const hash = location.hash.replace("#", "");
+      const hash = location.hash.replace('#', '');
       if (!hash) {
         if (isOpen) closeDetail();
         return;
@@ -98,12 +94,12 @@ export function useDetailOverlay(filteredDemos: DemoSection[]) {
         openDetail(idx);
       }
     };
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, [isOpen, filteredDemos, currentIndex, openDetail, closeDetail]);
 
   useEffect(() => {
-    const hash = location.hash.replace("#", "");
+    const hash = location.hash.replace('#', '');
     if (hash) {
       const idx = filteredDemos.findIndex((d) => d.componentId === hash);
       if (idx >= 0) {

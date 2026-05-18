@@ -47,6 +47,7 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
   const [entering, setEntering] = useState<Element[]>([]);
   const [leaving, setLeaving] = useState<Element[]>([]);
   const [swapping, setSwapping] = useState<Element[]>([]);
+  const [animating, setAnimating] = useState<Element[]>([]);
 
   const optionsRef = useRef(options);
   optionsRef.current = options;
@@ -154,17 +155,8 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
       createSafeCallback(onBegin as any, "onBegin")?.(tl);
     };
 
-    // Helper to track layout state after animation completes
-    const trackLayoutState = () => {
-      if (!layoutRef.current) return;
-      setEntering((layoutRef.current.entering as Element[]) ?? []);
-      setLeaving((layoutRef.current.leaving as Element[]) ?? []);
-      setSwapping((layoutRef.current.swapping as Element[]) ?? []);
-    };
-
     wrapped.onComplete = (tl: Timeline) => {
       setState(extractAnimationState(tl));
-      trackLayoutState();
       createSafeCallback(onComplete as any, "onComplete")?.(tl);
     };
 
@@ -199,6 +191,15 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
   }, []);
 
   const controls = useMemo(() => {
+    // Helper to track layout state immediately after initialization
+    const trackLayoutStateSync = () => {
+      if (!layoutRef.current) return;
+      setEntering((layoutRef.current.entering as Element[]) ?? []);
+      setLeaving((layoutRef.current.leaving as Element[]) ?? []);
+      setSwapping((layoutRef.current.swapping as Element[]) ?? []);
+      setAnimating((layoutRef.current.animating as Element[]) ?? []);
+    };
+
     return {
       record: () => {
         if (!layoutRef.current) return null;
@@ -212,6 +213,7 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
         ) as unknown as Timeline;
         timelineRef.current = tl;
         setState(extractAnimationState(tl));
+        trackLayoutStateSync();
         return tl;
       },
       update: (
@@ -225,6 +227,7 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
         ) as unknown as Timeline;
         timelineRef.current = tl;
         setState(extractAnimationState(tl));
+        trackLayoutStateSync();
         return tl;
       },
       revert: () => {
@@ -249,6 +252,7 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
     entering,
     leaving,
     swapping,
+    animating,
   };
 }
 

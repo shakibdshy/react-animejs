@@ -1,11 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 import {
   AnimeLayout,
   AnimeLayoutItem,
   type AnimeLayoutRef,
-} from "@/lib/react-animejs/components/AnimeLayout";
-import { DemoCard } from "./DemoCard";
-import { Layout, Maximize2, Sliders } from "lucide-react";
+} from '@/lib/react-animejs/components/AnimeLayout';
+import { DemoCard } from '@/landing/components/base/demo-card';
+import { DemoBox } from '@/landing/components/base/demo-box';
+import { DemoBtn } from '@/landing/components/base/demo-btn';
 
 export const LayoutSettingsDemo: React.FC = () => {
   const layoutRef = useRef<AnimeLayoutRef>(null);
@@ -17,116 +18,73 @@ export const LayoutSettingsDemo: React.FC = () => {
   const toggleLayout = () => {
     layoutRef.current?.update((layout) => {
       const root = layout.root as HTMLElement;
-      root.classList.toggle("flex-row");
-      root.classList.toggle("flex-col");
+      root.classList.toggle('flex-row');
+      root.classList.toggle('flex-col');
     });
     setIsRow(!isRow);
   };
 
-  const playDemo = () => {
-    toggleLayout();
-    setTimeout(toggleLayout, duration + 200);
-  };
-
-  const items = ["A", "B", "C", "D", "E"];
+  const items = ['A', 'B', 'C', 'D', 'E'];
 
   return (
     <DemoCard
-      title="layout settings"
-      description="Configure duration, delay, and staggering. Using <AnimeLayout> component."
-      actions={
-        <div className="flex gap-2">
-          <button
-            onClick={toggleLayout}
-            className="p-2 bg-white/5 text-demo-text-secondary hover:bg-white/10 hover:text-demo-accent rounded-lg transition-all"
-            title="Toggle Layout orientation"
-          >
-            <Layout size={16} className={isRow ? "rotate-90" : ""} />
-          </button>
-        </div>
-      }
-      controls={{
-        play: playDemo,
-        restart: () => {
-          if (isRow) toggleLayout();
-        },
-      }}
-      state={layoutRef.current?.state}
-      isPlaying={layoutRef.current?.isAnimating}
-      code={`<AnimeLayout duration={${duration}} delay={${useStagger ? "50" : delay}} />`}
-    >
-      <div className="flex flex-col gap-6 w-full h-full">
-        {/* Settings Panel */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-black/20 p-4 rounded-2xl border border-white/5">
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
-              <label className="flex items-center gap-1.5">
-                <Maximize2 size={10} /> Duration
-              </label>
-              <span className="text-demo-accent">{duration}ms</span>
-            </div>
+      title="<Layout Settings>"
+      description="Configure duration, delay, and staggering."
+      footer={
+        <>
+          <label className="text-xs text-landing-muted landing-font-mono">Duration</label>
+          <input
+            type="range"
+            min={100}
+            max={1500}
+            value={duration}
+            step={100}
+            onChange={(e) => setDuration(Number(e.target.value))}
+            className="w-20 h-1 rounded bg-landing-border appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-landing-accent [&::-webkit-slider-thumb]:cursor-pointer"
+          />
+          <span className="text-[11px] text-landing-muted landing-font-mono">{duration}ms</span>
+
+          <label className="text-xs text-landing-muted landing-font-mono ml-4">Delay</label>
+          <input
+            type="range"
+            min={0}
+            max={500}
+            value={delay}
+            step={50}
+            disabled={useStagger}
+            onChange={(e) => setDelay(Number(e.target.value))}
+            className="w-20 h-1 rounded bg-landing-border appearance-none outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-landing-accent [&::-webkit-slider-thumb]:cursor-pointer disabled:opacity-30"
+          />
+          <span className="text-[11px] text-landing-muted landing-font-mono">{delay}ms</span>
+
+          <label className="text-xs text-landing-muted landing-font-mono ml-4 flex items-center gap-1.5 cursor-pointer">
             <input
-              type="range"
-              min="100"
-              max="1500"
-              value={duration}
-              onChange={(e) => setDuration(Number(e.target.value))}
-              className="w-full h-1 bg-demo-card rounded-full appearance-none cursor-pointer accent-demo-accent"
+              type="checkbox"
+              checked={useStagger}
+              onChange={(e) => setUseStagger(e.target.checked)}
+              className="cursor-pointer accent-landing-accent"
             />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between text-[10px] font-mono text-demo-text-muted uppercase tracking-widest">
-              <label className="flex items-center gap-1.5">
-                <Sliders size={10} /> Delay
-              </label>
-              <span className="text-demo-accent">
-                {useStagger ? "stagger" : `${delay}ms`}
-              </span>
-            </div>
-            <div className="flex gap-3 items-center">
-              <input
-                type="range"
-                min="0"
-                max="500"
-                value={delay}
-                onChange={(e) => setDelay(Number(e.target.value))}
-                disabled={useStagger}
-                className="flex-1 h-1 bg-demo-card rounded-full appearance-none cursor-pointer accent-demo-accent disabled:opacity-30"
-              />
-              <label className="flex items-center gap-1.5 text-[10px] font-mono text-demo-text-muted uppercase cursor-pointer whitespace-nowrap">
-                <input
-                  type="checkbox"
-                  checked={useStagger}
-                  onChange={(e) => setUseStagger(e.target.checked)}
-                  className="w-3 h-3 rounded border-white/10 bg-white/5 checked:bg-demo-accent accent-demo-accent"
-                />
-                Stagger
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* Layout Container */}
-        <AnimeLayout
-          ref={layoutRef}
-          duration={duration}
-          delay={useStagger ? 50 : delay}
-          className={`flex-1 flex gap-3 min-h-[140px] items-stretch ${isRow ? "flex-row" : "flex-col"}`}
-        >
-          {items.map((item) => (
-            <AnimeLayoutItem
-              key={item}
-              layoutId={`settings-item-${item}`}
-              className="flex-1 flex items-center justify-center rounded-xl bg-demo-accent/5 border border-demo-accent/10 text-demo-accent font-bold text-sm shadow-sm"
-            >
-              ITEM {item}
-            </AnimeLayoutItem>
-          ))}
-        </AnimeLayout>
+            Stagger
+          </label>
+        </>
+      }
+    >
+      <AnimeLayout
+        ref={layoutRef}
+        duration={duration}
+        delay={useStagger ? 50 : delay}
+        className={`w-full flex gap-3 items-center justify-center ${isRow ? 'flex-row' : 'flex-col'}`}
+      >
+        {items.map((item) => (
+          <AnimeLayoutItem key={item} as={DemoBox} className="font-bold">
+            {item}
+          </AnimeLayoutItem>
+        ))}
+      </AnimeLayout>
+      <div className="mt-6 flex justify-center w-full">
+        <DemoBtn onClick={toggleLayout}>Toggle Layout</DemoBtn>
       </div>
     </DemoCard>
   );
 };
-
 export default LayoutSettingsDemo;

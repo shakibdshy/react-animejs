@@ -55,10 +55,7 @@ export const DemosPage = memo(function DemosPage() {
             >
               Home
             </Link>
-            <Link
-              to="/demos"
-              className="text-sm text-landing-accent font-medium no-underline"
-            >
+            <Link to="/demos" className="text-sm text-landing-accent font-medium no-underline">
               Components
             </Link>
             <button
