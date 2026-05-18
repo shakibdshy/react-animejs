@@ -218,21 +218,36 @@ function getRotationX(i: number): number {
 
   "layout": {
     component: "AnimeLayout",
-    summary: "FLIP-based layout animations with enter/exit, stagger, and imperative methods.",
-    code: `<AnimeLayout mode="auto" duration={400} ease="outExpo" stagger={50}
-  enterFrom={{ opacity: 0, translateY: 20 }}
-  leaveTo={{ opacity: 0, scale: 0.8 }}
+    summary: "FLIP-based automatic and manual layout animations, supporting dynamic grid transitions, parent-child state propagation, and custom styling updates.",
+    code: `const layoutRef = useRef<AnimeLayoutRef>(null);
+const [grid, setGrid] = useState(1);
+
+const nextGrid = () => {
+  layoutRef.current?.update(() => {
+    flushSync(() => {
+      setGrid((prev) => (prev % 4) + 1);
+    });
+  });
+};
+
+<AnimeLayout
+  ref={layoutRef}
+  duration={600}
+  ease="outExpo"
+  wrapperProps={{ 'data-grid': grid }}
 >
-  {items.map(id => <AnimeLayoutItem key={id}>...</AnimeLayoutItem>)}
+  {['A', 'B', 'C', 'D'].map((char) => (
+    <AnimeLayoutItem key={char} layoutId={char}>
+      Item {char}
+    </AnimeLayoutItem>
+  ))}
 </AnimeLayout>`,
     props: [
-      { name: "mode", type: "string", default: "auto", desc: "Layout mode" },
-      { name: "duration", type: "number", default: "500", desc: "Animation duration in ms" },
-      { name: "ease", type: "string", default: "outExpo", desc: "Easing function" },
-      { name: "stagger", type: "number", default: "0", desc: "Stagger delay between items" },
-      { name: "enterFrom", type: "object", default: "-", desc: "Enter animation initial state" },
-      { name: "leaveTo", type: "object", default: "-", desc: "Exit animation final state" },
-      { name: "update", type: "function", default: "-", desc: "Imperative layout update trigger" },
+      { name: "ref", type: "RefObject<AnimeLayoutRef>", default: "-", desc: "Imperative control ref" },
+      { name: "duration", type: "number", default: "500", desc: "FLIP transition duration in ms" },
+      { name: "ease", type: "string", default: "outExpo", desc: "Transition easing curve" },
+      { name: "wrapperProps", type: "HTMLAttributes", default: "-", desc: "Forwarded container DOM attributes" },
+      { name: "ref.current.update", type: "function", default: "-", desc: "Callback to update state synchronously during layout record" },
     ],
   },
 
