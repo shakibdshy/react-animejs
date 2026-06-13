@@ -88,30 +88,6 @@ export const demoSections: DemoSection[] = [
   },
 
   {
-    title: 'Easings',
-    path: '/demo/easings',
-    description: 'Cubic bezier, linear, steps, spring, and irregular easing functions',
-    category: 'core',
-    componentId: 'easings',
-  },
-
-  {
-    title: 'Utilities',
-    path: '/demo/utilities',
-    description: 'Math, random, string, DOM, and value animation utilities',
-    category: 'core',
-    componentId: 'utilities',
-  },
-
-  {
-    title: 'Animate Presence',
-    path: '/demo/animate-presence',
-    description: 'Animated enter/exit with sync, wait, and popLayout modes',
-    category: 'ui',
-    componentId: 'animate-presence',
-  },
-
-  {
     title: 'Toggle Switch',
     path: '/demo/toggle-switch',
     description: 'Animated toggle switch with styled and disabled states',
@@ -173,13 +149,5 @@ export const demoSections: DemoSection[] = [
     description: 'Text scramble animation with autoplay, loop, and custom chars',
     category: 'ui',
     componentId: 'scramble-text',
-  },
-
-  {
-    title: 'Animatable',
-    path: '/demo/utilities',
-    description: 'Reactive animatable values with unit, duration, easing, and modifiers',
-    category: 'core',
-    componentId: 'animatable',
   },
 ];

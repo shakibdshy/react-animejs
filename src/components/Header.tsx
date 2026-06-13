@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router'
 
 import { useEffect, useState } from 'react'
 import {
-  Activity,
   ArrowUpDown,
   Box,
   Eye,
@@ -42,17 +41,14 @@ const demoLinks = [
   { to: '/demo/scope', label: 'Scope', icon: Box },
   { to: '/demo/split-text', label: 'Split Text', icon: Type },
   { to: '/demo/scramble-text', label: 'Scramble Text', icon: Shuffle },
-  { to: '/demo/animate-presence', label: 'AnimePresence', icon: GitBranch },
   { to: '/demo/animated-slider', label: 'Animated Slider', icon: Play },
   { to: '/demo/clippath-reveal', label: 'ClipPath Reveal', icon: PenTool },
   { to: '/demo/counter-countdown', label: 'Counter', icon: Hash },
-  { to: '/demo/easings', label: 'Easings', icon: Activity },
   { to: '/demo/reorder-list', label: 'Reorder List', icon: ArrowUpDown },
   { to: '/demo/scroll-linked-animations', label: 'Scroll Linked', icon: Eye },
   { to: '/demo/spinning-cube', label: 'Spinning Cube', icon: Box },
   { to: '/demo/svg-path-draw', label: 'SVG Path Draw', icon: PenTool },
   { to: '/demo/toggle-switch', label: 'Toggle Switch', icon: ToggleLeft },
-  { to: '/demo/utilities', label: 'Utilities', icon: Wrench },
 ] as const
 
 export default function Header() {

@@ -292,60 +292,6 @@ const nextGrid = () => {
     ],
   },
 
-  "easings": {
-    component: "animejs easings",
-    summary: "Cubic bezier, linear, steps, spring, and irregular easing functions.",
-    code: `animate(target, {
-  translateX: 100,
-  ease: cubicBezier(.17, .67, .83, .67),
-  // Also: 'linear', steps(8), spring(mass, stiffness, damping),
-  // 'easeOutElastic', 'easeInOutBack', etc.
-})`,
-    props: [
-      { name: "ease", type: "Easing", default: "linear", desc: "Easing function name or generator" },
-      { name: "cubicBezier()", type: "function", default: "-", desc: "Custom bezier curve (x1, y1, x2, y2)" },
-      { name: "steps()", type: "function", default: "-", desc: "Stepped easing with count" },
-      { name: "spring()", type: "function", default: "-", desc: "Spring physics easing" },
-    ],
-  },
-
-  "utilities": {
-    component: "animejs/utils",
-    summary: "Math, random, string, DOM, and value animation utilities.",
-    code: `import { utils } from 'animejs';
-utils.clamp(val, 0, 100);
-utils.lerp(start, end, t);
-utils.mapRange(val, inMin, inMax, outMin, outMax);
-utils.random(min, max);
-utils.round(val, 2);
-utils.get(element, 'width');`,
-    props: [
-      { name: "clamp()", type: "function", default: "-", desc: "Clamp value between min and max" },
-      { name: "lerp()", type: "function", default: "-", desc: "Linear interpolation between two values" },
-      { name: "mapRange()", type: "function", default: "-", desc: "Map value from one range to another" },
-      { name: "random()", type: "function", default: "-", desc: "Random value within range" },
-      { name: "round()", type: "function", default: "-", desc: "Round to decimal places" },
-      { name: "get()", type: "function", default: "-", desc: "Get computed CSS/DOM measurement" },
-    ],
-  },
-
-  "animate-presence": {
-    component: "AnimePresence",
-    summary: "Animated enter/exit with sync, wait, and popLayout modes.",
-    code: `<AnimePresence mode="popLayout">
-  {items.map(item => (
-    <AnimePresenceChild key={item.id}>
-      <div>{item.label}</div>
-    </AnimePresenceChild>
-  ))}
-</AnimePresence>`,
-    props: [
-      { name: "mode", type: "string", default: "sync", desc: "sync | wait | popLayout" },
-      { name: "stagger", type: "number", default: "0", desc: "Stagger delay between items" },
-      { name: "duration", type: "number", default: "300", desc: "Animation duration in ms" },
-    ],
-  },
-
   "toggle-switch": {
     component: "useAnime",
     summary: "Animated toggle switch with styled and disabled states.",
@@ -490,21 +436,6 @@ utils.get(element, 'width');`,
       { name: "loop", type: "boolean", default: "false", desc: "Enable looping" },
       { name: "reversed", type: "boolean", default: "false", desc: "Reverse direction" },
       { name: "duration", type: "number", default: "1000", desc: "Duration in ms" },
-    ],
-  },
-
-  "animatable": {
-    component: "useAnimatable",
-    summary: "Reactive animatable values with unit, duration, easing, and modifiers.",
-    code: `const animatable = useAnimatable({
-  x: { unit: 'px', duration: 600, ease: 'outElastic', modifier: round },
-  y: { unit: '%', duration: 400 },
-})`,
-    props: [
-      { name: "unit", type: "string", default: "px", desc: "CSS unit" },
-      { name: "duration", type: "number", default: "600", desc: "Interpolation duration" },
-      { name: "ease", type: "string", default: "linear", desc: "Easing function" },
-      { name: "modifier", type: "function", default: "-", desc: "Output modifier" },
     ],
   },
 };

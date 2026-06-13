@@ -13,7 +13,6 @@ import { Route as McpRouteImport } from './routes/mcp'
 import { Route as DemosRouteImport } from './routes/demos'
 import { Route as DemoRouteRouteImport } from './routes/demo/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DemoUtilitiesRouteImport } from './routes/demo/utilities'
 import { Route as DemoToggleSwitchRouteImport } from './routes/demo/toggle-switch'
 import { Route as DemoTimersRouteImport } from './routes/demo/timers'
 import { Route as DemoTimelinesRouteImport } from './routes/demo/timelines'
@@ -29,14 +28,12 @@ import { Route as DemoPlaybackSettingsRouteImport } from './routes/demo/playback
 import { Route as DemoOnscrollRouteImport } from './routes/demo/onscroll'
 import { Route as DemoMethodsRouteImport } from './routes/demo/methods'
 import { Route as DemoLayoutRouteImport } from './routes/demo/layout'
-import { Route as DemoEasingsRouteImport } from './routes/demo/easings'
 import { Route as DemoDraggableRouteImport } from './routes/demo/draggable'
 import { Route as DemoCounterCountdownRouteImport } from './routes/demo/counter-countdown'
 import { Route as DemoCoreFeaturesRouteImport } from './routes/demo/core-features'
 import { Route as DemoClippathRevealRouteImport } from './routes/demo/clippath-reveal'
 import { Route as DemoCallbacksRouteImport } from './routes/demo/callbacks'
 import { Route as DemoAnimatedSliderRouteImport } from './routes/demo/animated-slider'
-import { Route as DemoAnimatePresenceRouteImport } from './routes/demo/animate-presence'
 
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
@@ -57,11 +54,6 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const DemoUtilitiesRoute = DemoUtilitiesRouteImport.update({
-  id: '/utilities',
-  path: '/utilities',
-  getParentRoute: () => DemoRouteRoute,
 } as any)
 const DemoToggleSwitchRoute = DemoToggleSwitchRouteImport.update({
   id: '/toggle-switch',
@@ -139,11 +131,6 @@ const DemoLayoutRoute = DemoLayoutRouteImport.update({
   path: '/layout',
   getParentRoute: () => DemoRouteRoute,
 } as any)
-const DemoEasingsRoute = DemoEasingsRouteImport.update({
-  id: '/easings',
-  path: '/easings',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
 const DemoDraggableRoute = DemoDraggableRouteImport.update({
   id: '/draggable',
   path: '/draggable',
@@ -174,25 +161,18 @@ const DemoAnimatedSliderRoute = DemoAnimatedSliderRouteImport.update({
   path: '/animated-slider',
   getParentRoute: () => DemoRouteRoute,
 } as any)
-const DemoAnimatePresenceRoute = DemoAnimatePresenceRouteImport.update({
-  id: '/animate-presence',
-  path: '/animate-presence',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
   '/demos': typeof DemosRoute
   '/mcp': typeof McpRoute
-  '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/animated-slider': typeof DemoAnimatedSliderRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/clippath-reveal': typeof DemoClippathRevealRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
   '/demo/counter-countdown': typeof DemoCounterCountdownRoute
   '/demo/draggable': typeof DemoDraggableRoute
-  '/demo/easings': typeof DemoEasingsRoute
   '/demo/layout': typeof DemoLayoutRoute
   '/demo/methods': typeof DemoMethodsRoute
   '/demo/onscroll': typeof DemoOnscrollRoute
@@ -208,21 +188,18 @@ export interface FileRoutesByFullPath {
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
   '/demo/toggle-switch': typeof DemoToggleSwitchRoute
-  '/demo/utilities': typeof DemoUtilitiesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
   '/demos': typeof DemosRoute
   '/mcp': typeof McpRoute
-  '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/animated-slider': typeof DemoAnimatedSliderRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/clippath-reveal': typeof DemoClippathRevealRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
   '/demo/counter-countdown': typeof DemoCounterCountdownRoute
   '/demo/draggable': typeof DemoDraggableRoute
-  '/demo/easings': typeof DemoEasingsRoute
   '/demo/layout': typeof DemoLayoutRoute
   '/demo/methods': typeof DemoMethodsRoute
   '/demo/onscroll': typeof DemoOnscrollRoute
@@ -238,7 +215,6 @@ export interface FileRoutesByTo {
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
   '/demo/toggle-switch': typeof DemoToggleSwitchRoute
-  '/demo/utilities': typeof DemoUtilitiesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -246,14 +222,12 @@ export interface FileRoutesById {
   '/demo': typeof DemoRouteRouteWithChildren
   '/demos': typeof DemosRoute
   '/mcp': typeof McpRoute
-  '/demo/animate-presence': typeof DemoAnimatePresenceRoute
   '/demo/animated-slider': typeof DemoAnimatedSliderRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
   '/demo/clippath-reveal': typeof DemoClippathRevealRoute
   '/demo/core-features': typeof DemoCoreFeaturesRoute
   '/demo/counter-countdown': typeof DemoCounterCountdownRoute
   '/demo/draggable': typeof DemoDraggableRoute
-  '/demo/easings': typeof DemoEasingsRoute
   '/demo/layout': typeof DemoLayoutRoute
   '/demo/methods': typeof DemoMethodsRoute
   '/demo/onscroll': typeof DemoOnscrollRoute
@@ -269,7 +243,6 @@ export interface FileRoutesById {
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
   '/demo/toggle-switch': typeof DemoToggleSwitchRoute
-  '/demo/utilities': typeof DemoUtilitiesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -278,14 +251,12 @@ export interface FileRouteTypes {
     | '/demo'
     | '/demos'
     | '/mcp'
-    | '/demo/animate-presence'
     | '/demo/animated-slider'
     | '/demo/callbacks'
     | '/demo/clippath-reveal'
     | '/demo/core-features'
     | '/demo/counter-countdown'
     | '/demo/draggable'
-    | '/demo/easings'
     | '/demo/layout'
     | '/demo/methods'
     | '/demo/onscroll'
@@ -301,21 +272,18 @@ export interface FileRouteTypes {
     | '/demo/timelines'
     | '/demo/timers'
     | '/demo/toggle-switch'
-    | '/demo/utilities'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/demo'
     | '/demos'
     | '/mcp'
-    | '/demo/animate-presence'
     | '/demo/animated-slider'
     | '/demo/callbacks'
     | '/demo/clippath-reveal'
     | '/demo/core-features'
     | '/demo/counter-countdown'
     | '/demo/draggable'
-    | '/demo/easings'
     | '/demo/layout'
     | '/demo/methods'
     | '/demo/onscroll'
@@ -331,21 +299,18 @@ export interface FileRouteTypes {
     | '/demo/timelines'
     | '/demo/timers'
     | '/demo/toggle-switch'
-    | '/demo/utilities'
   id:
     | '__root__'
     | '/'
     | '/demo'
     | '/demos'
     | '/mcp'
-    | '/demo/animate-presence'
     | '/demo/animated-slider'
     | '/demo/callbacks'
     | '/demo/clippath-reveal'
     | '/demo/core-features'
     | '/demo/counter-countdown'
     | '/demo/draggable'
-    | '/demo/easings'
     | '/demo/layout'
     | '/demo/methods'
     | '/demo/onscroll'
@@ -361,7 +326,6 @@ export interface FileRouteTypes {
     | '/demo/timelines'
     | '/demo/timers'
     | '/demo/toggle-switch'
-    | '/demo/utilities'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -400,13 +364,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/demo/utilities': {
-      id: '/demo/utilities'
-      path: '/utilities'
-      fullPath: '/demo/utilities'
-      preLoaderRoute: typeof DemoUtilitiesRouteImport
-      parentRoute: typeof DemoRouteRoute
     }
     '/demo/toggle-switch': {
       id: '/demo/toggle-switch'
@@ -513,13 +470,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoLayoutRouteImport
       parentRoute: typeof DemoRouteRoute
     }
-    '/demo/easings': {
-      id: '/demo/easings'
-      path: '/easings'
-      fullPath: '/demo/easings'
-      preLoaderRoute: typeof DemoEasingsRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
     '/demo/draggable': {
       id: '/demo/draggable'
       path: '/draggable'
@@ -562,25 +512,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoAnimatedSliderRouteImport
       parentRoute: typeof DemoRouteRoute
     }
-    '/demo/animate-presence': {
-      id: '/demo/animate-presence'
-      path: '/animate-presence'
-      fullPath: '/demo/animate-presence'
-      preLoaderRoute: typeof DemoAnimatePresenceRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
   }
 }
 
 interface DemoRouteRouteChildren {
-  DemoAnimatePresenceRoute: typeof DemoAnimatePresenceRoute
   DemoAnimatedSliderRoute: typeof DemoAnimatedSliderRoute
   DemoCallbacksRoute: typeof DemoCallbacksRoute
   DemoClippathRevealRoute: typeof DemoClippathRevealRoute
   DemoCoreFeaturesRoute: typeof DemoCoreFeaturesRoute
   DemoCounterCountdownRoute: typeof DemoCounterCountdownRoute
   DemoDraggableRoute: typeof DemoDraggableRoute
-  DemoEasingsRoute: typeof DemoEasingsRoute
   DemoLayoutRoute: typeof DemoLayoutRoute
   DemoMethodsRoute: typeof DemoMethodsRoute
   DemoOnscrollRoute: typeof DemoOnscrollRoute
@@ -596,18 +537,15 @@ interface DemoRouteRouteChildren {
   DemoTimelinesRoute: typeof DemoTimelinesRoute
   DemoTimersRoute: typeof DemoTimersRoute
   DemoToggleSwitchRoute: typeof DemoToggleSwitchRoute
-  DemoUtilitiesRoute: typeof DemoUtilitiesRoute
 }
 
 const DemoRouteRouteChildren: DemoRouteRouteChildren = {
-  DemoAnimatePresenceRoute: DemoAnimatePresenceRoute,
   DemoAnimatedSliderRoute: DemoAnimatedSliderRoute,
   DemoCallbacksRoute: DemoCallbacksRoute,
   DemoClippathRevealRoute: DemoClippathRevealRoute,
   DemoCoreFeaturesRoute: DemoCoreFeaturesRoute,
   DemoCounterCountdownRoute: DemoCounterCountdownRoute,
   DemoDraggableRoute: DemoDraggableRoute,
-  DemoEasingsRoute: DemoEasingsRoute,
   DemoLayoutRoute: DemoLayoutRoute,
   DemoMethodsRoute: DemoMethodsRoute,
   DemoOnscrollRoute: DemoOnscrollRoute,
@@ -623,7 +561,6 @@ const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoTimelinesRoute: DemoTimelinesRoute,
   DemoTimersRoute: DemoTimersRoute,
   DemoToggleSwitchRoute: DemoToggleSwitchRoute,
-  DemoUtilitiesRoute: DemoUtilitiesRoute,
 }
 
 const DemoRouteRouteWithChildren = DemoRouteRoute._addFileChildren(

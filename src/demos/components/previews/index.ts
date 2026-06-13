@@ -13,9 +13,6 @@ export { TimersPreview } from './timers';
 export { TimelinesPreview } from './timelines';
 export { LayoutPreview } from './layout';
 export { ScopePreview } from './scope';
-export { EasingsPreview } from './easings';
-export { AnimatablePreview } from './animatable';
-export { AnimePresencePreview } from './anime-presence';
 export { SplitTextPreview } from './split-text';
 export { ScrambleTextPreview } from './scramble-text';
 
@@ -33,7 +30,6 @@ export {
 } from './interaction-previews';
 
 export {
-  UtilitiesPreview,
   ToggleSwitchPreview,
   CounterCountdownPreview,
   SpinningCubePreview,
