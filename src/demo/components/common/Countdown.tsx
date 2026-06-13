@@ -1,5 +1,5 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { Anime } from '@/lib/react-animejs/components/Anime';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useAnime } from '@/lib/react-animejs/hooks/use-anime';
 
 export interface CountdownProps {
   /** Starting value (seconds) */
@@ -27,25 +27,91 @@ const sizeMap = {
   xl: 'text-9xl',
 };
 
-function formatTime(seconds: number, format: CountdownProps['format']): string {
+/** ms the reel takes to slide one digit. Tune for the "mechanical" feel. */
+const REEL_SLIDE_MS = 450;
+
+function formatParts(seconds: number, format: CountdownProps['format']): string {
+  const s = Math.max(0, Math.round(seconds));
   switch (format) {
     case 'hh:mm:ss': {
-      const h = Math.floor(seconds / 3600);
-      const m = Math.floor((seconds % 3600) / 60);
-      const s = seconds % 60;
-      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      const h = Math.floor(s / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const sec = s % 60;
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
     }
     case 'mm:ss': {
-      const mins = Math.floor(seconds / 60);
-      const secs = seconds % 60;
+      const mins = Math.floor(s / 60);
+      const secs = s % 60;
       return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
     case 'seconds':
     default:
-      return String(seconds);
+      return String(s);
   }
 }
 
+/**
+ * A single digit column that slides like a mechanical odometer reel. Renders a
+ * vertical strip of 0-9 and translates it so the active digit shows in the
+ * window. CSS transitions handle the slide, so it stays cheap and in sync.
+ */
+function DigitReel({
+  digit,
+  sizeClass,
+}: {
+  digit: number;
+  sizeClass: string;
+}) {
+  const clamped = Math.max(0, Math.min(9, digit));
+  return (
+    <span
+      className={`inline-block overflow-hidden align-bottom ${sizeClass}`}
+      style={{ lineHeight: 1, height: '1em', width: '0.62em' }}
+      aria-hidden
+    >
+      <span
+        className="flex flex-col will-change-transform"
+        style={{
+          transform: `translateY(-${clamped}em)`,
+          transition: `transform ${REEL_SLIDE_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
+        }}
+      >
+        {Array.from({ length: 10 }, (_, d) => (
+          <span key={d} style={{ lineHeight: 1, height: '1em' }}>
+            {d}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
+/**
+ * Splits a formatted time string into reels: numeric digits become
+ * `<DigitReel>`s, separators (`:`) render as static spans.
+ */
+function OdometerTime({ parts, sizeClass }: { parts: string; sizeClass: string }): ReactNode {
+  return (
+    <span className="inline-flex items-baseline tabular-nums">
+      {parts.split('').map((ch, i) =>
+        /[0-9]/.test(ch) ? (
+          <DigitReel key={i} digit={Number(ch)} sizeClass={sizeClass} />
+        ) : (
+          <span key={i} className={sizeClass} style={{ lineHeight: 1 }}>
+            {ch}
+          </span>
+        )
+      )}
+    </span>
+  );
+}
+
+/**
+ * Countdown — counts down per second with a mechanical odometer reel display:
+ * each digit slides vertically into place. A single continuous anime.js tween
+ * remains the time engine (driving the progress bar and onTick); the reels
+ * re-render only when the rounded second changes, so the slide is crisp.
+ */
 export function Countdown({
   from,
   autoplay = false,
@@ -56,142 +122,124 @@ export function Countdown({
   className = '',
   size = 'md',
 }: CountdownProps) {
-  const [remaining, setRemaining] = useState(from);
-  const [isRunning, setIsRunning] = useState(autoplay);
-  const [isComplete, setIsComplete] = useState(false);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const remainingRef = useRef(from);
+  const onTickRef = useRef(onTick);
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => {
+    onTickRef.current = onTick;
+    onCompleteRef.current = onComplete;
+  });
 
-  const stopInterval = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  }, []);
+  const target = useMemo(() => ({ val: from }), [from]);
 
-  const tick = useCallback(() => {
-    const next = remainingRef.current - 1;
-    if (next <= 0) {
-      remainingRef.current = 0;
-      setRemaining(0);
-      setIsRunning(false);
-      setIsComplete(true);
-      stopInterval();
-      onTick?.(0);
-      onComplete?.();
-      return;
-    }
-    remainingRef.current = next;
-    setRemaining(next);
-    onTick?.(next);
-  }, [onTick, onComplete, stopInterval]);
+  // The displayed integer second — updated only when it actually changes so
+  // React re-renders ~once per second, not per animation frame.
+  const [displaySecond, setDisplaySecond] = useState(from);
 
-  const startInterval = useCallback(() => {
-    stopInterval();
-    intervalRef.current = setInterval(tick, 1000);
-  }, [tick, stopInterval]);
+  const { controls, state } = useAnime({
+    targets: target,
+    val: 0,
+    duration: from * 1000,
+    round: 1,
+    ease: 'linear',
+    autoplay,
+    onUpdate: () => {
+      const sec = Math.round(target.val);
+      setDisplaySecond((prev) => (prev !== sec ? sec : prev));
+      onTickRef.current?.(sec);
+    },
+    onComplete: () => {
+      setDisplaySecond(0);
+      onCompleteRef.current?.();
+    },
+  });
 
   useEffect(() => {
-    if (isRunning) {
-      startInterval();
-    } else {
-      stopInterval();
-    }
-    return stopInterval;
-  }, [isRunning, startInterval, stopInterval]);
-
-  useEffect(() => {
-    if (autoplay) {
-      setIsRunning(true);
-    }
-  }, [autoplay]);
-
-  const handleStart = useCallback(() => {
-    remainingRef.current = from;
-    setRemaining(from);
-    setIsComplete(false);
-    setIsRunning(true);
+    setDisplaySecond(from);
   }, [from]);
 
-  const handlePause = useCallback(() => {
-    setIsRunning(false);
-  }, []);
+  const [hasStarted, setHasStarted] = useState(autoplay);
+  const isRunning = state.began && !state.paused && !state.completed;
+  const isComplete = state.completed;
+  const progress = from > 0 ? state.progress : 0;
 
-  const handleResume = useCallback(() => {
-    if (remainingRef.current > 0) {
-      setIsRunning(true);
-    }
-  }, []);
+  const handleStart = useCallback(() => {
+    setHasStarted(true);
+    controls.restart();
+  }, [controls]);
+
+  const handlePause = useCallback(() => controls.pause(), [controls]);
+  const handleResume = useCallback(() => controls.play(), [controls]);
 
   const handleReset = useCallback(() => {
-    stopInterval();
-    remainingRef.current = from;
-    setRemaining(from);
-    setIsRunning(false);
-    setIsComplete(false);
-  }, [from, stopInterval]);
+    controls.reset();
+    setDisplaySecond(from);
+    setHasStarted(false);
+  }, [controls, from]);
 
-  const displayValue = formatTime(remaining, format);
-  const progress = from > 0 ? (from - remaining) / from : 0;
+  const sizeClass = sizeMap[size];
+  const parts = formatParts(displaySecond, format);
 
   return (
-    <div className={`flex flex-col items-center gap-3 ${className}`}>
-      <div className="relative overflow-hidden">
-        <Anime
-          autoplay
-          key={remaining}
-          duration={400}
-          ease="outCubic"
-          translateY={[-8, 0]}
-          opacity={[0, 1]}
-        >
-          <span className={`font-mono font-black text-[#ff4d6a] tabular-nums ${sizeMap[size]}`}>
-            {displayValue}
-          </span>
-        </Anime>
+    <div className={`flex flex-col items-center gap-2 ${className}`}>
+      <div
+        className={`landing-font-mono font-black text-landing-accent-dim ${sizeClass}`}
+        style={{
+          lineHeight: 1,
+          textShadow: '0 0 18px color-mix(in oklch, var(--landing-accent-dim) 35%, transparent)',
+        }}
+      >
+        <OdometerTime parts={parts} sizeClass={sizeClass} />
       </div>
 
-      {/* Progress ring */}
-      <div className="w-full max-w-50 h-1 bg-demo-border rounded-full overflow-hidden mt-1">
-        <Anime autoplay duration={300} ease="outCubic" width={`${progress * 100}%`}>
-          <div
-            className="h-full bg-[#ff4d6a] shadow-[0_0_10px_rgba(255,77,106,0.5)] rounded-full"
-            style={{ width: `${progress * 100}%` }}
-          />
-        </Anime>
+      {/* Progress bar — driven by the animation's own progress (smooth per-frame) */}
+      <div className="w-full max-w-50 h-1 bg-landing-border rounded-full overflow-hidden">
+        <div
+          className="h-full rounded-full will-change-[width]"
+          style={{
+            width: `${progress * 100}%`,
+            backgroundColor: 'var(--landing-accent-dim)',
+            boxShadow: '0 0 8px color-mix(in oklch, var(--landing-accent-dim) 55%, transparent)',
+          }}
+        />
       </div>
 
-      {label && <span className="text-xs text-demo-text-muted uppercase tracking-widest">{label}</span>}
+      {label && (
+        <span className="landing-font-mono text-[9px] text-landing-muted uppercase tracking-[0.2em]">
+          {label}
+        </span>
+      )}
 
-      <div className="flex gap-2 mt-2">
-        {!isRunning && (remaining === from || isComplete) ? (
+      <div className="flex gap-2 mt-1">
+        {!hasStarted || isComplete ? (
           <button
             onClick={handleStart}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#ff4d6a] text-white rounded-lg hover:bg-[#ff4d6a]/90 transition-colors"
+            className="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-landing-accent-dim text-landing-bg rounded-lg hover:brightness-110 transition-all"
           >
             {isComplete ? 'Restart' : 'Start'}
           </button>
         ) : isRunning ? (
           <button
             onClick={handlePause}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text rounded-lg hover:bg-demo-border-hover transition-colors"
+            className="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-landing-surface border border-landing-border text-landing-fg rounded-lg hover:border-landing-accent/40 hover:text-landing-accent transition-all"
           >
             Pause
           </button>
         ) : (
           <button
             onClick={handleResume}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-[#ff4d6a] text-white rounded-lg hover:bg-[#ff4d6a]/90 transition-colors"
+            className="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-landing-accent-dim text-landing-bg rounded-lg hover:brightness-110 transition-all"
           >
             Resume
           </button>
         )}
-        <button
-          onClick={handleReset}
-          className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text-secondary rounded-lg hover:bg-demo-border-hover hover:text-demo-text transition-colors"
-        >
-          Reset
-        </button>
+        {hasStarted && (
+          <button
+            onClick={handleReset}
+            className="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-landing-surface border border-landing-border text-landing-muted rounded-lg hover:text-landing-fg transition-all"
+          >
+            Reset
+          </button>
+        )}
       </div>
     </div>
   );
