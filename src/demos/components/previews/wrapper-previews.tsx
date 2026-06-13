@@ -122,12 +122,60 @@ export const SpinningCubePreview = memo(function SpinningCubePreview(_props: Pre
 
 export const ClipPathRevealPreview = memo(function ClipPathRevealPreview(_props: PreviewProps) {
   return (
-    <PreviewCard title="ClipPath Reveal" description="Circle, diamond, wipe">
-      <ClipPathReveal shape="circle" duration={1200}>
-        <div className="w-full h-32 rounded-xl bg-linear-to-br from-landing-accent to-landing-accent/40 flex items-center justify-center">
-          <span className="landing-font-display text-lg text-landing-bg font-bold">Revealed</span>
+    <PreviewCard title="ClipPath Reveal" description="Circular clip wipe">
+      <div className="flex flex-col items-center gap-3 w-full">
+        {/* Stage: the accent reveal panel sits in normal flow (sizing the
+            stage), with a dark dotted backdrop behind it so the circle clip
+            boundary is clearly visible as it sweeps. */}
+        <div className="relative w-full max-w-64 rounded-xl overflow-hidden border border-landing-border/60">
+          {/* Backdrop (visible through the clip while hidden) */}
+          <div
+            className="absolute inset-0 bg-landing-surface/60"
+            style={{
+              backgroundImage:
+                'radial-gradient(var(--landing-fg) 1px, transparent 1px)',
+              backgroundSize: '14px 14px',
+            }}
+            aria-hidden
+          />
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span className="landing-font-mono text-[9px] tracking-[0.25em] uppercase text-landing-muted/70">
+              hidden
+            </span>
+          </div>
+
+          {/* Revealed panel, clipped by the circle wipe */}
+          <ClipPathReveal
+            shape="circle"
+            duration={1800}
+            autoplay
+            loop
+            alternate
+            ease="outExpo"
+            showControls={false}
+            className="relative"
+          >
+            <div
+              className="w-full h-32 flex flex-col items-center justify-center gap-1"
+              style={{
+                background:
+                  'linear-gradient(135deg, var(--landing-accent), color-mix(in oklch, var(--landing-accent) 40%, transparent))',
+              }}
+            >
+              <span className="landing-font-display text-xl text-landing-bg font-bold tracking-tight">
+                Revealed
+              </span>
+              <span className="landing-font-mono text-[8px] tracking-[0.25em] uppercase text-landing-bg/70">
+                circle()
+              </span>
+            </div>
+          </ClipPathReveal>
         </div>
-      </ClipPathReveal>
+
+        <span className="landing-font-mono text-[8px] tracking-[0.15em] uppercase text-landing-muted/60">
+          loop · alternate
+        </span>
+      </div>
     </PreviewCard>
   );
 });

@@ -19,6 +19,8 @@ export interface ClipPathRevealProps {
   alternate?: boolean;
   /** Callback when animation completes */
   onComplete?: () => void;
+  /** Show the Play/Reverse/Restart controls (default true) */
+  showControls?: boolean;
   /** Custom className for the wrapper */
   className?: string;
   /** Content to reveal */
@@ -30,7 +32,10 @@ function getClipPathValues(shape: ClipPathShape): { from: string; to: string } {
     case 'circle':
       return {
         from: 'circle(0% at 50% 50%)',
-        to: 'circle(75% at 50% 50%)',
+        // 150% of closest-side reliably covers the corners of rectangular
+        // content (75% left gaps on wide boxes). Overshooting is safe —
+        // clip-path beyond the element bounds just reveals fully.
+        to: 'circle(150% at 50% 50%)',
       };
     case 'diamond':
       return {
@@ -63,6 +68,7 @@ export function ClipPathReveal({
   loop = false,
   alternate = false,
   onComplete,
+  showControls = true,
   className = '',
   children,
 }: ClipPathRevealProps) {
@@ -99,32 +105,34 @@ export function ClipPathReveal({
           onComplete?.();
         }}
       >
-        <div className="relative overflow-hidden">{children}</div>
+        <div className="relative overflow-hidden w-full h-full">{children}</div>
       </Anime>
 
+      {showControls && (
       <div className="flex gap-2">
         {!isPlaying ? (
           <button
             onClick={handlePlay}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-accent text-demo-bg rounded-lg hover:bg-demo-accent/90 transition-colors"
+            className="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-landing-accent text-landing-bg rounded-lg hover:brightness-110 transition-all"
           >
             Play
           </button>
         ) : (
           <button
             onClick={handleReverse}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text rounded-lg hover:bg-demo-border-hover transition-colors"
+            className="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-landing-surface border border-landing-border text-landing-fg rounded-lg hover:border-landing-accent/40 hover:text-landing-accent transition-all"
           >
             Reverse
           </button>
         )}
         <button
           onClick={handlePlay}
-          className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text-secondary rounded-lg hover:bg-demo-border-hover hover:text-demo-text transition-colors"
+          className="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-landing-surface border border-landing-border text-landing-muted rounded-lg hover:text-landing-fg transition-all"
         >
           Restart
         </button>
       </div>
+      )}
     </div>
   );
 }
