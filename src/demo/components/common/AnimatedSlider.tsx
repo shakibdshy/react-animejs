@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   AnimePresence,
   AnimePresenceChild,
@@ -104,7 +105,7 @@ export function AnimatedSlider<T>({
   return (
     <div className={`flex flex-col items-center gap-6 w-full ${className}`}>
       {/* Slide viewport */}
-      <div className="relative w-full overflow-hidden rounded-2xl border border-demo-border bg-demo-bg">
+      <div className="relative w-full overflow-hidden rounded-2xl border border-landing-border bg-landing-surface/40">
         <div className="relative w-full min-h-60 flex items-center justify-center">
           <AnimePresence mode="sync">
             <AnimePresenceChild
@@ -125,38 +126,18 @@ export function AnimatedSlider<T>({
             <button
               onClick={goLeft}
               disabled={!canGoLeft}
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/60 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+              aria-label="Previous slide"
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-landing-bg/70 backdrop-blur-sm border border-landing-border flex items-center justify-center text-landing-muted hover:text-landing-accent hover:border-landing-accent/40 transition-all disabled:opacity-25 disabled:cursor-not-allowed"
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
+              <ChevronLeft size={18} strokeWidth={2.5} />
             </button>
             <button
               onClick={goRight}
               disabled={!canGoRight}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/60 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+              aria-label="Next slide"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-landing-bg/70 backdrop-blur-sm border border-landing-border flex items-center justify-center text-landing-muted hover:text-landing-accent hover:border-landing-accent/40 transition-all disabled:opacity-25 disabled:cursor-not-allowed"
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M9 18l6-6-6-6" />
-              </svg>
+              <ChevronRight size={18} strokeWidth={2.5} />
             </button>
           </>
         )}
@@ -164,15 +145,16 @@ export function AnimatedSlider<T>({
 
       {/* Dots */}
       {dots && count > 1 && (
-        <div className="flex gap-2">
+        <div className="flex items-center gap-1.5">
           {items.map((_, i) => (
             <button
               key={i}
               onClick={() => goTo(i)}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+              aria-label={`Go to slide ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
                 i === current
-                  ? 'bg-demo-accent shadow-[0_0_8px_var(--demo-accent)/0.5] scale-125'
-                  : 'bg-demo-border hover:bg-demo-border-hover'
+                  ? 'w-5 bg-landing-accent shadow-[0_0_8px_color-mix(in_oklch,var(--landing-accent)_55%,transparent)]'
+                  : 'w-1.5 bg-landing-border hover:bg-landing-muted'
               }`}
             />
           ))}

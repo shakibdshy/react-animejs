@@ -182,27 +182,41 @@ export const ClipPathRevealPreview = memo(function ClipPathRevealPreview(_props:
 
 export const AnimatedSliderPreview = memo(function AnimatedSliderPreview(_props: PreviewProps) {
   const slides = [
-    { title: 'Animate', gradient: 'from-landing-accent to-landing-accent/50', icon: 'A' },
-    { title: 'Timeline', gradient: 'from-landing-accent/80 to-landing-accent/30', icon: 'T' },
-    { title: 'Draggable', gradient: 'from-landing-accent/60 to-landing-accent/20', icon: 'D' },
+    { title: 'Animate', subtitle: 'Declarative tweens', icon: 'A' },
+    { title: 'Timeline', subtitle: 'Sequenced steps', icon: 'T' },
+    { title: 'Draggable', subtitle: 'Spring physics', icon: 'D' },
   ];
 
   return (
-    <PreviewCard title="Animated Slider" description="Slide transitions">
-      <AnimatedSlider items={slides} loop dots arrows={false}>
-        {(item) => (
-          <div
-            className={cn(
-              'w-full h-32 rounded-xl bg-linear-to-br flex items-center justify-center',
-              item.gradient
-            )}
-          >
-            <span className="landing-font-display text-2xl text-landing-bg font-bold">
-              {item.icon}
-            </span>
-          </div>
-        )}
-      </AnimatedSlider>
+    <PreviewCard title="Animated Slider" description="Prev/next + dots">
+      <div className="w-full max-w-72">
+        <AnimatedSlider items={slides} loop dots arrows duration={450} ease="outExpo">
+          {({ title, subtitle, icon }) => (
+            <div className="w-full h-40 px-6 flex items-center gap-4">
+              <div
+                className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 border border-landing-accent/30"
+                style={{
+                  background:
+                    'linear-gradient(135deg, var(--landing-accent), color-mix(in oklch, var(--landing-accent) 35%, transparent))',
+                  boxShadow: '0 0 18px color-mix(in oklch, var(--landing-accent) 25%, transparent)',
+                }}
+              >
+                <span className="landing-font-display text-2xl text-landing-bg font-bold">
+                  {icon}
+                </span>
+              </div>
+              <div className="flex flex-col gap-1 min-w-0">
+                <span className="landing-font-display text-lg text-landing-fg font-bold tracking-tight">
+                  {title}
+                </span>
+                <span className="landing-font-mono text-[9px] tracking-[0.2em] uppercase text-landing-muted">
+                  {subtitle}
+                </span>
+              </div>
+            </div>
+          )}
+        </AnimatedSlider>
+      </div>
     </PreviewCard>
   );
 });
