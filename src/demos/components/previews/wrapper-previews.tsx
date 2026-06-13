@@ -9,64 +9,98 @@ import { DemoButton, PreviewCard } from './shared';
 import { cn } from './utils';
 import type { PreviewProps } from './types';
 
-export const UtilitiesPreview = memo(function UtilitiesPreview(_props: PreviewProps) {
+export const ToggleSwitchPreview = memo(function ToggleSwitchPreview(_props: PreviewProps) {
+  const [primary, setPrimary] = useState(true);
+  const [settings, setSettings] = useState({
+    notifications: true,
+    autoSave: false,
+    analytics: true,
+  });
+
+  const update = (key: keyof typeof settings) => (val: boolean) =>
+    setSettings((s) => ({ ...s, [key]: val }));
+
   return (
-    <PreviewCard title="Utilities" description="Math, random, string, DOM">
-      <div className="flex flex-col gap-2 w-full landing-font-mono text-[11px] text-landing-muted">
-        <div className="flex justify-between">
-          <span>roundPad(3.7, 2)</span>
-          <span className="text-landing-accent">03.70</span>
+    <PreviewCard
+      title="Toggle Switch"
+      description="Springy toggle + ripple"
+      controls={
+        <DemoButton onClick={() => setPrimary((c) => !c)} variant="accent" small>
+          {primary ? 'ON' : 'OFF'}
+        </DemoButton>
+      }
+    >
+      <div className="flex flex-col gap-4 w-full max-w-65">
+        {/* Focal toggle with state readout */}
+        <div className="flex items-center justify-between rounded-lg border border-landing-border/50 bg-landing-surface/40 px-3.5 py-3">
+          <div className="flex flex-col gap-0.5">
+            <span className="landing-font-display text-sm text-landing-fg">Primary</span>
+            <span
+              className={cn(
+                'landing-font-mono text-[9px] tracking-[0.2em] uppercase transition-colors',
+                primary ? 'text-landing-accent' : 'text-landing-muted/60'
+              )}
+            >
+              {primary ? 'enabled' : 'disabled'}
+            </span>
+          </div>
+          <ToggleSwitch checked={primary} onChange={setPrimary} size="lg" />
         </div>
-        <div className="flex justify-between">
-          <span>padStart(&apos;42&apos;, 5, &apos;0&apos;)</span>
-          <span className="text-landing-accent">00042</span>
+
+        {/* Size row */}
+        <div className="flex items-center justify-around rounded-lg border border-landing-border/50 bg-landing-surface/40 px-3.5 py-3">
+          {(['sm', 'md', 'lg'] as const).map((s) => (
+            <div key={s} className="flex flex-col items-center gap-1.5">
+              <ToggleSwitch
+                size={s}
+                checked={primary}
+                onChange={setPrimary}
+              />
+              <span className="landing-font-mono text-[8px] tracking-[0.15em] uppercase text-landing-muted/60">
+                {s}
+              </span>
+            </div>
+          ))}
         </div>
-        <div className="flex justify-between">
-          <span>degToRad(180)</span>
-          <span className="text-landing-accent">3.14159</span>
-        </div>
-        <div className="flex justify-between">
-          <span>random(10, 100)</span>
-          <span className="text-landing-accent">{Math.floor(Math.random() * 90 + 10)}</span>
+
+        {/* Settings panel */}
+        <div className="flex flex-col rounded-lg border border-landing-border/50 bg-landing-surface/40 overflow-hidden">
+          {(['notifications', 'autoSave', 'analytics'] as const).map((key, i) => (
+            <div
+              key={key}
+              className={cn(
+                'flex items-center justify-between px-3.5 py-2.5',
+                i > 0 && 'border-t border-landing-border/40'
+              )}
+            >
+              <span className="text-xs text-landing-fg capitalize">
+                {key.replace(/([A-Z])/g, ' $1')}
+              </span>
+              <ToggleSwitch
+                size="sm"
+                checked={settings[key]}
+                onChange={update(key)}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </PreviewCard>
   );
 });
 
-export const ToggleSwitchPreview = memo(function ToggleSwitchPreview(_props: PreviewProps) {
-  const [checked, setChecked] = useState(false);
-
-  return (
-    <PreviewCard
-      title="Toggle Switch"
-      description="Animated toggle"
-      controls={
-        <DemoButton onClick={() => setChecked((c) => !c)} variant="accent" small>
-          {checked ? 'ON' : 'OFF'}
-        </DemoButton>
-      }
-    >
-      <ToggleSwitch checked={checked} onChange={setChecked} label="Enable feature" />
-    </PreviewCard>
-  );
-});
-
 export const CounterCountdownPreview = memo(function CounterCountdownPreview(_props: PreviewProps) {
   return (
-    <PreviewCard title="Counter & Countdown" description="Animated numbers">
-      <div className="flex gap-6">
-        <div className="flex flex-col items-center gap-1">
-          <Counter from={0} to={10} duration={500} size="lg" />
-          <span className="landing-font-mono text-[9px] text-landing-muted uppercase tracking-widest">
-            Counter
-          </span>
+    <PreviewCard title="Counter & Countdown" description="Smooth number tweens">
+      <div className="flex items-stretch gap-3 w-full">
+        {/* Focal looping counter */}
+        <div className="flex-1 flex flex-col items-center justify-center gap-1 rounded-xl border border-landing-border/50 bg-landing-surface/40 px-4 py-5">
+          <Counter from={0} to={100} duration={2500} loop autoplay size="lg" />
         </div>
-        <div className="flex flex-col items-center gap-1">
-          <Countdown from={30} format="seconds" size="lg" />
-          <span className="landing-font-mono text-[9px] text-landing-muted uppercase tracking-widest">
-            Countdown
-          </span>
+
+        {/* Countdown + progress */}
+        <div className="flex-1 flex flex-col items-center justify-center gap-1 rounded-xl border border-landing-border/50 bg-landing-surface/40 px-4 py-5">
+          <Countdown from={15} format="seconds" autoplay size="lg" />
         </div>
       </div>
     </PreviewCard>
@@ -75,8 +109,13 @@ export const CounterCountdownPreview = memo(function CounterCountdownPreview(_pr
 
 export const SpinningCubePreview = memo(function SpinningCubePreview(_props: PreviewProps) {
   return (
-    <PreviewCard title="Spinning 3D Cube" description="CSS 3D rotation">
-      <SpinningCube size={80} duration={3000} axis="both" />
+    <PreviewCard title="Spinning 3D Cube" description="Dual-axis rotation">
+      <div className="flex flex-col items-center gap-3 py-2">
+        <SpinningCube size={84} duration={4000} axis="both" autoplay showControls={false} />
+        <span className="landing-font-mono text-[8px] tracking-[0.15em] uppercase text-landing-muted/60">
+          dual-axis · loop
+        </span>
+      </div>
     </PreviewCard>
   );
 });

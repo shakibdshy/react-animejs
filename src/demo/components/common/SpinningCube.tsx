@@ -17,9 +17,29 @@ export interface SpinningCubeProps {
   ease?: string;
   /** Callback on each loop */
   onLoop?: () => void;
+  /** Show the Pause/Restart/Reverse controls (default true) */
+  showControls?: boolean;
   /** Custom className */
   className?: string;
 }
+
+/**
+ * Monochrome gold per-face lightness. A 3D cube reads depth from the
+ * brightness gradient across faces, so we grade the accent opacity from the
+ * front (brightest) to the back/receding faces (dimmest) rather than using
+ * six unrelated hues.
+ */
+const FACE_SHADES = [
+  { label: 'Front', alpha: 0.22 },
+  { label: 'Right', alpha: 0.14 },
+  { label: 'Top', alpha: 0.18 },
+  { label: 'Left', alpha: 0.1 },
+  { label: 'Bottom', alpha: 0.08 },
+  { label: 'Back', alpha: 0.06 },
+] as const;
+
+const accentAlpha = (alpha: number) =>
+  `color-mix(in oklch, var(--landing-accent) ${Math.round(alpha * 100)}%, transparent)`;
 
 export function SpinningCube({
   size = 120,
@@ -27,8 +47,9 @@ export function SpinningCube({
   axis = 'both',
   autoplay = false,
   loop = true,
-  ease = 'linear',
+  ease = 'inOutQuad',
   onLoop,
+  showControls = true,
   className = '',
 }: SpinningCubeProps) {
   const [isPlaying, setIsPlaying] = useState(autoplay);
@@ -66,50 +87,25 @@ export function SpinningCube({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: size * 0.16,
-    fontWeight: 800,
-    fontFamily: 'monospace',
+    fontSize: size * 0.14,
+    fontWeight: 700,
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase',
+    fontFamily: "'JetBrains Mono', ui-monospace, monospace",
     backfaceVisibility: 'hidden',
-    border: `1px solid rgba(255, 209, 26, 0.15)`,
+    border: '1px solid color-mix(in oklch, var(--landing-accent) 35%, transparent)',
+    color: 'var(--landing-accent)',
+    boxShadow: 'inset 0 0 24px color-mix(in oklch, var(--landing-accent) 18%, transparent)',
+    borderRadius: Math.max(4, size * 0.06),
   };
 
   const faces = [
-    {
-      label: 'Front',
-      transform: `translateZ(${half}px)`,
-      bg: 'rgba(255, 209, 26, 0.08)',
-      color: '#ffd11a',
-    },
-    {
-      label: 'Back',
-      transform: `rotateY(180deg) translateZ(${half}px)`,
-      bg: 'rgba(255, 77, 106, 0.08)',
-      color: '#ff4d6a',
-    },
-    {
-      label: 'Right',
-      transform: `rotateY(90deg) translateZ(${half}px)`,
-      bg: 'rgba(99, 179, 237, 0.08)',
-      color: '#63b3ed',
-    },
-    {
-      label: 'Left',
-      transform: `rotateY(-90deg) translateZ(${half}px)`,
-      bg: 'rgba(104, 211, 145, 0.08)',
-      color: '#68d391',
-    },
-    {
-      label: 'Top',
-      transform: `rotateX(90deg) translateZ(${half}px)`,
-      bg: 'rgba(183, 148, 244, 0.08)',
-      color: '#b794f4',
-    },
-    {
-      label: 'Bottom',
-      transform: `rotateX(-90deg) translateZ(${half}px)`,
-      bg: 'rgba(246, 173, 85, 0.08)',
-      color: '#f6ad55',
-    },
+    { ...FACE_SHADES[0], transform: `translateZ(${half}px)` },
+    { ...FACE_SHADES[1], transform: `rotateY(90deg) translateZ(${half}px)` },
+    { ...FACE_SHADES[2], transform: `rotateX(90deg) translateZ(${half}px)` },
+    { ...FACE_SHADES[3], transform: `rotateY(-90deg) translateZ(${half}px)` },
+    { ...FACE_SHADES[4], transform: `rotateX(-90deg) translateZ(${half}px)` },
+    { ...FACE_SHADES[5], transform: `rotateY(180deg) translateZ(${half}px)` },
   ];
 
   return (
@@ -117,7 +113,7 @@ export function SpinningCube({
       {/* 3D Scene */}
       <div
         style={{
-          perspective: size * 4,
+          perspective: size * 3,
           perspectiveOrigin: '50% 50%',
         }}
       >
@@ -126,8 +122,8 @@ export function SpinningCube({
           duration={duration}
           loop={loop}
           ease={ease}
-          rotateX={axis === 'y' ? undefined : '1turn'}
-          rotateY={axis === 'x' ? undefined : '1turn'}
+          rotateX={axis === 'y' ? '-20deg' : '1turn'}
+          rotateY={axis === 'x' ? '-30deg' : '1turn'}
           onControlsReady={handleControlsReady}
           onLoop={onLoop}
           onStateChange={(state: AnimationState) => {
@@ -150,8 +146,7 @@ export function SpinningCube({
                 style={{
                   ...faceBase,
                   transform: face.transform,
-                  backgroundColor: face.bg,
-                  color: face.color,
+                  backgroundColor: accentAlpha(face.alpha),
                 }}
               >
                 {face.label}
@@ -162,35 +157,37 @@ export function SpinningCube({
       </div>
 
       {/* Controls */}
+      {showControls && (
       <div className="flex gap-2">
         {isPlaying ? (
           <button
             onClick={handlePause}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text rounded-lg hover:bg-demo-border-hover transition-colors"
+            className="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-landing-surface border border-landing-border text-landing-fg rounded-lg hover:border-landing-accent/40 hover:text-landing-accent transition-all"
           >
             Pause
           </button>
         ) : (
           <button
             onClick={handleResume}
-            className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-accent text-demo-bg rounded-lg hover:bg-demo-accent/90 transition-colors"
+            className="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-landing-accent text-landing-bg rounded-lg hover:brightness-110 transition-all"
           >
             Resume
           </button>
         )}
         <button
           onClick={handleRestart}
-          className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text-secondary rounded-lg hover:bg-demo-border-hover hover:text-demo-text transition-colors"
+          className="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-landing-surface border border-landing-border text-landing-muted rounded-lg hover:text-landing-fg transition-all"
         >
           Restart
         </button>
         <button
           onClick={handleReverse}
-          className="px-4 py-1.5 text-xs font-bold uppercase tracking-wider bg-demo-border text-demo-text-secondary rounded-lg hover:bg-demo-border-hover hover:text-demo-text transition-colors"
+          className="px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-wider bg-landing-surface border border-landing-border text-landing-muted rounded-lg hover:text-landing-fg transition-all"
         >
           Reverse
         </button>
       </div>
+      )}
     </div>
   );
 }
