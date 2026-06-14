@@ -53,7 +53,7 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const location = useLocation();
-  const hideHeader = location.pathname === '/' || location.pathname === '/demos' || location.pathname.startsWith('/demo');
+  const hideHeader = location.pathname === '/' || location.pathname === '/demos' || location.pathname === '/blocks' || location.pathname.startsWith('/demo');
 
   return (
     <html lang="en">

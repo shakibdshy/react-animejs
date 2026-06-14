@@ -6,6 +6,7 @@ import type { NavItem } from '@/landing/types';
 const defaultNavItems: NavItem[] = [
   { label: 'Features', href: '#features' },
   { label: 'Components', href: '/demos' },
+  { label: 'Blocks', href: '/blocks' },
   { label: 'Docs', href: '#code' },
   { label: 'Community', href: '#testimonials' },
 ];

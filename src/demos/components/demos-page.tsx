@@ -58,6 +58,9 @@ export const DemosPage = memo(function DemosPage() {
             <Link to="/demos" className="text-sm text-landing-accent font-medium no-underline">
               Components
             </Link>
+            <Link to="/blocks" className="text-sm text-landing-muted font-medium hover:text-landing-fg transition-colors duration-200 no-underline">
+              Blocks
+            </Link>
             <button
               onClick={toggleTheme}
               className="bg-transparent border border-landing-border rounded-full w-10 h-10 cursor-pointer text-base text-landing-muted flex items-center justify-center hover:bg-landing-surface hover:text-landing-fg transition-all duration-200"
