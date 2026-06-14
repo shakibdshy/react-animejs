@@ -1,5 +1,6 @@
 import { memo, useCallback, useRef, useState } from 'react';
-import { useAnime, useAnimeDraggable, useAnimeOnScroll } from '@/lib/react-animejs/hooks';
+import { useAnimeDraggable, useAnimeOnScroll } from '@/lib/react-animejs/hooks';
+import { AnimatedReorderList } from '@/demo/components/common/AnimatedReorderList';
 import { DemoButton, PreviewCard } from './shared';
 import { cn } from './utils';
 import type { PreviewProps } from './types';
@@ -276,17 +277,21 @@ export const OnScrollPreview = memo(function OnScrollPreview(_props: PreviewProp
   );
 });
 
+interface ReorderTask {
+  id: string;
+  label: string;
+}
+
+const INITIAL_TASKS: ReorderTask[] = [
+  { id: 'design', label: 'Design system' },
+  { id: 'api', label: 'REST endpoints' },
+  { id: 'auth', label: 'OAuth flow' },
+  { id: 'tests', label: 'Integration tests' },
+  { id: 'deploy', label: 'CI/CD pipeline' },
+];
+
 export const ReorderListPreview = memo(function ReorderListPreview(_props: PreviewProps) {
-  const [items, setItems] = useState([1, 2, 3, 4, 5]);
-  const { controls } = useAnime({
-    selector: '.reorder-item',
-    translateY: [12, 0],
-    opacity: [0, 1],
-    duration: 300,
-    ease: 'outQuad',
-    delay: 50,
-    autoplay: false,
-  });
+  const [items, setItems] = useState<ReorderTask[]>(INITIAL_TASKS);
 
   const handleShuffle = useCallback(() => {
     setItems((prev) => {
@@ -297,32 +302,51 @@ export const ReorderListPreview = memo(function ReorderListPreview(_props: Previ
       }
       return next;
     });
-    setTimeout(() => controls.restart(), 20);
-  }, [controls]);
+  }, []);
+
+  const handleReverse = useCallback(() => {
+    setItems((prev) => [...prev].reverse());
+  }, []);
 
   return (
     <PreviewCard
       title="Reorder List"
-      description="FLIP list reorder"
+      description="FLIP reorder"
       controls={
-        <DemoButton onClick={handleShuffle} variant="accent" small>
-          Shuffle
-        </DemoButton>
+        <>
+          <DemoButton onClick={handleShuffle} variant="accent" small>
+            Shuffle
+          </DemoButton>
+          <DemoButton onClick={handleReverse} variant="surface" small>
+            Reverse
+          </DemoButton>
+        </>
       }
     >
-      <div className="flex flex-col gap-1.5 w-24">
-        {items.map((n) => (
-          <div
-            key={n}
-            className="reorder-item h-5 rounded flex items-center justify-center text-[10px] font-mono"
-            style={{
-              backgroundColor: `var(--color-landing-card, rgba(255,255,255,0.08))`,
-              color: 'var(--color-landing-text, #e2e0d9)',
-            }}
-          >
-            Item {n}
-          </div>
-        ))}
+      <div className="w-full max-w-60">
+        <AnimatedReorderList
+          items={items}
+          getKey={(t) => t.id}
+          duration={450}
+          ease="outExpo"
+          gap={6}
+        >
+          {(task, index) => (
+            <div className="flex items-center gap-2.5 rounded-lg border border-landing-border/50 bg-landing-surface/40 px-3 py-2">
+              <span
+                className="landing-font-mono text-[10px] font-bold w-5 h-5 rounded-md flex items-center justify-center shrink-0"
+                style={{
+                  backgroundColor:
+                    'color-mix(in oklch, var(--landing-accent) 18%, transparent)',
+                  color: 'var(--landing-accent)',
+                }}
+              >
+                {index + 1}
+              </span>
+              <span className="text-xs text-landing-fg truncate">{task.label}</span>
+            </div>
+          )}
+        </AnimatedReorderList>
       </div>
     </PreviewCard>
   );
@@ -331,55 +355,120 @@ export const ReorderListPreview = memo(function ReorderListPreview(_props: Previ
 export const ScrollLinkedAnimationsPreview = memo(function ScrollLinkedAnimationsPreview(
   _props: PreviewProps
 ) {
-  const box1Ref = useRef<HTMLDivElement>(null);
-  const box2Ref = useRef<HTMLDivElement>(null);
-
-  const { controls: ctrl1 } = useAnime({
-    targets: box1Ref,
-    translateX: [
-      { to: 80, duration: 500 },
-      { to: 0, duration: 400 },
-    ],
-    opacity: [
-      { to: 1, duration: 300 },
-      { to: 0, duration: 300 },
-    ],
-    autoplay: false,
-  });
-  const { controls: ctrl2 } = useAnime({
-    targets: box2Ref,
-    translateX: [
-      { to: 120, duration: 600 },
-      { to: 0, duration: 500 },
-    ],
-    opacity: [
-      { to: 1, duration: 400 },
-      { to: 0, duration: 300 },
-    ],
-    autoplay: false,
+  const { ref, containerRef, isInView, progress } = useAnimeOnScroll<
+    HTMLDivElement,
+    HTMLDivElement
+  >({
+    enter: 'bottom top',
+    leave: 'top bottom',
   });
 
-  const handlePlay = useCallback(() => {
-    ctrl1.restart();
-    setTimeout(() => ctrl2.restart(), 200);
-  }, [ctrl1, ctrl2]);
+  // Clamp progress to [0, 1].
+  const p = Math.max(0, Math.min(1, progress));
+
+  // Three parallax layers drift at different rates as you scroll. Each layer's
+  // translate and opacity are derived from scroll progress — real scroll-linked
+  // motion, not a button-triggered playback. Solid accent shades so they stay
+  // visible against the dark panel.
+  const layers = [
+    {
+      depth: 0.2,
+      label: 'fg',
+      color: 'var(--landing-accent)',
+      border: 'color-mix(in oklch, var(--landing-accent) 70%, transparent)',
+      opacity: 0.95,
+    },
+    {
+      depth: 0.5,
+      label: 'mid',
+      color: 'color-mix(in oklch, var(--landing-accent) 55%, var(--landing-surface))',
+      border: 'color-mix(in oklch, var(--landing-accent) 45%, transparent)',
+      opacity: 0.85,
+    },
+    {
+      depth: 0.85,
+      label: 'bg',
+      color: 'color-mix(in oklch, var(--landing-accent) 30%, var(--landing-surface))',
+      border: 'color-mix(in oklch, var(--landing-accent) 30%, transparent)',
+      opacity: 0.7,
+    },
+  ];
 
   return (
     <PreviewCard
       title="Scroll-Linked Animations"
-      description="Parallax, fade-in, scrub"
+      description="Parallax depth · scroll scrub"
       controls={
-        <DemoButton onClick={handlePlay} variant="accent" small>
-          Play
-        </DemoButton>
+        <span
+          className={cn(
+            'landing-font-mono text-[10px]',
+            isInView ? 'text-landing-accent' : 'text-landing-muted',
+          )}
+        >
+          {isInView ? `${Math.round(p * 100)}%` : 'Scroll ↓'}
+        </span>
       }
     >
-      <div className="w-full h-40 rounded-xl border border-landing-border bg-landing-bg/40 p-4 space-y-4">
-        <div className="h-10" />
-        <div ref={box1Ref} className="w-10 h-10 rounded-lg bg-landing-accent" />
-        <div className="h-10" />
-        <div ref={box2Ref} className="w-10 h-10 rounded-lg bg-landing-accent/60" />
-        <div className="h-10" />
+      <div className="flex flex-col gap-2 w-full">
+        <div className="landing-font-mono text-[9px] tracking-[0.22em] uppercase text-landing-muted/70">
+          Scroll inside the panel to scrub the parallax
+        </div>
+        <div
+          ref={containerRef}
+          className="w-full h-56 rounded-xl border border-landing-border border-dashed bg-landing-bg/40 overflow-y-auto overscroll-contain relative"
+        >
+          {/* Top spacer gives the tracked target room to enter from below. */}
+          <div className="h-40" />
+          <div ref={ref} className="relative h-80">
+            {/* Sticky content stays pinned while the tracked target scrolls
+                through, so the parallax stays visible across the full scrub. */}
+            <div className="sticky top-0 h-56 flex items-center justify-center">
+              <div className="relative w-full max-w-60 h-36">
+                {layers.map((layer, i) => {
+                  // Each layer moves up by a different fraction of progress —
+                  // foreground drifts least, background drifts most.
+                  const ty = p * layer.depth * -56;
+                  const scale = 1 - layer.depth * 0.22 + p * layer.depth * 0.1;
+                  return (
+                    <div
+                      key={layer.label}
+                      className="absolute inset-0 rounded-xl border flex items-end justify-start p-2"
+                      style={{
+                        transform: `translateY(${ty}px) scale(${scale})`,
+                        opacity: layer.opacity,
+                        backgroundColor: layer.color,
+                        borderColor: layer.border,
+                        zIndex: 3 - i,
+                        boxShadow:
+                          i === 0
+                            ? '0 8px 24px color-mix(in oklch, var(--landing-accent) 30%, transparent)'
+                            : 'none',
+                      }}
+                    >
+                      <span className="landing-font-mono text-[8px] tracking-[0.2em] uppercase text-landing-bg/80">
+                        {layer.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+          <div className="h-40" />
+        </div>
+
+        {/* Progress bar driven by the same scroll progress */}
+        <div className="flex items-center gap-2">
+          <div className="flex-1 h-1 rounded-full bg-landing-border overflow-hidden">
+            <div
+              className="h-full rounded-full bg-landing-accent transition-[width] duration-75"
+              style={{ width: `${p * 100}%` }}
+            />
+          </div>
+          <span className="landing-font-mono text-[9px] tabular-nums text-landing-muted">
+            {Math.round(p * 100).toString().padStart(3, '0')}
+          </span>
+        </div>
       </div>
     </PreviewCard>
   );

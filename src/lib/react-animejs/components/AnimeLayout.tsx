@@ -24,9 +24,11 @@ import React, {
   useContext,
   useEffect,
   useImperativeHandle,
+  useLayoutEffect,
   useMemo,
   useRef,
 } from "react";
+import { animate } from "animejs";
 import { useAnimeLayout } from "../hooks";
 import type {
   AutoLayout,
@@ -556,14 +558,72 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
       }
     }, [entering, leaving, swapping, animating, onLayoutChange]);
 
-    // Auto-animate on children changes (when mode is 'auto')
-    useEffect(() => {
-      if (mode === "auto" && isReady && prevChildrenRef.current !== null) {
-        // Children have changed, trigger animation
-        refresh();
-      }
+    // FLIP baseline: each item's position from the previous commit. Captured
+    // at the END of every layout effect (with transforms cleared, so leftover
+    // translate from the previous animation can't pollute the measurement),
+    // giving the next children change a valid "first" state to diff against.
+    const prevRectsRef = useRef<Map<string, { x: number; y: number }>>(new Map());
+
+    const measureBaseline = useCallback(() => {
+      const baseline = new Map<string, { x: number; y: number }>();
+      itemsRef.current.forEach((el, id) => {
+        // Clear any leftover transform from a prior FLIP play so the rect we
+        // record reflects the element's true committed position. anime.js may
+        // write either `transform` or the individual `translate` property.
+        el.style.transform = "";
+        el.style.translate = "";
+        const r = el.getBoundingClientRect();
+        baseline.set(id, { x: r.x, y: r.y });
+      });
+      return baseline;
+    }, []);
+
+    // Auto-animate on children changes (when mode is 'auto').
+    //
+    // The previous implementation used `useEffect` + `refresh()`, but that runs
+    // AFTER the browser has painted the reordered DOM, so anime.js recorded
+    // identical "old" and "new" positions → zero delta → no animation. This
+    // implementation does a real FLIP: diff the previous-commit rects against
+    // the just-committed positions inside `useLayoutEffect` (pre-paint), invert
+    // each moved item back to its old spot, then play it to its new spot.
+    useLayoutEffect(() => {
+      const isFirstCommit = prevChildrenRef.current === null;
       prevChildrenRef.current = children;
-    }, [children, mode, isReady, refresh]);
+
+      // Always capture the clean baseline first (also clears stale transforms).
+      const baseline = measureBaseline();
+
+      if (mode !== "auto" || !isReady || isFirstCommit) {
+        prevRectsRef.current = baseline;
+        return;
+      }
+
+      const prev = prevRectsRef.current;
+      const animDuration = duration ?? 500;
+      const animEase = ease ?? "outExpo";
+
+      itemsRef.current.forEach((el, id) => {
+        const oldPos = prev.get(id);
+        const newPos = baseline.get(id);
+        if (!oldPos || !newPos) return;
+        const dx = oldPos.x - newPos.x;
+        const dy = oldPos.y - newPos.y;
+        if (dx === 0 && dy === 0) return;
+
+        // Play: the element is already at its new (committed) position. Animate
+        // its translate from the old-position offset back to 0, so it appears
+        // to glide from oldPos → newPos. Explicit keyframes keep the start
+        // value unambiguous (no reliance on anime reading an inline transform).
+        animate(el, {
+          translateX: [dx, 0],
+          translateY: [dy, 0],
+          duration: animDuration,
+          ease: animEase,
+        });
+      });
+
+      prevRectsRef.current = baseline;
+    }, [children, mode, isReady, duration, ease, measureBaseline]);
 
     // Context for AnimeLayout.Item
     const contextValue = useMemo<AnimeLayoutContextValue>(
