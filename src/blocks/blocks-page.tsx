@@ -1,8 +1,67 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { Code as CodeIcon } from 'lucide-react';
 import { AnimeProvider } from '@/lib/react-animejs';
 import { ErrorBoundary } from '@/landing/components/ui/error-boundary';
 import { CursorTrailImagesDemo } from '@/demo/components/CursorTrailImagesDemo';
+import { AddToCard } from './components/AddToCard';
+import { PointerCollisionGrid } from './components/PointerCollisionGrid';
+import { TiltCard } from './components/TiltCard';
+import { ImageRevealSlider } from './components/ImageRevealSlider';
+import { CodeModal } from './components/CodeModal';
+// Exact source for each block, pulled at build time via Vite's ?raw so the
+// "View Code" modal always shows the real, current code.
+import cursorTrailSource from '@/demo/components/CursorTrailImagesDemo.tsx?raw';
+import addToCardSource from './components/AddToCard.tsx?raw';
+import pointerGridSource from './components/PointerCollisionGrid.tsx?raw';
+import tiltCardSource from './components/TiltCard.tsx?raw';
+import imageRevealSource from './components/ImageRevealSlider.tsx?raw';
+
+/** The set of blocks that can be shown in the code modal. */
+type CodeTarget = {
+  title: string;
+  code: string;
+};
+
+const SOURCE_BY_KEY: Record<string, CodeTarget> = {
+  'cursor-trail': { title: 'CursorTrailImagesDemo.tsx', code: cursorTrailSource },
+  'add-to-card': { title: 'AddToCard.tsx', code: addToCardSource },
+  'pointer-grid': { title: 'PointerCollisionGrid.tsx', code: pointerGridSource },
+  'tilt-card': { title: 'TiltCard.tsx', code: tiltCardSource },
+  'image-reveal': { title: 'ImageRevealSlider.tsx', code: imageRevealSource },
+};
+
+/** Header row for a block section: title, library-primitive chip, and a
+ *  "View Code" button that opens the source modal. */
+function SectionHeader({
+  title,
+  chip,
+  codeKey,
+  onViewCode,
+}: {
+  title: string;
+  chip: string;
+  codeKey: string;
+  onViewCode: (key: string) => void;
+}) {
+  return (
+    <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <h2 className="landing-font-display text-xl font-bold text-landing-fg">{title}</h2>
+      <div className="flex items-center gap-3">
+        <span className="landing-font-mono text-[10px] tracking-[0.2em] uppercase text-landing-muted/70">
+          {chip}
+        </span>
+        <button
+          onClick={() => onViewCode(codeKey)}
+          className="flex items-center gap-1.5 rounded-full border border-landing-border bg-landing-surface px-3 py-1.5 landing-font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-landing-muted transition-all hover:border-landing-accent hover:text-landing-accent"
+        >
+          <CodeIcon size={12} />
+          View Code
+        </button>
+      </div>
+    </div>
+  );
+}
 
 /**
  * BlocksPage — a showcase page for standalone "block" examples (self-contained
@@ -12,6 +71,12 @@ import { CursorTrailImagesDemo } from '@/demo/components/CursorTrailImagesDemo';
  */
 export const BlocksPage = memo(function BlocksPage() {
   const [isDark, setIsDark] = useState(true);
+  const [codeKey, setCodeKey] = useState<string | null>(null);
+
+  const openCode = useCallback((key: string) => setCodeKey(key), []);
+  const closeCode = useCallback(() => setCodeKey(null), []);
+
+  const activeCode = codeKey ? SOURCE_BY_KEY[codeKey] : null;
 
   useEffect(() => {
     const stored = localStorage.getItem('demo-theme');
@@ -80,14 +145,12 @@ export const BlocksPage = memo(function BlocksPage() {
           <div className="max-w-300 mx-auto px-6 pb-20">
             {/* Cursor Trail with Images */}
             <section className="mb-16">
-              <div className="mb-4 flex items-baseline justify-between gap-4">
-                <h2 className="landing-font-display text-xl font-bold text-landing-fg">
-                  Cursor Trail · Images
-                </h2>
-                <span className="landing-font-mono text-[10px] tracking-[0.2em] uppercase text-landing-muted/70">
-                  useAnimatable
-                </span>
-              </div>
+              <SectionHeader
+                title="Cursor Trail · Images"
+                chip="<Anime>"
+                codeKey="cursor-trail"
+                onViewCode={openCode}
+              />
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
                 A queue of sprites, each owning its own <code className="landing-font-mono text-landing-accent">useAnimatable</code>{' '}
                 x/y. On <code className="landing-font-mono">pointermove</code> every sprite eases toward the
@@ -95,6 +158,86 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <CursorTrailImagesDemo />
+              </ErrorBoundary>
+            </section>
+
+            {/* Add To Card — fly into basket along a curve */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Add To Cart · Arc Fly"
+                chip="Anime · keyframes"
+                codeKey="add-to-card"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                Click <em>Add to cart</em> and a sprite arcs from the card to the basket along a
+                three-point keyframe curve (origin → lifted midpoint → basket). The declarative{' '}
+                <code className="landing-font-mono text-landing-accent">{'<Anime>'}</code> drives
+                translate, scale, and the basket&rsquo;s impact pulse.
+              </p>
+              <ErrorBoundary>
+                <AddToCard />
+              </ErrorBoundary>
+            </section>
+
+            {/* Pointer Collision Grid — swept detection */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Pointer Collision · Swept Grid"
+                chip="useAnimatable"
+                codeKey="pointer-grid"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                A 20×20 grid that lights every cell the pointer sweeps — even on a fast flick. On
+                each <code className="landing-font-mono">pointermove</code> a supercover line walks
+                from the last cell to the current one, lighting all cells in between. Each cell owns
+                a <code className="landing-font-mono text-landing-accent">useAnimatable</code> that
+                flashes and fades it.
+              </p>
+              <ErrorBoundary>
+                <PointerCollisionGrid />
+              </ErrorBoundary>
+            </section>
+
+            {/* Tilt Card */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Tilt Card"
+                chip="useAnimatable"
+                codeKey="tilt-card"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                The card tilts in 3D toward the cursor. Pointer position maps to{' '}
+                <code className="landing-font-mono text-landing-accent">rotateX</code>/{' '}
+                <code className="landing-font-mono text-landing-accent">rotateY</code> setters from{' '}
+                <code className="landing-font-mono text-landing-accent">useAnimatable</code>, which
+                ease toward each new value — and a glare highlight follows the pointer. Leaving the
+                card springs it back to level.
+              </p>
+              <ErrorBoundary>
+                <TiltCard />
+              </ErrorBoundary>
+            </section>
+
+            {/* Image Reveal Slider — before/after */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Image Reveal · Before / After"
+                chip="useAnimatable"
+                codeKey="image-reveal"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                A draggable handle reveals one image over another. A single drag value feeds two{' '}
+                <code className="landing-font-mono text-landing-accent">useAnimatable</code>{' '}
+                setters — the overlay&rsquo;s <code className="landing-font-mono">width</code> and the
+                handle&rsquo;s <code className="landing-font-mono">left</code> — easing in lockstep with
+                pointer capture holding the drag through fast flicks.
+              </p>
+              <ErrorBoundary>
+                <ImageRevealSlider />
               </ErrorBoundary>
             </section>
           </div>
@@ -105,6 +248,16 @@ export const BlocksPage = memo(function BlocksPage() {
             </span>
           </footer>
         </ErrorBoundary>
+
+        {/* Code modal — rendered once; opened by any section's View Code button. */}
+        {activeCode && (
+          <CodeModal
+            open
+            title={activeCode.title}
+            code={activeCode.code}
+            onClose={closeCode}
+          />
+        )}
       </div>
     </AnimeProvider>
   );
