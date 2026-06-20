@@ -8,6 +8,7 @@ import { AddToCard } from './components/AddToCard';
 import { PointerCollisionGrid } from './components/PointerCollisionGrid';
 import { TiltCard } from './components/TiltCard';
 import { ImageRevealSlider } from './components/ImageRevealSlider';
+import { CursorTrackingPreview } from './components/CursorTrackingPreview';
 import { CodeModal } from './components/CodeModal';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
 // "View Code" modal always shows the real, current code.
@@ -16,6 +17,7 @@ import addToCardSource from './components/AddToCard.tsx?raw';
 import pointerGridSource from './components/PointerCollisionGrid.tsx?raw';
 import tiltCardSource from './components/TiltCard.tsx?raw';
 import imageRevealSource from './components/ImageRevealSlider.tsx?raw';
+import cursorTrackingSource from './components/CursorTrackingPreview.tsx?raw';
 
 /** The set of blocks that can be shown in the code modal. */
 type CodeTarget = {
@@ -29,6 +31,7 @@ const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'pointer-grid': { title: 'PointerCollisionGrid.tsx', code: pointerGridSource },
   'tilt-card': { title: 'TiltCard.tsx', code: tiltCardSource },
   'image-reveal': { title: 'ImageRevealSlider.tsx', code: imageRevealSource },
+  'cursor-tracking': { title: 'CursorTrackingPreview.tsx', code: cursorTrackingSource },
 };
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -158,6 +161,26 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <CursorTrailImagesDemo />
+              </ErrorBoundary>
+            </section>
+
+            {/* Cursor Tracking Image Preview */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Cursor Tracking · Image Preview"
+                chip="useAnimatable + Anime"
+                codeKey="cursor-tracking"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                Hover a thumbnail and a larger preview window chases the cursor with spring-eased
+                movement (<code className="landing-font-mono text-landing-accent">useAnimatable</code>{' '}
+                translate setters fed on every pointermove). Moving between thumbnails swaps the
+                image with an <code className="landing-font-mono text-landing-accent">{'<Anime>'}</code>{' '}
+                cross-fade so it never hard-cuts.
+              </p>
+              <ErrorBoundary>
+                <CursorTrackingPreview />
               </ErrorBoundary>
             </section>
 
