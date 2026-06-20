@@ -9,6 +9,7 @@ import { PointerCollisionGrid } from './components/PointerCollisionGrid';
 import { TiltCard } from './components/TiltCard';
 import { ImageRevealSlider } from './components/ImageRevealSlider';
 import { CursorTrackingPreview } from './components/CursorTrackingPreview';
+import { MacOSDock } from './components/MacOSDock';
 import { CodeModal } from './components/CodeModal';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
 // "View Code" modal always shows the real, current code.
@@ -18,6 +19,7 @@ import pointerGridSource from './components/PointerCollisionGrid.tsx?raw';
 import tiltCardSource from './components/TiltCard.tsx?raw';
 import imageRevealSource from './components/ImageRevealSlider.tsx?raw';
 import cursorTrackingSource from './components/CursorTrackingPreview.tsx?raw';
+import dockSource from './components/MacOSDock.tsx?raw';
 
 /** The set of blocks that can be shown in the code modal. */
 type CodeTarget = {
@@ -32,6 +34,7 @@ const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'tilt-card': { title: 'TiltCard.tsx', code: tiltCardSource },
   'image-reveal': { title: 'ImageRevealSlider.tsx', code: imageRevealSource },
   'cursor-tracking': { title: 'CursorTrackingPreview.tsx', code: cursorTrackingSource },
+  'macos-dock': { title: 'MacOSDock.tsx', code: dockSource },
 };
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -261,6 +264,28 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <ImageRevealSlider />
+              </ErrorBoundary>
+            </section>
+
+            {/* macOS Dock — fisheye magnification */}
+            <section className="mb-16">
+              <SectionHeader
+                title="macOS Dock · Fisheye"
+                chip="useAnimatable"
+                codeKey="macos-dock"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                Icons magnify toward the cursor with a smooth inverted-parabola falloff so neighbors
+                rise too — the signature dock &ldquo;genie&rdquo;. Each icon owns a{' '}
+                <code className="landing-font-mono text-landing-accent">useAnimatable</code> for{' '}
+                <code className="landing-font-mono">scale</code> +{' '}
+                <code className="landing-font-mono">translateY</code>; one dock-level pointermove
+                computes every icon&rsquo;s target from its distance to the cursor. Leaving springs
+                them back to rest.
+              </p>
+              <ErrorBoundary>
+                <MacOSDock />
               </ErrorBoundary>
             </section>
           </div>
