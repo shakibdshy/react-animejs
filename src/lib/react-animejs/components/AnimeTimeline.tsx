@@ -7,7 +7,7 @@ import React, {
   useRef,
 } from "react";
 import { useAnimeTimeline } from "../hooks";
-import { TimelineContext } from "../core";
+import { TimelineContext, shallowEqual } from "../core";
 import type {
   AnimationState,
   Timeline,
@@ -42,7 +42,13 @@ export interface AnimeTimelineProps extends UseAnimeTimelineOptions {
   onReady?: (api: AnimeTimelineRef) => void;
 
   /**
-   * Called whenever the reactive timeline state changes.
+   * Called whenever the reactive timeline state *meaningfully* changes.
+   *
+   * Gated by shallow equality, so it fires on real transitions (begin,
+   * complete, pause, reverse, progress milestones you compare) — not on every
+   * animation frame. During playback this still emits once per frame because
+   * `progress`/`currentTime` change each tick; bind it to a ref or throttle if
+   * you drive React state from it.
    */
   onStateChange?: (state: AnimationState) => void;
 }
@@ -91,9 +97,16 @@ export const AnimeTimeline = forwardRef<AnimeTimelineRef, AnimeTimelineProps>(
       }
     }, [timelineOptions.enabled]);
 
-    useEffect(() => {
-      onStateChange?.(state);
-    }, [state, onStateChange]);
+  // Notify on meaningful state changes. Shallow equality suppresses the
+  // reference-only updates that `extractAnimationState` produces on internal
+  // ticks where nothing observable changed (e.g. a paused timeline re-render).
+  const lastNotifiedStateRef = useRef<AnimationState>(state);
+  useEffect(() => {
+    if (!onStateChange) return;
+    if (shallowEqual(lastNotifiedStateRef.current, state)) return;
+    lastNotifiedStateRef.current = state;
+    onStateChange(state);
+  }, [state, onStateChange]);
 
     const contextValue = useMemo(
       () => ({

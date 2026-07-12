@@ -23,6 +23,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useId,
   useImperativeHandle,
   useLayoutEffect,
   useMemo,
@@ -30,6 +31,7 @@ import React, {
 } from "react";
 import { animate } from "animejs";
 import { useAnimeLayout } from "../hooks";
+import { shallowEqual } from "../core";
 import type {
   AutoLayout,
   LayoutAnimationParams,
@@ -151,7 +153,14 @@ export interface AnimeLayoutProps
   /** Callback when layout is ready */
   onReady?: (controls: AnimeLayoutRef) => void;
 
-  /** Callback when animation state changes */
+  /**
+   * Called whenever the reactive animation state *meaningfully* changes.
+   *
+   * Gated by shallow equality, so it fires on real transitions (begin,
+   * complete, pause) — not on every animation frame. During playback this
+   * still emits once per frame because `progress`/`currentTime` change each
+   * tick; bind it to a ref or throttle if you drive React state from it.
+   */
   onStateChange?: (state: AnimationState) => void;
 
   onLayoutChange?: (info: {
@@ -257,9 +266,12 @@ export const AnimeLayoutItem = forwardRef<HTMLElement, AnimeLayoutItemProps>(
   ) {
     const context = useContext(AnimeLayoutContext);
     const internalRef = useRef<HTMLElement>(null);
+    // SSR-safe stable id (React 18+). Falls back to a per-instance suffix only
+    // when no explicit layoutId is provided, avoiding server/client mismatch.
+    const reactId = useId();
     const id = useMemo(
-      () => layoutId || `layout-item-${Math.random().toString(36).slice(2, 9)}`,
-      [layoutId],
+      () => layoutId || `layout-item-${reactId}`,
+      [layoutId, reactId],
     );
 
     // Register with parent AnimeLayout
@@ -546,9 +558,15 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
       }
     }, [enabled]);
 
-    // Notify on state changes
+    // Notify on meaningful state changes. Shallow equality suppresses the
+    // reference-only updates that `extractAnimationState` produces on internal
+    // ticks where nothing observable changed (e.g. an idle layout re-render).
+    const lastNotifiedStateRef = useRef<AnimationState>(state);
     useEffect(() => {
-      onStateChange?.(state);
+      if (!onStateChange) return;
+      if (shallowEqual(lastNotifiedStateRef.current, state)) return;
+      lastNotifiedStateRef.current = state;
+      onStateChange(state);
     }, [state, onStateChange]);
 
     // Notify on layout changes

@@ -63,3 +63,33 @@ export function safeJsonStringify(obj: unknown): string {
     return value;
   });
 }
+
+/**
+ * Shallow equality check for two values. Treats objects with the same keys and
+ * shallow-equal primitive values as equal; references are compared otherwise.
+ *
+ * Used to gate `onStateChange` so it doesn't fire on every animation tick when
+ * the extracted `AnimationState` is reference-new but value-identical. Object
+ * fields (e.g. `labels`) are compared by reference — they only change on
+ * timeline rebuild, not per-tick, so this is safe.
+ */
+export function shallowEqual(a: unknown, b: unknown): boolean {
+  if (Object.is(a, b)) return true;
+  if (!a || !b || typeof a !== 'object' || typeof b !== 'object') {
+    return false;
+  }
+  const keysA = Object.keys(a as Record<string, unknown>);
+  const keysB = Object.keys(b as Record<string, unknown>);
+  if (keysA.length !== keysB.length) return false;
+  for (const key of keysA) {
+    if (
+      !Object.is(
+        (a as Record<string, unknown>)[key],
+        (b as Record<string, unknown>)[key],
+      )
+    ) {
+      return false;
+    }
+  }
+  return true;
+}

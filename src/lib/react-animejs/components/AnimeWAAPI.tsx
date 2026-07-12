@@ -9,6 +9,7 @@ import {
   useRef,
 } from "react";
 import { useAnimeWAAPI } from "../hooks";
+import { shallowEqual } from "../core";
 import type {
   AnimationState,
   PlaybackControls,
@@ -87,8 +88,15 @@ export const AnimeWAAPI = forwardRef<AnimeWAAPIRef, AnimeWAAPIProps>(
       }
     }, [animationProps.enabled]);
 
+    // Notify on meaningful state changes. Shallow equality suppresses the
+    // reference-only updates produced on internal ticks where nothing
+    // observable changed.
+    const lastNotifiedStateRef = useRef<AnimationState>(state);
     useEffect(() => {
-      onStateChange?.(state);
+      if (!onStateChange) return;
+      if (shallowEqual(lastNotifiedStateRef.current, state)) return;
+      lastNotifiedStateRef.current = state;
+      onStateChange(state);
     }, [state, onStateChange]);
 
     if (!isValidElement(children)) {

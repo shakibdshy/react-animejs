@@ -19,4 +19,4 @@ export { parseAnimeOptions } from './props';
 export { extractAnimationState, buildCallbackConfig } from './state';
 export { createSafeCallback, cleanUndefinedValues } from './callbacks';
 export { mergeRefs } from './refs';
-export { depsChanged, isPlainObject, isFunction, safeJsonStringify } from './utilities';
+export { depsChanged, isPlainObject, isFunction, safeJsonStringify, shallowEqual } from './utilities';
