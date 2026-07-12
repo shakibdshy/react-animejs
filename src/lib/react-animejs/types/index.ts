@@ -134,3 +134,11 @@ export type {
   UseAnimeScrambleOptions,
   UseAnimeScrambleReturn,
 } from "./scramble-text";
+
+// Adapter types
+export type {
+  AnimeAdapterConfig,
+  AnimeAdapterProperty,
+  AnimeAdapterTarget,
+  AnimeAdapterInstance,
+} from "./adapter";

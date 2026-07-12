@@ -28,6 +28,8 @@ export type {
   UseAnimatableReturn,
 } from './hooks/use-animatable';
 export type { AnimeController } from './hooks/use-anime-controls';
+export { useAnimeAdapter } from './hooks/use-anime-adapter';
+export type { UseAnimeAdapterReturn } from './hooks/use-anime-adapter';
 
 // =============================================================================
 // Components
@@ -57,6 +59,8 @@ export { AnimeTimeline } from './components/AnimeTimeline';
 export type { AnimeTimelineProps, AnimeTimelineRef } from './components/AnimeTimeline';
 export { AnimeWAAPI } from './components/AnimeWAAPI';
 export type { AnimeWAAPIProps, AnimeWAAPIRef } from './components/AnimeWAAPI';
+export { AnimeAdapter } from './components/AnimeAdapter';
+export type { AnimeAdapterProps } from './components/AnimeAdapter';
 
 
 // =============================================================================
@@ -221,6 +225,12 @@ export type {
   UseAnimeScopeReturn,
   AnimeScopeContext,
   AnimeProviderProps,
+
+  // Adapter types
+  AnimeAdapterConfig,
+  AnimeAdapterProperty,
+  AnimeAdapterTarget,
+  AnimeAdapterInstance,
 } from './types';
 
 // =============================================================================
@@ -235,7 +245,14 @@ export {
   createAnimatable,
   createScope,
   createDraggable,
+  // Imperative factories that complement the declarative components above
+  // (<AnimeDraw>, <AnimeMotionPath>, <AnimeMorph>) for consumers who want the
+  // raw anime.js primitives without the React wrapper.
+  createDrawable,
+  createMotionPath,
+  createSpring,
   onScroll,
+  morphTo,
   ScrollObserver,
   scrollContainers,
   AutoLayout,
@@ -245,6 +262,9 @@ export {
   steps,
   irregular,
   stagger as animeStagger,
+  // `eases` is the full named-easing registry (46 entries); `easings` below is
+  // the curve-constructor set (8 entries). Both are kept for distinct uses.
+  eases,
   easings,
   svg,
   utils,
@@ -253,6 +273,13 @@ export {
   globals,
 } from 'animejs';
 
+// Text utilities (complement useAnimeScramble / SplitText component)
+export { split, splitText, TextSplitter } from 'animejs';
+
 export * as events from 'animejs/events';
 
 export { scrambleText } from 'animejs/text';
+
+// Adapter API (anime.js v4.5.0+) — raw imperative form for advanced use cases.
+// For the React-friendly version, use useAnimeAdapter / <AnimeAdapter> above.
+export { registerAdapter } from 'animejs/adapters';
