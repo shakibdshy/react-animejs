@@ -10,6 +10,7 @@ import { TiltCard } from './components/TiltCard';
 import { ImageRevealSlider } from './components/ImageRevealSlider';
 import { CursorTrackingPreview } from './components/CursorTrackingPreview';
 import { MacOSDock } from './components/MacOSDock';
+import { OrchestratedEaseReverse } from './components/OrchestratedEaseReverse';
 import { CodeModal } from './components/CodeModal';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
 // "View Code" modal always shows the real, current code.
@@ -20,6 +21,7 @@ import tiltCardSource from './components/TiltCard.tsx?raw';
 import imageRevealSource from './components/ImageRevealSlider.tsx?raw';
 import cursorTrackingSource from './components/CursorTrackingPreview.tsx?raw';
 import dockSource from './components/MacOSDock.tsx?raw';
+import easeReverseSource from './components/OrchestratedEaseReverse.tsx?raw';
 
 /** The set of blocks that can be shown in the code modal. */
 type CodeTarget = {
@@ -35,6 +37,7 @@ const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'image-reveal': { title: 'ImageRevealSlider.tsx', code: imageRevealSource },
   'cursor-tracking': { title: 'CursorTrackingPreview.tsx', code: cursorTrackingSource },
   'macos-dock': { title: 'MacOSDock.tsx', code: dockSource },
+  'orchestrated-easereverse': { title: 'OrchestratedEaseReverse.tsx', code: easeReverseSource },
 };
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -286,6 +289,23 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <MacOSDock />
+              </ErrorBoundary>
+            </section>
+
+            {/* Orchestrated easeReverse */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Orchestrated easeReverse · Exit Controls"
+                chip="useAnimeTimeline"
+                codeKey="orchestrated-easereverse"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                Toggle <code className="landing-font-mono text-landing-accent">easeReverse</code> to compare transitions:
+                ON executes a custom closing sequence with smooth, non-bouncy curves (<code className="landing-font-mono text-landing-accent">outQuad</code>) and adjustable speed, while OFF plays the entrance sequence in reverse (reversing the bouncy <code className="landing-font-mono text-landing-accent">outBack</code> animation).
+              </p>
+              <ErrorBoundary>
+                <OrchestratedEaseReverse />
               </ErrorBoundary>
             </section>
           </div>
