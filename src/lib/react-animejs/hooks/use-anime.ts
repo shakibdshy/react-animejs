@@ -643,8 +643,18 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
   ]);
 
   // ==========================================================================
-  // Dynamic frameRate update
+  // Dynamic playbackRate / frameRate updates
   // ==========================================================================
+
+  // Dynamically update speed on the existing animation instance.
+  // NOTE: anime.js v4 accepts `playbackRate` only as a constructor parameter;
+  // the live instance setter is `speed` (defined on Clock, the base of Timer).
+  useEffect(() => {
+    if (animationRef.current && playbackRate !== undefined) {
+      (animationRef.current as unknown as Record<string, unknown>).speed =
+        playbackRate;
+    }
+  }, [playbackRate]);
 
   useEffect(() => {
     if (animationRef.current && frameRate !== undefined) {
@@ -746,9 +756,10 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       },
       setPlaybackRate: (rate: number) => {
         if (animationRef.current) {
-          (
-            animationRef.current as unknown as Record<string, unknown>
-          ).playbackRate = rate;
+          // anime.js v4's live setter is `speed` (Clock), not `playbackRate`
+          // (which is accepted only as a constructor parameter).
+          (animationRef.current as unknown as Record<string, unknown>).speed =
+            rate;
         }
       },
       setFrameRate: (fps: number) => {

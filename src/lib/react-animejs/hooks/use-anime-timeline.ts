@@ -439,6 +439,28 @@ export function useAnimeTimeline(
   }, []);
 
   // ==========================================================================
+  // Dynamic playbackRate / frameRate updates
+  // ==========================================================================
+
+  // Dynamically update speed/fps on the existing timeline instance.
+  // NOTE: anime.js v4 accepts `playbackRate`/`frameRate` only as constructor
+  // parameters; the live instance setters are `speed` and `fps` (defined on
+  // Clock, the base of Timer, which Timeline extends).
+  useEffect(() => {
+    if (timelineRef.current && playbackRate !== undefined) {
+      (timelineRef.current as unknown as Record<string, unknown>).speed =
+        playbackRate;
+    }
+  }, [playbackRate]);
+
+  useEffect(() => {
+    if (timelineRef.current && frameRate !== undefined) {
+      (timelineRef.current as unknown as Record<string, unknown>).fps =
+        frameRate;
+    }
+  }, [frameRate]);
+
+  // ==========================================================================
   // Playback Controls
   // ==========================================================================
 
@@ -524,9 +546,10 @@ export function useAnimeTimeline(
       },
       setPlaybackRate: (rate: number) => {
         if (timelineRef.current) {
-          (
-            timelineRef.current as unknown as Record<string, unknown>
-          ).playbackRate = rate;
+          // anime.js v4's live setter is `speed` (Clock), not `playbackRate`
+          // (which is accepted only as a constructor parameter).
+          (timelineRef.current as unknown as Record<string, unknown>).speed =
+            rate;
           setTimelineState(extractAnimationState(timelineRef.current));
         }
       },
