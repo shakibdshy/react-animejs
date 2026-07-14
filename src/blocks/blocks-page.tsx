@@ -14,6 +14,7 @@ import { OrchestratedEaseReverse } from './components/OrchestratedEaseReverse';
 import { CodeModal } from './components/CodeModal';
 import { ScrubbedBentoGallery } from './components/ScrubbedBentoGallery';
 import { ScrollBatchGallery } from './components/ScrollBatchGallery';
+import { CanvasParticles } from './components/CanvasParticles';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
 // "View Code" modal always shows the real, current code.
 import cursorTrailSource from '@/demo/components/CursorTrailImagesDemo.tsx?raw';
@@ -26,6 +27,7 @@ import dockSource from './components/MacOSDock.tsx?raw';
 import easeReverseSource from './components/OrchestratedEaseReverse.tsx?raw';
 import scrubbedBentoSource from './components/ScrubbedBentoGallery.tsx?raw';
 import scrollBatchSource from './components/ScrollBatchGallery.tsx?raw';
+import canvasParticlesSource from './components/CanvasParticles.tsx?raw';
 
 /** The set of blocks that can be shown in the code modal. */
 type CodeTarget = {
@@ -44,6 +46,7 @@ const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'orchestrated-easereverse': { title: 'OrchestratedEaseReverse.tsx', code: easeReverseSource },
   'scrubbed-bento': { title: 'ScrubbedBentoGallery.tsx', code: scrubbedBentoSource },
   'scroll-batch': { title: 'ScrollBatchGallery.tsx', code: scrollBatchSource },
+  'canvas-particles': { title: 'CanvasParticles.tsx', code: canvasParticlesSource },
 };
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -355,6 +358,26 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <ScrollBatchGallery />
+              </ErrorBoundary>
+            </section>
+
+            {/* Canvas Particles — timeline-driven canvas renderer */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Canvas Particles · Timeline Renderer"
+                chip="AnimeTimeline + Canvas"
+                codeKey="canvas-particles"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                A canvas particle field driven by one{' '}
+                <code className="landing-font-mono text-landing-accent">AnimeTimeline</code>. Each
+                particle is a plain JavaScript target with function-based positions and staggered
+                timing; the timeline&rsquo;s update callback redraws the canvas, while the controls
+                toggle playback speed.
+              </p>
+              <ErrorBoundary>
+                <CanvasParticles />
               </ErrorBoundary>
             </section>
           </div>
