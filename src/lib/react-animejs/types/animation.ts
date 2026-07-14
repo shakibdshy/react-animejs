@@ -4,7 +4,7 @@
 
 import type { RefObject } from "react";
 import type React from "react";
-import type { ScrollObserver } from "animejs";
+import type { ScrollObserver, StaggerFunction } from "animejs";
 import type {
   AnimationCallbacks,
   AnimationState,
@@ -217,7 +217,13 @@ export interface StaggerOptions {
 /**
  * Options for useAnime hook
  */
-export type UseAnimeOptions = Omit<PlaybackSettings, "autoplay"> &
+export type UseAnimeOptions = Omit<PlaybackSettings, "autoplay" | "delay"> & {
+  /**
+   * Delay before the animation starts, or a native Anime.js stagger function
+   * that resolves a delay per target.
+   */
+  delay?: number | StaggerFunction<number>;
+} &
   AnimationCallbacks<JSAnimation> &
   TweenParameters &
   Partial<AnimatableProperties> & {

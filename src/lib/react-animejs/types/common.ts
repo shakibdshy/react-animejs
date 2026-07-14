@@ -3,6 +3,7 @@
  */
 
 import type { RefObject } from "react";
+import type { StaggerFunction } from "animejs";
 import type { Easing } from './easing';
 
 // =============================================================================
@@ -397,7 +398,8 @@ export type PropertyValue =
   | PropertyKeyframe
   | PropertyKeyframe[]
   | (string | number)[] // Keyframe values array (any length)
-  | ((target: Element, index: number, targets: Element[], prevTween?: unknown) => string | number);
+  | ((target: Element, index: number, targets: Element[], prevTween?: unknown) => string | number)
+  | StaggerFunction<string | number>;
 
 // =============================================================================
 // Utility Types
