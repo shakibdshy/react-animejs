@@ -30,6 +30,8 @@ export type {
 export type { AnimeController } from './hooks/use-anime-controls';
 export { useAnimeAdapter } from './hooks/use-anime-adapter';
 export type { UseAnimeAdapterReturn } from './hooks/use-anime-adapter';
+export { useSvgAnimation } from './hooks/use-anime-svg';
+export type { SvgComponentRef, SvgAnimationOptions } from './hooks/use-anime-svg';
 
 // =============================================================================
 // Components

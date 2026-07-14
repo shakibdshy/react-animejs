@@ -14,4 +14,6 @@ export { useAnimatable } from "./use-animatable";
 export { useAnimeScope } from "./use-anime-scope";
 export { useSplitText } from "./use-split-text";
 export { useAnimeScramble } from "./use-anime-scramble";
+export { useSvgAnimation } from "./use-anime-svg";
+export type { SvgComponentRef, SvgAnimationOptions } from "./use-anime-svg";
 export type { AnimeController } from "./use-anime-controls";

@@ -10,12 +10,8 @@ import {
 } from 'react';
 import { svg } from 'animejs';
 import type { AnimationState, PlaybackControls, UseAnimeOptions } from '../types';
-import {
-  mergeChildProps,
-  resolveSvgElement,
-  type SvgComponentRef,
-  useSvgAnimation,
-} from '../utils/svg-component-utils';
+import { mergeChildProps, resolveSvgElement } from '../utils/svg-component-utils';
+import { type SvgComponentRef, useSvgAnimation } from '../hooks/use-anime-svg';
 
 export interface AnimeMotionPathRef extends SvgComponentRef {
   controls: PlaybackControls;
