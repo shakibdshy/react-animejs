@@ -280,6 +280,10 @@ export {
 // Text utilities (complement useAnimeScramble / SplitText component)
 export { split, splitText, TextSplitter } from 'animejs';
 
+// SplitText component (declarative text splitting + animation)
+export { SplitText } from './components/SplitText';
+export type { SplitTextProps, SplitTextRef } from './components/SplitText';
+
 export * as events from 'animejs/events';
 
 export { scrambleText } from 'animejs/text';

@@ -17,6 +17,7 @@ import { ScrollBatchGallery } from './components/ScrollBatchGallery';
 import { CanvasParticles } from './components/CanvasParticles';
 import { CurveSwipe } from './components/CurveSwipe';
 import { DynamicShapeOverlays } from './components/DynamicShapeOverlays';
+import { HorizontalSplitText } from './components/HorizontalSplitText';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
 // "View Code" modal always shows the real, current code.
 import cursorTrailSource from '@/demo/components/CursorTrailImagesDemo.tsx?raw';
@@ -32,6 +33,7 @@ import scrollBatchSource from './components/ScrollBatchGallery.tsx?raw';
 import canvasParticlesSource from './components/CanvasParticles.tsx?raw';
 import curveSwipeSource from './components/CurveSwipe.tsx?raw';
 import dynamicShapeOverlaysSource from './components/DynamicShapeOverlays.tsx?raw';
+import horizontalSplitTextSource from './components/HorizontalSplitText.tsx?raw';
 
 /** The set of blocks that can be shown in the code modal. */
 type CodeTarget = {
@@ -53,6 +55,7 @@ const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'canvas-particles': { title: 'CanvasParticles.tsx', code: canvasParticlesSource },
   'curve-swipe': { title: 'CurveSwipe.tsx', code: curveSwipeSource },
   'dynamic-shape-overlays': { title: 'DynamicShapeOverlays.tsx', code: dynamicShapeOverlaysSource },
+  'horizontal-split-text': { title: 'HorizontalSplitText.tsx', code: horizontalSplitTextSource },
 };
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -425,6 +428,28 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <DynamicShapeOverlays />
+              </ErrorBoundary>
+            </section>
+
+            {/* Horizontal SplitText — nested-scroll char reveal */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Horizontal SplitText · Nested Scroll"
+                chip="SplitText + useAnimeOnScroll"
+                codeKey="horizontal-split-text"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                A pinned box scrubs a long line of{' '}
+                <code className="landing-font-mono text-landing-accent">SplitText</code> characters
+                sideways as you scroll vertically. Each char settles in with a random vertical offset +
+                rotation tied to its <em>horizontal</em> position on screen — GSAP&rsquo;s{' '}
+                <code className="landing-font-mono text-landing-accent">containerAnimation</code> trick,
+                replicated with one <code className="landing-font-mono text-landing-accent">useAnimeOnScroll</code>{' '}
+                scrub driving a per-frame <code className="landing-font-mono">back.out</code> ease.
+              </p>
+              <ErrorBoundary>
+                <HorizontalSplitText />
               </ErrorBoundary>
             </section>
           </div>
