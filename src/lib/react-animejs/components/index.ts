@@ -4,6 +4,8 @@
 
 export { Anime } from './Anime';
 export type { AnimeProps } from './Anime';
+export { AnimeBatch } from './AnimeBatch';
+export type { AnimeBatchAnimation, AnimeBatchProps } from './AnimeBatch';
 export { AnimeMorph } from './AnimeMorph';
 export type { AnimeMorphProps, AnimeMorphRef } from './AnimeMorph';
 export { AnimeDraw } from './AnimeDraw';

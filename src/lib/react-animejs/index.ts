@@ -38,6 +38,8 @@ export type { UseAnimeAdapterReturn } from './hooks/use-anime-adapter';
 export { AnimeProvider } from './core/scope-context';
 export { Anime } from './components/Anime';
 export type { AnimeProps } from './components/Anime';
+export { AnimeBatch } from './components/AnimeBatch';
+export type { AnimeBatchAnimation, AnimeBatchProps } from './components/AnimeBatch';
 export { AnimeMorph } from './components/AnimeMorph';
 export type { AnimeMorphProps, AnimeMorphRef } from './components/AnimeMorph';
 export { AnimeDraw } from './components/AnimeDraw';
