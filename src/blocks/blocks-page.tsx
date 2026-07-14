@@ -15,6 +15,7 @@ import { CodeModal } from './components/CodeModal';
 import { ScrubbedBentoGallery } from './components/ScrubbedBentoGallery';
 import { ScrollBatchGallery } from './components/ScrollBatchGallery';
 import { CanvasParticles } from './components/CanvasParticles';
+import { CurveSwipe } from './components/CurveSwipe';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
 // "View Code" modal always shows the real, current code.
 import cursorTrailSource from '@/demo/components/CursorTrailImagesDemo.tsx?raw';
@@ -28,6 +29,7 @@ import easeReverseSource from './components/OrchestratedEaseReverse.tsx?raw';
 import scrubbedBentoSource from './components/ScrubbedBentoGallery.tsx?raw';
 import scrollBatchSource from './components/ScrollBatchGallery.tsx?raw';
 import canvasParticlesSource from './components/CanvasParticles.tsx?raw';
+import curveSwipeSource from './components/CurveSwipe.tsx?raw';
 
 /** The set of blocks that can be shown in the code modal. */
 type CodeTarget = {
@@ -47,6 +49,7 @@ const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'scrubbed-bento': { title: 'ScrubbedBentoGallery.tsx', code: scrubbedBentoSource },
   'scroll-batch': { title: 'ScrollBatchGallery.tsx', code: scrollBatchSource },
   'canvas-particles': { title: 'CanvasParticles.tsx', code: canvasParticlesSource },
+  'curve-swipe': { title: 'CurveSwipe.tsx', code: curveSwipeSource },
 };
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -378,6 +381,25 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <CanvasParticles />
+              </ErrorBoundary>
+            </section>
+
+            {/* Curve Swipe — SVG path morph */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Curve Swipe · SVG Morph"
+                chip="AnimeTimeline · SVG path"
+                codeKey="curve-swipe"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                Click the stage to raise and lower an SVG curve. Two sequential{' '}
+                <code className="landing-font-mono text-landing-accent">d</code> path morphs are
+                composed in <code className="landing-font-mono text-landing-accent">AnimeTimeline</code>,
+                then played forward or reversed from the same timeline.
+              </p>
+              <ErrorBoundary>
+                <CurveSwipe />
               </ErrorBoundary>
             </section>
           </div>

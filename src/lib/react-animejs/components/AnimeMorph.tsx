@@ -19,7 +19,8 @@ export interface AnimeMorphProps extends Omit<
   'targets' | 'selector' | 'd' | 'points'
 > {
   children: ReactElement;
-  to?: string | MorphableShape | RefObject<MorphableShape | null>;
+  /** A single destination path or sequential destination paths. */
+  to?: string | string[] | MorphableShape | RefObject<MorphableShape | null>;
   target?: MorphableShape | RefObject<MorphableShape | null>;
   precision?: number;
   attribute?: 'd' | 'points';
@@ -63,7 +64,7 @@ export const AnimeMorph = forwardRef<AnimeMorphRef, AnimeMorphProps>(function An
     autoplay,
     deps,
     specificOptions: {
-      to: typeof to === 'string' ? to : null, // only stringify strings safely
+      to: typeof to === 'string' || Array.isArray(to) ? to : null,
       precision,
       attribute,
     },
@@ -84,13 +85,14 @@ export const AnimeMorph = forwardRef<AnimeMorphRef, AnimeMorphProps>(function An
     forwardedRef: ref,
     createConfig: (source) => {
       const morphTarget = resolveSvgElement(to ?? target);
-      if (!morphTarget && typeof to !== 'string') return null;
+      if (!morphTarget && typeof to !== 'string' && !Array.isArray(to)) return null;
 
       const morphAttribute =
         attribute ?? (source.tagName.toLowerCase() === 'path' ? 'd' : 'points');
 
-      const morphValue =
-        typeof to === 'string'
+      const morphValue = Array.isArray(to)
+        ? [getCurrentSvgAttribute(source as MorphableShape, morphAttribute), ...to]
+        : typeof to === 'string'
           ? [getCurrentSvgAttribute(source as MorphableShape, morphAttribute), to]
           : svg.morphTo(morphTarget as MorphableShape, precision);
 
