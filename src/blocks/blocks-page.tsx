@@ -16,6 +16,7 @@ import { ScrubbedBentoGallery } from './components/ScrubbedBentoGallery';
 import { ScrollBatchGallery } from './components/ScrollBatchGallery';
 import { CanvasParticles } from './components/CanvasParticles';
 import { CurveSwipe } from './components/CurveSwipe';
+import { DynamicShapeOverlays } from './components/DynamicShapeOverlays';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
 // "View Code" modal always shows the real, current code.
 import cursorTrailSource from '@/demo/components/CursorTrailImagesDemo.tsx?raw';
@@ -30,6 +31,7 @@ import scrubbedBentoSource from './components/ScrubbedBentoGallery.tsx?raw';
 import scrollBatchSource from './components/ScrollBatchGallery.tsx?raw';
 import canvasParticlesSource from './components/CanvasParticles.tsx?raw';
 import curveSwipeSource from './components/CurveSwipe.tsx?raw';
+import dynamicShapeOverlaysSource from './components/DynamicShapeOverlays.tsx?raw';
 
 /** The set of blocks that can be shown in the code modal. */
 type CodeTarget = {
@@ -50,6 +52,7 @@ const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'scroll-batch': { title: 'ScrollBatchGallery.tsx', code: scrollBatchSource },
   'canvas-particles': { title: 'CanvasParticles.tsx', code: canvasParticlesSource },
   'curve-swipe': { title: 'CurveSwipe.tsx', code: curveSwipeSource },
+  'dynamic-shape-overlays': { title: 'DynamicShapeOverlays.tsx', code: dynamicShapeOverlaysSource },
 };
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -400,6 +403,28 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <CurveSwipe />
+              </ErrorBoundary>
+            </section>
+
+            {/* Dynamic Shape Overlays — cascading SVG path morphs */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Dynamic Shape Overlays · Cascade Morph"
+                chip="AnimeMorph · SVG path"
+                codeKey="dynamic-shape-overlays"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                Click the stage to cascade-cover it. Four stacked SVG layers each morph their{' '}
+                <code className="landing-font-mono text-landing-accent">d</code> attribute through a
+                keyframe sequence (flat → curve → full cover) via one{' '}
+                <code className="landing-font-mono text-landing-accent">AnimeMorph</code> per layer;
+                an incremental stagger on <code className="landing-font-mono">play()</code>/
+                <code className="landing-font-mono">reverse()</code> makes the reveal read as a
+                travelling wave. A port of the codrops &ldquo;Dynamic Shape Overlays&rdquo;.
+              </p>
+              <ErrorBoundary>
+                <DynamicShapeOverlays />
               </ErrorBoundary>
             </section>
           </div>
