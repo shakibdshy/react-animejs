@@ -9,7 +9,7 @@
  * by computing every char's screen-X from the single scroll progress and easing
  * it to rest with a `back.out` curve (anime.js `utils` + `SplitText`).
  */
-import { memo, useCallback, useEffect, useRef } from 'react';
+import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { SplitText, useAnimeOnScroll, utils } from '@/lib/react-animejs';
 import { SplitTextRef } from '@/lib/react-animejs/components';
 
@@ -37,6 +37,10 @@ export const HorizontalSplitText = memo(function HorizontalSplitText({
   const boxRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const splitRef = useRef<SplitTextRef>(null);
+  // Gate the observer creation until after layout so both the scroll box and
+  // the tall track are guaranteed to be in the DOM. Without this, anime.js can
+  // call `refresh()` on a null target/container and throw.
+  const [ready, setReady] = useState(false);
 
   // Per-char baseline screen-X (relative to the stage) captured at translate 0,
   // plus a stable random (y, rotation) assigned once per char.
@@ -46,12 +50,20 @@ export const HorizontalSplitText = memo(function HorizontalSplitText({
 
   // Master scrub: the tall track travels through the box; progress 0→1 drives
   // the horizontal translate. Scoped to the box so the page scroll is untouched.
+  // `enabled: ready` prevents the observer from being created until the layout
+  // effect has confirmed the scroll box and track are mounted.
   const { ref: trackRef, state } = useAnimeOnScroll<HTMLDivElement, HTMLDivElement>({
     container: boxRef,
     enter: { target: 'top', container: 'top' },
     leave: { target: 'bottom', container: 'bottom' },
+    enabled: ready,
     onUpdate: (observer) => applyFrame(observer.progress ?? 0),
   });
+
+  // Confirm DOM nodes exist before allowing the observer to instantiate.
+  useLayoutEffect(() => {
+    setReady(true);
+  }, []);
 
   const handleReady = useCallback(() => {
     const split = splitRef.current?.split;

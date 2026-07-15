@@ -18,6 +18,7 @@ import { CanvasParticles } from './components/CanvasParticles';
 import { CurveSwipe } from './components/CurveSwipe';
 import { DynamicShapeOverlays } from './components/DynamicShapeOverlays';
 import { HorizontalSplitText } from './components/HorizontalSplitText';
+import { GridFlipModal } from './components/GridFlipModal';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
 // "View Code" modal always shows the real, current code.
 import cursorTrailSource from '@/demo/components/CursorTrailImagesDemo.tsx?raw';
@@ -185,6 +186,28 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <CursorTrailImagesDemo />
+              </ErrorBoundary>
+            </section>
+
+            {/* Grid Flip Modal — FLIP grid tile into modal */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Grid Flip Modal · Tile to Modal"
+                chip="AnimeLayout · createLayout"
+                codeKey="grid-flip-modal"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                Click a tile and it flies into a centered modal; click again to send it back. The real{' '}
+                DOM node is reparented into a <code className="landing-font-mono">&lt;dialog&gt;</code>{' '}
+                inside a single <code className="landing-font-mono text-landing-accent">AnimeLayout</code>{' '}
+                root (with <code className="landing-font-mono">children:&apos;*&apos;</code>), so anime.js&rsquo;s
+                layout system correlates the old grid position with the new modal position via a shared{' '}
+                <code className="landing-font-mono text-landing-accent">data-layout-id</code> and FLIP-animates
+                the size + position change on an <code className="landing-font-mono">inOutQuad</code> curve.
+              </p>
+              <ErrorBoundary>
+                <GridFlipModal />
               </ErrorBoundary>
             </section>
 

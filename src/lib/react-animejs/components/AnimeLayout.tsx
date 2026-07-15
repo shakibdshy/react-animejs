@@ -33,9 +33,11 @@ import { animate } from "animejs";
 import { useAnimeLayout } from "../hooks";
 import { shallowEqual } from "../core";
 import type {
+  AnimationTarget,
   AutoLayout,
   LayoutAnimationParams,
   UseAnimeLayoutControls,
+  UseAnimeLayoutOptions,
 } from "../types";
 import type { AnimationState } from "../types/common";
 import type { Timeline } from "../types/timeline";
@@ -116,6 +118,20 @@ export interface AnimeLayoutProps
   extends AnimeLayoutStateParams, AnimeLayoutCallbacks {
   /** Child elements to animate */
   children: ReactNode;
+
+  /**
+   * External element to use as the anime.js layout root instead of the
+   * component's own wrapper element.
+   *
+   * This enables the "modal dialog" pattern where the layout root (e.g. a
+   * dialog) is a different element from the container that renders the
+   * children (e.g. a grid). anime.js correlates elements inside and outside
+   * the root via matching `data-layout-id` attributes.
+   *
+   * Accepts a React ref, a DOM element, or a CSS selector string — same
+   * types as useAnimeLayout's `root` option.
+   */
+  root?: AnimationTarget;
 
   /** CSS selector for children to animate (default: '.anime-layout-item') */
   childrenSelector?: string;
@@ -382,6 +398,7 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
   function AnimeLayout(
     {
       children,
+      root: externalRoot,
       childrenSelector,
       mode = "manual",
       enabled = true,
@@ -419,7 +436,12 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
     const prevChildrenRef = useRef<ReactNode>(null);
     const readyNotifiedRef = useRef(false);
 
-    // Use the layout hook
+    // Use the layout hook. enterFrom / leaveTo / swapAt are passed to the
+    // constructor (not merged per-call) because anime.js already merges
+    // per-call values with constructor defaults inside animate()
+    // (mergeObjects(params.enterFrom || {}, this.enterFromParams)). Passing
+    // them here also lets the constructor add their CSS property names to the
+    // tracked `properties` set, which the per-call approach misses.
     const {
       ref: rootRef,
       controls,
@@ -433,6 +455,11 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
       swapping,
       animating,
     } = useAnimeLayout<HTMLDivElement>({
+      // When an external root is provided, the layout is created on that
+      // element instead of the wrapper div. This enables patterns like the
+      // modal dialog where the layout root (dialog) is different from the
+      // container that renders the React children (grid).
+      ...(externalRoot ? { root: externalRoot } : {}),
       children: childrenSelector || ".anime-layout-item",
       duration,
       ease,
@@ -441,6 +468,16 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
       autoplay,
       enabled,
       deps,
+      // States are part of AutoLayoutParams — serialized into the layout, used
+      // as defaults by every .animate()/.update() call.
+      enterFrom: enterFrom as UseAnimeLayoutOptions["enterFrom"],
+      leaveTo: leaveTo as UseAnimeLayoutOptions["leaveTo"],
+      swapAt: swapAt as UseAnimeLayoutOptions["swapAt"],
+      // Callbacks are stripped from the serialized params by the hook and held
+      // in a ref (latest identity), so passing inline closures here is safe.
+      // Cast through `unknown`-typed fn because anime.js's TickableCallbacks
+      // type is an intersection of (self: Timer) => any & (self: Timeline) =>
+      // any, which a plain (tl: Timeline) => void doesn't satisfy structurally.
       onBegin: onBegin as ((instance: unknown) => void) | undefined,
       onComplete: onComplete as ((instance: unknown) => void) | undefined,
       onUpdate: onUpdate as ((instance: unknown) => void) | undefined,
@@ -452,52 +489,13 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
       onPause: onPause as ((instance: unknown) => void) | undefined,
     });
 
-    // Build animation params with states
-    const buildAnimationParams = useCallback(
-      (overrides?: LayoutAnimationParams): LayoutAnimationParams => {
-        const params: LayoutAnimationParams = { ...overrides };
-
-        if (enterFrom && !params.enterFrom) {
-          params.enterFrom = enterFrom as LayoutAnimationParams["enterFrom"];
-        }
-        if (leaveTo && !params.leaveTo) {
-          params.leaveTo = leaveTo as LayoutAnimationParams["leaveTo"];
-        }
-        if (swapAt && !params.swapAt) {
-          params.swapAt = swapAt as LayoutAnimationParams["swapAt"];
-        }
-
-        return params;
-      },
-      [enterFrom, leaveTo, swapAt],
-    );
-
-    // Extended controls with state params
-    const extendedUpdate = useCallback(
-      (
-        callback: (layout: AutoLayout) => void,
-        params?: LayoutAnimationParams,
-      ) => {
-        return controls.update(callback, buildAnimationParams(params));
-      },
-      [controls, buildAnimationParams],
-    );
-
-    const extendedAnimate = useCallback(
-      (params?: LayoutAnimationParams) => {
-        return controls.animate(buildAnimationParams(params));
-      },
-      [controls, buildAnimationParams],
-    );
-
-    // Refresh method - force animation with current state
+    // Refresh method - force animation with current state (no DOM changes,
+    // just re-calculate positions).
     const refresh = useCallback(
       (params?: LayoutAnimationParams) => {
-        return controls.update(() => {
-          // No DOM changes, just re-calculate positions
-        }, buildAnimationParams(params));
+        return controls.update(() => {}, params);
       },
-      [controls, buildAnimationParams],
+      [controls],
     );
 
     // Get element method
@@ -507,8 +505,8 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
     const refValue: AnimeLayoutRef = useMemo(
       () => ({
         record: controls.record,
-        animate: extendedAnimate,
-        update: extendedUpdate,
+        animate: controls.animate,
+        update: controls.update,
         revert: controls.revert,
         state,
         isReady,
@@ -524,8 +522,6 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
       }),
       [
         controls,
-        extendedAnimate,
-        extendedUpdate,
         state,
         isReady,
         isAnimating,
@@ -588,13 +584,18 @@ export const AnimeLayout = forwardRef<AnimeLayoutRef, AnimeLayoutProps>(
         // Clear any leftover transform from a prior FLIP play so the rect we
         // record reflects the element's true committed position. anime.js may
         // write either `transform` or the individual `translate` property.
-        el.style.transform = "";
-        el.style.translate = "";
+        // Only do this in auto mode — in manual mode anime.js's own layout
+        // system manages transforms, and clearing them here would destroy a
+        // running layout animation if this effect re-fires.
+        if (mode === "auto") {
+          el.style.transform = "";
+          el.style.translate = "";
+        }
         const r = el.getBoundingClientRect();
         baseline.set(id, { x: r.x, y: r.y });
       });
       return baseline;
-    }, []);
+    }, [mode]);
 
     // Auto-animate on children changes (when mode is 'auto').
     //
