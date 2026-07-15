@@ -35,6 +35,7 @@ import canvasParticlesSource from './components/CanvasParticles.tsx?raw';
 import curveSwipeSource from './components/CurveSwipe.tsx?raw';
 import dynamicShapeOverlaysSource from './components/DynamicShapeOverlays.tsx?raw';
 import horizontalSplitTextSource from './components/HorizontalSplitText.tsx?raw';
+import gridFlipModalSource from './components/GridFlipModal.tsx?raw';
 
 /** The set of blocks that can be shown in the code modal. */
 type CodeTarget = {
@@ -44,6 +45,7 @@ type CodeTarget = {
 
 const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'cursor-trail': { title: 'CursorTrailImagesDemo.tsx', code: cursorTrailSource },
+  'grid-flip-modal': { title: 'GridFlipModal.tsx', code: gridFlipModalSource },
   'add-to-card': { title: 'AddToCard.tsx', code: addToCardSource },
   'pointer-grid': { title: 'PointerCollisionGrid.tsx', code: pointerGridSource },
   'tilt-card': { title: 'TiltCard.tsx', code: tiltCardSource },
