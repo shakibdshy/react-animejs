@@ -15,6 +15,7 @@ import { memo, useCallback, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { AnimeLayout, AnimeLayoutItem } from '@/lib/react-animejs';
 import type { AnimeLayoutRef } from '@/lib/react-animejs';
+import { cn } from '@/lib/utils';
 
 /** Six portrait sources (stable seeds so each tile is a distinct image). */
 const img = (seed: string, w = 600, h = 750) => `https://picsum.photos/seed/${seed}/${w}/${h}`;
@@ -56,17 +57,11 @@ export const GridFlipModal = memo(function GridFlipModal({
 
   return (
     <div
-      className={`relative w-full overflow-hidden rounded-2xl border border-landing-border/60 bg-landing-bg text-landing-fg ${className}`}
+      className={cn(
+        'py-10 relative w-full overflow-hidden rounded-2xl border border-landing-border/60 bg-landing-bg text-landing-fg',
+        className
+      )}
     >
-      <div className="p-6">
-        <p className="landing-font-mono text-[10px] tracking-[0.25em] uppercase text-landing-accent">
-          Grid Flip · Modal
-        </p>
-        <h3 className="landing-font-display mt-1 text-base font-bold text-landing-fg">
-          Click a tile · it flips into the modal
-        </h3>
-      </div>
-
       <AnimeLayout
         ref={layoutRef}
         as="div"
@@ -74,76 +69,64 @@ export const GridFlipModal = memo(function GridFlipModal({
         ease="inOutQuad"
         className="relative w-full"
       >
-        {/* Grid Container (Flex/Wrap, matched to CodePen layout) */}
+        {/* Grid Container */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-6 pb-10 max-w-5xl mx-auto">
           {TILES.map((tile, i) => {
             const isExpanded = activeIdx === i;
             return (
               <div
                 key={i}
-                className="border-2 border-dashed border-landing-border/45 rounded-2xl flex items-center justify-center relative"
+                className={cn(
+                  'border-2 border-dashed border-landing-border/45 rounded-2xl flex items-center justify-center aspect-4/3 sm:aspect-square',
+                  !isExpanded && 'relative'
+                )}
               >
                 {/* 
-                  Only render the active animatable tile in the grid if it's NOT expanded.
-                  When expanded, this slot contains only the dashed placeholder boundary.
+                  The tile is always rendered and never unmounted.
+                  - If expanded: it transitions to absolute centering relative to the wrapper.
+                  - If normal: it sits inside the dashed box.
                 */}
-                {!isExpanded && (
-                  <AnimeLayoutItem
-                    layoutId={`tile-${i}`}
-                    as="button"
-                    className="w-full h-full rounded-xl overflow-hidden cursor-pointer bg-landing-surface border border-landing-border shadow-md focus:outline-none"
-                    onClick={() => toggleTile(i)}
+                <AnimeLayoutItem
+                  layoutId={`tile-${i}`}
+                  as="button"
+                  className={
+                    isExpanded
+                      ? 'absolute inset-0 m-auto h-[85%] w-auto aspect-4/5 rounded-2xl overflow-hidden border border-white/15 shadow-2xl cursor-pointer focus:outline-none z-50 transition-none'
+                      : 'w-full h-full rounded-xl overflow-hidden cursor-pointer bg-landing-surface border border-landing-border shadow-md focus:outline-none transition-none'
+                  }
+                  onClick={() => toggleTile(isExpanded ? null : i)}
+                >
+                  <img
+                    src={tile.src}
+                    alt=""
+                    loading="lazy"
+                    draggable={false}
+                    className="h-full w-full object-cover transition-none"
+                  />
+                  <span
+                    className={`landing-font-mono absolute uppercase text-white/90 drop-shadow transition-all duration-300 ${
+                      isExpanded
+                        ? 'bottom-6 left-6 text-xs tracking-[0.2em]'
+                        : 'bottom-3 left-3 text-[9px] tracking-[0.2em]'
+                    }`}
                   >
-                    <img
-                      src={tile.src}
-                      alt=""
-                      loading="lazy"
-                      draggable={false}
-                      className="h-full w-full object-cover transition-none"
-                    />
-                    <span className="landing-font-mono absolute bottom-3 left-3 text-[9px] tracking-[0.2em] uppercase text-white/90 drop-shadow">
-                      {tile.label}
-                    </span>
-                  </AnimeLayoutItem>
-                )}
+                    {tile.label}
+                  </span>
+                </AnimeLayoutItem>
               </div>
             );
           })}
         </div>
 
-        {/* Modal Overlay & Centered Content */}
+        {/* Modal Backdrop Overlay */}
         <div
-          className={`fixed inset-0 z-1000 flex items-center justify-center transition-all duration-300 ${
+          className={`absolute inset-0 z-45 transition-all duration-300 ${
             activeIdx !== null
               ? 'opacity-100 pointer-events-auto backdrop-blur-sm bg-black/65'
               : 'opacity-0 pointer-events-none'
           }`}
           onClick={() => toggleTile(null)}
-        >
-          {activeIdx !== null && (
-            <div
-              className="h-[80vh] w-auto aspect-4/5 max-w-[90vw] relative"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <AnimeLayoutItem
-                layoutId={`tile-${activeIdx}`}
-                as="button"
-                className="w-full h-full rounded-2xl overflow-hidden border border-white/15 shadow-2xl cursor-pointer focus:outline-none"
-                onClick={() => toggleTile(null)}
-              >
-                <img
-                  src={TILES[activeIdx].src}
-                  alt=""
-                  draggable={false}
-                  className="h-full w-full object-cover transition-none"
-                />
-                <span className="landing-font-mono absolute bottom-6 left-6 text-xs tracking-[0.2em] uppercase text-white/90 drop-shadow">
-                  {TILES[activeIdx].label}
-                </span>
-              </AnimeLayoutItem>
-            </div>
-          )}
-        </div>
+        />
       </AnimeLayout>
     </div>
   );
