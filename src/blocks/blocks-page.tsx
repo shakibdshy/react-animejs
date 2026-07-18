@@ -397,11 +397,11 @@ export const BlocksPage = memo(function BlocksPage() {
               </ErrorBoundary>
             </section>
 
-            {/* Layered pinning with infinite looping — sticky panel stack */}
+            {/* Layered pinning — finite sticky panel stack */}
             <section className="mb-16">
               <SectionHeader
-                title="Layered Pinning · Infinite Loop"
-                chip="useAnimeOnScroll + sticky + snap"
+                title="Layered Pinning · Finite Stack"
+                chip="<AnimeScroll> + sticky"
                 codeKey="layered-pinning-loop"
                 onViewCode={openCode}
               />

@@ -40,6 +40,8 @@ export type { SvgComponentRef, SvgAnimationOptions } from './hooks/use-anime-svg
 export { AnimeProvider } from './core/scope-context';
 export { Anime } from './components/Anime';
 export type { AnimeProps } from './components/Anime';
+export { AnimeScroll } from './components/AnimeScroll';
+export type { AnimeScrollProps, AnimeScrollRef } from './components/AnimeScroll';
 export { AnimeBatch } from './components/AnimeBatch';
 export type { AnimeBatchAnimation, AnimeBatchProps } from './components/AnimeBatch';
 export { AnimeMorph } from './components/AnimeMorph';
