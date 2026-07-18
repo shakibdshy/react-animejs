@@ -20,6 +20,7 @@ import { DynamicShapeOverlays } from './components/DynamicShapeOverlays';
 import { HorizontalSplitText } from './components/HorizontalSplitText';
 import { GridFlipModal } from './components/GridFlipModal';
 import { ScrollImageSequence } from './components/ScrollImageSequence';
+import { ScrollImageComparison } from './components/ScrollImageComparison';
 import { LayeredPinningLoop } from './components/LayeredPinningLoop';
 import { ScrollShader } from './components/ScrollShader';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
@@ -40,6 +41,7 @@ import dynamicShapeOverlaysSource from './components/DynamicShapeOverlays.tsx?ra
 import horizontalSplitTextSource from './components/HorizontalSplitText.tsx?raw';
 import gridFlipModalSource from './components/GridFlipModal.tsx?raw';
 import scrollImageSequenceSource from './components/ScrollImageSequence.tsx?raw';
+import scrollImageComparisonSource from './components/ScrollImageComparison.tsx?raw';
 import layeredPinningLoopSource from './components/LayeredPinningLoop.tsx?raw';
 import scrollShaderSource from './components/ScrollShader.tsx?raw';
 
@@ -66,6 +68,10 @@ const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'dynamic-shape-overlays': { title: 'DynamicShapeOverlays.tsx', code: dynamicShapeOverlaysSource },
   'horizontal-split-text': { title: 'HorizontalSplitText.tsx', code: horizontalSplitTextSource },
   'scroll-image-sequence': { title: 'ScrollImageSequence.tsx', code: scrollImageSequenceSource },
+  'scroll-image-comparison': {
+    title: 'ScrollImageComparison.tsx',
+    code: scrollImageComparisonSource,
+  },
   'layered-pinning-loop': { title: 'LayeredPinningLoop.tsx', code: layeredPinningLoopSource },
   'scroll-shader': { title: 'ScrollShader.tsx', code: scrollShaderSource },
 };
@@ -412,6 +418,24 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <ScrollImageSequence />
+              </ErrorBoundary>
+            </section>
+
+            {/* Scroll comparison — pinned before/after reveal */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Image Comparison · Scroll Reveal"
+                chip="<AnimeScroll> + opposing transforms"
+                codeKey="scroll-image-comparison"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                Scroll through a pinned before/after frame. The after panel moves in from the right
+                while its image counter-moves from the left. AnimeScroll scopes progress to the
+                fixed comparison panel, with no page-height expansion or infinite loop.
+              </p>
+              <ErrorBoundary>
+                <ScrollImageComparison />
               </ErrorBoundary>
             </section>
 
