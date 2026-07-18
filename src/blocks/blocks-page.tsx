@@ -20,6 +20,7 @@ import { DynamicShapeOverlays } from './components/DynamicShapeOverlays';
 import { HorizontalSplitText } from './components/HorizontalSplitText';
 import { GridFlipModal } from './components/GridFlipModal';
 import { ScrollImageSequence } from './components/ScrollImageSequence';
+import { LayeredPinningLoop } from './components/LayeredPinningLoop';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
 // "View Code" modal always shows the real, current code.
 import cursorTrailSource from '@/demo/components/CursorTrailImagesDemo.tsx?raw';
@@ -38,6 +39,7 @@ import dynamicShapeOverlaysSource from './components/DynamicShapeOverlays.tsx?ra
 import horizontalSplitTextSource from './components/HorizontalSplitText.tsx?raw';
 import gridFlipModalSource from './components/GridFlipModal.tsx?raw';
 import scrollImageSequenceSource from './components/ScrollImageSequence.tsx?raw';
+import layeredPinningLoopSource from './components/LayeredPinningLoop.tsx?raw';
 
 /** The set of blocks that can be shown in the code modal. */
 type CodeTarget = {
@@ -62,6 +64,7 @@ const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'dynamic-shape-overlays': { title: 'DynamicShapeOverlays.tsx', code: dynamicShapeOverlaysSource },
   'horizontal-split-text': { title: 'HorizontalSplitText.tsx', code: horizontalSplitTextSource },
   'scroll-image-sequence': { title: 'ScrollImageSequence.tsx', code: scrollImageSequenceSource },
+  'layered-pinning-loop': { title: 'LayeredPinningLoop.tsx', code: layeredPinningLoopSource },
 };
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -391,6 +394,22 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <ScrollImageSequence />
+              </ErrorBoundary>
+            </section>
+
+            {/* Layered pinning with infinite looping — sticky panel stack */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Layered Pinning · Infinite Loop"
+                chip="useAnimeOnScroll + sticky + snap"
+                codeKey="layered-pinning-loop"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                A self-contained panel stack inspired by GreenSock&rsquo;s layered pinning pattern. Each panel pins at the top of the stage while the next panel layers over it in one continuous, finite scroll sequence.
+              </p>
+              <ErrorBoundary>
+                <LayeredPinningLoop />
               </ErrorBoundary>
             </section>
 
