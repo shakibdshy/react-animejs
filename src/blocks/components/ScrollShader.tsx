@@ -302,7 +302,7 @@ const ShaderFrame = memo(function ShaderFrame({
   return (
     <article
       ref={frameRef}
-      className="group relative mx-auto aspect-[16/10] w-[88%] overflow-hidden rounded-[1.4rem] border border-white/10 bg-[#101414] shadow-[0_22px_70px_rgba(0,0,0,0.34)]"
+      className="group relative mx-auto aspect-16/10 w-[88%] overflow-hidden rounded-[1.4rem] border border-white/10 bg-[#101414] shadow-[0_22px_70px_rgba(0,0,0,0.34)]"
     >
       <img src={src} alt="" className="absolute inset-0 h-full w-full object-cover" />
       <canvas
@@ -310,7 +310,7 @@ const ShaderFrame = memo(function ShaderFrame({
         aria-hidden="true"
         className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${status === 'ready' ? 'opacity-100' : 'opacity-0'}`}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/5 to-transparent" />
       <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-4 sm:inset-x-7 sm:bottom-7">
         <div>
           <span
