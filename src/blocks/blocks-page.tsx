@@ -19,6 +19,7 @@ import { CurveSwipe } from './components/CurveSwipe';
 import { DynamicShapeOverlays } from './components/DynamicShapeOverlays';
 import { HorizontalSplitText } from './components/HorizontalSplitText';
 import { GridFlipModal } from './components/GridFlipModal';
+import { ScrollImageSequence } from './components/ScrollImageSequence';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
 // "View Code" modal always shows the real, current code.
 import cursorTrailSource from '@/demo/components/CursorTrailImagesDemo.tsx?raw';
@@ -36,6 +37,7 @@ import curveSwipeSource from './components/CurveSwipe.tsx?raw';
 import dynamicShapeOverlaysSource from './components/DynamicShapeOverlays.tsx?raw';
 import horizontalSplitTextSource from './components/HorizontalSplitText.tsx?raw';
 import gridFlipModalSource from './components/GridFlipModal.tsx?raw';
+import scrollImageSequenceSource from './components/ScrollImageSequence.tsx?raw';
 
 /** The set of blocks that can be shown in the code modal. */
 type CodeTarget = {
@@ -59,6 +61,7 @@ const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'curve-swipe': { title: 'CurveSwipe.tsx', code: curveSwipeSource },
   'dynamic-shape-overlays': { title: 'DynamicShapeOverlays.tsx', code: dynamicShapeOverlaysSource },
   'horizontal-split-text': { title: 'HorizontalSplitText.tsx', code: horizontalSplitTextSource },
+  'scroll-image-sequence': { title: 'ScrollImageSequence.tsx', code: scrollImageSequenceSource },
 };
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -372,6 +375,22 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <ScrubbedBentoGallery />
+              </ErrorBoundary>
+            </section>
+
+            {/* Scroll-based Image Sequence — Apple AirPods Pro style image sequence */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Scroll-based Image Sequence · Apple Style"
+                chip="useAnimeOnScroll + useAnime"
+                codeKey="scroll-image-sequence"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                An Apple-style scroll-driven canvas image sequence preloading 147 frames. Syncs scroll progress to the active frame index using a plain object playhead, or switches to autoplay mode with loops and adjustable speeds. Storytelling overlays fade in and out at specific frames.
+              </p>
+              <ErrorBoundary>
+                <ScrollImageSequence />
               </ErrorBoundary>
             </section>
 
