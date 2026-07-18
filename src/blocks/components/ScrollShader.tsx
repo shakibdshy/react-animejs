@@ -228,6 +228,8 @@ const ShaderFrame = memo(function ShaderFrame({
 
     let disposed = false;
     let animationFrame = 0;
+    let isVisible = true;
+    let textureReady = false;
     let startedAt = performance.now();
     let lastWidth = 0;
     let lastHeight = 0;
@@ -258,7 +260,13 @@ const ShaderFrame = memo(function ShaderFrame({
       gl.uniform1f(velocityLocation, current.velocity);
       gl.uniform1f(strengthLocation, current.strength);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      animationFrame = requestAnimationFrame(render);
+      if (isVisible) animationFrame = requestAnimationFrame(render);
+    };
+
+    const startRendering = () => {
+      if (!disposed && textureReady && isVisible && animationFrame === 0) {
+        animationFrame = requestAnimationFrame(render);
+      }
     };
 
     image.onload = () => {
@@ -271,9 +279,10 @@ const ShaderFrame = memo(function ShaderFrame({
       }
       gl.uniform2f(textureSizeLocation, image.naturalWidth || 1, image.naturalHeight || 1);
       setStatus('ready');
+      textureReady = true;
       startedAt = performance.now();
       resize();
-      animationFrame = requestAnimationFrame(render);
+      startRendering();
     };
 
     image.onerror = () => {
@@ -284,12 +293,25 @@ const ShaderFrame = memo(function ShaderFrame({
 
     const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(resize);
     observer?.observe(frame);
+    const visibilityObserver =
+      typeof IntersectionObserver === 'undefined'
+        ? null
+        : new IntersectionObserver(([entry]) => {
+            isVisible = entry.isIntersecting;
+            if (isVisible) startRendering();
+            else {
+              cancelAnimationFrame(animationFrame);
+              animationFrame = 0;
+            }
+          });
+    visibilityObserver?.observe(frame);
     window.addEventListener('resize', resize);
 
     return () => {
       disposed = true;
       cancelAnimationFrame(animationFrame);
       observer?.disconnect();
+      visibilityObserver?.disconnect();
       window.removeEventListener('resize', resize);
       image.onload = null;
       image.onerror = null;
@@ -438,6 +460,9 @@ export const ScrollShader = memo(function ScrollShader({ className = '' }: { cla
           >
             <div
               ref={containerRef}
+              tabIndex={0}
+              role="region"
+              aria-label="Velocity distortion shader gallery"
               className="relative h-[min(78vh,700px)] overflow-y-auto overscroll-contain"
             >
               <div

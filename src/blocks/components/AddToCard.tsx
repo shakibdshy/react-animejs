@@ -95,7 +95,7 @@ export const AddToCard = memo(function AddToCard({ className = '' }: { className
           </div>
           <button
             ref={cardRef}
-            onPointerDown={handleAdd}
+            onClick={handleAdd}
             className="cursor-pointer rounded-full border border-landing-accent bg-landing-accent px-5 py-2 landing-font-mono text-[11px] font-semibold uppercase tracking-widest text-landing-bg transition-transform duration-150 hover:scale-105 active:scale-95"
           >
             Add to cart

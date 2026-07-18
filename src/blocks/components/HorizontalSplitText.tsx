@@ -11,7 +11,7 @@
  */
 import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { SplitText, useAnimeOnScroll, utils } from '@/lib/react-animejs';
-import { SplitTextRef } from '@/lib/react-animejs/components';
+import type { SplitTextRef } from '@/lib/react-animejs/components';
 
 const { clamp, random } = utils;
 
@@ -47,6 +47,32 @@ export const HorizontalSplitText = memo(function HorizontalSplitText({
   const baselineXRef = useRef<number[]>([]);
   const randomsRef = useRef<{ y: number; r: number }[]>([]);
   const charsRef = useRef<HTMLElement[]>([]);
+
+  // One frame: translate the text horizontally by `progress`, then settle each
+  // char based on where it currently sits across the stage (nested-scroll feel).
+  const applyFrame = useCallback((p: number) => {
+    const text = splitRef.current?.$target;
+    const stage = stageRef.current;
+    const chars = charsRef.current;
+    if (!text || !stage || chars.length === 0) return;
+
+    const stageW = stage.clientWidth;
+    const maxX = Math.max(0, text.scrollWidth - stageW);
+    const x = -p * maxX; // progress 0 → no translate, 1 → fully crossed
+    text.style.transform = `translateX(${x}px)`;
+
+    const vw = stageW;
+    const band = vw * 0.7; // reveal band: right edge (100%) → 30% from left
+
+    for (let i = 0; i < chars.length; i++) {
+      const charX = baselineXRef.current[i] + x;
+      // t = 0 when the char's left hits the right edge, 1 when it reaches 30%.
+      const t = clamp((vw - charX) / band, 0, 1);
+      const factor = 1 - backOut(t); // 1 at start (offset) → 0 when settled
+      const { y, r } = randomsRef.current[i];
+      chars[i].style.transform = `translateY(${factor * y}px) rotate(${factor * r}deg)`;
+    }
+  }, []);
 
   // Master scrub: the tall track travels through the box; progress 0→1 drives
   // the horizontal translate. Scoped to the box so the page scroll is untouched.
@@ -89,7 +115,7 @@ export const HorizontalSplitText = memo(function HorizontalSplitText({
     });
 
     applyFrame(0);
-  }, []);
+  }, [applyFrame]);
 
   // Recompute baselines on resize so the math stays correct after layout shifts.
   useEffect(() => {
@@ -97,32 +123,6 @@ export const HorizontalSplitText = memo(function HorizontalSplitText({
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, [handleReady]);
-
-  // One frame: translate the text horizontally by `progress`, then settle each
-  // char based on where it currently sits across the stage (nested-scroll feel).
-  const applyFrame = useCallback((p: number) => {
-    const text = splitRef.current?.$target;
-    const stage = stageRef.current;
-    const chars = charsRef.current;
-    if (!text || !stage || chars.length === 0) return;
-
-    const stageW = stage.clientWidth;
-    const maxX = Math.max(0, text.scrollWidth - stageW);
-    const x = -p * maxX; // progress 0 → no translate, 1 → fully crossed
-    text.style.transform = `translateX(${x}px)`;
-
-    const vw = stageW;
-    const band = vw * 0.7; // reveal band: right edge (100%) → 30% from left
-
-    for (let i = 0; i < chars.length; i++) {
-      const charX = baselineXRef.current[i] + x;
-      // t = 0 when the char's left hits the right edge, 1 when it reaches 30%.
-      const t = clamp((vw - charX) / band, 0, 1);
-      const factor = 1 - backOut(t); // 1 at start (offset) → 0 when settled
-      const { y, r } = randomsRef.current[i];
-      chars[i].style.transform = `translateY(${factor * y}px) rotate(${factor * r}deg)`;
-    }
-  }, []);
 
   const p = clamp(state.progress, 0, 1);
 
@@ -133,6 +133,9 @@ export const HorizontalSplitText = memo(function HorizontalSplitText({
       {/* Scroll box — the self-contained scroller (like ScrubbedBentoGallery). */}
       <div
         ref={boxRef}
+        tabIndex={0}
+        role="region"
+        aria-label="Horizontal split text animation"
         className="relative w-full overflow-y-auto"
         style={{ height: 'min(78vh, 620px)' }}
       >

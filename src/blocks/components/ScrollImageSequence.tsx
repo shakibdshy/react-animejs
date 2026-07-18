@@ -81,6 +81,7 @@ export const ScrollImageSequence = memo(function ScrollImageSequence({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const preloadTriggerRef = useRef<HTMLDivElement>(null);
   const loadedImagesRef = useRef<HTMLImageElement[]>([]);
   const currentFrameRef = useRef(0);
 
@@ -95,6 +96,7 @@ export const ScrollImageSequence = memo(function ScrollImageSequence({
   const [isPreloaded, setIsPreloaded] = useState(false);
   const [preloadError, setPreloadError] = useState(false);
   const [preloadAttempt, setPreloadAttempt] = useState(0);
+  const [shouldPreload, setShouldPreload] = useState(false);
   const [syncMode, setSyncMode] = useState<'scroll' | 'autoplay'>('scroll');
   const [syncType, setSyncType] = useState<'direct' | 'smooth'>('smooth');
   const [isPlaying, setIsPlaying] = useState(true); // Autoplay toggle state
@@ -225,8 +227,30 @@ export const ScrollImageSequence = memo(function ScrollImageSequence({
     drawFrame(currentFrameRef.current);
   }, [drawFrame]);
 
+  // Delay the expensive image sequence until the block is near the viewport.
+  useEffect(() => {
+    const trigger = preloadTriggerRef.current;
+    if (!trigger) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setShouldPreload(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setShouldPreload(true);
+        observer.disconnect();
+      },
+      { rootMargin: '500px 0px' },
+    );
+    observer.observe(trigger);
+    return () => observer.disconnect();
+  }, []);
+
   // Image preloading effect
   useEffect(() => {
+    if (!shouldPreload) return;
     let isMounted = true;
     let loaded = 0;
     let nextFrame = 0;
@@ -278,7 +302,7 @@ export const ScrollImageSequence = memo(function ScrollImageSequence({
     return () => {
       isMounted = false;
     };
-  }, [preloadAttempt]);
+  }, [preloadAttempt, shouldPreload]);
 
   // ResizeObserver binding
   useEffect(() => {
@@ -335,6 +359,7 @@ export const ScrollImageSequence = memo(function ScrollImageSequence({
 
   return (
     <div
+      ref={preloadTriggerRef}
       className={`relative w-full overflow-hidden rounded-2xl border border-landing-border/60 bg-[#060707] text-landing-fg ${className}`}
     >
       {/* ── LOADER OVERLAY ── */}
@@ -392,6 +417,9 @@ export const ScrollImageSequence = memo(function ScrollImageSequence({
       {/* ── INNER SCROLLER (Self-contained) ── */}
       <div
         ref={containerRef}
+        tabIndex={0}
+        role="region"
+        aria-label="Scroll-driven image sequence"
         className="relative w-full overflow-y-auto"
         style={{ height: 'min(72vh, 640px)' }}
       >

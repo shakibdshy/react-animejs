@@ -99,6 +99,9 @@ export const LayeredPinningLoop = memo(function LayeredPinningLoop({
           >
             <div
               ref={containerRef}
+              tabIndex={0}
+              role="region"
+              aria-label="Layered pinning panels"
               className="relative w-full overflow-y-auto overscroll-contain"
               style={{ height: 'min(74vh, 640px)' }}
             >

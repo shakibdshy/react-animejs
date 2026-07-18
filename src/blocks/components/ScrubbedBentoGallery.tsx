@@ -112,6 +112,9 @@ export const ScrubbedBentoGallery = memo(function ScrubbedBentoGallery({
           so the Blocks page scroll is untouched. */}
       <div
         ref={containerRef}
+        tabIndex={0}
+        role="region"
+        aria-label="Scrubbed bento gallery"
         className="relative w-full overflow-y-auto"
         style={{ height: 'min(72vh, 640px)' }}
       >

@@ -51,6 +51,9 @@ export const ScrollBatchGallery = memo(function ScrollBatchGallery({
     >
       <div
         ref={containerRef}
+        tabIndex={0}
+        role="region"
+        aria-label="Batched scroll gallery"
         className="mx-auto max-h-[min(72vh,640px)] max-w-6xl overflow-y-auto px-6 pb-12"
       >
         <AnimeBatch

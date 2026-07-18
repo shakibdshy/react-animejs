@@ -12,6 +12,7 @@
  */
 import {
   memo,
+  type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
   useCallback,
   useRef,
@@ -38,6 +39,7 @@ export const ImageRevealSlider = memo(function ImageRevealSlider({
 }: ImageRevealSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
+  const revealRef = useRef(50);
 
   // Two animatable targets share one logical value (the reveal %):
   //   - overlay.width clips the after image
@@ -49,14 +51,15 @@ export const ImageRevealSlider = memo(function ImageRevealSlider({
     left: { to: 50, unit: '%', duration: EASE_MS, ease: 'outQuad' },
   });
 
-  const setReveal = useCallback(
-    (clientX: number) => {
-      const el = containerRef.current;
+  const setRevealPercent = useCallback(
+    (percent: number) => {
       const ov = overlayAnim.current;
       const hd = handleAnim.current;
-      if (!el || !ov || !hd) return;
-      const rect = el.getBoundingClientRect();
-      const pct = Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
+      if (!ov || !hd) return;
+      const pct = Math.min(100, Math.max(0, percent));
+      revealRef.current = pct;
+      containerRef.current?.setAttribute('aria-valuenow', String(Math.round(pct)));
+      containerRef.current?.setAttribute('aria-valuetext', `${Math.round(pct)}% after image revealed`);
       const width = ov.width as (v: number, d?: number) => void;
       const left = hd.left as (v: number, d?: number) => void;
       width(pct, EASE_MS);
@@ -65,21 +68,46 @@ export const ImageRevealSlider = memo(function ImageRevealSlider({
     [overlayAnim, handleAnim],
   );
 
+  const setRevealFromPointer = useCallback(
+    (clientX: number) => {
+      const el = containerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      setRevealPercent(((clientX - rect.left) / rect.width) * 100);
+    },
+    [setRevealPercent],
+  );
+
   const handlePointerDown = useCallback(
     (e: ReactPointerEvent<HTMLDivElement>) => {
       draggingRef.current = true;
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-      setReveal(e.clientX);
+      setRevealFromPointer(e.clientX);
     },
-    [setReveal],
+    [setRevealFromPointer],
   );
 
   const handlePointerMove = useCallback(
     (e: ReactPointerEvent<HTMLDivElement>) => {
       if (!draggingRef.current) return;
-      setReveal(e.clientX);
+      setRevealFromPointer(e.clientX);
     },
-    [setReveal],
+    [setRevealFromPointer],
+  );
+
+  const handleKeyDown = useCallback(
+    (e: ReactKeyboardEvent<HTMLDivElement>) => {
+      const step = e.shiftKey ? 10 : 1;
+      let next: number | null = null;
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = revealRef.current - step;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = revealRef.current + step;
+      if (e.key === 'Home') next = 0;
+      if (e.key === 'End') next = 100;
+      if (next === null) return;
+      e.preventDefault();
+      setRevealPercent(next);
+    },
+    [setRevealPercent],
   );
 
   const handlePointerUp = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
@@ -98,11 +126,19 @@ export const ImageRevealSlider = memo(function ImageRevealSlider({
     >
       <div
         ref={containerRef}
-        className="relative mx-auto h-72 w-full max-w-xl cursor-ew-resize select-none overflow-hidden rounded-xl border border-landing-border bg-landing-bg"
+        className="relative mx-auto h-72 w-full max-w-xl cursor-ew-resize select-none overflow-hidden rounded-xl border border-landing-border bg-landing-bg touch-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-landing-accent"
+        role="slider"
+        aria-label="Image comparison reveal"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={50}
+        aria-valuetext="50% after image revealed"
+        tabIndex={0}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
+        onKeyDown={handleKeyDown}
       >
         {/* Before — full-width bottom layer. */}
         <div className="absolute inset-0 flex items-center justify-center bg-landing-surface">

@@ -24,8 +24,8 @@ import {
 import {
   AnimeProvider,
   AnimeTimeline,
-  stagger,
   type AnimeTimelineRef,
+  stagger,
   type TimelineEntry,
 } from '@/lib/react-animejs';
 
@@ -295,7 +295,7 @@ const OrchestratedEaseReverseInner = memo(function OrchestratedEaseReverseInner(
           }}
         >
           <div
-            className={`relative flex flex-col items-center justify-center rounded-2xl border border-landing-border/60 bg-[#0e100f] p-8 min-h-[480px] overflow-hidden ${className}`}
+            className={`relative flex flex-col items-center justify-center rounded-2xl border border-landing-border/60 bg-[#0e100f] p-8 min-h-120 overflow-hidden ${className}`}
             style={{ color: '#fffce1' }}
           >
             {/* 1. Backdrop Overlay */}
@@ -400,7 +400,7 @@ const OrchestratedEaseReverseInner = memo(function OrchestratedEaseReverseInner(
               id="menu-overlay"
               ref={panelRef}
               onKeyDown={handlePanelKeyDown}
-              className="er-menu-panel absolute top-24 left-1/2 -translate-x-1/2 z-50 bg-[#171918] border border-[#7c7c6f]/40 rounded-2xl p-1.5 w-[90%] max-w-[400px]"
+              className="er-menu-panel absolute top-24 left-1/2 -translate-x-1/2 z-50 bg-[#171918] border border-[#7c7c6f]/40 rounded-2xl p-1.5 w-[90%] max-w-100"
               style={{
                 visibility: isOverlayVisible ? 'visible' : 'hidden',
                 opacity: 0,
@@ -453,7 +453,7 @@ const OrchestratedEaseReverseInner = memo(function OrchestratedEaseReverseInner(
                     onChange={(e) => setExitSpeed(parseFloat(e.target.value))}
                     className="w-16 h-4 accent-landing-accent cursor-pointer"
                   />
-                  <span className="text-[10px] text-landing-accent font-bold min-w-[20px]">
+                  <span className="text-[10px] text-landing-accent font-bold min-w-5">
                     {exitSpeed}x
                   </span>
                 </label>

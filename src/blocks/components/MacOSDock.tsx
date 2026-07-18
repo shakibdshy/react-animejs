@@ -1,22 +1,21 @@
 /**
- * MacOSDock — the macOS-style dock with cursor-driven fisheye magnification.
+ * MacOSDock — a refined macOS-style dock with cursor-driven fisheye motion.
  *
- * As the cursor travels across the dock, each icon scales up toward a peak the
- * closer the pointer gets to that icon's center, and lifts slightly. The
- * falloff is a smooth inverted-parabola so neighbors magnify a little too — the
- * signature "genie" wave.
- *
- * Driven entirely by react-animejs: every icon owns a `useAnimatable` for
- * `scale` and `translateY` (the library's cursor-event hook). On the dock's
- * `pointermove`, the parent computes each icon's target from the cursor distance
- * and feeds the setters — the hook eases toward each target, no per-frame React
- * state and smooth even on fast moves. Leaving the dock springs every icon back
- * to rest.
- *
- * Decoupling: icons register their setter into a parent-held ref map on mount,
- * so a single pointermove listener on the dock drives all icons (rather than N
- * listeners). Same pattern as the PointerCollisionGrid cells.
+ * Each icon owns a useAnimatable instance. The dock has one pointer listener
+ * that calculates a smooth distance falloff, while every icon eases its scale
+ * and lift independently without React state updates on every pointer frame.
  */
+import {
+  Compass,
+  Globe2,
+  Image as ImageIcon,
+  type LucideIcon,
+  Mail,
+  MessageCircle,
+  Music2,
+  TerminalSquare,
+  Trash2,
+} from 'lucide-react';
 import {
   memo,
   type PointerEvent as ReactPointerEvent,
@@ -28,151 +27,169 @@ import { useAnimatable } from '@/lib/react-animejs';
 
 interface DockApp {
   id: string;
-  /** emoji glyph standing in for the app icon. */
-  icon: string;
+  icon: LucideIcon;
   label: string;
+  tint: string;
+  isOpen?: boolean;
 }
 
 const APPS: DockApp[] = [
-  { id: 'finder', icon: '🧭', label: 'Finder' },
-  { id: 'mail', icon: '✉️', label: 'Mail' },
-  { id: 'music', icon: '🎵', label: 'Music' },
-  { id: 'photos', icon: '🌅', label: 'Photos' },
-  { id: 'messages', icon: '💬', label: 'Messages' },
-  { id: 'browser', icon: '🌐', label: 'Browser' },
-  { id: 'terminal', icon: '⌨️', label: 'Terminal' },
-  { id: 'trash', icon: '🗑️', label: 'Trash' },
+  { id: 'finder', icon: Compass, label: 'Finder', tint: '#73b8ff', isOpen: true },
+  { id: 'mail', icon: Mail, label: 'Mail', tint: '#72a9ff', isOpen: true },
+  { id: 'music', icon: Music2, label: 'Music', tint: '#ff72a8' },
+  { id: 'photos', icon: ImageIcon, label: 'Photos', tint: '#ffb56f', isOpen: true },
+  { id: 'messages', icon: MessageCircle, label: 'Messages', tint: '#71e39c', isOpen: true },
+  { id: 'browser', icon: Globe2, label: 'Browser', tint: '#8a9dff' },
+  { id: 'terminal', icon: TerminalSquare, label: 'Terminal', tint: '#b3becd' },
+  { id: 'trash', icon: Trash2, label: 'Trash', tint: '#a9b3c2' },
 ];
 
-const BASE_SIZE = 52; // px — resting icon size
-const MAX_SCALE = 1.9; // peak magnification directly under the cursor
-const RANGE = 130; // px — how far the fisheye reaches from the cursor
-const EASE_MS = 140; // snappy follow so magnification tracks the cursor tightly
-const REST_MS = 320; // gentler ease back to rest when the cursor leaves
+const MAX_SCALE = 1.65;
+const RANGE = 150;
+const FOLLOW_MS = 120;
+const REST_MS = 300;
 
-/** What an icon exposes to the parent: feed it the cursor's clientX (or a
- *  negative sentinel to signal "rest"). */
-type IconSetter = (cursorX: number, ms: number) => void;
+type IconSetter = (cursorX: number, duration: number) => void;
 
 export const MacOSDock = memo(function MacOSDock({ className = '' }: { className?: string }) {
-  // Live icon setters, keyed by id. A ref (not state) so pointermove mutates it
-  // without re-rendering.
   const settersRef = useRef<Map<string, IconSetter>>(new Map());
 
-  const register = useCallback((id: string, fn: IconSetter) => {
-    settersRef.current.set(id, fn);
+  const register = useCallback((id: string, setter: IconSetter) => {
+    settersRef.current.set(id, setter);
   }, []);
+
   const unregister = useCallback((id: string) => {
     settersRef.current.delete(id);
   }, []);
 
-  const handleMove = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
-    const x = e.clientX;
-    settersRef.current.forEach((fn) => fn(x, EASE_MS));
+  const handleMove = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    settersRef.current.forEach((setter) => setter(event.clientX, FOLLOW_MS));
   }, []);
 
-  // Leaving the dock: spring every icon back to rest with a gentler ease.
   const handleLeave = useCallback(() => {
-    settersRef.current.forEach((fn) => fn(-1, REST_MS));
+    settersRef.current.forEach((setter) => setter(-1, REST_MS));
   }, []);
 
   return (
     <div
-      className={`relative flex items-center justify-center rounded-2xl border border-landing-border/60 bg-landing-surface/40 ${className}`}
-      style={{ minHeight: 360 }}
+      className={`relative isolate flex min-h-82.5 items-end justify-center overflow-visible rounded-2xl border border-landing-border/60 bg-[#090b10] px-4 pb-12 pt-10 ${className}`}
+      style={{
+        backgroundImage:
+          'radial-gradient(circle at 50% 36%, rgba(94,124,190,.16), transparent 40%), linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px)',
+        backgroundSize: '100% 100%, 28px 28px, 28px 28px',
+      }}
     >
-      {/* The dock shelf. overflow-visible so magnified icons rise above it;
-          bottom-aligned items so they "grow upward" as they scale. */}
+      <div className="pointer-events-none absolute inset-x-6 top-6 flex items-center justify-between">
+        <span className="landing-font-mono text-[9px] uppercase tracking-[0.28em] text-white/45">
+          interactive dock
+        </span>
+        <span className="landing-font-mono text-[9px] uppercase tracking-[0.22em] text-white/30">
+          useAnimatable / 08 apps
+        </span>
+      </div>
+
       <div
         onPointerMove={handleMove}
         onPointerLeave={handleLeave}
-        className="flex items-end gap-2 overflow-visible rounded-2xl border border-white/10 bg-white/5 px-3 py-2 shadow-2xl shadow-black/40 backdrop-blur-xl"
-        style={{ marginBottom: 24 }}
+        role="toolbar"
+        aria-label="Application dock"
+        className="group relative flex items-end gap-1.5 rounded-[1.35rem] border border-white/15 bg-white/7.5 px-3 pb-3 pt-4 shadow-[0_24px_70px_rgba(0,0,0,.46),inset_0_1px_0_rgba(255,255,255,.12)] backdrop-blur-2xl sm:gap-2 sm:px-4"
       >
+        <div className="pointer-events-none absolute inset-x-5 bottom-1.5 h-px bg-linear-to-r from-transparent via-white/25 to-transparent" />
         {APPS.map((app) => (
           <DockIcon key={app.id} app={app} register={register} unregister={unregister} />
         ))}
       </div>
 
-      <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2">
-        <span className="landing-font-mono text-[9px] tracking-[0.2em] uppercase text-landing-muted/60">
-          move the cursor across the dock · fisheye magnification
+      <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap">
+        <span className="landing-font-mono text-[9px] uppercase tracking-[0.2em] text-white/35">
+          move across icons · magnify with intention
         </span>
       </div>
     </div>
   );
 });
 
-/**
- * A single dock icon. Owns a `useAnimatable` for `scale` + `translateY`. The
- * parent calls its registered setter on pointermove with the cursor's clientX;
- * this computes the fisheye target from the icon's distance to the cursor and
- * feeds the animatable setters. A negative cursorX is the "rest" sentinel.
- *
- * The icon uses `transform` for scale/lift (so layout is unaffected — neighbors
- * don't shuffle when one grows) inside a fixed-size slot.
- */
 const DockIcon = memo(function DockIcon({
   app,
   register,
   unregister,
 }: {
   app: DockApp;
-  register: (id: string, fn: IconSetter) => void;
+  register: (id: string, setter: IconSetter) => void;
   unregister: (id: string) => void;
 }) {
-  const { ref, animatable } = useAnimatable<HTMLDivElement>({
+  const slotRef = useRef<HTMLDivElement>(null);
+  const { ref, animatable } = useAnimatable<HTMLButtonElement>({
     scale: { to: 1, duration: REST_MS, ease: 'outQuad' },
     translateY: { to: 0, duration: REST_MS, ease: 'outQuad' },
   });
 
-  // The setter the parent drives on pointermove.
   const update = useCallback(
-    (cursorX: number, ms: number) => {
-      const el = ref.current;
-      const a = animatable.current;
-      if (!el || !a) return;
+    (cursorX: number, duration: number) => {
+      const slot = slotRef.current;
+      const instance = animatable.current;
+      if (!slot || !instance) return;
 
-      let target = 1;
-      let lift = 0;
+      let scaleTarget = 1;
+      let liftTarget = 0;
       if (cursorX >= 0) {
-        const rect = el.getBoundingClientRect();
-        const center = rect.left + rect.width / 2;
-        const dist = Math.abs(cursorX - center);
-        if (dist < RANGE) {
-          // Smooth inverted-parabola falloff: peak at center, →1 at the edge.
-          const t = 1 - (dist / RANGE) ** 2;
-          target = 1 + (MAX_SCALE - 1) * t;
-          lift = -((MAX_SCALE - 1) * BASE_SIZE * 0.35) * t; // grow upward
-        }
+        const rect = slot.getBoundingClientRect();
+        const distance = Math.abs(cursorX - (rect.left + rect.width / 2));
+        const normalized = Math.max(0, 1 - distance / RANGE);
+        const influence = normalized * normalized * (3 - 2 * normalized);
+        scaleTarget = 1 + (MAX_SCALE - 1) * influence;
+        liftTarget = -18 * influence;
       }
 
-      const scale = a.scale as (v: number, d?: number) => void;
-      const translateY = a.translateY as (v: number, d?: number) => void;
-      scale(target, ms);
-      translateY(lift, ms);
+      const scale = instance.scale as (value: number, ms?: number) => void;
+      const translateY = instance.translateY as (value: number, ms?: number) => void;
+      scale(scaleTarget, duration);
+      translateY(liftTarget, duration);
     },
-    [animatable, ref],
+    [animatable]
   );
 
-  // Register on mount, unregister on unmount.
   useEffect(() => {
     register(app.id, update);
     return () => unregister(app.id);
   }, [app.id, register, unregister, update]);
 
+  const Icon = app.icon;
+
   return (
-    <div className="relative flex items-end" style={{ height: BASE_SIZE * MAX_SCALE + 8 }}>
-      {/* The icon. transform handles scale + lift (no layout shift). */}
-      <div
+    <div
+      ref={slotRef}
+      className="group/icon relative flex h-20.5 w-13.5 items-end justify-center sm:w-14.5"
+    >
+      <span className="pointer-events-none absolute -top-7 left-1/2 z-20 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-md border border-white/10 bg-[#11151d]/95 px-2 py-1 font-mono text-[9px] uppercase tracking-[0.16em] text-white/80 opacity-0 shadow-xl transition-[opacity,transform] duration-150 group-hover/icon:translate-y-0 group-hover/icon:opacity-100">
+        {app.label}
+      </span>
+      <button
         ref={ref}
-        className="flex items-center justify-center rounded-xl border border-white/10 bg-white/10 shadow-lg shadow-black/30"
-        style={{ width: BASE_SIZE, height: BASE_SIZE, willChange: 'transform' }}
+        type="button"
         aria-label={app.label}
-        role="img"
+        className="relative flex h-12.5 w-12.5 items-center justify-center rounded-[0.95rem] border border-white/20 bg-linear-to-br from-white/22 to-white/6 text-white shadow-[0_8px_18px_rgba(0,0,0,.3),inset_0_1px_0_rgba(255,255,255,.2)] outline-none transition-[border-color,box-shadow] duration-150 hover:border-white/40 focus-visible:border-white focus-visible:ring-2 focus-visible:ring-white/45"
+        style={{
+          transformOrigin: 'center bottom',
+          willChange: 'transform',
+        }}
       >
-        <span style={{ fontSize: BASE_SIZE * 0.5 }}>{app.icon}</span>
-      </div>
+        <span
+          className="pointer-events-none absolute inset-0.5 rounded-[0.8rem] opacity-70"
+          style={{
+            background: `radial-gradient(circle at 35% 20%, ${app.tint}55, transparent 65%)`,
+          }}
+        />
+        <Icon className="relative z-10 h-5.75 w-5.75" strokeWidth={1.65} />
+      </button>
+      {app.isOpen && (
+        <span
+          className="absolute -bottom-1.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full"
+          style={{ backgroundColor: app.tint, boxShadow: `0 0 10px ${app.tint}` }}
+          aria-hidden="true"
+        />
+      )}
     </div>
   );
 });

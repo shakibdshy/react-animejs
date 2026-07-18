@@ -8,7 +8,7 @@
  *
  * Escape closes; clicking outside the panel (the backdrop) closes.
  */
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Check, Copy, X } from 'lucide-react';
 import { AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
 import { CodeBlock } from '@/demos/components/code-block';
@@ -30,15 +30,52 @@ export const CodeModal = memo(function CodeModal({
   onClose,
 }: CodeModalProps) {
   const [copied, setCopied] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const copyResetTimerRef = useRef<number | null>(null);
 
-  // Escape closes.
+  // Keep keyboard focus inside the modal, restore it on close, and prevent the
+  // document behind the dialog from scrolling.
   useEffect(() => {
     if (!open) return;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const frame = window.requestAnimationFrame(() => closeButtonRef.current?.focus());
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const focusable = Array.from(
+        dialogRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      );
+      if (focusable.length === 0) {
+        e.preventDefault();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus();
+    };
   }, [open, onClose]);
 
   // Reset copied state whenever the snippet changes / modal reopens.
@@ -46,11 +83,26 @@ export const CodeModal = memo(function CodeModal({
     setCopied(false);
   }, [title, open]);
 
+  useEffect(
+    () => () => {
+      if (copyResetTimerRef.current !== null) window.clearTimeout(copyResetTimerRef.current);
+    },
+    [],
+  );
+
+  const showCopied = useCallback(() => {
+    if (copyResetTimerRef.current !== null) window.clearTimeout(copyResetTimerRef.current);
+    setCopied(true);
+    copyResetTimerRef.current = window.setTimeout(() => {
+      setCopied(false);
+      copyResetTimerRef.current = null;
+    }, 2000);
+  }, []);
+
   const handleCopy = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      showCopied();
     } catch {
       // Fallback for browsers without the async clipboard API.
       const ta = document.createElement('textarea');
@@ -61,14 +113,13 @@ export const CodeModal = memo(function CodeModal({
       ta.select();
       try {
         document.execCommand('copy');
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        showCopied();
       } catch {
         /* clipboard unavailable */
       }
       document.body.removeChild(ta);
     }
-  }, [code]);
+  }, [code, showCopied]);
 
   // Clicking the dim area (outside the panel) closes. Clicks inside the panel
   // stop propagation so they don't bubble up to close.
@@ -102,7 +153,8 @@ export const CodeModal = memo(function CodeModal({
           ease="outExpo"
         >
           <div
-            className="fixed inset-0 z-1001 flex items-center justify-center p-4 sm:p-8"
+            ref={dialogRef}
+            className="fixed inset-0 z-1001 flex items-center justify-center overscroll-contain p-4 sm:p-8"
             role="dialog"
             aria-modal="true"
             aria-label={`${title} source code`}
@@ -130,6 +182,7 @@ export const CodeModal = memo(function CodeModal({
                     {copied ? 'Copied' : 'Copy'}
                   </button>
                   <button
+                    ref={closeButtonRef}
                     onClick={onClose}
                     aria-label="Close"
                     className="flex h-8 w-8 items-center justify-center rounded-full border border-landing-border bg-landing-surface text-landing-muted transition-all hover:border-red-500 hover:text-red-400"
@@ -143,6 +196,9 @@ export const CodeModal = memo(function CodeModal({
               <div className="cm-scroll bg-[#0b0b10] px-2 py-3 text-[12.5px] leading-[1.55]">
                 <CodeBlock code={code} language={language} />
               </div>
+              <span className="sr-only" aria-live="polite">
+                {copied ? 'Code copied to clipboard.' : ''}
+              </span>
             </div>
           </div>
         </AnimePresenceChild>,

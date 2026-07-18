@@ -19,6 +19,7 @@ import { CurveSwipe } from './components/CurveSwipe';
 import { DynamicShapeOverlays } from './components/DynamicShapeOverlays';
 import { HorizontalSplitText } from './components/HorizontalSplitText';
 import { GridFlipModal } from './components/GridFlipModal';
+import { AnimateCssGridFlip } from './components/AnimateCssGridFlip';
 import { ScrollImageSequence } from './components/ScrollImageSequence';
 import { ScrollImageComparison } from './components/ScrollImageComparison';
 import { AnimatedContinuousSections } from './components/AnimatedContinuousSections';
@@ -41,6 +42,7 @@ import curveSwipeSource from './components/CurveSwipe.tsx?raw';
 import dynamicShapeOverlaysSource from './components/DynamicShapeOverlays.tsx?raw';
 import horizontalSplitTextSource from './components/HorizontalSplitText.tsx?raw';
 import gridFlipModalSource from './components/GridFlipModal.tsx?raw';
+import animateCssGridFlipSource from './components/AnimateCssGridFlip.tsx?raw';
 import scrollImageSequenceSource from './components/ScrollImageSequence.tsx?raw';
 import scrollImageComparisonSource from './components/ScrollImageComparison.tsx?raw';
 import animatedContinuousSectionsSource from './components/AnimatedContinuousSections.tsx?raw';
@@ -56,6 +58,7 @@ type CodeTarget = {
 const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'cursor-trail': { title: 'CursorTrailImagesDemo.tsx', code: cursorTrailSource },
   'grid-flip-modal': { title: 'GridFlipModal.tsx', code: gridFlipModalSource },
+  'animate-css-grid-flip': { title: 'AnimateCssGridFlip.tsx', code: animateCssGridFlipSource },
   'add-to-card': { title: 'AddToCard.tsx', code: addToCardSource },
   'pointer-grid': { title: 'PointerCollisionGrid.tsx', code: pointerGridSource },
   'tilt-card': { title: 'TiltCard.tsx', code: tiltCardSource },
@@ -235,6 +238,24 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <GridFlipModal />
+              </ErrorBoundary>
+            </section>
+
+            {/* Animate CSS Grid Flip — active tile swaps grid areas */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Animate CSS Grid Flip · Area Swap"
+                chip="AnimeLayout + createLayout"
+                codeKey="animate-css-grid-flip"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                Select a bottom tile to promote it into the large hero area. The previous hero takes
+                its slot while AnimeLayout measures the CSS Grid before/after positions and
+                FLIP-animates each real tile into place.
+              </p>
+              <ErrorBoundary>
+                <AnimateCssGridFlip />
               </ErrorBoundary>
             </section>
 
@@ -615,9 +636,12 @@ export const BlocksPage = memo(function BlocksPage() {
         </ErrorBoundary>
 
         {/* Code modal — rendered once; opened by any section's View Code button. */}
-        {activeCode && (
-          <CodeModal open title={activeCode.title} code={activeCode.code} onClose={closeCode} />
-        )}
+        <CodeModal
+          open={Boolean(activeCode)}
+          title={activeCode?.title ?? ''}
+          code={activeCode?.code ?? ''}
+          onClose={closeCode}
+        />
       </div>
     </AnimeProvider>
   );

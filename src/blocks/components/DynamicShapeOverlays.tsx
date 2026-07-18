@@ -1,4 +1,4 @@
-import { memo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { AnimeMorph, type AnimeMorphRef } from '@/lib/react-animejs';
 
 // ── Path states ─────────────────────────────────────────────────────────────
@@ -39,6 +39,7 @@ export const DynamicShapeOverlays = memo(function DynamicShapeOverlays({
   className?: string;
 }) {
   const refs = useRef<AnimeMorphRef[]>([]);
+  const timersRef = useRef<number[]>([]);
   const [isCovered, setIsCovered] = useState(false);
 
   const setLayerRef =
@@ -46,22 +47,32 @@ export const DynamicShapeOverlays = memo(function DynamicShapeOverlays({
       if (api) refs.current[index] = api;
     };
 
-  const toggle = () => {
+  useEffect(
+    () => () => {
+      timersRef.current.forEach((timer) => window.clearTimeout(timer));
+    },
+    [],
+  );
+
+  const toggle = useCallback(() => {
     const layers = refs.current;
     if (!layers.length) return;
+    timersRef.current.forEach((timer) => window.clearTimeout(timer));
+    timersRef.current = [];
     // Play (cover) bottom → top with a stagger; reverse (reveal) top → bottom
     // so the same layer that covered last is the first uncovered.
     const order = isCovered ? [...layers.keys()].reverse() : [...layers.keys()];
     order.forEach((index, step) => {
       const api = layers[index];
       if (!api) return;
-      window.setTimeout(() => {
+      const timer = window.setTimeout(() => {
         if (isCovered) api.controls.reverse();
         else api.controls.play();
       }, step * LAYER_STAGGER);
+      timersRef.current.push(timer);
     });
     setIsCovered((current) => !current);
-  };
+  }, [isCovered]);
 
   return (
     <div
