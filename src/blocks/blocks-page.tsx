@@ -21,6 +21,7 @@ import { HorizontalSplitText } from './components/HorizontalSplitText';
 import { GridFlipModal } from './components/GridFlipModal';
 import { ScrollImageSequence } from './components/ScrollImageSequence';
 import { LayeredPinningLoop } from './components/LayeredPinningLoop';
+import { ScrollShader } from './components/ScrollShader';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
 // "View Code" modal always shows the real, current code.
 import cursorTrailSource from '@/demo/components/CursorTrailImagesDemo.tsx?raw';
@@ -40,6 +41,7 @@ import horizontalSplitTextSource from './components/HorizontalSplitText.tsx?raw'
 import gridFlipModalSource from './components/GridFlipModal.tsx?raw';
 import scrollImageSequenceSource from './components/ScrollImageSequence.tsx?raw';
 import layeredPinningLoopSource from './components/LayeredPinningLoop.tsx?raw';
+import scrollShaderSource from './components/ScrollShader.tsx?raw';
 
 /** The set of blocks that can be shown in the code modal. */
 type CodeTarget = {
@@ -65,6 +67,7 @@ const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'horizontal-split-text': { title: 'HorizontalSplitText.tsx', code: horizontalSplitTextSource },
   'scroll-image-sequence': { title: 'ScrollImageSequence.tsx', code: scrollImageSequenceSource },
   'layered-pinning-loop': { title: 'LayeredPinningLoop.tsx', code: layeredPinningLoopSource },
+  'scroll-shader': { title: 'ScrollShader.tsx', code: scrollShaderSource },
 };
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -173,8 +176,8 @@ export const BlocksPage = memo(function BlocksPage() {
               Example blocks
             </h1>
             <p className="text-base text-landing-muted max-w-xl mx-auto">
-              Self-contained patterns built with react-animejs — copy-paste
-              starting points you can drop into your own app.
+              Self-contained patterns built with react-animejs — copy-paste starting points you can
+              drop into your own app.
             </p>
           </section>
 
@@ -188,8 +191,9 @@ export const BlocksPage = memo(function BlocksPage() {
                 onViewCode={openCode}
               />
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
-                A queue of sprites, each owning its own <code className="landing-font-mono text-landing-accent">useAnimatable</code>{' '}
-                x/y. On <code className="landing-font-mono">pointermove</code> every sprite eases toward the
+                A queue of sprites, each owning its own{' '}
+                <code className="landing-font-mono text-landing-accent">useAnimatable</code> x/y. On{' '}
+                <code className="landing-font-mono">pointermove</code> every sprite eases toward the
                 cursor with a progressively longer duration — the head follows tight, the tail lags.
               </p>
               <ErrorBoundary>
@@ -206,13 +210,16 @@ export const BlocksPage = memo(function BlocksPage() {
                 onViewCode={openCode}
               />
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
-                Click a tile and it flies into a centered modal; click again to send it back. The real{' '}
-                DOM node is reparented into a <code className="landing-font-mono">&lt;dialog&gt;</code>{' '}
-                inside a single <code className="landing-font-mono text-landing-accent">AnimeLayout</code>{' '}
-                root (with <code className="landing-font-mono">children:&apos;*&apos;</code>), so anime.js&rsquo;s
-                layout system correlates the old grid position with the new modal position via a shared{' '}
-                <code className="landing-font-mono text-landing-accent">data-layout-id</code> and FLIP-animates
-                the size + position change on an <code className="landing-font-mono">inOutQuad</code> curve.
+                Click a tile and it flies into a centered modal; click again to send it back. The
+                real DOM node is reparented into a{' '}
+                <code className="landing-font-mono">&lt;dialog&gt;</code> inside a single{' '}
+                <code className="landing-font-mono text-landing-accent">AnimeLayout</code> root
+                (with <code className="landing-font-mono">children:&apos;*&apos;</code>), so
+                anime.js&rsquo;s layout system correlates the old grid position with the new modal
+                position via a shared{' '}
+                <code className="landing-font-mono text-landing-accent">data-layout-id</code> and
+                FLIP-animates the size + position change on an{' '}
+                <code className="landing-font-mono">inOutQuad</code> curve.
               </p>
               <ErrorBoundary>
                 <GridFlipModal />
@@ -229,9 +236,11 @@ export const BlocksPage = memo(function BlocksPage() {
               />
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
                 Hover a thumbnail and a larger preview window chases the cursor with spring-eased
-                movement (<code className="landing-font-mono text-landing-accent">useAnimatable</code>{' '}
+                movement (
+                <code className="landing-font-mono text-landing-accent">useAnimatable</code>{' '}
                 translate setters fed on every pointermove). Moving between thumbnails swaps the
-                image with an <code className="landing-font-mono text-landing-accent">{'<Anime>'}</code>{' '}
+                image with an{' '}
+                <code className="landing-font-mono text-landing-accent">{'<Anime>'}</code>{' '}
                 cross-fade so it never hard-cuts.
               </p>
               <ErrorBoundary>
@@ -309,10 +318,10 @@ export const BlocksPage = memo(function BlocksPage() {
               />
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
                 A draggable handle reveals one image over another. A single drag value feeds two{' '}
-                <code className="landing-font-mono text-landing-accent">useAnimatable</code>{' '}
-                setters — the overlay&rsquo;s <code className="landing-font-mono">width</code> and the
-                handle&rsquo;s <code className="landing-font-mono">left</code> — easing in lockstep with
-                pointer capture holding the drag through fast flicks.
+                <code className="landing-font-mono text-landing-accent">useAnimatable</code> setters
+                — the overlay&rsquo;s <code className="landing-font-mono">width</code> and the
+                handle&rsquo;s <code className="landing-font-mono">left</code> — easing in lockstep
+                with pointer capture holding the drag through fast flicks.
               </p>
               <ErrorBoundary>
                 <ImageRevealSlider />
@@ -350,8 +359,12 @@ export const BlocksPage = memo(function BlocksPage() {
                 onViewCode={openCode}
               />
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
-                Toggle <code className="landing-font-mono text-landing-accent">easeReverse</code> to compare transitions:
-                ON executes a custom closing sequence with smooth, non-bouncy curves (<code className="landing-font-mono text-landing-accent">outQuad</code>) and adjustable speed, while OFF plays the entrance sequence in reverse (reversing the bouncy <code className="landing-font-mono text-landing-accent">outBack</code> animation).
+                Toggle <code className="landing-font-mono text-landing-accent">easeReverse</code> to
+                compare transitions: ON executes a custom closing sequence with smooth, non-bouncy
+                curves (<code className="landing-font-mono text-landing-accent">outQuad</code>) and
+                adjustable speed, while OFF plays the entrance sequence in reverse (reversing the
+                bouncy <code className="landing-font-mono text-landing-accent">outBack</code>{' '}
+                animation).
               </p>
               <ErrorBoundary>
                 <OrchestratedEaseReverse />
@@ -367,14 +380,16 @@ export const BlocksPage = memo(function BlocksPage() {
                 onViewCode={openCode}
               />
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
-                A 3×3 bento grid sits centered inside a scrollable box; as you scroll <em>inside the
-                box</em>, the grid tracks interpolate from compact to huge (<code className="landing-font-mono">33% → 100%</code>).
-                Centering + <code className="landing-font-mono">overflow: hidden</code> turns that into a zoom — the center image
-                fills the box while the rest scatter off-canvas, then a content panel fades in. A port of the GSAP &ldquo;Scrubbed
-                Bento Gallery&rdquo; driven by one{' '}
-                <code className="landing-font-mono text-landing-accent">useAnimeOnScroll</code> observer (scoped to a{' '}
-                <code className="landing-font-mono">container</code>) scrubbing{' '}
-                <code className="landing-font-mono text-landing-accent">utils.lerp</code> on the grid tracks.
+                A 3×3 bento grid sits centered inside a scrollable box; as you scroll{' '}
+                <em>inside the box</em>, the grid tracks interpolate from compact to huge (
+                <code className="landing-font-mono">33% → 100%</code>). Centering +{' '}
+                <code className="landing-font-mono">overflow: hidden</code> turns that into a zoom —
+                the center image fills the box while the rest scatter off-canvas, then a content
+                panel fades in. A port of the GSAP &ldquo;Scrubbed Bento Gallery&rdquo; driven by
+                one <code className="landing-font-mono text-landing-accent">useAnimeOnScroll</code>{' '}
+                observer (scoped to a <code className="landing-font-mono">container</code>)
+                scrubbing <code className="landing-font-mono text-landing-accent">utils.lerp</code>{' '}
+                on the grid tracks.
               </p>
               <ErrorBoundary>
                 <ScrubbedBentoGallery />
@@ -390,7 +405,10 @@ export const BlocksPage = memo(function BlocksPage() {
                 onViewCode={openCode}
               />
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
-                An Apple-style scroll-driven canvas image sequence preloading 147 frames. Syncs scroll progress to the active frame index using a plain object playhead, or switches to autoplay mode with loops and adjustable speeds. Storytelling overlays fade in and out at specific frames.
+                An Apple-style scroll-driven canvas image sequence preloading 147 frames. Syncs
+                scroll progress to the active frame index using a plain object playhead, or switches
+                to autoplay mode with loops and adjustable speeds. Storytelling overlays fade in and
+                out at specific frames.
               </p>
               <ErrorBoundary>
                 <ScrollImageSequence />
@@ -406,10 +424,30 @@ export const BlocksPage = memo(function BlocksPage() {
                 onViewCode={openCode}
               />
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
-                A self-contained panel stack inspired by GreenSock&rsquo;s layered pinning pattern. Each panel pins at the top of the stage while the next panel layers over it in one continuous, finite scroll sequence.
+                A self-contained panel stack inspired by GreenSock&rsquo;s layered pinning pattern.
+                Each panel pins at the top of the stage while the next panel layers over it in one
+                continuous, finite scroll sequence.
               </p>
               <ErrorBoundary>
                 <LayeredPinningLoop />
+              </ErrorBoundary>
+            </section>
+
+            {/* Scroll Shader — velocity-reactive WebGL canvases */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Scroll Shader · Velocity Distortion"
+                chip="<AnimeScroll> + WebGL"
+                codeKey="scroll-shader"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                A native WebGL image stack where AnimeScroll feeds signed scroll velocity into a
+                cover-mapped shader. Move faster to pull the RGB channels apart; every frame falls
+                back to its image when WebGL is unavailable.
+              </p>
+              <ErrorBoundary>
+                <ScrollShader />
               </ErrorBoundary>
             </section>
 
@@ -422,11 +460,13 @@ export const BlocksPage = memo(function BlocksPage() {
                 onViewCode={openCode}
               />
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
-                A grid of images that stagger-fades in as each enters the viewport — a port of GSAP&rsquo;s{' '}
-                <code className="landing-font-mono text-landing-accent">ScrollTrigger.batch()</code>. A
-                container-scoped <code className="landing-font-mono text-landing-accent">IntersectionObserver</code>
-                collects items entering within the same 100ms window, then Anime.js animates that batch with{' '}
-                <code className="landing-font-mono text-landing-accent">stagger()</code>.
+                A grid of images that stagger-fades in as each enters the viewport — a port of
+                GSAP&rsquo;s{' '}
+                <code className="landing-font-mono text-landing-accent">ScrollTrigger.batch()</code>
+                . A container-scoped{' '}
+                <code className="landing-font-mono text-landing-accent">IntersectionObserver</code>
+                collects items entering within the same 100ms window, then Anime.js animates that
+                batch with <code className="landing-font-mono text-landing-accent">stagger()</code>.
               </p>
               <ErrorBoundary>
                 <ScrollBatchGallery />
@@ -464,8 +504,9 @@ export const BlocksPage = memo(function BlocksPage() {
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
                 Click the stage to raise and lower an SVG curve. Two sequential{' '}
                 <code className="landing-font-mono text-landing-accent">d</code> path morphs are
-                composed in <code className="landing-font-mono text-landing-accent">AnimeTimeline</code>,
-                then played forward or reversed from the same timeline.
+                composed in{' '}
+                <code className="landing-font-mono text-landing-accent">AnimeTimeline</code>, then
+                played forward or reversed from the same timeline.
               </p>
               <ErrorBoundary>
                 <CurveSwipe />
@@ -505,10 +546,11 @@ export const BlocksPage = memo(function BlocksPage() {
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
                 A pinned box scrubs a long line of{' '}
                 <code className="landing-font-mono text-landing-accent">SplitText</code> characters
-                sideways as you scroll vertically. Each char settles in with a random vertical offset +
-                rotation tied to its <em>horizontal</em> position on screen — GSAP&rsquo;s{' '}
-                <code className="landing-font-mono text-landing-accent">containerAnimation</code> trick,
-                replicated with one <code className="landing-font-mono text-landing-accent">useAnimeOnScroll</code>{' '}
+                sideways as you scroll vertically. Each char settles in with a random vertical
+                offset + rotation tied to its <em>horizontal</em> position on screen — GSAP&rsquo;s{' '}
+                <code className="landing-font-mono text-landing-accent">containerAnimation</code>{' '}
+                trick, replicated with one{' '}
+                <code className="landing-font-mono text-landing-accent">useAnimeOnScroll</code>{' '}
                 scrub driving a per-frame <code className="landing-font-mono">back.out</code> ease.
               </p>
               <ErrorBoundary>
@@ -526,12 +568,7 @@ export const BlocksPage = memo(function BlocksPage() {
 
         {/* Code modal — rendered once; opened by any section's View Code button. */}
         {activeCode && (
-          <CodeModal
-            open
-            title={activeCode.title}
-            code={activeCode.code}
-            onClose={closeCode}
-          />
+          <CodeModal open title={activeCode.title} code={activeCode.code} onClose={closeCode} />
         )}
       </div>
     </AnimeProvider>
