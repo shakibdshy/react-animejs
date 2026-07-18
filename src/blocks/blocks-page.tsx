@@ -21,6 +21,7 @@ import { HorizontalSplitText } from './components/HorizontalSplitText';
 import { GridFlipModal } from './components/GridFlipModal';
 import { ScrollImageSequence } from './components/ScrollImageSequence';
 import { ScrollImageComparison } from './components/ScrollImageComparison';
+import { AnimatedContinuousSections } from './components/AnimatedContinuousSections';
 import { LayeredPinningLoop } from './components/LayeredPinningLoop';
 import { ScrollShader } from './components/ScrollShader';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
@@ -42,6 +43,7 @@ import horizontalSplitTextSource from './components/HorizontalSplitText.tsx?raw'
 import gridFlipModalSource from './components/GridFlipModal.tsx?raw';
 import scrollImageSequenceSource from './components/ScrollImageSequence.tsx?raw';
 import scrollImageComparisonSource from './components/ScrollImageComparison.tsx?raw';
+import animatedContinuousSectionsSource from './components/AnimatedContinuousSections.tsx?raw';
 import layeredPinningLoopSource from './components/LayeredPinningLoop.tsx?raw';
 import scrollShaderSource from './components/ScrollShader.tsx?raw';
 
@@ -71,6 +73,10 @@ const SOURCE_BY_KEY: Record<string, CodeTarget> = {
   'scroll-image-comparison': {
     title: 'ScrollImageComparison.tsx',
     code: scrollImageComparisonSource,
+  },
+  'animated-continuous-sections': {
+    title: 'AnimatedContinuousSections.tsx',
+    code: animatedContinuousSectionsSource,
   },
   'layered-pinning-loop': { title: 'LayeredPinningLoop.tsx', code: layeredPinningLoopSource },
   'scroll-shader': { title: 'ScrollShader.tsx', code: scrollShaderSource },
@@ -436,6 +442,24 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <ScrollImageComparison />
+              </ErrorBoundary>
+            </section>
+
+            {/* Animated continuous sections — discrete layered slide + SplitText */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Animated Continuous Sections · Split Slide"
+                chip="createTimeline() + SplitText"
+                codeKey="animated-continuous-sections"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                Use one wheel, touch, or keyboard gesture to advance a finite sequence of full-frame
+                scenes. Opposing wrappers create the layered slide while Anime.js SplitText settles
+                each heading character independently.
+              </p>
+              <ErrorBoundary>
+                <AnimatedContinuousSections />
               </ErrorBoundary>
             </section>
 
