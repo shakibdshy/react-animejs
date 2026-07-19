@@ -41,7 +41,7 @@ export const ScrollLinkedAnimationsGroup: React.FC = () => {
   return (
     <div className="space-y-10">
       <ScrollLinkedIntro />
-      <DemoSection title="Scroll-Linked Animations">
+      <DemoSection title="Scroll-Linked Animations" frameChildren={false} codeId={false}>
         <DepthStackDemo />
         <RevealColumnsDemo />
         <ConveyorDemo />

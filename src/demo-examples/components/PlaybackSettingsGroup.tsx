@@ -19,7 +19,7 @@ import {
  */
 export const PlaybackSettingsGroup: React.FC = () => {
   return (
-    <DemoSection title="Playback Settings">
+    <DemoSection title="Playback Settings" frameChildren={false} codeId={false}>
       <TimelineDefaultsDemo />
       <TimelineDelayDemo />
       <TimelineLoopDemo />

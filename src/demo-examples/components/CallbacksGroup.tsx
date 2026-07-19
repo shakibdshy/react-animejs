@@ -13,7 +13,7 @@ import {
 
 export const CallbacksGroup: React.FC = () => {
   return (
-    <DemoSection title="Timeline: Callbacks">
+    <DemoSection title="Timeline: Callbacks" frameChildren={false} codeId={false}>
       <TimelineOnBeginDemo />
       <TimelineOnCompleteDemo />
       <TimelineOnUpdateDemo />

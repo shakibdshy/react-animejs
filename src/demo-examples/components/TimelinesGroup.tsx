@@ -8,7 +8,7 @@ import { SyncWAAPIAnimationsDemo } from "./SyncWAAPIAnimationsDemo";
 
 export const TimelinesGroup: React.FC = () => {
   return (
-    <DemoSection title="Timelines & Syncing">
+    <DemoSection title="Timelines & Syncing" frameChildren={false} codeId={false}>
       <TimelineAnimationsDemo />
       <TimelineFeaturesDemo />
       <TimelineTimersDemo />

@@ -174,7 +174,7 @@ function SideBySideDemo() {
 
 export const CounterCountdownGroup: React.FC = () => {
   return (
-    <DemoSection title="Counter & Countdown">
+    <DemoSection title="Counter & Countdown" frameChildren={false} codeId={false}>
       <BasicCounterDemo />
       <ReversedCounterDemo />
       <PaddedCounterDemo />

@@ -1,6 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { ComponentGalleryPage } from '@/component-gallery';
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 
-export const Route = createFileRoute("/demos")({
-  component: ComponentGalleryPage,
+/** Route seam that keeps the gallery index and component details independently renderable. */
+export const Route = createFileRoute('/demos')({
+  component: DemosLayout,
 });
+
+function DemosLayout() {
+  return <Outlet />;
+}

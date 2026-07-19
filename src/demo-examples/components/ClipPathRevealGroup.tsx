@@ -209,7 +209,7 @@ function ShapeComparisonDemo() {
 
 export const ClipPathRevealGroup: React.FC = () => {
   return (
-    <DemoSection title="ClipPath Reveal">
+    <DemoSection title="ClipPath Reveal" frameChildren={false} codeId={false}>
       <CircleRevealDemo />
       <DiamondRevealDemo />
       <HorizontalRevealDemo />

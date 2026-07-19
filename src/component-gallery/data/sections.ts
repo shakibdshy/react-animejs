@@ -3,7 +3,7 @@ import type { DemoSection } from '../types';
 export const demoSections = [
   {
     title: 'Basic Animation',
-    path: '/demo/core-features',
+    playgroundPath: '/demo/core-features',
     description: 'Animate targets with CSS selectors, stagger, easing, and callbacks',
     category: 'core',
     componentId: 'basic-animation',
@@ -11,21 +11,21 @@ export const demoSections = [
 
   {
     title: 'SVG Morph',
-    path: '/demo/svg',
+    playgroundPath: '/demo/svg',
     description: 'Morph between different SVG path shapes smoothly',
     category: 'svg',
     componentId: 'svg-morph',
   },
   {
     title: 'SVG Draw',
-    path: '/demo/svg',
+    playgroundPath: '/demo/svg',
     description: 'Animate SVG path drawing with stroke-dashoffset',
     category: 'svg',
     componentId: 'svg-draw',
   },
   {
     title: 'SVG Motion Path',
-    path: '/demo/svg',
+    playgroundPath: '/demo/svg',
     description: 'Move elements along an SVG motion path',
     category: 'svg',
     componentId: 'svg-motion-path',
@@ -33,7 +33,7 @@ export const demoSections = [
 
   {
     title: 'Timer',
-    path: '/demo/timers',
+    playgroundPath: '/demo/timers',
     description: 'Standalone timer with playback controls, callbacks, and methods',
     category: 'core',
     componentId: 'timer',
@@ -41,7 +41,8 @@ export const demoSections = [
 
   {
     title: 'Timeline',
-    path: '/demo/timelines',
+    playgroundPath: '/demo/timelines',
+    hasPlayground: true,
     description: 'Sequenced timeline animations with sync, labels, and methods',
     category: 'core',
     componentId: 'timeline',
@@ -49,7 +50,8 @@ export const demoSections = [
 
   {
     title: 'Draggable',
-    path: '/demo/draggable',
+    playgroundPath: '/demo/draggable',
+    hasPlayground: true,
     description: 'Physics-based drag with snap, spring release, and programmatic controls',
     category: 'interaction',
     componentId: 'draggable',
@@ -57,7 +59,8 @@ export const demoSections = [
 
   {
     title: 'On Scroll',
-    path: '/demo/onscroll',
+    playgroundPath: '/demo/onscroll',
+    hasPlayground: true,
     description: 'Scroll-linked animation with enter/leave callbacks and progress tracking',
     category: 'scroll',
     componentId: 'on-scroll',
@@ -65,7 +68,8 @@ export const demoSections = [
 
   {
     title: 'Layout',
-    path: '/demo/layout',
+    playgroundPath: '/demo/layout',
+    hasPlayground: true,
     description: 'FLIP-based layout animations with enter/exit, stagger, and methods',
     category: 'core',
     componentId: 'layout',
@@ -73,7 +77,8 @@ export const demoSections = [
 
   {
     title: 'Scope',
-    path: '/demo/scope',
+    playgroundPath: '/demo/scope',
+    hasPlayground: true,
     description: 'Animation scopes with media queries, methods, and keepTime',
     category: 'core',
     componentId: 'scope',
@@ -81,7 +86,8 @@ export const demoSections = [
 
   {
     title: 'Split Text',
-    path: '/demo/split-text',
+    playgroundPath: '/demo/split-text',
+    hasPlayground: true,
     description: 'Text splitting into chars, words, lines with CJK and effects',
     category: 'core',
     componentId: 'split-text',
@@ -89,7 +95,7 @@ export const demoSections = [
 
   {
     title: 'Toggle Switch',
-    path: '/demo/toggle-switch',
+    playgroundPath: '/demo/toggle-switch',
     description: 'Animated toggle switch with styled and disabled states',
     category: 'ui',
     componentId: 'toggle-switch',
@@ -97,7 +103,7 @@ export const demoSections = [
 
   {
     title: 'Counter & Countdown',
-    path: '/demo/counter-countdown',
+    playgroundPath: '/demo/counter-countdown',
     description: 'Animated counter and countdown with padding and format options',
     category: 'ui',
     componentId: 'counter-countdown',
@@ -105,7 +111,7 @@ export const demoSections = [
 
   {
     title: 'Spinning Cube',
-    path: '/demo/spinning-cube',
+    playgroundPath: '/demo/spinning-cube',
     description: '3D cube rotation with speed variants and interactive controls',
     category: 'ui',
     componentId: 'spinning-cube',
@@ -113,7 +119,7 @@ export const demoSections = [
 
   {
     title: 'ClipPath Reveal',
-    path: '/demo/clippath-reveal',
+    playgroundPath: '/demo/clippath-reveal',
     description: 'Circle, diamond, star, and wipe clipPath reveal animations',
     category: 'svg',
     componentId: 'clippath-reveal',
@@ -121,7 +127,7 @@ export const demoSections = [
 
   {
     title: 'Animated Slider',
-    path: '/demo/animated-slider',
+    playgroundPath: '/demo/animated-slider',
     description: 'Slide, fade, scale, flip transitions with visual slide showcase',
     category: 'ui',
     componentId: 'animated-slider',
@@ -129,7 +135,8 @@ export const demoSections = [
 
   {
     title: 'Reorder List',
-    path: '/demo/reorder-list',
+    playgroundPath: '/demo/reorder-list',
+    hasPlayground: true,
     description: 'FLIP-based shuffle, move, add/remove, and grid reorder animations',
     category: 'ui',
     componentId: 'reorder-list',
@@ -137,7 +144,8 @@ export const demoSections = [
 
   {
     title: 'Scroll-Linked Animations',
-    path: '/demo/scroll-linked-animations',
+    playgroundPath: '/demo/scroll-linked-animations',
+    hasPlayground: true,
     description: 'Parallax depth, reveal columns, conveyor, morph tile, and wave bar',
     category: 'scroll',
     componentId: 'scroll-linked-animations',
@@ -145,7 +153,7 @@ export const demoSections = [
 
   {
     title: 'Scramble Text',
-    path: '/demo/scramble-text',
+    playgroundPath: '/demo/scramble-text',
     description: 'Text scramble animation with autoplay, loop, and custom chars',
     category: 'ui',
     componentId: 'scramble-text',
@@ -153,3 +161,7 @@ export const demoSections = [
 ] as const satisfies readonly DemoSection[];
 
 export type DemoId = (typeof demoSections)[number]['componentId'];
+
+export function isDemoId(value: string): value is DemoId {
+  return demoSections.some((demo) => demo.componentId === value);
+}

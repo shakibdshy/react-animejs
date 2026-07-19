@@ -20,7 +20,7 @@ import {
 
 export const ScopeGroup: React.FC = () => {
   return (
-    <DemoSection title="Scope">
+    <DemoSection title="Scope" frameChildren={false} codeId={false}>
       {/* Overview */}
       <ScopeConstructorDemo />
       <ScopeBasicDemo />

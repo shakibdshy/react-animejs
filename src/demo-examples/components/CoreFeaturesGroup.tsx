@@ -8,7 +8,7 @@ import { CallFunctionsDemo } from "./CallFunctionsDemo";
 
 export const CoreFeaturesGroup: React.FC = () => {
   return (
-    <DemoSection title="Core Features">
+    <DemoSection title="Core Features" frameChildren={false} codeId={false}>
       <CssSelectorDemo />
       <JsObjectDemo />
       <ArrayOfTargetsDemo />

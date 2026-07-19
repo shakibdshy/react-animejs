@@ -7,7 +7,7 @@ import { ScrollHorizontalAxisDemo } from './ScrollHorizontalAxisDemo';
 
 export const OnScrollGroup = () => {
   return (
-    <DemoSection title="Events: onScroll">
+    <DemoSection title="Events: onScroll" frameChildren={false} codeId={false}>
       <ScrollPlaybackDemo />
       <ScrollScrubDemo />
       <ScrollCallbacksDemo />

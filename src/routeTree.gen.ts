@@ -14,6 +14,8 @@ import { Route as DemosRouteImport } from './routes/demos'
 import { Route as BlocksRouteImport } from './routes/blocks'
 import { Route as DemoRouteRouteImport } from './routes/demo/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DemosIndexRouteImport } from './routes/demos.index'
+import { Route as DemosComponentIdRouteImport } from './routes/demos.$componentId'
 import { Route as DemoToggleSwitchRouteImport } from './routes/demo/toggle-switch'
 import { Route as DemoTimersRouteImport } from './routes/demo/timers'
 import { Route as DemoTimelinesRouteImport } from './routes/demo/timelines'
@@ -60,6 +62,16 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DemosIndexRoute = DemosIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DemosRoute,
+} as any)
+const DemosComponentIdRoute = DemosComponentIdRouteImport.update({
+  id: '/$componentId',
+  path: '/$componentId',
+  getParentRoute: () => DemosRoute,
 } as any)
 const DemoToggleSwitchRoute = DemoToggleSwitchRouteImport.update({
   id: '/toggle-switch',
@@ -172,7 +184,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
   '/blocks': typeof BlocksRoute
-  '/demos': typeof DemosRoute
+  '/demos': typeof DemosRouteWithChildren
   '/mcp': typeof McpRoute
   '/demo/animated-slider': typeof DemoAnimatedSliderRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
@@ -195,12 +207,13 @@ export interface FileRoutesByFullPath {
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
   '/demo/toggle-switch': typeof DemoToggleSwitchRoute
+  '/demos/$componentId': typeof DemosComponentIdRoute
+  '/demos/': typeof DemosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
   '/blocks': typeof BlocksRoute
-  '/demos': typeof DemosRoute
   '/mcp': typeof McpRoute
   '/demo/animated-slider': typeof DemoAnimatedSliderRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
@@ -223,13 +236,15 @@ export interface FileRoutesByTo {
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
   '/demo/toggle-switch': typeof DemoToggleSwitchRoute
+  '/demos/$componentId': typeof DemosComponentIdRoute
+  '/demos': typeof DemosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
   '/blocks': typeof BlocksRoute
-  '/demos': typeof DemosRoute
+  '/demos': typeof DemosRouteWithChildren
   '/mcp': typeof McpRoute
   '/demo/animated-slider': typeof DemoAnimatedSliderRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
@@ -252,6 +267,8 @@ export interface FileRoutesById {
   '/demo/timelines': typeof DemoTimelinesRoute
   '/demo/timers': typeof DemoTimersRoute
   '/demo/toggle-switch': typeof DemoToggleSwitchRoute
+  '/demos/$componentId': typeof DemosComponentIdRoute
+  '/demos/': typeof DemosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -282,12 +299,13 @@ export interface FileRouteTypes {
     | '/demo/timelines'
     | '/demo/timers'
     | '/demo/toggle-switch'
+    | '/demos/$componentId'
+    | '/demos/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/demo'
     | '/blocks'
-    | '/demos'
     | '/mcp'
     | '/demo/animated-slider'
     | '/demo/callbacks'
@@ -310,6 +328,8 @@ export interface FileRouteTypes {
     | '/demo/timelines'
     | '/demo/timers'
     | '/demo/toggle-switch'
+    | '/demos/$componentId'
+    | '/demos'
   id:
     | '__root__'
     | '/'
@@ -338,13 +358,15 @@ export interface FileRouteTypes {
     | '/demo/timelines'
     | '/demo/timers'
     | '/demo/toggle-switch'
+    | '/demos/$componentId'
+    | '/demos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DemoRouteRoute: typeof DemoRouteRouteWithChildren
   BlocksRoute: typeof BlocksRoute
-  DemosRoute: typeof DemosRoute
+  DemosRoute: typeof DemosRouteWithChildren
   McpRoute: typeof McpRoute
 }
 
@@ -384,6 +406,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/demos/': {
+      id: '/demos/'
+      path: '/'
+      fullPath: '/demos/'
+      preLoaderRoute: typeof DemosIndexRouteImport
+      parentRoute: typeof DemosRoute
+    }
+    '/demos/$componentId': {
+      id: '/demos/$componentId'
+      path: '/$componentId'
+      fullPath: '/demos/$componentId'
+      preLoaderRoute: typeof DemosComponentIdRouteImport
+      parentRoute: typeof DemosRoute
     }
     '/demo/toggle-switch': {
       id: '/demo/toggle-switch'
@@ -587,11 +623,23 @@ const DemoRouteRouteWithChildren = DemoRouteRoute._addFileChildren(
   DemoRouteRouteChildren,
 )
 
+interface DemosRouteChildren {
+  DemosComponentIdRoute: typeof DemosComponentIdRoute
+  DemosIndexRoute: typeof DemosIndexRoute
+}
+
+const DemosRouteChildren: DemosRouteChildren = {
+  DemosComponentIdRoute: DemosComponentIdRoute,
+  DemosIndexRoute: DemosIndexRoute,
+}
+
+const DemosRouteWithChildren = DemosRoute._addFileChildren(DemosRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DemoRouteRoute: DemoRouteRouteWithChildren,
   BlocksRoute: BlocksRoute,
-  DemosRoute: DemosRoute,
+  DemosRoute: DemosRouteWithChildren,
   McpRoute: McpRoute,
 }
 export const routeTree = rootRouteImport

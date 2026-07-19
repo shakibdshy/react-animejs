@@ -264,7 +264,7 @@ function TransitionPickerDemo() {
 
 export const AnimatedSliderGroup: React.FC = () => {
   return (
-    <DemoSection title="Animated Slider">
+    <DemoSection title="Animated Slider" frameChildren={false} codeId={false}>
       <SlideTransitionDemo />
       <FadeTransitionDemo />
       <ScaleTransitionDemo />

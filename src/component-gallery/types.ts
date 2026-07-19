@@ -2,7 +2,10 @@ export type DemoCategory = "core" | "svg" | "scroll" | "interaction" | "ui";
 
 export interface DemoSection<TComponentId extends string = string> {
   title: string;
-  path: string;
+  /** Optional deep-dive route for interactions that need a larger canvas. */
+  playgroundPath?: string;
+  /** Whether the component earns a dedicated Playground beyond its detail page. */
+  hasPlayground?: boolean;
   description: string;
   category: DemoCategory;
   componentId: TComponentId;

@@ -3,6 +3,7 @@ import type { WAAPIAnimation } from '@/lib/react-animejs/types';
 import type { AnimeWAAPIRef } from '@/lib/react-animejs/components';
 import { AnimeTimeline, AnimeWAAPI } from '@/lib/react-animejs/components';
 import { DemoSection } from './DemoSection';
+import { TimelineDemoFrame } from './TimelineDemoFrame';
 
 /**
  * SyncWAAPIAnimationsDemo - Demonstrates syncing WAAPI animations to a timeline
@@ -48,20 +49,22 @@ export const SyncWAAPIAnimationsDemo: React.FC = () => {
     >
       {({ controls, state }) => (
         <DemoSection title="Timeline: Sync WAAPI Animations">
-          <div className="flex flex-col gap-10 w-full bg-[#2a2610] p-10 rounded-3xl border border-[#4a4220] shadow-2xl">
-        <div className="flex justify-between items-center">
-          <h3 className="text-amber-500 font-bold text-xl uppercase tracking-widest">Sync WAAPI animations</h3>
-          <div className="flex gap-4">
+          <TimelineDemoFrame
+            title="Sync WAAPI animations"
+            controls={(
+              <>
             <button 
               onClick={controls.restart}
-              className="text-amber-500 hover:text-amber-400 transition-colors"
+              aria-label="Restart timeline"
+              className="text-demo-accent hover:text-demo-accent/80 transition-colors"
               title="Restart"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
             </button>
             <button 
               onClick={state.paused ? controls.play : controls.pause}
-              className="text-amber-500 hover:text-amber-400 transition-colors"
+              aria-label={state.paused ? 'Play timeline' : 'Pause timeline'}
+              className="text-demo-accent hover:text-demo-accent/80 transition-colors"
             >
               {state.paused ? (
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -69,11 +72,12 @@ export const SyncWAAPIAnimationsDemo: React.FC = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
               )}
             </button>
-          </div>
-        </div>
+              </>
+            )}
+          >
 
         {/* Animation Stage */}
-        <div className="relative h-64 w-full bg-[#1a180a] rounded-2xl border border-[#3a3418] p-6 overflow-hidden shadow-inner">
+        <div className="relative h-64 w-full bg-demo-bg rounded-2xl border border-demo-border p-6 overflow-hidden shadow-inner">
           <div className="relative w-full h-full flex items-center">
             {/* Square (Bottom Left) */}
             <AnimeWAAPI
@@ -83,7 +87,7 @@ export const SyncWAAPIAnimationsDemo: React.FC = () => {
               onReady={(api: AnimeWAAPIRef) => setSquareWAAPI(api.animation)}
             >
               <div 
-                className="absolute left-6 w-16 h-16 bg-amber-500 rounded-2xl shadow-[0_0_25px_rgba(245,158,11,0.4)] z-10"
+                className="absolute left-6 w-16 h-16 bg-demo-accent rounded-2xl demo-stage-glow z-10"
               ></div>
             </AnimeWAAPI>
 
@@ -97,7 +101,7 @@ export const SyncWAAPIAnimationsDemo: React.FC = () => {
               onReady={(api: AnimeWAAPIRef) => setTriangleWAAPI(api.animation)}
             >
               <div 
-                className="absolute left-12 w-0 h-0 border-l-35 border-l-transparent border-r-35 border-r-transparent border-b-60 border-b-amber-500 drop-shadow-[0_0_15px_rgba(245,158,11,0.4)] z-20 -translate-y-8"
+                className="absolute left-12 w-0 h-0 border-l-35 border-l-transparent border-r-35 border-r-transparent border-b-60 border-b-demo-accent demo-stage-drop-glow z-20 -translate-y-8"
               ></div>
             </AnimeWAAPI>
 
@@ -108,9 +112,9 @@ export const SyncWAAPIAnimationsDemo: React.FC = () => {
               onReady={(api: AnimeWAAPIRef) => setCircleWAAPI(api.animation)}
             >
               <div 
-                className="absolute left-16 w-16 h-16 bg-amber-500 rounded-full shadow-[0_0_30px_rgba(245,158,11,0.5)] z-30 flex items-center justify-center border-2 border-amber-400"
+                className="absolute left-16 w-16 h-16 bg-demo-accent rounded-full demo-stage-glow z-30 flex items-center justify-center border-2 border-demo-accent"
               >
-                <div className="w-6 h-6 rounded-full border-4 border-[#1a180a]"></div>
+                <div className="w-6 h-6 rounded-full border-4 border-demo-bg"></div>
               </div>
             </AnimeWAAPI>
           </div>
@@ -120,60 +124,60 @@ export const SyncWAAPIAnimationsDemo: React.FC = () => {
         <div className="relative w-full h-24 flex flex-col justify-end gap-2 px-12">
           {/* Bar 1 (Circle) */}
           <div 
-            className="h-3 bg-amber-900/20 rounded-full relative"
+            className="h-3 bg-demo-accent/20 rounded-full relative"
             style={{ width: `${(circleDur / totalDuration) * 100}%`, marginLeft: `${(circleStart / totalDuration) * 100}%` }}
           >
-            <div className="absolute -left-10 -top-1 w-6 h-6 bg-amber-500/20 rounded-full border-2 border-amber-500/40 flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-amber-500"></div>
+            <div className="absolute -left-10 -top-1 w-6 h-6 bg-demo-accent/20 rounded-full border-2 border-demo-accent/40 flex items-center justify-center">
+              <div className="w-2 h-2 rounded-full bg-demo-accent"></div>
             </div>
             <div 
-              className="absolute top-0 left-0 h-full bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.8)] rounded-full"
+              className="absolute top-0 left-0 h-full bg-demo-accent demo-stage-glow-strong rounded-full"
               style={{ width: `${Math.min(100, Math.max(0, (state.currentTime / circleDur) * 100))}%` }}
             />
           </div>
 
           {/* Bar 2 (Triangle) */}
           <div 
-            className="h-3 bg-amber-900/20 rounded-full relative"
+            className="h-3 bg-demo-accent/20 rounded-full relative"
             style={{ width: `${(triangleDur / totalDuration) * 100}%`, marginLeft: `${(triangleStart / totalDuration) * 100}%` }}
           >
-            <div className="absolute -left-10 -top-2 w-0 h-0 border-l-10 border-l-transparent border-r-10 border-r-transparent border-b-18 border-b-amber-500/40"></div>
+            <div className="absolute -left-10 -top-2 w-0 h-0 border-l-10 border-l-transparent border-r-10 border-r-transparent border-b-18 border-b-demo-accent/40"></div>
             <div 
-              className="absolute top-0 left-0 h-full bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.8)] rounded-full"
+              className="absolute top-0 left-0 h-full bg-demo-accent demo-stage-glow-strong rounded-full"
               style={{ width: `${Math.min(100, Math.max(0, ((state.currentTime - triangleStart) / triangleDur) * 100))}%` }}
             />
           </div>
 
           {/* Bar 3 (Square) */}
           <div 
-            className="h-3 bg-amber-900/20 rounded-full relative"
+            className="h-3 bg-demo-accent/20 rounded-full relative"
             style={{ width: `${(squareDur / totalDuration) * 100}%`, marginLeft: `${(squareStart / totalDuration) * 100}%` }}
           >
-            <div className="absolute -left-10 -top-1 w-6 h-6 bg-amber-500/20 rounded-lg border-2 border-amber-500/40 shadow-inner"></div>
+            <div className="absolute -left-10 -top-1 w-6 h-6 bg-demo-accent/20 rounded-lg border-2 border-demo-accent/40 shadow-inner"></div>
             <div 
-              className="absolute top-0 left-0 h-full bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.8)] rounded-full"
+              className="absolute top-0 left-0 h-full bg-demo-accent demo-stage-glow-strong rounded-full"
               style={{ width: `${Math.min(100, Math.max(0, ((state.currentTime - squareStart) / squareDur) * 100))}%` }}
             />
           </div>
 
           {/* Current position marker */}
           <div 
-            className="absolute bottom-0 w-0.5 h-full bg-amber-500/60 shadow-[0_0_15px_rgba(245,158,11,0.6)] z-20"
+            className="absolute bottom-0 w-0.5 h-full bg-demo-accent/60 demo-stage-glow-strong z-20"
             style={{ left: `${state.progress * 100}%` }}
           />
         </div>
 
-        <div className="space-y-3 pt-6 border-t border-[#3a3418]">
+        <div className="space-y-3 pt-6 border-t border-demo-border">
           <div className="flex items-center gap-3">
-            <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
-            <span className="text-xs text-amber-600 font-bold tracking-widest uppercase">WAAPI animations can be synchronised to a timeline using the sync() method.</span>
+            <div className="w-1.5 h-1.5 rounded-full bg-demo-accent"></div>
+            <span className="text-xs text-demo-text-muted font-bold tracking-widest uppercase">WAAPI animations can be synchronised to a timeline using the sync() method.</span>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
-            <span className="text-xs text-amber-600 font-bold tracking-widest uppercase">Demonstrating precise overlapping timing control.</span>
+            <div className="w-1.5 h-1.5 rounded-full bg-demo-accent"></div>
+            <span className="text-xs text-demo-text-muted font-bold tracking-widest uppercase">Demonstrating precise overlapping timing control.</span>
           </div>
         </div>
-          </div>
+          </TimelineDemoFrame>
         </DemoSection>
       )}
     </AnimeTimeline>

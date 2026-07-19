@@ -175,7 +175,7 @@ function InteractiveCubeDemo() {
 
 export const SpinningCubeGroup: React.FC = () => {
   return (
-    <DemoSection title="Spinning 3D Cube">
+    <DemoSection title="Spinning 3D Cube" frameChildren={false} codeId={false}>
       <BasicCubeDemo />
       <YAxisCubeDemo />
       <XAxisCubeDemo />

@@ -17,7 +17,7 @@ import {
 
 const MethodsGroup: React.FC = () => {
   return (
-    <DemoSection title="Timeline: Methods">
+    <DemoSection title="Timeline: Methods" frameChildren={false} codeId={false}>
       <TimelinePlaybackMethodsDemo />
       <TimelinePropertiesDemo />
       <TimelineAddDemo />

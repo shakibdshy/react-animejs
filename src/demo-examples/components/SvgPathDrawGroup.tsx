@@ -468,7 +468,7 @@ function MusicNoteDrawDemo() {
 
 export const SvgPathDrawGroup: React.FC = () => {
   return (
-    <DemoSection title="SVG Path Drawing">
+    <DemoSection title="SVG Path Drawing" frameChildren={false} codeId={false}>
       <SinglePathDrawDemo />
       <LoopingDrawDemo />
       <StaggeredDrawDemo />

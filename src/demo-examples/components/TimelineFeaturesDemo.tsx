@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { AnimeTimeline } from '@/lib/react-animejs/components';
 import { DemoSection } from './DemoSection';
+import { TimelineDemoFrame } from './TimelineDemoFrame';
 
 /**
  * TimelineFeaturesDemo - Demonstrates advanced Anime.js v4 timeline features
@@ -59,51 +60,55 @@ export const TimelineFeaturesDemo: React.FC = () => {
     >
       {({ controls, state }) => (
         <DemoSection title="Advanced Timeline Features">
-          <div className="flex flex-col gap-6 w-full">
-            <div className="flex gap-4">
+          <TimelineDemoFrame
+            title="Advanced timeline features"
+            controls={(
+              <>
               <button 
                 onClick={controls.play}
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition-colors"
+                className="timeline-demo-text-button"
               >
                 Play Timeline
               </button>
               <button 
                 onClick={controls.restart}
-                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors"
+                className="timeline-demo-text-button"
               >
                 Restart
               </button>
-            </div>
+              </>
+            )}
+          >
 
-            <div className="flex flex-col gap-4 bg-demo-card p-6 rounded-xl border border-demo-border">
+            <div className="flex flex-1 flex-col justify-center gap-4 rounded-2xl border border-demo-border bg-demo-bg p-6 shadow-inner">
               <div className="flex items-center gap-4">
-                <div ref={box1Ref} className="w-10 h-10 bg-indigo-500 rounded-sm shadow-lg"></div>
-                <span className="text-xs text-gray-400">Animation 1 (pos: 0)</span>
+                <div ref={box1Ref} className="w-10 h-10 bg-demo-accent rounded-sm demo-stage-glow-soft"></div>
+                <span className="text-xs text-demo-text-secondary">Animation 1 (pos: 0)</span>
               </div>
               <div className="flex items-center gap-4">
-                <div ref={box2Ref} className="w-10 h-10 bg-purple-500 rounded-sm shadow-lg"></div>
-                <span className="text-xs text-gray-400">{'Animation 2 (pos: "<")'}</span>
+                <div ref={box2Ref} className="w-10 h-10 bg-demo-accent/70 rounded-sm demo-stage-glow-soft"></div>
+                <span className="text-xs text-demo-text-secondary">{'Animation 2 (pos: "<")'}</span>
               </div>
               <div className="flex items-center gap-4">
-                <div ref={box3Ref} className="w-10 h-10 bg-pink-500 rounded-sm shadow-lg"></div>
-                <span className="text-xs text-gray-400">{'Animation 3 (pos: "+=")'}</span>
+                <div ref={box3Ref} className="w-10 h-10 bg-demo-accent/45 rounded-sm demo-stage-glow-soft"></div>
+                <span className="text-xs text-demo-text-secondary">{'Animation 3 (pos: "+=")'}</span>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 text-xs font-mono bg-[#0f0f15] p-4 rounded-lg border border-demo-border">
-              <div className="text-gray-500">Last Event:</div>
-              <div className="text-amber-400">{lastEvent}</div>
-              <div className="text-gray-500">Progress:</div>
-              <div className="text-amber-400">{Math.round(state.progress * 100)}%</div>
+            <div className="grid grid-cols-2 gap-4 text-xs font-mono bg-demo-bg p-4 rounded-lg border border-demo-border">
+              <div className="text-demo-text-muted">Last Event:</div>
+              <div className="text-demo-accent">{lastEvent}</div>
+              <div className="text-demo-text-muted">Progress:</div>
+              <div className="text-demo-accent">{Math.round(state.progress * 100)}%</div>
             </div>
 
-            <div className="text-xs text-gray-500 space-y-1">
+            <div className="space-y-1 border-t border-demo-border pt-5 text-xs text-demo-text-muted">
               <p>• Uses <code>position</code> for relative timing (<code>&lt;</code>, <code>&gt;</code>, <code>+=</code>).</p>
               <p>• Demonstrates <code>callback</code> (function calls) within the timeline.</p>
               <p>• Shows <code>timer</code> entries (pauses/delays) without targets.</p>
               <p>• Uses <code>labels</code> for marking positions.</p>
             </div>
-          </div>
+          </TimelineDemoFrame>
         </DemoSection>
       )}
     </AnimeTimeline>

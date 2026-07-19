@@ -12,7 +12,7 @@ import { AdvancedTimerDemo } from "./AdvancedTimerDemo";
 
 export const TimersGroup: React.FC = () => {
   return (
-    <DemoSection title="Standalone Timers">
+    <DemoSection title="Standalone Timers" frameChildren={false} codeId={false}>
       <AdvancedTimerDemo />
       <AlternatingTimerDemo />
       <ReversedTimerDemo />

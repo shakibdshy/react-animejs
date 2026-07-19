@@ -136,7 +136,7 @@ export const ScrambleTextLoopDemo: React.FC = () => {
 
 export const ScrambleTextGroup: React.FC = () => {
   return (
-    <DemoSection title="Scramble Text">
+    <DemoSection title="Scramble Text" frameChildren={false} codeId={false}>
       <ScrambleTextBasicDemo />
       <ScrambleTextAutoplayDemo />
       <ScrambleTextOptionsDemo />

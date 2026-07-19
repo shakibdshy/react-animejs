@@ -470,7 +470,7 @@ function SequenceReorderDemo() {
 
 export const ReorderListDemoGroup: React.FC = () => {
   return (
-    <DemoSection title="Reorder Animation">
+    <DemoSection title="Reorder Animation" frameChildren={false} codeId={false}>
       <BasicReorderDemo />
       <MoveUpDownDemo />
       <AddRemoveDemo />

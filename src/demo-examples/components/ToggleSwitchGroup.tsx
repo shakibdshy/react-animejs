@@ -98,7 +98,7 @@ function MultipleTogglesDemo() {
 
 export const ToggleSwitchGroup: React.FC = () => {
   return (
-    <DemoSection title="Toggle Switch">
+    <DemoSection title="Toggle Switch" frameChildren={false} codeId={false}>
       <BasicToggleDemo />
       <SizesDemo />
       <DisabledDemo />
