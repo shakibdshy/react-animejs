@@ -235,6 +235,58 @@ code {
   .dark .landing-code-attr { color: oklch(65% 0.15 200); }
   .dark .landing-code-val { color: oklch(70% 0.15 145); }
 
+  .demo-examples-page {
+    min-height: calc(100vh - 4rem);
+    background:
+      linear-gradient(90deg, transparent 0, transparent calc(50% - 0.5px), color-mix(in oklch, var(--landing-border) 45%, transparent) 50%, transparent calc(50% + 0.5px), transparent 100%);
+  }
+  .demo-examples-glow {
+    position: absolute;
+    width: min(42vw, 42rem);
+    height: min(42vw, 42rem);
+    border-radius: 999px;
+    filter: blur(88px);
+    opacity: 0.14;
+    pointer-events: none;
+    background: var(--landing-accent);
+  }
+  .demo-examples-glow-left { top: 10rem; left: -20rem; }
+  .demo-examples-glow-right { top: 28rem; right: -22rem; opacity: 0.1; }
+  .demo-example-section + .demo-example-section { margin-top: 4.5rem; }
+  .demo-example-item {
+    min-width: 0;
+    border: 1px solid var(--landing-border);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    background: color-mix(in oklch, var(--landing-surface) 88%, transparent);
+    box-shadow: 0 18px 45px color-mix(in srgb, black 10%, transparent);
+  }
+  .demo-example-item:has(.demo-example-card) {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .demo-example-item .demo-example-section {
+    margin: 0;
+  }
+  .demo-example-item .demo-example-section > header {
+    margin-bottom: 1.25rem;
+  }
+  .demo-example-item .demo-example-section > header h2 {
+    font-size: 1.25rem;
+  }
+  .demo-example-item .demo-example-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .demo-example-item .demo-example-grid > .demo-example-item {
+    padding: 1.25rem;
+  }
+  @media (max-width: 640px) {
+    .demo-example-item { padding: 1rem; }
+    .demo-examples-page { background: none; }
+  }
+
   .code-block-root {
     font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
     font-size: 13px;

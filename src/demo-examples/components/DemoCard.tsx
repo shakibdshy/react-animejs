@@ -33,7 +33,7 @@ export const DemoCard: React.FC<DemoCardProps> = ({
 }) => {
   return (
     <div
-      className={`w-full bg-landing-surface border border-landing-border rounded-2xl p-6 flex flex-col transition-all duration-500 hover:border-landing-accent/30 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] ${className}`}
+      className={`demo-example-card w-full bg-landing-surface border border-landing-border rounded-2xl p-6 flex flex-col transition-all duration-500 hover:border-landing-accent/30 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] ${className}`}
     >
       <div className="flex justify-between items-center mb-5">
         <div>
