@@ -21,6 +21,7 @@ import {
   safeJsonStringify,
   useScopeContext,
 } from "../core";
+import { useDependencySignal } from './use-dependency-signal';
 
 /**
  * useAnimeWAAPI - Create and control WAAPI animations declaratively
@@ -55,6 +56,8 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
     ...restOptions
   } = options;
 
+  const depsSignal = useDependencySignal(deps);
+
   // Stability for animatable props
   const optionsJson = useMemo(() => {
     const { onBegin, onComplete, onUpdate, onRender, onLoop, ...serializable } = options;
@@ -62,6 +65,8 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
   }, [options]);
 
   useEffect(() => {
+    let unregisterScopedCleanup: (() => void) | undefined;
+
     if (!enabled) {
       setIsReady(false);
       return;
@@ -106,7 +111,7 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
       setIsReady(true);
 
       if (scopeContext.isScoped) {
-        scopeContext.registerCleanup(() => {
+        unregisterScopedCleanup = scopeContext.registerCleanup(() => {
           animationRef.current?.revert();
         });
       }
@@ -116,11 +121,12 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
     }
 
     return () => {
+      unregisterScopedCleanup?.();
       animationRef.current?.revert();
       animationRef.current = null;
       setIsReady(false);
     };
-  }, [enabled, optionsJson, scopeContext, ...deps]);
+  }, [enabled, optionsJson, scopeContext, depsSignal]);
 
   const controls: PlaybackControls = useMemo(
     () => ({

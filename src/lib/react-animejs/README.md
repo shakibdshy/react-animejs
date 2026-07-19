@@ -9,7 +9,7 @@ A comprehensive React wrapper for [Anime.js v4](https://animejs.com), providing 
 - 📦 **TypeScript first** - Full type safety with comprehensive types
 - 🎯 **Scoped animations** - `AnimeProvider` for isolated animation contexts
 - 🎨 **Ready-to-use presets** - fadeIn, scaleIn, bounce, shake, and more
-- 🎭 **Declarative components** - `<Animate>` and `<AnimatePresence>`
+- 🎭 **Declarative components** - `<Anime>` and `<AnimePresence>`
 - 🎮 **Shared controllers** - Control multiple animations with `useAnimeControls`
 
 ## 📦 Installation
@@ -62,13 +62,13 @@ function Hero() {
 ### Declarative Component
 
 ```tsx
-import { Animate, popIn } from '@/lib/react-animejs';
+import { Anime, popIn } from '@/lib/react-animejs';
 
 function Card() {
   return (
-    <Animate {...popIn} autoplay>
+    <Anime {...popIn} autoplay>
       <div className="card">Hello!</div>
-    </Animate>
+    </Anime>
   );
 }
 ```
@@ -403,12 +403,12 @@ Scopes animations for automatic cleanup and selector isolation.
 
 ---
 
-#### `<Animate>`
+#### `<Anime>`
 
 Declarative animation wrapper.
 
 ```tsx
-<Animate
+<Anime
   translateY={[-50, 0]}
   opacity={[0, 1]}
   duration={800}
@@ -416,29 +416,28 @@ Declarative animation wrapper.
   onControlsReady={(controls) => console.log(controls)}
 >
   <div>Animated content</div>
-</Animate>
+</Anime>
 ```
 
 ---
 
-#### `<AnimatePresence>`
+#### `<AnimePresence>`
 
 Handle enter/exit animations for mounting/unmounting components.
 
 ```tsx
-<AnimatePresence>
+<AnimePresence>
   {isVisible && (
     <AnimatePresenceChild
       key="modal"
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
+      enter={{ opacity: [0, 1], scale: [0.9, 1] }}
       exit={{ opacity: 0, scale: 0.9 }}
       duration={300}
     >
       <div className="modal">Modal content</div>
     </AnimatePresenceChild>
   )}
-</AnimatePresence>
+</AnimePresence>
 ```
 
 ---

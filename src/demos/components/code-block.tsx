@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { Highlight } from 'prism-react-renderer';
 
 const EMPTY_THEME = {

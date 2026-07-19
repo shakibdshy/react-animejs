@@ -21,6 +21,7 @@ import {
   safeJsonStringify,
   useScopeContext,
 } from "../core";
+import { useDependencySignal } from './use-dependency-signal';
 
 // =============================================================================
 // Hook Implementation
@@ -127,6 +128,8 @@ export function useAnimeTimer(
     autoUpdateRefs = false,
   } = options;
 
+  const depsSignal = useDependencySignal(deps);
+
   // ==========================================================================
   // Mount State Management
   // ==========================================================================
@@ -180,6 +183,8 @@ export function useAnimeTimer(
   scopeContextRef.current = scopeContext;
 
   useEffect(() => {
+    let unregisterScopedCleanup: (() => void) | undefined;
+
     if (!enabled) {
       setIsReady(false);
       return;
@@ -286,7 +291,7 @@ export function useAnimeTimer(
       // Register cleanup with parent scope (using ref to avoid dependency)
       const currentScopeContext = scopeContextRef.current;
       if (currentScopeContext.isScoped) {
-        currentScopeContext.registerCleanup(() => {
+        unregisterScopedCleanup = currentScopeContext.registerCleanup(() => {
           if (timerRef.current) {
             try {
               timerRef.current.cancel();
@@ -303,6 +308,7 @@ export function useAnimeTimer(
 
     // Cleanup
     return () => {
+      unregisterScopedCleanup?.();
       if (timerRef.current) {
         try {
           timerRef.current.cancel();
@@ -313,8 +319,7 @@ export function useAnimeTimer(
       }
       setIsReady(false);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, optionsJson, ...deps]);
+  }, [enabled, optionsJson, depsSignal]);
 
   // ==========================================================================
   // Dynamic frameRate update (matches Anime.js docs pattern: timer.fps = value)

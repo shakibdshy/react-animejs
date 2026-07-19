@@ -35,6 +35,7 @@ import {
   safeJsonStringify,
   useScopeContext,
 } from "../core";
+import { useDependencySignal } from './use-dependency-signal';
 
 const DEFAULT_SCROLL_OBSERVER_STATE: ScrollObserverState = {
   id: "",
@@ -164,6 +165,8 @@ export function useAnimeOnScroll<
     onSyncComplete,
   } = options;
 
+  const depsSignal = useDependencySignal(deps);
+
   const callbackRefs = useRef({
     onEnter,
     onLeave,
@@ -244,6 +247,8 @@ export function useAnimeOnScroll<
   );
 
   useEffect(() => {
+    let unregisterScopedCleanup: (() => void) | undefined;
+
     if (!enabled) {
       observerRef.current?.revert();
       observerRef.current = null;
@@ -303,7 +308,7 @@ export function useAnimeOnScroll<
       setIsReady(true);
 
       if (scopeContext.isScoped) {
-        scopeContext.registerCleanup(() => {
+        unregisterScopedCleanup = scopeContext.registerCleanup(() => {
           try {
             observer.revert();
           } catch {}
@@ -311,6 +316,7 @@ export function useAnimeOnScroll<
       }
 
       return () => {
+        unregisterScopedCleanup?.();
         try {
           observer.revert();
         } catch {}
@@ -328,8 +334,7 @@ export function useAnimeOnScroll<
       syncObserverState(null);
       setIsReady(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, resolvedPropLinked, configJson, scopeContext, ...deps]);
+  }, [enabled, resolvedPropLinked, configJson, scopeContext, depsSignal]);
 
   useEffect(() => {
     if (!observerRef.current || !linkedInstance) return;

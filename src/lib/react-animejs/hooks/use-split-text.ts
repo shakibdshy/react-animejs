@@ -15,6 +15,8 @@ import {
 import { splitText } from "animejs";
 import type { TextSplitter, TextSplitterParams } from "animejs";
 import type { RefObject } from "react";
+import { safeJsonStringify } from '../core';
+import { useDependencySignal } from './use-dependency-signal';
 
 export interface UseSplitTextOptions {
   /**
@@ -168,15 +170,17 @@ export function useSplitText(
     onReadyRef.current = onReady;
   }, [onReady]);
 
-  const paramsStr = JSON.stringify(params);
+  const paramsRef = useRef(params);
+  paramsRef.current = params;
+  const paramsKey = useMemo(() => safeJsonStringify(params), [params]);
+  const depsSignal = useDependencySignal(deps);
 
   const performSplit = useCallback(() => {
     const element = target.current as HTMLElement | null;
     if (!element) return null;
 
     try {
-      const parsedParams = JSON.parse(paramsStr);
-      const split = splitText(element, parsedParams);
+      const split = splitText(element, paramsRef.current);
 
       if (onReadyRef.current) {
         onReadyRef.current(split);
@@ -187,7 +191,7 @@ export function useSplitText(
       console.error("[react-animejs] splitText error:", error);
       return null;
     }
-  }, [target, paramsStr]);
+  }, [target]);
 
   useEffect(() => {
     if (!splitOnMount) return;
@@ -206,22 +210,7 @@ export function useSplitText(
       }
       setIsReady(false);
     };
-  }, [performSplit, splitOnMount]);
-
-  useEffect(() => {
-    if (deps.length > 0) {
-      if (splitRef.current) {
-        try {
-          splitRef.current.revert();
-        } catch {
-        }
-      }
-
-      const split = performSplit();
-      splitRef.current = split;
-      setIsReady(split !== null);
-    }
-  }, [deps, performSplit]);
+  }, [performSplit, splitOnMount, depsSignal, paramsKey]);
 
   const splitNow = useCallback(() => {
     if (splitRef.current) {

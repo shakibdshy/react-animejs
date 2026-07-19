@@ -22,6 +22,7 @@ import type {
   UseAnimeScopeReturn,
 } from "../types/scope";
 import { safeJsonStringify } from "../core";
+import { useDependencySignal } from './use-dependency-signal';
 
 // =============================================================================
 // Helper Functions
@@ -199,6 +200,8 @@ export function useAnimeScope<T extends ScopeMediaQueries = ScopeMediaQueries>(
     onRefresh,
   } = options;
 
+  const depsSignal = useDependencySignal(deps);
+
   // ==========================================================================
   // Stable Option Refs
   // ==========================================================================
@@ -328,8 +331,7 @@ export function useAnimeScope<T extends ScopeMediaQueries = ScopeMediaQueries>(
       setIsReady(false);
       setMethods({});
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, root, configJson, ...deps]);
+  }, [enabled, root, configJson, depsSignal]);
 
   // ==========================================================================
   // Sync Matches State (for media query changes)

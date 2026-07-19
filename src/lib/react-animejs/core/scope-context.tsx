@@ -35,7 +35,7 @@ const defaultContextValue: AnimeScopeContext = {
   scope: null,
   rootRef: { current: null },
   isScoped: false,
-  registerCleanup: () => {},
+  registerCleanup: () => () => {},
   matches: {},
 };
 
@@ -103,6 +103,7 @@ export function AnimeProvider({
    */
   useEffect(() => {
     if (!rootRef.current) return;
+    const registeredCleanups = cleanupFunctions.current;
 
     // Create the anime.js scope
     scopeRef.current = createScope({ root: rootRef }) as unknown as AnimeScope;
@@ -111,14 +112,14 @@ export function AnimeProvider({
     // Cleanup on unmount
     return () => {
       // Call all registered cleanup functions
-      cleanupFunctions.current.forEach((cleanup) => {
+      registeredCleanups.forEach((cleanup) => {
         try {
           cleanup();
         } catch (error) {
           console.warn("[react-animejs] Cleanup error:", error);
         }
       });
-      cleanupFunctions.current.clear();
+      registeredCleanups.clear();
 
       // Revert the scope (cleanup all anime.js instances)
       if (scopeRef.current) {

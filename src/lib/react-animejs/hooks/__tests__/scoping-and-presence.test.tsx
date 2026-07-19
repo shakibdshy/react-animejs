@@ -11,24 +11,24 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("animejs", () => {
   const animateCalls: Array<{
     target: unknown;
-    config: Record<string, unknown>;
+    config: Record<string, any>;
     instance: Record<string, any>;
   }> = [];
   const onScrollCalls: Array<{
-    config: Record<string, unknown>;
+    config: Record<string, any>;
     instance: Record<string, any>;
   }> = [];
   const timelineCalls: Array<{
-    config: Record<string, unknown>;
+    config: Record<string, any>;
     instance: Record<string, any>;
   }> = [];
   const waapiCalls: Array<{
     target: unknown;
-    config: Record<string, unknown>;
+    config: Record<string, any>;
     instance: Record<string, any>;
   }> = [];
 
-  const createAnimationInstance = (config: Record<string, unknown> = {}) => {
+  const createAnimationInstance = (config: Record<string, any> = {}) => {
     const instance: Record<string, any> = {
       id: "mock-animation",
       progress: 0,
@@ -117,7 +117,7 @@ vi.mock("animejs", () => {
     return instance;
   };
 
-  const createScrollObserverInstance = (config: Record<string, unknown> = {}) => {
+  const createScrollObserverInstance = (config: Record<string, any> = {}) => {
     const instance: Record<string, any> = {
       id: config.id ?? `observer-${onScrollCalls.length + 1}`,
       target: config.target ?? null,
@@ -183,13 +183,13 @@ vi.mock("animejs", () => {
         },
       };
     },
-    animate: (target: unknown, config: Record<string, unknown>) => {
+    animate: (target: unknown, config: Record<string, any>) => {
       const instance = createAnimationInstance(config);
       animateCalls.push({ target, config, instance });
       config.onBegin?.(instance);
       return instance;
     },
-    createTimeline: (config: Record<string, unknown>) => {
+    createTimeline: (config: Record<string, any>) => {
       const instance: Record<string, any> = {
         ...createAnimationInstance(config),
         addCalls: [] as Array<{ target: unknown; params: unknown; position: unknown }>,
@@ -238,7 +238,7 @@ vi.mock("animejs", () => {
       return instance;
     },
     waapi: {
-      animate: (target: unknown, config: Record<string, unknown>) => {
+      animate: (target: unknown, config: Record<string, any>) => {
         const instance = createAnimationInstance(config);
         waapiCalls.push({ target, config, instance });
         config.onBegin?.(instance);
@@ -247,7 +247,7 @@ vi.mock("animejs", () => {
       convertEase: () => "linear()",
     },
     stagger: () => 0,
-    onScroll: (config: Record<string, unknown>) =>
+    onScroll: (config: Record<string, any>) =>
       createScrollObserverInstance(config),
     utils: {},
     __mock: {
@@ -275,11 +275,16 @@ vi.mock("animejs", () => {
 // Vitest mock helper — declared so TypeScript accepts the import
 // even though animejs doesn't export __mock at runtime.
 declare module "animejs" {
+  interface AnimeMockCall {
+    target: unknown;
+    config: Record<string, any>;
+    instance: Record<string, any>;
+  }
   interface AnimeMockData {
-    animateCalls: Array<Record<string, unknown>>;
-    onScrollCalls: Array<Record<string, unknown>>;
-    timelineCalls: Array<Record<string, unknown>>;
-    waapiCalls: Array<Record<string, unknown>>;
+    animateCalls: AnimeMockCall[];
+    onScrollCalls: AnimeMockCall[];
+    timelineCalls: AnimeMockCall[];
+    waapiCalls: AnimeMockCall[];
     reset: () => void;
     completeAll: () => void;
   }
@@ -316,7 +321,7 @@ function createScopedWrapper(root: HTMLElement) {
           scope: null,
           rootRef: { current: root },
           isScoped: true,
-          registerCleanup: () => {},
+          registerCleanup: () => () => {},
           matches: {},
         }}
       >
@@ -327,6 +332,46 @@ function createScopedWrapper(root: HTMLElement) {
 }
 
 describe("scoped selector handling", () => {
+  it("unregisters replaced scoped cleanups", async () => {
+    const root = document.createElement("div");
+    const target = document.createElement("div");
+    root.appendChild(target);
+    document.body.appendChild(root);
+    const cleanups = new Set<() => void>();
+
+    function ScopedWrapper({ children }: { children: React.ReactNode }) {
+      return (
+        <ScopeContext.Provider
+          value={{
+            scope: null,
+            rootRef: { current: root },
+            isScoped: true,
+            registerCleanup: (cleanup) => {
+              cleanups.add(cleanup);
+              return () => cleanups.delete(cleanup);
+            },
+            matches: {},
+          }}
+        >
+          {children}
+        </ScopeContext.Provider>
+      );
+    }
+
+    const { rerender, unmount } = renderHook(
+      ({ duration }) => useAnime({ targets: target, duration }),
+      { initialProps: { duration: 200 }, wrapper: ScopedWrapper },
+    );
+
+    await waitFor(() => expect(cleanups.size).toBe(1));
+
+    rerender({ duration: 400 });
+    await waitFor(() => expect(cleanups.size).toBe(1));
+
+    unmount();
+    expect(cleanups.size).toBe(0);
+  });
+
   it("registers useAnime instances with shared controllers", async () => {
     const target = document.createElement("div");
     document.body.appendChild(target);
@@ -391,6 +436,28 @@ describe("scoped selector handling", () => {
 
     expect(__mock.animateCalls[1].config.duration).toBe(600);
     expect(__mock.animateCalls[1].config.ease).toBe("outQuad");
+  });
+
+  it("recreates useAnime animations when caller dependencies change shape", async () => {
+    const target = document.createElement("div");
+    document.body.appendChild(target);
+
+    const { result, rerender } = renderHook(
+      ({ deps }: { deps: unknown[] }) =>
+        useAnime({ targets: target, duration: 300, deps }),
+      { initialProps: { deps: ["initial"] } },
+    );
+
+    await waitFor(() => {
+      expect(result.current.isReady).toBe(true);
+      expect(__mock.animateCalls).toHaveLength(1);
+    });
+
+    rerender({ deps: ["initial", "expanded"] });
+
+    await waitFor(() => {
+      expect(__mock.animateCalls).toHaveLength(2);
+    });
   });
 
   it("supports official onScroll autoplay params in useAnime", async () => {
@@ -671,7 +738,7 @@ describe("AnimePresence modes", () => {
 
     const SpyChild = React.forwardRef<
       HTMLDivElement,
-      Record<string, unknown> & { label: string }
+      { label: string }
     >(function SpyChild(props, ref) {
       receivedProps(props);
       return (

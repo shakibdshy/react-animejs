@@ -1,6 +1,6 @@
 export function depsChanged(
-  prev: unknown[] | undefined,
-  next: unknown[] | undefined,
+  prev: readonly unknown[] | undefined,
+  next: readonly unknown[] | undefined,
 ): boolean {
   if (prev === next) return false;
   if (!prev || !next) return true;
@@ -32,6 +32,10 @@ export function isFunction(
 export function safeJsonStringify(obj: unknown): string {
   const cache = new Set();
   return JSON.stringify(obj, (key, value) => {
+    if (typeof value === 'function') {
+      return '[Function]';
+    }
+
     if (typeof value === 'object' && value !== null) {
       if (cache.has(value)) return '[Circular]';
 
@@ -48,10 +52,6 @@ export function safeJsonStringify(obj: unknown): string {
           __type: 'Ref',
           current: (value as { current: unknown }).current,
         };
-      }
-
-      if (typeof value === 'function') {
-        return '[Function]';
       }
 
       if (key.startsWith('__react') || key.startsWith('fiber')) {

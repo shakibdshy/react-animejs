@@ -184,6 +184,8 @@ export function useSvgAnimation<TSvg extends SVGElement = SVGElement>({
   useImperativeHandle(forwardedRef, () => refValue, [refValue]);
 
   useEffect(() => {
+    let unregisterScopedCleanup: (() => void) | undefined;
+
     if (!enabled) {
       setIsReady(false);
       readyNotifiedRef.current = false;
@@ -217,12 +219,13 @@ export function useSvgAnimation<TSvg extends SVGElement = SVGElement>({
     setIsReady(true);
 
     if (scopeContext.isScoped && scopeContext.registerCleanup) {
-      scopeContext.registerCleanup(() => {
+      unregisterScopedCleanup = scopeContext.registerCleanup(() => {
         animationRef.current?.revert();
       });
     }
 
     return () => {
+      unregisterScopedCleanup?.();
       animationRef.current?.revert();
       animationRef.current = null;
       setIsReady(false);

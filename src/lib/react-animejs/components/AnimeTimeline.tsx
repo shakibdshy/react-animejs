@@ -5,16 +5,16 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
-} from "react";
-import { useAnimeTimeline } from "../hooks";
-import { TimelineContext, shallowEqual } from "../core";
+} from 'react';
+import { useAnimeTimeline } from '../hooks';
+import { shallowEqual, TimelineContext } from '../core';
 import type {
   AnimationState,
   Timeline,
   TimelineControls,
   TimelineEntry,
   UseAnimeTimelineOptions,
-} from "../types";
+} from '../types';
 
 export interface AnimeTimelineRef {
   controls: TimelineControls;
@@ -55,18 +55,12 @@ export interface AnimeTimelineProps extends UseAnimeTimelineOptions {
 
 export const AnimeTimeline = forwardRef<AnimeTimelineRef, AnimeTimelineProps>(
   function AnimeTimeline(
-    {
-      entries = [],
-      children,
-      onReady,
-      onStateChange,
-      ...timelineOptions
-    },
-    ref,
+    { entries = [], children, onReady, onStateChange, ...timelineOptions },
+    ref
   ) {
     const { controls, state, timeline, isReady, isPlaying } = useAnimeTimeline(
       timelineOptions,
-      entries,
+      entries
     );
     const readyNotifiedRef = useRef(false);
 
@@ -79,7 +73,7 @@ export const AnimeTimeline = forwardRef<AnimeTimelineRef, AnimeTimelineProps>(
         isPlaying,
         getTimeline: () => timeline.current,
       }),
-      [controls, state, timeline, isReady, isPlaying],
+      [controls, state, timeline, isReady, isPlaying]
     );
 
     useImperativeHandle(ref, () => refValue, [refValue]);
@@ -97,16 +91,16 @@ export const AnimeTimeline = forwardRef<AnimeTimelineRef, AnimeTimelineProps>(
       }
     }, [timelineOptions.enabled]);
 
-  // Notify on meaningful state changes. Shallow equality suppresses the
-  // reference-only updates that `extractAnimationState` produces on internal
-  // ticks where nothing observable changed (e.g. a paused timeline re-render).
-  const lastNotifiedStateRef = useRef<AnimationState>(state);
-  useEffect(() => {
-    if (!onStateChange) return;
-    if (shallowEqual(lastNotifiedStateRef.current, state)) return;
-    lastNotifiedStateRef.current = state;
-    onStateChange(state);
-  }, [state, onStateChange]);
+    // Notify on meaningful state changes. Shallow equality suppresses the
+    // reference-only updates that `extractAnimationState` produces on internal
+    // ticks where nothing observable changed (e.g. a paused timeline re-render).
+    const lastNotifiedStateRef = useRef<AnimationState>(state);
+    useEffect(() => {
+      if (!onStateChange) return;
+      if (shallowEqual(lastNotifiedStateRef.current, state)) return;
+      lastNotifiedStateRef.current = state;
+      onStateChange(state);
+    }, [state, onStateChange]);
 
     const contextValue = useMemo(
       () => ({
@@ -116,22 +110,20 @@ export const AnimeTimeline = forwardRef<AnimeTimelineRef, AnimeTimelineProps>(
         isReady,
         isPlaying,
       }),
-      [controls, state, timeline, isReady, isPlaying],
+      [controls, state, timeline, isReady, isPlaying]
     );
 
     const renderChildren = () => {
-      if (typeof children === "function") {
+      if (typeof children === 'function') {
         return <>{children(refValue)}</>;
       }
       return <>{children ?? null}</>;
     };
 
     return (
-      <TimelineContext.Provider value={contextValue}>
-        {renderChildren()}
-      </TimelineContext.Provider>
+      <TimelineContext.Provider value={contextValue}>{renderChildren()}</TimelineContext.Provider>
     );
-  },
+  }
 );
 
 export default AnimeTimeline;

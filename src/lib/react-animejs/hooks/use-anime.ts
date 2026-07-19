@@ -26,6 +26,7 @@ import {
   safeJsonStringify,
   useScopeContext,
 } from "../core";
+import { useDependencySignal } from './use-dependency-signal';
 
 type ScrollObserverCallbackKey =
   | "onEnter"
@@ -217,6 +218,8 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     // Rest are animatable properties
     ...animatableProps
   } = options;
+
+  const depsSignal = useDependencySignal(deps);
 
   const callbackRefs = useRef({
     onBegin,
@@ -532,6 +535,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
 
     const { target, config, scrollObserver, ownsScrollObserver } = result;
     let unregisterController: (() => void) | undefined;
+    let unregisterScopedCleanup: (() => void) | undefined;
 
     try {
       // Create animation within a scope for proper cleanup
@@ -563,7 +567,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
 
       // Register cleanup with parent scope if available
       if (scopeContext.isScoped) {
-        scopeContext.registerCleanup(() => {
+        unregisterScopedCleanup = scopeContext.registerCleanup(() => {
           if (animationRef.current) {
             try {
               animationRef.current.revert();
@@ -589,6 +593,8 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
 
     // Cleanup
     return () => {
+      unregisterScopedCleanup?.();
+
       if (animationRef.current) {
         try {
           animationRef.current.revert();
@@ -624,7 +630,6 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
 
       setIsReady(false);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     enabled,
     externalTargets,
@@ -639,7 +644,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     ease,
     modifier,
     playbackEase,
-    ...deps,
+    depsSignal,
   ]);
 
   // ==========================================================================

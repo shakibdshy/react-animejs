@@ -1,4 +1,4 @@
-import { Suspense, memo, useCallback, useMemo, useState } from 'react';
+import { memo, Suspense, useCallback, useMemo, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeft, ArrowRight, Check, ExternalLink, X } from 'lucide-react';
 import { AnimeProvider } from '@/lib/react-animejs';

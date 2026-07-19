@@ -25,6 +25,7 @@ import type {
   UseAnimeDraggableReturn,
 } from "../types";
 import { createSafeCallback, safeJsonStringify, useScopeContext } from "../core";
+import { useDependencySignal } from './use-dependency-signal';
 
 // =============================================================================
 // Default State
@@ -178,6 +179,8 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
     onAfterResize,
   } = options;
 
+  const depsSignal = useDependencySignal(deps);
+
   // ==========================================================================
   // Draggable Lifecycle
   // ==========================================================================
@@ -244,6 +247,8 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
   );
 
   useEffect(() => {
+    let unregisterScopedCleanup: (() => void) | undefined;
+
     if (!enabled || disabled || !targetRef.current) {
       return;
     }
@@ -422,7 +427,7 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
 
       // Register cleanup with parent scope
       if (scopeContext.isScoped) {
-        scopeContext.registerCleanup(() => {
+        unregisterScopedCleanup = scopeContext.registerCleanup(() => {
           if (draggableRef.current) {
             try {
               draggableRef.current.revert();
@@ -438,6 +443,7 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
 
     // Cleanup
     return () => {
+      unregisterScopedCleanup?.();
       if (draggableRef.current) {
         try {
           draggableRef.current.revert();
@@ -447,8 +453,7 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
         draggableRef.current = null;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, disabled, optionsJson, scopeContext, ...deps]);
+  }, [enabled, disabled, optionsJson, scopeContext, depsSignal]);
 
   // ==========================================================================
   // Control Methods

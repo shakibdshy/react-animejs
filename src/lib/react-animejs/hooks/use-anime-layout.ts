@@ -14,6 +14,7 @@ import {
   safeJsonStringify,
   useScopeContext,
 } from "../core";
+import { useDependencySignal } from './use-dependency-signal';
 
 function normalizeSingleElement(
   target:
@@ -83,6 +84,8 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
     ...restOptions
   } = options;
 
+  const depsSignal = useDependencySignal(deps);
+
   // Split callbacks (→ ref, latest wins) from layout params (→ serialized).
   const { layoutParams } = useMemo(() => {
     const params: Record<string, unknown> = {};
@@ -110,6 +113,8 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
   const { rootRef: scopeRootRef, isScoped, registerCleanup } = scopeContext;
 
   useEffect(() => {
+    let unregisterScopedCleanup: (() => void) | undefined;
+
     if (!enabled) {
       setIsReady(false);
       return;
@@ -147,7 +152,7 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
       setTimelineInstance(null);
 
       if (isScoped) {
-        registerCleanup(() => {
+        unregisterScopedCleanup = registerCleanup(() => {
           try {
             layoutRef.current?.revert();
           } catch {}
@@ -159,6 +164,7 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
     }
 
     return () => {
+      unregisterScopedCleanup?.();
       try {
         layoutRef.current?.revert();
       } catch {}
@@ -169,7 +175,6 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
       setLayoutInstance(null);
       setTimelineInstance(null);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     enabled,
     externalRoot,
@@ -178,7 +183,7 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
     isScoped,
     registerCleanup,
     layoutParamsJson,
-    ...deps,
+    depsSignal,
   ]);
 
   const wrapParams = useCallback((params?: LayoutAnimationParams) => {

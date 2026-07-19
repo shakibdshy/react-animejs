@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { useAnimeOnScroll } from '@/lib/react-animejs';
 import { DemoCard } from '../DemoCard';
 import { ScrollHint, Panel } from './shared';
@@ -36,7 +35,7 @@ export function DepthStackDemo() {
             </div>
 
             <div ref={ref} className="relative flex w-full max-w-sm flex-col gap-6 py-10">
-              <div className="pointer-events-none absolute inset-x-0 top-1/2 h-36 -translate-y-1/2 rounded-[2rem] border border-dashed border-white/10 bg-white/3" />
+              <div className="pointer-events-none absolute inset-x-0 top-1/2 h-36 -translate-y-1/2 rounded-4xl border border-dashed border-white/10 bg-white/3" />
 
               {layers.map((layer) => {
                 const travel = (state.progress - 0.5) * layer.drift * 180;

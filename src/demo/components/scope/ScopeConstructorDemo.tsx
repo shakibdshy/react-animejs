@@ -37,7 +37,7 @@ export const ScopeConstructorDemo: React.FC = () => {
   // Track if container is "small" based on width
   const isSmall = iframeWidth <= SMALL_THRESHOLD;
 
-  const { ref, isReady, add, revert, refresh } = useAnimeScope({
+  const { ref, isReady, add, refresh } = useAnimeScope({
     defaults: {
       ease: "linear",
       duration: 2000,
@@ -86,7 +86,7 @@ export const ScopeConstructorDemo: React.FC = () => {
     square.style.transform = "";
     square.classList.remove("draggable", "animate-only");
 
-    add((self: any) => {
+    add((_self: any) => {
       // Conditional behavior based on container width
       if (isSmall) {
         // Small viewport: Animate only (no draggable)
@@ -130,12 +130,6 @@ export const ScopeConstructorDemo: React.FC = () => {
       };
     });
   }, [isReady, add, ref, isSmall, cleanupInstances]);
-
-  // Handle revert button
-  const handleRevert = useCallback(() => {
-    cleanupInstances();
-    revert();
-  }, [revert, cleanupInstances]);
 
   // Handle refresh (re-run constructor)
   const handleRefresh = useCallback(() => {

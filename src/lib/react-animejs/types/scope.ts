@@ -370,7 +370,12 @@ export interface AnimeScopeContext {
   /**
    * Register a cleanup function to be called on unmount
    */
-  registerCleanup: (cleanup: () => void) => void;
+  /**
+   * Registers cleanup work owned by a child animation and returns a disposer.
+   * Call the disposer when that animation is replaced so the provider does not
+   * retain stale cleanup closures until it unmounts.
+   */
+  registerCleanup: (cleanup: () => void) => () => void;
 
   /**
    * Current media query matches (if mediaQueries configured in provider)

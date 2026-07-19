@@ -1,4 +1,4 @@
-import { memo, useCallback, useState, useRef, useEffect } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import {
   AnimeLayout,
   AnimeLayoutItem,

@@ -25,11 +25,12 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
-} from "react";
-import { animate, utils } from "animejs";
-import { useAnimeScope } from "../hooks/use-anime-scope";
-import { ScopeContext } from "../core/scope-context";
-import type { AnimeScopeContext as ContextType } from "../types";
+} from 'react';
+import { animate, utils } from 'animejs';
+import { useAnimeScope } from '../hooks/use-anime-scope';
+import { useDependencySignal } from '../hooks/use-dependency-signal';
+import { ScopeContext } from '../core/scope-context';
+import type { AnimeScopeContext as ContextType } from '../types';
 import type {
   AnimeJsScope,
   ScopeCleanupFunction,
@@ -39,7 +40,7 @@ import type {
   ScopeMediaQueries,
   ScopeMethods,
   ScopeSelf,
-} from "../types/scope";
+} from '../types/scope';
 
 // =============================================================================
 // Types
@@ -49,9 +50,7 @@ import type {
  * Extended context passed to the animate callback
  * Includes the Anime.js animate and utils functions for convenience
  */
-export interface AnimeScopeContext<
-  T extends ScopeMediaQueries = ScopeMediaQueries,
-> {
+export interface AnimeScopeContext<T extends ScopeMediaQueries = ScopeMediaQueries> {
   /**
    * Current media query match states
    */
@@ -85,16 +84,17 @@ export interface AnimeScopeContext<
 /**
  * Animate function that receives scope context with animate/utils and returns optional cleanup
  */
-export type AnimeScopeAnimateFn<
-  T extends ScopeMediaQueries = ScopeMediaQueries,
-> = (ctx: AnimeScopeContext<T>) => ScopeCleanupFunction | void;
+export type AnimeScopeAnimateFn<T extends ScopeMediaQueries = ScopeMediaQueries> = (
+  ctx: AnimeScopeContext<T>
+) => ScopeCleanupFunction | void;
 
 /**
  * Props for AnimeScope component
  */
-export interface AnimeScopeProps<
-  T extends ScopeMediaQueries = ScopeMediaQueries,
-> extends Omit<HTMLAttributes<HTMLElement>, "children"> {
+export interface AnimeScopeProps<T extends ScopeMediaQueries = ScopeMediaQueries> extends Omit<
+  HTMLAttributes<HTMLElement>,
+  'children'
+> {
   /**
    * Child elements to render within the scope.
    * Can be a ReactNode or a function that receives the current media matches.
@@ -152,9 +152,7 @@ export interface AnimeScopeProps<
 /**
  * Ref interface for AnimeScope - exposes all scope controls and state
  */
-export interface AnimeScopeRef<
-  T extends ScopeMediaQueries = ScopeMediaQueries,
-> {
+export interface AnimeScopeRef<T extends ScopeMediaQueries = ScopeMediaQueries> {
   /** Whether the scope is ready */
   isReady: boolean;
 
@@ -168,14 +166,10 @@ export interface AnimeScopeRef<
   scope: AnimeJsScope<T> | null;
 
   /** Add a constructor to the scope */
-  add: (
-    constructor: (self: ScopeSelf<T>) => ScopeCleanupFunction | void,
-  ) => void;
+  add: (constructor: (self: ScopeSelf<T>) => ScopeCleanupFunction | void) => void;
 
   /** Add a constructor that only runs once */
-  addOnce: (
-    constructor: (self: ScopeSelf<T>) => ScopeCleanupFunction | void,
-  ) => void;
+  addOnce: (constructor: (self: ScopeSelf<T>) => ScopeCleanupFunction | void) => void;
 
   /** Revert all animations in the scope */
   revert: () => void;
@@ -197,7 +191,7 @@ export interface AnimeScopeRef<
 function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
   {
     children,
-    as: Component = "div",
+    as: Component = 'div',
     enabled = true,
     mediaQueries,
     defaults,
@@ -212,9 +206,10 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
     style,
     ...rest
   }: AnimeScopeProps<T>,
-  forwardedRef: React.ForwardedRef<AnimeScopeRef<T>>,
+  forwardedRef: React.ForwardedRef<AnimeScopeRef<T>>
 ) {
   const readyNotifiedRef = useRef(false);
+  const depsSignal = useDependencySignal(deps);
 
   // Use the scope hook
   const {
@@ -239,7 +234,7 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
   });
 
   // Get element helper
-  const getElement = () => rootRef.current;
+  const getElement = useCallback(() => rootRef.current, [rootRef]);
 
   // Stable ref for animate prop to avoid unnecessary re-runs
   const animatePropRef = useRef(animateProp);
@@ -252,7 +247,11 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
    * Wraps user's callback to enhance scope self with animate and utils
    */
   const wrapCallback = useCallback((callback: AnimeScopeAnimateFn<T>) => {
-    return (self: { matches: ScopeMediaMatches<T>; root: HTMLElement | Document; add: (name: string, fn: (...args: unknown[]) => unknown) => void }) => {
+    return (self: {
+      matches: ScopeMediaMatches<T>;
+      root: HTMLElement | Document;
+      add: (name: string, fn: (...args: unknown[]) => unknown) => void;
+    }) => {
       // Create a safe add function that registers named methods
       // In Anime.js, self.add(name, fn) registers a method that can be called later via scope.methods[name]
       const addMethod = (name: string, fn: (...args: unknown[]) => unknown) => {
@@ -289,16 +288,24 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
   // with self.animate and self.utils so demos work correctly.
   const wrappedAdd = useCallback(
     (constructor: ScopeConstructorFunction<T>) => {
-      add(wrapCallback(constructor as AnimeScopeAnimateFn<T>) as unknown as ScopeConstructorFunction<T>);
+      add(
+        wrapCallback(
+          constructor as AnimeScopeAnimateFn<T>
+        ) as unknown as ScopeConstructorFunction<T>
+      );
     },
-    [add, wrapCallback],
+    [add, wrapCallback]
   );
 
   const wrappedAddOnce = useCallback(
     (constructor: ScopeConstructorFunction<T>) => {
-      addOnce(wrapCallback(constructor as AnimeScopeAnimateFn<T>) as unknown as ScopeConstructorFunction<T>);
+      addOnce(
+        wrapCallback(
+          constructor as AnimeScopeAnimateFn<T>
+        ) as unknown as ScopeConstructorFunction<T>
+      );
     },
-    [addOnce, wrapCallback],
+    [addOnce, wrapCallback]
   );
 
   // Build ref value
@@ -315,7 +322,18 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
       keepTime,
       getElement,
     }),
-    [isReady, matches, methods, scope, wrappedAdd, wrappedAddOnce, revert, refresh, keepTime],
+    [
+      isReady,
+      matches,
+      methods,
+      scope,
+      wrappedAdd,
+      wrappedAddOnce,
+      revert,
+      refresh,
+      keepTime,
+      getElement,
+    ]
   );
 
   // Expose ref
@@ -325,15 +343,14 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
   useEffect(() => {
     if (!isReady || !animateOncePropRef.current) return;
     addOnce(wrapCallback(animateOncePropRef.current));
-  }, [isReady, addOnce]);
+  }, [isReady, addOnce, wrapCallback]);
 
   // Handle animate prop
   useEffect(() => {
     if (!isReady || !animatePropRef.current) return;
     revert();
     add(wrapCallback(animatePropRef.current));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isReady, add, revert, ...deps]);
+  }, [isReady, add, revert, depsSignal, wrapCallback]);
 
   // Notify when ready
   useEffect(() => {
@@ -356,16 +373,17 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
 
   // Register cleanup helper for children hooks
   const cleanupFunctions = useRef<Set<() => void>>(new Set());
-  const registerCleanup = (cleanup: () => void) => {
+  const registerCleanup = useCallback((cleanup: () => void) => {
     cleanupFunctions.current.add(cleanup);
     return () => cleanupFunctions.current.delete(cleanup);
-  };
+  }, []);
 
   // Run child cleanups when scope changes or unmounts
   useEffect(() => {
+    const registeredCleanups = cleanupFunctions.current;
     return () => {
-      cleanupFunctions.current.forEach((fn) => fn());
-      cleanupFunctions.current.clear();
+      registeredCleanups.forEach((fn) => fn());
+      registeredCleanups.clear();
     };
   }, [isReady]);
 
@@ -378,7 +396,7 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
       registerCleanup,
       matches: matches as any,
     }),
-    [scope, rootRef, matches],
+    [scope, rootRef, matches, registerCleanup]
   );
 
   const Element = Component as React.ElementType;
@@ -386,7 +404,7 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
   return (
     <ScopeContext.Provider value={contextValue}>
       <Element ref={rootRef} className={className} style={style} {...rest}>
-        {typeof children === "function"
+        {typeof children === 'function'
           ? (children as (matches: ScopeMediaMatches<T>) => ReactNode)(matches)
           : children}
       </Element>
@@ -398,9 +416,9 @@ function AnimeScopeInner<T extends ScopeMediaQueries = ScopeMediaQueries>(
 export const AnimeScope = forwardRef(AnimeScopeInner) as <
   T extends ScopeMediaQueries = ScopeMediaQueries,
 >(
-  props: AnimeScopeProps<T> & { ref?: React.Ref<AnimeScopeRef<T>> },
+  props: AnimeScopeProps<T> & { ref?: React.Ref<AnimeScopeRef<T>> }
 ) => React.ReactElement | null;
 
-(AnimeScope as React.FC).displayName = "AnimeScope";
+(AnimeScope as React.FC).displayName = 'AnimeScope';
 
 export default AnimeScope;

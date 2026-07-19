@@ -23,6 +23,7 @@ import {
   safeJsonStringify,
   useScopeContext,
 } from "../core";
+import { useDependencySignal } from './use-dependency-signal';
 
 function resolveSyncTarget(target: unknown) {
   if (
@@ -134,6 +135,8 @@ export function useAnimeTimeline(
     persist,
   } = options;
 
+  const depsSignal = useDependencySignal(deps);
+
   // ==========================================================================
   // Timeline Lifecycle
   // ==========================================================================
@@ -173,6 +176,8 @@ export function useAnimeTimeline(
   const entriesJson = useMemo(() => safeJsonStringify(entries), [entries]);
 
   useEffect(() => {
+    let unregisterScopedCleanup: (() => void) | undefined;
+
     if (!enabled) {
       setIsReady(false);
       return;
@@ -261,7 +266,7 @@ export function useAnimeTimeline(
 
       // Register cleanup with parent scope
       if (scopeContext.isScoped) {
-        scopeContext.registerCleanup(() => {
+        unregisterScopedCleanup = scopeContext.registerCleanup(() => {
           if (timelineRef.current) {
             try {
               timelineRef.current.revert();
@@ -278,6 +283,7 @@ export function useAnimeTimeline(
 
     // Cleanup
     return () => {
+      unregisterScopedCleanup?.();
       if (timelineRef.current) {
         try {
           timelineRef.current.revert();
@@ -289,8 +295,7 @@ export function useAnimeTimeline(
       entriesAddedRef.current = false;
       setIsReady(false);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, optionsJson, entriesJson, scopeContext, ...deps]);
+  }, [enabled, optionsJson, entriesJson, scopeContext, depsSignal]);
 
   // ==========================================================================
   // Dynamic Methods

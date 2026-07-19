@@ -19,7 +19,8 @@ export { useAnimeDraggable } from './hooks/use-anime-draggable';
 export { useAnimeOnScroll } from './hooks/use-anime-onscroll';
 export { useAnimeControls } from './hooks/use-anime-controls';
 export { useAnimeWAAPI } from './hooks/use-anime-waapi';
-export { useAnimeScope } from './hooks';
+export { useAnimeScope, useSplitText } from './hooks';
+export type { UseSplitTextOptions, UseSplitTextReturn } from './hooks/use-split-text';
 export { useAnimatable, useAnimatableEvent } from './hooks/use-animatable';
 export type {
   AnimatableConfig,
@@ -67,6 +68,19 @@ export { AnimeWAAPI } from './components/AnimeWAAPI';
 export type { AnimeWAAPIProps, AnimeWAAPIRef } from './components/AnimeWAAPI';
 export { AnimeAdapter } from './components/AnimeAdapter';
 export type { AnimeAdapterProps } from './components/AnimeAdapter';
+export { AnimeScope } from './components/AnimeScope';
+export type {
+  AnimeScopeAnimateFn,
+  AnimeScopeContext as AnimeScopeComponentContext,
+  AnimeScopeProps,
+  AnimeScopeRef,
+} from './components/AnimeScope';
+export { SplitTextEntry } from './components/SplitTextEntry';
+export type {
+  SplitMode,
+  SplitTextEntryProps,
+  SplitTextEntryRef,
+} from './components/SplitTextEntry';
 
 
 // =============================================================================
@@ -226,7 +240,6 @@ export type {
   ScopeConstructorFunction,
   ScopeMethods,
   AnimeJsScope,
-  AnimeScope,
   UseAnimeScopeOptions,
   UseAnimeScopeReturn,
   AnimeScopeContext,

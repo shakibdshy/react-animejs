@@ -28,7 +28,6 @@ export const DemoCard: React.FC<DemoCardProps> = ({
   actions,
   controls,
   state,
-  isPlaying,
   className = "",
   code,
 }) => {
