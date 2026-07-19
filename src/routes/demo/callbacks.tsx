@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CallbacksGroup } from "@/demo/components/CallbacksGroup";
+import { CallbacksGroup } from "@/demo-examples/components/CallbacksGroup";
 
 export const Route = createFileRoute("/demo/callbacks")({
   component: CallbacksPage,

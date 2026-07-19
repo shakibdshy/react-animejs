@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { Code as CodeIcon } from 'lucide-react';
 import { AnimeProvider } from '@/lib/react-animejs';
 import { ErrorBoundary } from '@/landing/components/ui/error-boundary';
-import { CursorTrailImagesDemo } from '@/demo/components/CursorTrailImagesDemo';
+import { CursorTrailImagesDemo } from '@/demo-examples/components/CursorTrailImagesDemo';
 import { AddToCard } from './components/AddToCard';
 import { PointerCollisionGrid } from './components/PointerCollisionGrid';
 import { TiltCard } from './components/TiltCard';
@@ -27,7 +27,7 @@ import { LayeredPinningLoop } from './components/LayeredPinningLoop';
 import { ScrollShader } from './components/ScrollShader';
 // Exact source for each block, pulled at build time via Vite's ?raw so the
 // "View Code" modal always shows the real, current code.
-import cursorTrailSource from '@/demo/components/CursorTrailImagesDemo.tsx?raw';
+import cursorTrailSource from '@/demo-examples/components/CursorTrailImagesDemo.tsx?raw';
 import addToCardSource from './components/AddToCard.tsx?raw';
 import pointerGridSource from './components/PointerCollisionGrid.tsx?raw';
 import tiltCardSource from './components/TiltCard.tsx?raw';
@@ -119,7 +119,7 @@ function SectionHeader({
 
 /**
  * BlocksPage — a showcase page for standalone "block" examples (self-contained
- * patterns that aren't part of the component gallery). Mirrors the DemosPage
+ * patterns that aren't part of the component gallery). Mirrors the ComponentGalleryPage
  * shell so it reads as a sibling page, and renders its own header (the root
  * layout hides the sidebar Header on top-level pages).
  */

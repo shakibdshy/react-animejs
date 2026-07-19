@@ -11,7 +11,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Check, Copy, X } from 'lucide-react';
 import { AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
-import { CodeBlock } from '@/demos/components/code-block';
+import { CodeBlock } from '@/component-gallery/components/code-block';
 
 export interface CodeModalProps {
   open: boolean;

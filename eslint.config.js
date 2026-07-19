@@ -13,7 +13,6 @@ export default [
       ".vite/**",
       "*.config.ts",
       "routeTree.gen.ts",
-      "**/demo/**",
       "**/__tests__/**",
       "**/*.test.ts",
       "**/*.test.tsx",

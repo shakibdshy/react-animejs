@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SpinningCubeGroup } from "@/demo/components/SpinningCubeGroup";
+import { SpinningCubeGroup } from "@/demo-examples/components/SpinningCubeGroup";
 
 export const Route = createFileRoute("/demo/spinning-cube")({
   component: SpinningCubePage,

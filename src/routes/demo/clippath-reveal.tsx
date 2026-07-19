@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ClipPathRevealGroup } from "@/demo/components/ClipPathRevealGroup";
+import { ClipPathRevealGroup } from "@/demo-examples/components/ClipPathRevealGroup";
 
 export const Route = createFileRoute("/demo/clippath-reveal")({
   component: ClipPathRevealPage,
