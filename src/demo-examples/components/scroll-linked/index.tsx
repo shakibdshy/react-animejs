@@ -10,7 +10,7 @@ import { WaveBarDemo } from './WaveBarDemo';
 
 function ScrollLinkedIntro() {
   return (
-    <div className="rounded-[2rem] border border-demo-border bg-linear-to-br from-[#11111a] via-[#0e1018] to-[#0a0a10] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.28)]">
+    <div className="xl:col-span-2 rounded-[2rem] border border-demo-border bg-linear-to-br from-[#11111a] via-[#0e1018] to-[#0a0a10] p-6 shadow-[0_30px_80px_rgba(0,0,0,0.28)]">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl space-y-3">
           <div className="text-[10px] font-mono uppercase tracking-[0.34em] text-demo-accent">
@@ -39,17 +39,15 @@ function ScrollLinkedIntro() {
 
 export const ScrollLinkedAnimationsGroup: React.FC = () => {
   return (
-    <div className="space-y-10">
+    <DemoSection title="Scroll-Linked Animations" frameChildren={false}>
       <ScrollLinkedIntro />
-      <DemoSection title="Scroll-Linked Animations" frameChildren={false} codeId={false}>
-        <DepthStackDemo />
-        <RevealColumnsDemo />
-        <ConveyorDemo />
-        <MorphTileDemo />
-        <SpectrumMeterDemo />
-        <CopyRevealDemo />
-        <WaveBarDemo />
-      </DemoSection>
-    </div>
+      <DepthStackDemo />
+      <RevealColumnsDemo />
+      <ConveyorDemo />
+      <MorphTileDemo />
+      <SpectrumMeterDemo />
+      <CopyRevealDemo />
+      <WaveBarDemo />
+    </DemoSection>
   );
 };

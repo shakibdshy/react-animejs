@@ -49,6 +49,13 @@ export const AnimeLayoutComponentDemo: React.FC = () => {
     <DemoCard
       title="<Declarative>"
       description="Component-based layout with automatic DOM reconciliation mode."
+      code={`<AnimeLayout mode="auto" duration={700} ease="outExpo">
+  {items.map((item) => (
+    <AnimeLayoutItem key={item.id} layoutId={item.id}>
+      <Card item={item} />
+    </AnimeLayoutItem>
+  ))}
+</AnimeLayout>`}
       footer={
         <>
           <label className="text-xs text-landing-muted landing-font-mono">Columns</label>

@@ -11,7 +11,7 @@ import {
 
 export const SplitTextGroup: React.FC = () => {
   return (
-    <DemoSection title="Split Text" frameChildren={false} codeId={false}>
+    <DemoSection title="Split Text" frameChildren={false}>
       <SplitTextBasicDemo />
       <SplitTextTemplatesDemo />
       <SplitTextCjkDemo />

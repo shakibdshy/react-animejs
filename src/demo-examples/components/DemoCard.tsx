@@ -1,5 +1,6 @@
-import { type ReactNode } from "react";
-import { Play, RotateCcw } from "lucide-react";
+import { type ReactNode, useState } from "react";
+import { Code, Play, RotateCcw } from "lucide-react";
+import { CodeModal } from "@/blocks/components/CodeModal";
 
 interface DemoCardProps {
   title: string;
@@ -31,11 +32,13 @@ export const DemoCard: React.FC<DemoCardProps> = ({
   className = "",
   code,
 }) => {
+  const [isCodeOpen, setIsCodeOpen] = useState(false);
+
   return (
     <div
-      className={`demo-example-card w-full bg-landing-surface border border-landing-border rounded-2xl p-6 flex flex-col transition-all duration-500 hover:border-landing-accent/30 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] ${className}`}
+      className={`demo-example-card min-h-[32rem] w-full bg-landing-surface border border-landing-border rounded-2xl p-6 flex flex-col transition-all duration-500 hover:border-landing-accent/30 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] ${className}`}
     >
-      <div className="flex justify-between items-center mb-5">
+      <div className="mb-5 flex items-start justify-between gap-4">
         <div>
           <h4 className="text-landing-accent landing-font-display text-lg font-bold tracking-tight">
             {title}
@@ -47,6 +50,17 @@ export const DemoCard: React.FC<DemoCardProps> = ({
           )}
         </div>
         <div className="flex gap-2">
+          {code ? (
+            <button
+              type="button"
+              onClick={() => setIsCodeOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 landing-font-mono text-[10px] uppercase tracking-wider text-landing-muted transition-colors hover:bg-landing-border/50 hover:text-landing-accent"
+              aria-label={`View ${title} code`}
+            >
+              <Code className="h-3.5 w-3.5" aria-hidden />
+              Code
+            </button>
+          ) : null}
           {actions}
           {controls?.play && (
             <button
@@ -73,7 +87,7 @@ export const DemoCard: React.FC<DemoCardProps> = ({
         {children}
       </div>
 
-      {(state?.progress !== undefined || code) && (
+      {state?.progress !== undefined && (
         <div className="mt-5 flex flex-col gap-3">
           {state?.progress !== undefined && (
             <div className="flex flex-col gap-1.5">
@@ -89,14 +103,16 @@ export const DemoCard: React.FC<DemoCardProps> = ({
               </div>
             </div>
           )}
-
-          {code && (
-            <div className="text-[11px] text-landing-muted landing-font-mono bg-landing-bg p-3.5 rounded-xl border border-landing-border/40 overflow-x-auto whitespace-nowrap">
-              <code className="text-landing-accent">{code}</code>
-            </div>
-          )}
         </div>
       )}
+      {code ? (
+        <CodeModal
+          open={isCodeOpen}
+          title={`${title}.tsx`}
+          code={code}
+          onClose={() => setIsCodeOpen(false)}
+        />
+      ) : null}
     </div>
   );
 };

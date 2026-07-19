@@ -30,6 +30,14 @@ export const LayoutSettingsDemo: React.FC = () => {
     <DemoCard
       title="<Layout Settings>"
       description="Configure duration, delay, and staggering."
+      code={`<AnimeLayout
+  duration={duration}
+  delay={delay}
+  ease="outExpo"
+  stagger={stagger}
+>
+  {items.map((item) => <AnimeLayoutItem key={item.id} layoutId={item.id} />)}
+</AnimeLayout>`}
       footer={
         <>
           <label className="text-xs text-landing-muted landing-font-mono">Duration</label>

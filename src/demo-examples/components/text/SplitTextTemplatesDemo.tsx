@@ -36,6 +36,12 @@ export const SplitTextTemplatesDemo: React.FC = () => {
     <DemoCard
       title="split templates"
       description="Custom HTML templates and accessibility options for split text."
+      code={`<SplitText
+  params={{ words: true }}
+  templates={{ word: '<span class="word">$1</span>' }}
+>
+  <p>Template driven text</p>
+</SplitText>`}
     >
       <div className="flex flex-col gap-6 w-full">
         <div className="flex flex-wrap gap-2">

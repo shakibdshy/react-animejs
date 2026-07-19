@@ -1,4 +1,5 @@
 import { DemoSection } from '../DemoSection';
+import { DemoCard } from '../DemoCard';
 import { BasicDraggable } from './BasicDraggable';
 import { TriggerDemo } from './TriggerDemo';
 import { AxisConstrainedDraggable } from './AxisConstrainedDraggable';
@@ -16,14 +17,33 @@ import { CallbackDraggable } from './CallbackDraggable';
 export function DraggableDemo() {
   return (
     <DemoSection title="Draggable (useAnimeDraggable)">
-      <div className="space-y-12">
-        <BasicDraggable />
+      <div className="grid gap-6 xl:grid-cols-2">
+        <DemoCard
+          title="Core drag interaction"
+          description="A live draggable target with position, progress, and velocity telemetry."
+          className="xl:col-span-2"
+          code={`const { ref, position, velocity } = useAnimeDraggable({
+  container: containerRef.current,
+  containerPadding: 16,
+  releaseStiffness: 120,
+  releaseDamping: 20,
+});`}
+        >
+          <BasicDraggable />
+        </DemoCard>
 
-        <div className="border-t border-demo-border pt-8">
-          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
-            <span className="text-green-400">⚙️</span> Settings
-          </h3>
-          <div className="grid gap-8">
+        <DemoCard
+          title="Drag configuration"
+          description="Tune trigger behavior, constraints, resistance, speed, and cursor feedback."
+          code={`useAnimeDraggable({
+  trigger,
+  axis: 'x',
+  container,
+  containerFriction: 0.85,
+  dragSpeed: 1.2,
+});`}
+        >
+          <div className="grid w-full gap-8">
             <TriggerDemo />
             <AxisConstrainedDraggable />
             <ContainerFrictionDemo />
@@ -31,29 +51,43 @@ export function DraggableDemo() {
             <DragThresholdDemo />
             <CursorDemo />
           </div>
-        </div>
+        </DemoCard>
 
-        <div className="border-t border-demo-border pt-8">
-          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
-            <span className="text-blue-400">🔬</span> Physics & Animation
-          </h3>
-          <div className="grid gap-8">
+        <DemoCard
+          title="Release physics"
+          description="Compare spring response, velocity, easing, and snap behavior after release."
+          code={`useAnimeDraggable({
+  releaseStiffness: 180,
+  releaseDamping: 16,
+  releaseEase: 'outElastic(1, .5)',
+  snap: 24,
+});`}
+        >
+          <div className="grid w-full gap-8">
             <SpringPhysicsDemo />
             <VelocityDemo />
             <ReleaseEaseDemo />
             <SnappingDraggable />
           </div>
-        </div>
+        </DemoCard>
 
-        <div className="border-t border-demo-border pt-8">
-          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
-            <span className="text-purple-400">🎮</span> Methods & Callbacks
-          </h3>
-          <div className="grid gap-8">
+        <DemoCard
+          title="Control and callbacks"
+          description="Use imperative controls and inspect drag lifecycle events."
+          className="xl:col-span-2"
+          code={`const { controls } = useAnimeDraggable({
+  onGrab: () => {},
+  onDrag: () => {},
+  onRelease: () => {},
+});
+
+controls.revert();`}
+        >
+          <div className="grid w-full gap-8 xl:grid-cols-2">
             <ControlledDraggable />
             <CallbackDraggable />
           </div>
-        </div>
+        </DemoCard>
       </div>
     </DemoSection>
   );

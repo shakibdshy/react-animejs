@@ -53,6 +53,10 @@ export const SplitTextEffectsDemo: React.FC = () => {
     <DemoCard
       title="split effects"
       description="Different animation effects on split text elements with continuous loops."
+      code={`<SplitText ref={splitRef} params={{ words: true }}>
+  <p>Choose an effect</p>
+</SplitText>
+<SplitTextEntry splitRef={splitRef} translateY={[24, 0]} opacity={[0, 1]} />`}
     >
       <div className="flex flex-col gap-6 w-full">
         <div className="flex flex-wrap gap-2">

@@ -54,6 +54,13 @@ export const SplitTextAdvancedPropsDemo: React.FC = () => {
     <DemoCard
       title="advanced split properties"
       description="Debug mode, includeSpaces, custom templates, and $target access."
+      code={`<SplitText
+  ref={splitRef}
+  params={{ lines: true, words: true, chars: true, includeSpaces: true }}
+  templates={{ char: (char) => \`<span data-char="\${char}">\${char}</span>\` }}
+>
+  <p>Advanced Props</p>
+</SplitText>`}
     >
       <div className="flex flex-col gap-6 w-full">
         <div className="flex flex-wrap gap-2">

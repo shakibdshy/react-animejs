@@ -18,6 +18,12 @@ export const SplitTextAdvancedDemo: React.FC = () => {
     <DemoCard
       title="advanced timeline"
       description="Official Anime.js v4 text splitter capabilities reproduced using react-animejs components."
+      code={`<AnimeTimeline defaults={{ ease: 'outExpo', duration: 700 }}>
+  <SplitText ref={splitRef} params={{ lines: true, words: true }}>
+    <p>Timeline controlled text</p>
+  </SplitText>
+  <SplitTextEntry splitRef={splitRef} splitMode="lines" stagger={120} />
+</AnimeTimeline>`}
     >
       <div className="flex flex-col gap-6 w-full">
         <div className="bg-demo-card/50 rounded-2xl p-8 border border-white/5 min-h-30 flex items-center justify-center overflow-hidden">

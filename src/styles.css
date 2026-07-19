@@ -374,6 +374,13 @@ code {
   .timeline-demo-frame__body > :first-child {
     flex: 1 1 auto;
   }
+  .animate-fade-in {
+    animation: demo-tab-fade 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes demo-tab-fade {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   @media (max-width: 640px) {
     .demo-example-item { padding: 1rem; }
     .demo-examples-page { background: none; }

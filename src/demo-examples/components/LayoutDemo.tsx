@@ -48,6 +48,11 @@ export const LayoutDemo: React.FC = () => {
     <DemoCard
       title="<Automatic Layout>"
       description="Fluid transitions between different grid configurations."
+      code={`const layoutRef = useRef<AnimeLayoutRef>(null);
+
+layoutRef.current?.update((layout) => {
+  layout.root.style.gridTemplateColumns = 'repeat(4, minmax(0, 1fr))';
+}, { duration: 800, ease: 'outExpo' });`}
       footer={
         <>
           <label className="text-xs text-landing-muted landing-font-mono">Columns</label>

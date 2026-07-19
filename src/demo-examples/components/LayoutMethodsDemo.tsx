@@ -47,6 +47,12 @@ export const LayoutMethodsDemo: React.FC = () => {
     <DemoCard
       title="<Layout Methods>"
       description="Directly control the layout engine with programmatic methods."
+      code={`layoutRef.current?.update((layout) => {
+  layout.root.style.gap = '2rem';
+}, { duration: 600 });
+
+layoutRef.current?.refresh();
+layoutRef.current?.revert();`}
       footer={
         <div className="flex flex-wrap gap-2 w-full">
           <DemoBtn

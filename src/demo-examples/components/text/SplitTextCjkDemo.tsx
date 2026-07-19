@@ -23,6 +23,10 @@ export const SplitTextCjkDemo: React.FC = () => {
     <DemoCard
       title="cjk text"
       description="Language-aware splitting using Intl.Segmenter for Japanese, Chinese, and Thai."
+      code={`<SplitText params={{ chars: true, language: 'ja' }}>
+  <p lang="ja">こんにちは世界</p>
+</SplitText>
+<SplitTextEntry splitRef={splitRef} splitMode="chars" />`}
     >
       <div className="flex flex-col gap-6 w-full">
         <div className="flex flex-wrap gap-2">

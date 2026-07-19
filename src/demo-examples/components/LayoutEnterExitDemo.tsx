@@ -37,6 +37,12 @@ export const LayoutEnterExitDemo: React.FC = () => {
     <DemoCard
       title="<Enter / Exit>"
       description="Animated insertion and removal of elements."
+      code={`<AnimeLayout
+  enterFrom={{ opacity: 0, scale: 0.5 }}
+  leaveTo={{ opacity: 0, scale: 0.5 }}
+>
+  {items.map((id) => <AnimeLayoutItem key={id} layoutId={id} />)}
+</AnimeLayout>`}
       footer={
         <>
           <span className="text-xs text-landing-muted landing-font-mono">

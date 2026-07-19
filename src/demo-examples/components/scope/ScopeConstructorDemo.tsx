@@ -16,7 +16,7 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { DemoSection } from "../DemoSection";
+import { DemoCard } from "../DemoCard";
 import { useAnimeScope } from "@/lib/react-animejs/hooks/use-anime-scope";
 import { animate, createDraggable } from "animejs";
 import { GripVertical, RotateCcw } from "lucide-react";
@@ -162,19 +162,19 @@ export const ScopeConstructorDemo: React.FC = () => {
   }, [isDraggingResize]);
 
   return (
-    <DemoSection title="Scope: Constructor Function">
-      <div className="w-full bg-demo-card rounded-3xl p-6 border border-demo-border shadow-xl">
-        {/* Header */}
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <h4 className="text-demo-accent font-bold text-xl tracking-tight">
-              Constructor Function + Defaults
-            </h4>
-            <p className="text-[10px] text-demo-text-muted font-mono mt-1 uppercase tracking-wider">
-              Uses scope constructor with conditional logic based on container width
-            </p>
-          </div>
-          <div className="flex gap-2">
+    <DemoCard
+      title="constructor function + defaults"
+      description="Uses scope construction with conditional behavior based on container width."
+      code={`const { add } = useAnimeScope({
+  defaults: { ease: 'linear', duration: 2000 },
+});
+
+add((scope) => {
+  if (scope.matches.isSmall) animate(element, { rotate: 360 });
+  return () => element.classList.remove('draggable');
+});`}
+      actions={
+        <div className="flex gap-2">
             <button
               onClick={handleRefresh}
               className="p-2 hover:bg-white/5 rounded-full text-demo-text-secondary hover:text-demo-accent transition-all"
@@ -182,8 +182,9 @@ export const ScopeConstructorDemo: React.FC = () => {
             >
               <RotateCcw className="w-4 h-4" />
             </button>
-          </div>
         </div>
+      }
+    >
 
         {/* Resizable container */}
         <div ref={containerRef} className="relative w-full flex items-center mb-6">
@@ -289,8 +290,7 @@ createScope({
 });`}
           </pre>
         </div>
-      </div>
-    </DemoSection>
+    </DemoCard>
   );
 };
 

@@ -35,6 +35,13 @@ export const LayoutStaggerDemo: React.FC = () => {
     <DemoCard
       title="<Staggered Layout>"
       description="Apply sequential delays to layout transitions."
+      code={`layoutRef.current?.update((layout) => {
+  layout.root.classList.toggle('grid-cols-2');
+}, {
+  duration: 700,
+  ease: 'outExpo',
+  stagger: 80,
+});`}
       footer={
         <>
           <label className="text-xs text-landing-muted landing-font-mono">Stagger Delay</label>

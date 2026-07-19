@@ -24,6 +24,10 @@ export const SplitTextBasicDemo: React.FC = () => {
     <DemoCard
       title="basic split"
       description="SplitText — declarative text splitting with continuous loop animations."
+      code={`<SplitText ref={splitRef} params={{ chars: true }}>
+  <p>Hello World</p>
+</SplitText>
+<SplitTextEntry splitRef={splitRef} splitMode="chars" stagger={30} />`}
     >
       <div className="flex flex-col gap-6 w-full">
         <div className="flex flex-wrap gap-2">
