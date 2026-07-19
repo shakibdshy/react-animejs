@@ -4,11 +4,9 @@ import { cn } from '@/landing/utils/cn';
 import type { NavItem } from '@/landing/types';
 
 const defaultNavItems: NavItem[] = [
-  { label: 'Features', href: '#features' },
   { label: 'Components', href: '/demos' },
   { label: 'Blocks', href: '/blocks' },
-  { label: 'Docs', href: '#code' },
-  { label: 'Community', href: '#testimonials' },
+  { label: 'Docs', href: '/docs' },
 ];
 
 interface LandingHeaderProps {
@@ -54,21 +52,14 @@ export const LandingHeader = memo(function LandingHeader({
       <nav className="flex items-center gap-8" aria-label="Main navigation">
         {navItems.map((item) => {
           const isRoute = item.href.startsWith('/');
-          const linkClass = 'text-sm text-landing-muted font-medium hover:text-landing-fg transition-colors duration-200 no-underline hidden sm:block';
+          const linkClass =
+            'text-sm text-landing-muted font-medium hover:text-landing-fg transition-colors duration-200 no-underline hidden sm:block';
           return isRoute ? (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={linkClass}
-            >
+            <Link key={item.href} to={item.href} className={linkClass}>
               {item.label}
             </Link>
           ) : (
-            <a
-              key={item.href}
-              href={item.href}
-              className={linkClass}
-            >
+            <a key={item.href} href={item.href} className={linkClass}>
               {item.label}
             </a>
           );

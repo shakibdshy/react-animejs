@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as DocsRouteImport } from './routes/docs'
 import { Route as DemosRouteImport } from './routes/demos'
 import { Route as BlocksRouteImport } from './routes/blocks'
 import { Route as DemoRouteRouteImport } from './routes/demo/route'
@@ -41,6 +42,11 @@ import { Route as DemoAnimatedSliderRouteImport } from './routes/demo/animated-s
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemosRoute = DemosRouteImport.update({
@@ -185,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRouteRouteWithChildren
   '/blocks': typeof BlocksRoute
   '/demos': typeof DemosRouteWithChildren
+  '/docs': typeof DocsRoute
   '/mcp': typeof McpRoute
   '/demo/animated-slider': typeof DemoAnimatedSliderRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
@@ -214,6 +221,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
   '/blocks': typeof BlocksRoute
+  '/docs': typeof DocsRoute
   '/mcp': typeof McpRoute
   '/demo/animated-slider': typeof DemoAnimatedSliderRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
@@ -245,6 +253,7 @@ export interface FileRoutesById {
   '/demo': typeof DemoRouteRouteWithChildren
   '/blocks': typeof BlocksRoute
   '/demos': typeof DemosRouteWithChildren
+  '/docs': typeof DocsRoute
   '/mcp': typeof McpRoute
   '/demo/animated-slider': typeof DemoAnimatedSliderRoute
   '/demo/callbacks': typeof DemoCallbacksRoute
@@ -277,6 +286,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/blocks'
     | '/demos'
+    | '/docs'
     | '/mcp'
     | '/demo/animated-slider'
     | '/demo/callbacks'
@@ -306,6 +316,7 @@ export interface FileRouteTypes {
     | '/'
     | '/demo'
     | '/blocks'
+    | '/docs'
     | '/mcp'
     | '/demo/animated-slider'
     | '/demo/callbacks'
@@ -336,6 +347,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/blocks'
     | '/demos'
+    | '/docs'
     | '/mcp'
     | '/demo/animated-slider'
     | '/demo/callbacks'
@@ -367,6 +379,7 @@ export interface RootRouteChildren {
   DemoRouteRoute: typeof DemoRouteRouteWithChildren
   BlocksRoute: typeof BlocksRoute
   DemosRoute: typeof DemosRouteWithChildren
+  DocsRoute: typeof DocsRoute
   McpRoute: typeof McpRoute
 }
 
@@ -377,6 +390,13 @@ declare module '@tanstack/react-router' {
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demos': {
@@ -640,6 +660,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRouteRoute: DemoRouteRouteWithChildren,
   BlocksRoute: BlocksRoute,
   DemosRoute: DemosRouteWithChildren,
+  DocsRoute: DocsRoute,
   McpRoute: McpRoute,
 }
 export const routeTree = rootRouteImport
