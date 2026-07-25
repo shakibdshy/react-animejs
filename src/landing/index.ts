@@ -5,6 +5,7 @@ export { SectionLabel } from "./components/ui/section-label";
 export { SectionHeading } from "./components/ui/section-heading";
 export { SectionDescription } from "./components/ui/section-description";
 export { SectionHeader } from "./components/ui/section-header";
+export { BackToTop } from "./components/ui/back-to-top";
 export { LandingContainer } from "./components/ui/landing-container";
 export { CodeBlock } from "./components/ui/code-block";
 export { ScrollIndicator } from "./components/ui/scroll-indicator";

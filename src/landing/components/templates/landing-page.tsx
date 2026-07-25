@@ -11,6 +11,7 @@ import { StatsSection } from '@/landing/components/containers/stats-section';
 import { TestimonialsSection } from '@/landing/components/containers/testimonials-section';
 import { CtaSection } from '@/landing/components/containers/cta-section';
 import { FooterSection } from '@/landing/components/containers/footer-section';
+import { BackToTop } from '@/landing/components/ui/back-to-top';
 import type { FeatureItem, FooterColumn, NavItem, TestimonialItem } from '@/landing/types';
 
 interface LandingPageProps {
@@ -70,6 +71,7 @@ export const LandingPage = memo(function LandingPage({
         <ErrorBoundary>
           <FooterSection columns={footerColumns} socials={footerSocials} />
         </ErrorBoundary>
+        <BackToTop />
       </div>
     </AnimeProvider>
   );

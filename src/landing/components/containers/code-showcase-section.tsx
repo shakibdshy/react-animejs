@@ -69,15 +69,15 @@ function animateCards() {
 }`,
     },
     react: {
-      title: 'react-animejs — stagger prop',
-      raw: `import { useAnime } from 'react-animejs'
+      title: 'react-animejs — stagger helper',
+      raw: `import { useAnime, stagger } from 'react-animejs'
 
 function Cards() {
   const { controls } = useAnime({
     selector: '.card',
     opacity: [0, 1],
     translateY: [20, 0],
-    stagger: 60,
+    delay: stagger(60),
     duration: 400,
     ease: 'outQuad',
     autoplay: false,
@@ -192,15 +192,13 @@ export const CodeShowcaseSection = memo(function CodeShowcaseSection({
               onClick={() => setActive(i)}
               className={cn(
                 'relative px-4 py-2.5 landing-font-mono text-[12px] tracking-[0.04em] transition-colors duration-200 cursor-pointer bg-transparent border-0',
-                isActive
-                  ? 'text-landing-fg'
-                  : 'text-landing-muted hover:text-landing-fg'
+                isActive ? 'text-landing-fg' : 'text-landing-muted hover:text-landing-fg'
               )}
             >
               {p.topic}
               {isActive ? (
                 <span
-                  className="absolute left-0 right-0 -bottom-px h-[2px] bg-landing-accent"
+                  className="absolute left-0 right-0 -bottom-px h-0.5 bg-landing-accent"
                   aria-hidden="true"
                 />
               ) : null}
@@ -213,21 +211,13 @@ export const CodeShowcaseSection = memo(function CodeShowcaseSection({
       <div
         ref={sideRef}
         className={cn(
-          'grid grid-cols-1 lg:grid-cols-2 gap-px bg-landing-border border border-landing-border rounded-2xl overflow-hidden mt-px',
+          'grid grid-cols-1 lg:grid-cols-2 gap-px bg-landing-border border border-landing-border rounded-b-2xl overflow-hidden mt-px',
           'transition-all duration-700',
           sideVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
         )}
       >
-        <ComparisonPanel
-          variant="vanilla"
-          title={pair.vanilla.title}
-          code={pair.vanilla.raw}
-        />
-        <ComparisonPanel
-          variant="react"
-          title={pair.react.title}
-          code={pair.react.raw}
-        />
+        <ComparisonPanel variant="vanilla" title={pair.vanilla.title} code={pair.vanilla.raw} />
+        <ComparisonPanel variant="react" title={pair.react.title} code={pair.react.raw} />
       </div>
     </LandingContainer>
   );
@@ -248,12 +238,7 @@ const ComparisonPanel = memo(function ComparisonPanel({
   const isReact = variant === 'react';
 
   return (
-    <div
-      className={cn(
-        'flex flex-col bg-landing-bg/80',
-        isReact && 'relative'
-      )}
-    >
+    <div className={cn('flex flex-col bg-landing-bg/80', isReact && 'relative')}>
       {/* Header bar */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-landing-border bg-landing-surface">
         <div className="flex items-center gap-2.5">

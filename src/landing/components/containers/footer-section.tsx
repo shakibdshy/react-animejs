@@ -67,19 +67,12 @@ export const FooterSection = memo(function FooterSection({
     >
       <div className="max-w-300 mx-auto px-6 pt-24 pb-10">
         {/* Oversized wordmark */}
-        <a
-          href="#"
-          className="block no-underline hover:no-underline mb-16"
-          aria-label="React AnimeJS — back to top"
+        <span
+          className="block landing-font-display font-bold tracking-[-0.03em] leading-[0.85] text-landing-fg mb-16"
+          style={{ fontSize: 'clamp(56px, 13vw, 148px)' }}
         >
-          <span
-            className="landing-font-display font-bold tracking-[-0.03em] leading-[0.85] text-landing-fg"
-            style={{ fontSize: 'clamp(56px, 13vw, 168px)' }}
-          >
-            React AnimeJS{' '}
-            <em className="not-italic text-landing-accent">{'\u2726'}</em>
-          </span>
-        </a>
+          React AnimeJS <em className="not-italic text-landing-accent">{'\u2726'}</em>
+        </span>
 
         {/* Link grid */}
         <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 pb-12 border-b border-landing-border">
@@ -88,8 +81,8 @@ export const FooterSection = memo(function FooterSection({
               The Field Guide
             </p>
             <p className="text-[15px] text-landing-muted leading-relaxed max-w-72">
-              Beautiful React animations, powered by anime.js. Built for
-              developers who care about motion.
+              Beautiful React animations, powered by anime.js. Built for developers who care about
+              motion.
             </p>
           </div>
           {columns.map((col) => (
@@ -117,12 +110,8 @@ export const FooterSection = memo(function FooterSection({
 
         {/* Colophon line */}
         <div className="pt-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-[12px] text-landing-muted landing-font-mono tracking-[0.08em]">
-          <span className="uppercase">
-            {'\u00A9'} 2026 React AnimeJS — MIT licensed
-          </span>
-          <span className="uppercase opacity-70">
-            Set in Iowan Old Style &amp; JetBrains Mono
-          </span>
+          <span className="uppercase">{'\u00A9'} 2026 React AnimeJS — MIT licensed</span>
+          <span className="uppercase opacity-70">Set in Iowan Old Style &amp; JetBrains Mono</span>
           <div className="flex gap-4">
             {socials.map((s) => (
               <a
