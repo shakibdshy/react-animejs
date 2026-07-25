@@ -3,9 +3,7 @@ import { cn } from '@/landing/utils/cn';
 import { useScrollReveal } from '@/landing/hooks/use-scroll-reveal';
 import { useAnime } from '@/lib/react-animejs/hooks';
 import { LandingContainer } from '@/landing/components/ui/landing-container';
-import { SectionLabel } from '@/landing/components/ui/section-label';
-import { SectionHeading } from '@/landing/components/ui/section-heading';
-import { SectionDescription } from '@/landing/components/ui/section-description';
+import { SectionHeader } from '@/landing/components/ui/section-header';
 import { Btn } from '@/landing/components/ui/btn';
 import { DemoCard } from '@/landing/components/base/demo-card';
 import { DemoBox } from '@/landing/components/base/demo-box';
@@ -26,11 +24,12 @@ interface DemosSectionProps {
   className?: string;
 }
 
+/**
+ * "The Lab" — the interactive playground, framed with the editorial header and
+ * a footer CTA into the full gallery. Functionally identical controls to the
+ * prior version; only the framing changes.
+ */
 export const DemosSection = memo(function DemosSection({ className }: DemosSectionProps) {
-  const [labelRef, labelVisible] = useScrollReveal();
-  const [headingRef, headingVisible] = useScrollReveal();
-  const [descRef, descVisible] = useScrollReveal();
-
   const [fadeDuration, setFadeDuration] = useState(600);
   const [fadeEasing, setFadeEasing] = useState<string>('outQuad');
   const [staggerDelay, setStaggerDelay] = useState(60);
@@ -57,49 +56,25 @@ export const DemosSection = memo(function DemosSection({ className }: DemosSecti
     deps: [staggerDelay],
   });
 
-  const triggerFade = useCallback(() => {
-    fadeControls.restart();
-  }, [fadeControls]);
-
-  const triggerStagger = useCallback(() => {
-    staggerControls.restart();
-  }, [staggerControls]);
+  const triggerFade = useCallback(() => fadeControls.restart(), [fadeControls]);
+  const triggerStagger = useCallback(() => staggerControls.restart(), [staggerControls]);
 
   return (
     <LandingContainer as="section" id="demos" className={cn('py-30', className)}>
-      <div
-        ref={labelRef}
-        className={cn(
-          labelVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10',
-          'transition-all duration-800'
-        )}
-      >
-        <SectionLabel>Live demos</SectionLabel>
-      </div>
-      <div
-        ref={headingRef}
-        className={cn(
-          headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10',
-          'transition-all duration-800'
-        )}
-      >
-        <SectionHeading>Components in action</SectionHeading>
-      </div>
-      <div
-        ref={descRef}
-        className={cn(
-          descVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10',
-          'transition-all duration-800',
-          'mb-15'
-        )}
-      >
-        <SectionDescription>
-          Play with real animations. Toggle controls, change easing, and see how each component
-          behaves.
-        </SectionDescription>
+      <div className="flex items-end justify-between flex-wrap gap-6">
+        <SectionHeader
+          index="Chapter II"
+          numeral="02"
+          label="The Lab"
+          heading="Try the primitives."
+          intro="Real, running animations. Tweak duration, easing, and stagger — the controls are the docs."
+        />
+        <span className="landing-font-mono text-[11px] tracking-[0.25em] uppercase text-landing-muted pb-2">
+          04 specimens
+        </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
         <DemoCard
           title="<FadeIn>"
           description="Enter animation with configurable duration & easing"
@@ -203,10 +178,13 @@ export const DemosSection = memo(function DemosSection({ className }: DemosSecti
         </DemoCard>
       </div>
 
-      <div className="text-center mt-12">
-        <Btn variant="secondary" href="#demos">
-          Browse all 25+ components {'\u2192'}
+      <div className="mt-14 flex flex-col items-center gap-2">
+        <Btn variant="secondary" href="/demos">
+          Browse the full gallery {'\u2192'}
         </Btn>
+        <span className="landing-font-mono text-[11px] tracking-[0.2em] uppercase text-landing-muted">
+          25+ components
+        </span>
       </div>
     </LandingContainer>
   );

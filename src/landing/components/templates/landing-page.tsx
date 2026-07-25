@@ -3,9 +3,11 @@ import { AnimeProvider } from '@/lib/react-animejs';
 import { ErrorBoundary } from '@/landing/components/ui/error-boundary';
 import { LandingHeader } from '@/landing/components/containers/landing-header';
 import { HeroSection } from '@/landing/components/containers/hero-section';
+import { MarqueeSection } from '@/landing/components/containers/marquee-section';
 import { FeaturesSection } from '@/landing/components/containers/features-section';
 import { DemosSection } from '@/landing/components/containers/demos-section';
 import { CodeShowcaseSection } from '@/landing/components/containers/code-showcase-section';
+import { StatsSection } from '@/landing/components/containers/stats-section';
 import { TestimonialsSection } from '@/landing/components/containers/testimonials-section';
 import { CtaSection } from '@/landing/components/containers/cta-section';
 import { FooterSection } from '@/landing/components/containers/footer-section';
@@ -44,6 +46,9 @@ export const LandingPage = memo(function LandingPage({
             />
           </ErrorBoundary>
           <ErrorBoundary>
+            <MarqueeSection />
+          </ErrorBoundary>
+          <ErrorBoundary>
             <FeaturesSection features={features} />
           </ErrorBoundary>
           <ErrorBoundary>
@@ -51,6 +56,9 @@ export const LandingPage = memo(function LandingPage({
           </ErrorBoundary>
           <ErrorBoundary>
             <CodeShowcaseSection />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <StatsSection />
           </ErrorBoundary>
           <ErrorBoundary>
             <TestimonialsSection testimonials={testimonials} />

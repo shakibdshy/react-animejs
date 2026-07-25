@@ -6,8 +6,8 @@ import type { FooterColumn, NavItem } from '@/landing/types';
 
 const defaultProductLinks: NavItem[] = [
   { label: 'Components', href: '/demos' },
-  { label: 'Documentation', href: '#code' },
-  { label: 'Install', href: '#install' },
+  { label: 'Documentation', href: '/docs' },
+  { label: 'Blocks', href: '/blocks' },
   { label: 'Changelog', href: '#' },
 ];
 
@@ -43,6 +43,11 @@ interface FooterSectionProps {
   className?: string;
 }
 
+/**
+ * Editorial "colophon" footer. The wordmark gets masthead scale, links sit in
+ * hairline columns, and the legal line is set in mono small-caps like a
+ * printed imprint notice.
+ */
 export const FooterSection = memo(function FooterSection({
   columns = defaultFooterColumns,
   socials = defaultSocials,
@@ -54,64 +59,77 @@ export const FooterSection = memo(function FooterSection({
     <footer
       ref={ref}
       className={cn(
-        'pt-20 pb-10 border-t border-landing-border',
-        'transition-all duration-600',
+        'border-t border-landing-border',
+        'transition-all duration-700',
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5',
         className
       )}
     >
-      <div className="max-w-300 mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 mb-10">
+      <div className="max-w-300 mx-auto px-6 pt-24 pb-10">
+        {/* Oversized wordmark */}
+        <a
+          href="#"
+          className="block no-underline hover:no-underline mb-16"
+          aria-label="React AnimeJS — back to top"
+        >
+          <span
+            className="landing-font-display font-bold tracking-[-0.03em] leading-[0.85] text-landing-fg"
+            style={{ fontSize: 'clamp(56px, 13vw, 168px)' }}
+          >
+            React AnimeJS{' '}
+            <em className="not-italic text-landing-accent">{'\u2726'}</em>
+          </span>
+        </a>
+
+        {/* Link grid */}
+        <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 pb-12 border-b border-landing-border">
           <div>
-            <a
-              href="#"
-              className="landing-font-display text-[22px] font-bold tracking-tight text-landing-fg no-underline hover:no-underline"
-            >
-              React AnimeJS <em className="not-italic text-landing-accent">{'\u2726'}</em>
-            </a>
-            <p className="text-sm text-landing-muted mt-3 max-w-70 leading-relaxed">
+            <p className="landing-font-mono text-[11px] tracking-[0.2em] uppercase text-landing-muted mb-4">
+              The Field Guide
+            </p>
+            <p className="text-[15px] text-landing-muted leading-relaxed max-w-72">
               Beautiful React animations, powered by anime.js. Built for
               developers who care about motion.
             </p>
           </div>
           {columns.map((col) => (
-            <div key={col.heading}>
-              <h4 className="text-xs uppercase tracking-widest text-landing-muted mb-4 landing-font-mono">
+            <nav key={col.heading} aria-label={col.heading}>
+              <h4 className="text-[11px] uppercase tracking-[0.2em] text-landing-muted mb-4 landing-font-mono">
                 {col.heading}
               </h4>
               {col.links.map((link) => {
-                const linkClass = "block text-sm text-landing-muted mb-2.5 hover:text-landing-fg transition-colors duration-200 no-underline";
+                const linkClass =
+                  'block text-[14px] text-landing-muted mb-2.5 hover:text-landing-accent transition-colors duration-200 no-underline';
                 const isRoute = link.href.startsWith('/');
                 return isRoute ? (
-                  <Link
-                    key={link.label}
-                    to={link.href}
-                    className={linkClass}
-                  >
+                  <Link key={link.label} to={link.href} className={linkClass}>
                     {link.label}
                   </Link>
                 ) : (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    className={linkClass}
-                  >
+                  <a key={link.label} href={link.href} className={linkClass}>
                     {link.label}
                   </a>
                 );
               })}
-            </div>
+            </nav>
           ))}
         </div>
-        <div className="pt-6 border-t border-landing-border flex justify-between items-center text-[13px] text-landing-muted">
-          <span>{'\u00A9'} 2026 React AnimeJS. MIT license.</span>
+
+        {/* Colophon line */}
+        <div className="pt-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-[12px] text-landing-muted landing-font-mono tracking-[0.08em]">
+          <span className="uppercase">
+            {'\u00A9'} 2026 React AnimeJS — MIT licensed
+          </span>
+          <span className="uppercase opacity-70">
+            Set in Iowan Old Style &amp; JetBrains Mono
+          </span>
           <div className="flex gap-4">
             {socials.map((s) => (
               <a
                 key={s.label}
                 href={s.href}
                 aria-label={s.label}
-                className="text-landing-muted hover:text-landing-accent transition-colors duration-200 no-underline"
+                className="text-landing-muted hover:text-landing-accent transition-colors duration-200 no-underline uppercase"
               >
                 {s.label}
               </a>
