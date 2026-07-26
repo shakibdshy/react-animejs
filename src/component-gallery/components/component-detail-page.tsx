@@ -1,8 +1,9 @@
 import { memo, Suspense, useCallback, useMemo, useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { ArrowLeft, ArrowRight, Check, ExternalLink } from 'lucide-react';
-import { demoDetails, demoSections } from '../data';
+import { ArrowLeft, ArrowRight, BookOpen, Check, ExternalLink } from 'lucide-react';
+import { demoDetails, demoSections, demoDocsLinks, DIFFICULTY_META } from '../data';
 import { getDemoPreview } from './detail-previews';
+import { GalleryPreview } from './gallery-preview';
 import { CodeBlock } from './code-block';
 import { ComponentGalleryShell } from './component-gallery-shell';
 import type { DemoId } from '../data';
@@ -23,6 +24,25 @@ export const ComponentDetailPage = memo(function ComponentDetailPage({
   const nextDemo = currentIndex < demoSections.length - 1 ? demoSections[currentIndex + 1] : undefined;
 
   const PreviewComponent = useMemo(() => getDemoPreview(demo.componentId), [demo.componentId]);
+
+  // Related demos: same category (worth 2) plus shared tags (worth 1 each), top 3.
+  const relatedDemos = useMemo(() => {
+    return demoSections
+      .filter((d) => d.componentId !== demo.componentId)
+      .map((d) => {
+        const sameCategory = d.category === demo.category ? 2 : 0;
+        const sharedTags = (demo.tags ?? []).filter((t) =>
+          (d.tags ?? []).some((dt) => dt === t),
+        ).length;
+        return { demo: d, score: sameCategory + sharedTags };
+      })
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .map((entry) => entry.demo);
+  }, [demo]);
+
+  const docsLink = demoDocsLinks[demo.componentId];
 
   const handleCopy = useCallback(async () => {
     try {
@@ -47,7 +67,7 @@ export const ComponentDetailPage = memo(function ComponentDetailPage({
     <ComponentGalleryShell>
       <main className="relative overflow-hidden pt-28 pb-16 min-h-screen">
         <div className="pointer-events-none absolute top-12 left-[14%] h-72 w-72 rounded-full bg-landing-accent/8 blur-[100px]" />
-        <div className="pointer-events-none absolute top-[32rem] right-[8%] h-80 w-80 rounded-full bg-violet-500/8 blur-[110px]" />
+        <div className="pointer-events-none absolute top-[32rem] right-[8%] h-80 w-80 rounded-full bg-landing-accent/8 blur-[110px]" />
 
         <div className="relative max-w-300 mx-auto px-6">
           <div className="flex items-center justify-between gap-5 mb-10 flex-wrap">
@@ -95,6 +115,23 @@ export const ComponentDetailPage = memo(function ComponentDetailPage({
                 <span className="landing-font-mono text-[11px] tracking-widest uppercase text-landing-accent bg-landing-accent/10 px-3 py-1 rounded-full border border-landing-accent/20">
                   {demo.category}
                 </span>
+                {demo.difficulty && (
+                  <span
+                    className={`landing-font-mono text-[11px] tracking-widest uppercase px-3 py-1 rounded-full border ${DIFFICULTY_META[demo.difficulty].badgeClassName}`}
+                  >
+                    {DIFFICULTY_META[demo.difficulty].label}
+                  </span>
+                )}
+                {docsLink && (
+                  <Link
+                    to="/docs"
+                    hash={docsLink.anchor}
+                    className="landing-font-mono text-[11px] tracking-wider uppercase text-landing-muted hover:text-landing-accent bg-landing-surface px-3 py-1 rounded-full border border-landing-border hover:border-landing-accent/30 transition-all no-underline flex items-center gap-1.5"
+                  >
+                    <BookOpen size={13} />
+                    Read the docs
+                  </Link>
+                )}
                 {demo.hasPlayground && demo.playgroundPath ? (
                   <Link
                     to={demo.playgroundPath as never}
@@ -183,6 +220,32 @@ export const ComponentDetailPage = memo(function ComponentDetailPage({
               </div>
             </section>
           </div>
+
+          {relatedDemos.length > 0 && (
+            <section className="mt-12 pt-8 border-t border-landing-border">
+              <h2 className="landing-font-display text-xl mb-5">Related components</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {relatedDemos.map((d) => (
+                  <Link
+                    key={d.componentId}
+                    to="/demos/$componentId"
+                    params={{ componentId: d.componentId }}
+                    className="bg-landing-surface border border-landing-border rounded-xl overflow-hidden no-underline group hover:-translate-y-0.5 hover:border-landing-accent/30 transition-all"
+                  >
+                    <GalleryPreview demoId={d.componentId} className="h-24" />
+                    <div className="p-3">
+                      <h3 className="landing-font-display text-sm group-hover:text-landing-accent transition-colors">
+                        {d.title}
+                      </h3>
+                      <p className="text-[12px] text-landing-muted leading-relaxed mt-1 line-clamp-2">
+                        {d.description}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
 
           <div className="flex items-center justify-between mt-12 pt-8 border-t border-landing-border">
             {previousDemo ? (
