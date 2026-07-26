@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { animate, Anime, AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
 import { DemoButton, PreviewCard } from './shared';
 import { cn } from './utils';
@@ -106,10 +106,15 @@ export const DropdownMenuPreview = memo(function DropdownMenuPreview(_props: Pre
   );
 });
 
-/** A single accordion item. The panel measures its content's scrollHeight and
- *  animates between 0 and that value. Anime.js tweens the height imperatively
- *  on each toggle (raw `animate` call from the click handler), so it never
- *  fights React's inline style on mount — the resting state is owned by React. */
+/** A single accordion item.
+ *
+ *  Animation model: React owns the resting height (auto when open, 0 when
+ *  closed), but a `useLayoutEffect` runs *before paint* on every isOpen
+ *  change to (1) freeze the panel at its current rendered pixel height, then
+ *  (2) kick off the anime.js tween to the new target. This eliminates the
+ *  flash where React's commit would otherwise paint the final height before
+ *  the animation starts, and lets two panels animate in parallel when
+ *  switching (the old one closes while the new one opens, simultaneously). */
 const AccordionItem = memo(function AccordionItem({
   title,
   body,
@@ -123,28 +128,52 @@ const AccordionItem = memo(function AccordionItem({
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  // Tracks whether the initial mount sync has happened, so we don't animate
+  // on first paint (only on real toggles thereafter).
+  const isFirstRun = useRef(true);
 
-  // Animate imperatively on toggle. By reading scrollHeight at click time we
-  // get the true content height even if it changed (e.g. responsive wrap).
-  const handleToggle = () => {
+  // Before the browser paints each isOpen change, measure the current pixel
+  // height and tween to the target. Running in useLayoutEffect means the
+  // freeze + animate happen between React's DOM commit and paint, so the user
+  // never sees an intermediate snap.
+  useLayoutEffect(() => {
     const panel = panelRef.current;
     const content = contentRef.current;
-    if (panel && content) {
-      const targetHeight = isOpen ? 0 : content.scrollHeight;
-      animate(panel, {
-        height: targetHeight,
-        opacity: isOpen ? 0 : 1,
-        duration: 320,
-        ease: 'outExpo',
-      });
+    if (!panel || !content) return;
+
+    // First render: just sync to the resting state without animating.
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      panel.style.height = isOpen ? 'auto' : '0px';
+      panel.style.opacity = isOpen ? '1' : '0';
+      return;
     }
-    onToggle();
-  };
+
+    // Freeze at the current rendered pixel height so the tween has a real
+    // starting value (avoiding a flash from auto -> 0 or auto -> auto).
+    const currentHeight = panel.getBoundingClientRect().height;
+    panel.style.height = `${currentHeight}px`;
+
+    // Tween to the target. When opening, the target is the natural content
+    // height (scrollHeight); when closing, it's 0.
+    const targetHeight = isOpen ? content.scrollHeight : 0;
+    animate(panel, {
+      height: targetHeight,
+      opacity: isOpen ? 1 : 0,
+      duration: 320,
+      ease: 'outExpo',
+      // On complete, release the inline height so layout stays correct if the
+      // viewport/content resizes later (open panels return to 'auto').
+      onComplete: () => {
+        if (isOpen) panel.style.height = 'auto';
+      },
+    });
+  }, [isOpen]);
 
   return (
     <div className="rounded-lg border border-landing-border bg-landing-surface/40 overflow-hidden">
       <button
-        onClick={handleToggle}
+        onClick={onToggle}
         aria-expanded={isOpen}
         className="w-full flex items-center justify-between px-3.5 py-2.5 text-left"
       >
@@ -158,11 +187,7 @@ const AccordionItem = memo(function AccordionItem({
           ▼
         </span>
       </button>
-      <div
-        ref={panelRef}
-        style={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
-        className="overflow-hidden"
-      >
+      <div ref={panelRef} style={{ height: 0 }} className="overflow-hidden">
         <div ref={contentRef}>
           <p className="px-3.5 pb-3 text-xs text-landing-muted leading-relaxed">{body}</p>
         </div>
