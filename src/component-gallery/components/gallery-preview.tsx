@@ -255,6 +255,134 @@ function ScramblePreview() {
   );
 }
 
+function TooltipCardPreview() {
+  useAnime({
+    selector: '.demo-prev-tooltip',
+    opacity: [0, 1],
+    translateY: [8, 0],
+    scale: [0.85, 1],
+    duration: 500,
+    ease: 'outBack' as never,
+    loop: true,
+    direction: 'alternate',
+    delay: 600,
+  });
+
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <div className="landing-font-mono text-[11px] text-landing-muted">Hover me</div>
+      <div className="demo-prev-tooltip landing-font-mono text-[11px] text-landing-bg bg-landing-accent px-2.5 py-1 rounded-md shadow-lg">
+        Tooltip
+      </div>
+    </div>
+  );
+}
+
+function DropdownMenuCardPreview() {
+  useAnime({
+    selector: '.demo-prev-menu-item',
+    opacity: [0, 1],
+    translateY: [-6, 0],
+    stagger: 80,
+    duration: 350,
+    ease: 'outQuad' as never,
+    loop: true,
+    direction: 'alternate',
+    delay: 700,
+  });
+
+  return (
+    <div className="flex flex-col gap-1 w-28">
+      {['Item one', 'Item two', 'Item three'].map((label) => (
+        <div
+          key={label}
+          className="demo-prev-menu-item h-5 rounded bg-landing-surface border border-landing-border flex items-center px-2"
+        >
+          <span className="landing-font-mono text-[9px] text-landing-muted truncate">{label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function AccordionCardPreview() {
+  useAnime({
+    selector: '.demo-prev-acc-panel',
+    maxHeight: [0, 28],
+    opacity: [0, 1],
+    stagger: 200,
+    duration: 600,
+    ease: 'outExpo' as never,
+    loop: true,
+    direction: 'alternate',
+    delay: 600,
+  });
+
+  return (
+    <div className="flex flex-col gap-1 w-32">
+      {[0, 1, 2].map((i) => (
+        <div key={i} className="overflow-hidden">
+          <div className="h-3 rounded bg-landing-accent/30 mb-0.5" />
+          <div className="demo-prev-acc-panel max-h-0 rounded bg-landing-surface border border-landing-border overflow-hidden">
+            <div className="h-7" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ToastCardPreview() {
+  useAnime({
+    selector: '.demo-prev-toast',
+    opacity: [0, 1],
+    translateX: [20, 0],
+    stagger: 120,
+    duration: 500,
+    ease: 'outExpo' as never,
+    loop: true,
+    direction: 'alternate',
+    delay: 600,
+  });
+
+  return (
+    <div className="flex flex-col gap-1.5 items-end">
+      {['Saved', 'Copied'].map((msg) => (
+        <div
+          key={msg}
+          className="demo-prev-toast landing-font-mono text-[10px] text-landing-bg bg-landing-accent px-2.5 py-1 rounded-md shadow-lg"
+        >
+          ✓ {msg}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TabsCardPreview() {
+  useAnime({
+    selector: '.demo-prev-tab-underline',
+    translateX: [0, 48, 0],
+    duration: 2000,
+    ease: 'inOutQuad' as never,
+    loop: true,
+    delay: 500,
+  });
+
+  return (
+    <div className="flex flex-col items-center gap-2 w-32">
+      <div className="relative flex gap-4 border-b border-landing-border pb-1">
+        {['A', 'B', 'C'].map((t) => (
+          <span key={t} className="landing-font-mono text-[10px] text-landing-muted w-6 text-center">
+            {t}
+          </span>
+        ))}
+        <span className="demo-prev-tab-underline absolute bottom-[-1px] left-0 w-6 h-0.5 bg-landing-accent rounded-full" />
+      </div>
+    </div>
+  );
+}
+
 export const galleryPreviewRegistry = {
   'basic-animation': StaggerBoxesPreview,
   'svg-morph': SvgPulsePreview,
@@ -275,6 +403,11 @@ export const galleryPreviewRegistry = {
   'reorder-list': BounceDotsPreview,
   'scroll-linked-animations': RingOrbitPreview,
   'scramble-text': ScramblePreview,
+  tooltip: TooltipCardPreview,
+  'dropdown-menu': DropdownMenuCardPreview,
+  accordion: AccordionCardPreview,
+  toast: ToastCardPreview,
+  tabs: TabsCardPreview,
 } satisfies Record<DemoId, ComponentType>;
 
 export const GalleryPreview = memo(function GalleryPreview({

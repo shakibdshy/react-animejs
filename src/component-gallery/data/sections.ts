@@ -217,6 +217,56 @@ export const demoSections = [
     difficulty: 'intermediate',
     docsAnchor: 'use-anime-scramble',
   },
+
+  {
+    title: 'Tooltip',
+    description: 'Hover or focus trigger with spring enter/exit and smart placement',
+    category: 'ui',
+    componentId: 'tooltip',
+    tags: ['ui', 'hover', 'reveal'],
+    difficulty: 'beginner',
+    docsAnchor: 'use-anime',
+  },
+
+  {
+    title: 'Dropdown Menu',
+    description: 'Button-triggered menu with staggered item entrance and click-outside dismiss',
+    category: 'ui',
+    componentId: 'dropdown-menu',
+    tags: ['ui', 'menu', 'stagger'],
+    difficulty: 'intermediate',
+    docsAnchor: 'anime-component',
+  },
+
+  {
+    title: 'Accordion',
+    description: 'Expand/collapse panels with height animation and single/multi open modes',
+    category: 'ui',
+    componentId: 'accordion',
+    tags: ['ui', 'collapse', 'height'],
+    difficulty: 'intermediate',
+    docsAnchor: 'anime-component',
+  },
+
+  {
+    title: 'Toast',
+    description: 'Stacked notifications with enter/exit animations and auto-dismiss',
+    category: 'ui',
+    componentId: 'toast',
+    tags: ['ui', 'notification', 'presence'],
+    difficulty: 'intermediate',
+    docsAnchor: 'anime-presence',
+  },
+
+  {
+    title: 'Tabs',
+    description: 'Animated underline indicator with cross-fading content panels',
+    category: 'ui',
+    componentId: 'tabs',
+    tags: ['ui', 'indicator', 'crossfade'],
+    difficulty: 'beginner',
+    docsAnchor: 'anime-component',
+  },
 ] as const satisfies readonly DemoSection[];
 
 export type DemoId = (typeof demoSections)[number]['componentId'];

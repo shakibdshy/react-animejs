@@ -69,4 +69,9 @@ export const demoDocsLinks: Record<
     extras: ['anime-scroll'],
   },
   'scramble-text': { anchor: 'use-anime-scramble', label: 'useAnimeScramble' },
+  tooltip: { anchor: 'use-anime', label: 'useAnime', extras: ['anime-component'] },
+  'dropdown-menu': { anchor: 'anime-component', label: 'Anime' },
+  accordion: { anchor: 'anime-component', label: 'Anime' },
+  toast: { anchor: 'anime-presence', label: 'AnimePresence', extras: ['anime-presence-child'] },
+  tabs: { anchor: 'anime-component', label: 'Anime' },
 };

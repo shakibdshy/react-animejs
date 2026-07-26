@@ -439,4 +439,132 @@ const nextGrid = () => {
       { name: "duration", type: "number", default: "1000", desc: "Duration in ms" },
     ],
   },
+
+  tooltip: {
+    component: "Anime",
+    summary: "Hover or focus trigger with spring enter/exit and smart placement.",
+    code: `const [open, setOpen] = useState(false)
+
+<Anime
+  opacity={open ? [0, 1] : [1, 0]}
+  translateY={open ? [6, 0] : [0, 6]}
+  scale={open ? [0.9, 1] : [1, 0.9]}
+  duration={220}
+  ease="outBack"
+  deps={[open]}
+>
+  <span className="tooltip-pop">Tooltip text</span>
+</Anime>`,
+    props: [
+      { name: "opacity", type: "number[]", default: "[0, 1]", desc: "Fade keyframes" },
+      { name: "translateY", type: "number[]", default: "[6, 0]", desc: "Slide-in offset" },
+      { name: "scale", type: "number[]", default: "[0.9, 1]", desc: "Pop scale" },
+      { name: "duration", type: "number", default: "220", desc: "Enter/exit ms" },
+      { name: "ease", type: "string", default: "outBack", desc: "Spring-like easing" },
+    ],
+  },
+
+  "dropdown-menu": {
+    component: "Anime",
+    summary: "Button-triggered menu with staggered item entrance and click-outside dismiss.",
+    code: `{items.map((item) => (
+  <Anime
+    key={item}
+    opacity={open ? [0, 1] : [1, 0]}
+    translateY={open ? [-8, 0] : [0, -8]}
+    stagger={40}
+    duration={200}
+    ease="outQuad"
+    deps={[open]}
+  >
+    <button className="menu-item">{item}</button>
+  </Anime>
+))}`,
+    props: [
+      { name: "stagger", type: "number", default: "40", desc: "Per-item delay cascade" },
+      { name: "translateY", type: "number[]", default: "[-8, 0]", desc: "Item slide-in" },
+      { name: "opacity", type: "number[]", default: "[0, 1]", desc: "Item fade" },
+      { name: "duration", type: "number", default: "200", desc: "Per-item ms" },
+      { name: "ease", type: "string", default: "outQuad", desc: "Item easing" },
+    ],
+  },
+
+  accordion: {
+    component: "Anime",
+    summary: "Expand/collapse panels with height animation and single/multi open modes.",
+    code: `<Anime
+  maxHeight={isOpen ? 200 : 0}
+  opacity={isOpen ? [0, 1] : [1, 0]}
+  duration={300}
+  ease="outExpo"
+  deps={[isOpen]}
+>
+  <div className="panel-body">…</div>
+</Anime>`,
+    props: [
+      { name: "maxHeight", type: "number", default: "0 / N", desc: "Panel max-height target (use maxHeight for reliable collapse)" },
+      { name: "opacity", type: "number[]", default: "[0, 1]", desc: "Content fade" },
+      { name: "deps", type: "unknown[]", default: "[]", desc: "Re-init animation when state changes" },
+      { name: "duration", type: "number", default: "300", desc: "Expand/collapse ms" },
+      { name: "ease", type: "string", default: "outExpo", desc: "Decelerating curve" },
+    ],
+  },
+
+  toast: {
+    component: "AnimePresence",
+    summary: "Stacked notifications with enter/exit animations and auto-dismiss.",
+    code: `<AnimePresence mode="popLayout">
+  {toasts.map((t) => (
+    <AnimePresenceChild
+      key={t.id}
+      enter={{ opacity: [0, 1], translateX: [40, 0], scale: [0.9, 1] }}
+      exit={{ opacity: [1, 0], translateX: [0, 40], scale: [1, 0.9] }}
+      duration={300}
+      ease="outExpo"
+    >
+      <Toast onDismiss={() => dismiss(t.id)}>{t.msg}</Toast>
+    </AnimePresenceChild>
+  ))}
+</AnimePresence>`,
+    props: [
+      { name: "mode", type: "'sync'|'wait'|'popLayout'", default: "'popLayout'", desc: "Exit sequencing" },
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes per child" },
+      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Exit keyframes per child" },
+      { name: "duration", type: "number", default: "300", desc: "Enter/exit ms" },
+      { name: "ease", type: "string", default: "'outExpo'", desc: "Easing curve" },
+    ],
+  },
+
+  tabs: {
+    component: "Anime",
+    summary: "Animated underline indicator with cross-fading content panels.",
+    code: `// Sliding underline
+<Anime
+  translateX={active * TAB_WIDTH}
+  duration={300}
+  ease="outExpo"
+  deps={[active]}
+>
+  <span className="underline" />
+</Anime>
+
+// Cross-fading panels
+{panels.map((p, i) => (
+  <Anime
+    key={p.label}
+    opacity={active === i ? [0, 1] : [1, 0]}
+    duration={250}
+    deps={[active]}
+  >
+    <div className="panel">{p.body}</div>
+  </Anime>
+))}`,
+    props: [
+      { name: "translateX", type: "number", default: "-", desc: "Indicator slide target" },
+      { name: "opacity", type: "number[]", default: "[0, 1]", desc: "Panel cross-fade" },
+      { name: "deps", type: "unknown[]", default: "[]", desc: "Re-init when active tab changes" },
+      { name: "duration", type: "number", default: "300", desc: "Transition ms" },
+      { name: "ease", type: "string", default: "'outExpo'", desc: "Decelerating curve" },
+    ],
+  },
 } satisfies Record<DemoId, DemoDetail>;
