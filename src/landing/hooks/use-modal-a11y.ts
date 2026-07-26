@@ -67,7 +67,11 @@ export function useModalA11y({
       window.cancelAnimationFrame(frame);
       window.removeEventListener('keydown', onKey);
       document.body.style.overflow = previousOverflow;
-      previousFocus?.focus();
+      // Only restore focus if the element is still in the DOM (the palette may
+      // navigate away on selection, unmounting the previous focus target).
+      if (previousFocus && document.body.contains(previousFocus)) {
+        previousFocus.focus();
+      }
     };
   }, [open, onClose, panelRef, initialFocusRef]);
 }

@@ -10,7 +10,7 @@ const VALID_CATEGORIES: ReadonlySet<string> = new Set(
 const VALID_SORTS: ReadonlySet<string> = new Set(['alpha', 'category', 'recent']);
 
 /** Coerce raw URL search params into typed filter state with safe defaults. */
-function readSearchParams(raw: Record<string, unknown>): {
+export function readSearchParams(raw: Record<string, unknown>): {
   q: string;
   cat: FilterCategory;
   sort: SortKey;

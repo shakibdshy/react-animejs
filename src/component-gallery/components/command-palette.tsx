@@ -56,8 +56,11 @@ export const CommandPalette = memo(function CommandPalette({
     return [...list].sort((a, b) => a.title.localeCompare(b.title));
   }, [query]);
 
-  // Clamp activeIndex when results shrink.
-  const safeIndex = Math.min(activeIndex, Math.max(results.length - 1, 0));
+  // Keep activeIndex within bounds whenever the result set changes, so hover
+  // (which sets a large index) can't desync from a subsequently-shrunk list.
+  useEffect(() => {
+    setActiveIndex((i) => Math.min(i, Math.max(results.length - 1, 0)));
+  }, [results.length]);
 
   const selectDemo = (componentId: string) => {
     navigate({ to: '/demos/$componentId', params: { componentId } });
@@ -73,7 +76,7 @@ export const CommandPalette = memo(function CommandPalette({
       setActiveIndex((i) => Math.max(i - 1, 0));
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      const selected = results[safeIndex];
+      const selected = results[activeIndex];
       if (selected) selectDemo(selected.componentId);
     }
   };
@@ -123,7 +126,7 @@ export const CommandPalette = memo(function CommandPalette({
                   aria-expanded="true"
                   aria-controls="palette-list"
                   aria-activedescendant={
-                    results[safeIndex] ? `palette-item-${safeIndex}` : undefined
+                    results[activeIndex] ? `palette-item-${activeIndex}` : undefined
                   }
                 />
                 <kbd className="landing-font-mono text-[10px] text-landing-muted px-1.5 py-0.5 rounded border border-landing-border">
@@ -147,11 +150,11 @@ export const CommandPalette = memo(function CommandPalette({
                       key={demo.componentId}
                       id={`palette-item-${i}`}
                       role="option"
-                      aria-selected={i === safeIndex}
+                      aria-selected={i === activeIndex}
                       onMouseEnter={() => setActiveIndex(i)}
                       onClick={() => selectDemo(demo.componentId)}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors ${
-                        i === safeIndex
+                        i === activeIndex
                           ? 'bg-landing-accent/10'
                           : 'hover:bg-landing-accent/5'
                       }`}

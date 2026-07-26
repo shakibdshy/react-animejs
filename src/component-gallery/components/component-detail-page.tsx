@@ -37,7 +37,9 @@ export const ComponentDetailPage = memo(function ComponentDetailPage({
         return { demo: d, score: sameCategory + sharedTags };
       })
       .filter((entry) => entry.score > 0)
-      .sort((a, b) => b.score - a.score)
+      .sort(
+        (a, b) => b.score - a.score || a.demo.title.localeCompare(b.demo.title),
+      )
       .slice(0, 3)
       .map((entry) => entry.demo);
   }, [demo]);

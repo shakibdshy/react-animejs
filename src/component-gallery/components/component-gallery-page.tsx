@@ -23,6 +23,7 @@ export const ComponentGalleryPage = memo(function ComponentGalleryPage() {
     setCategory('all');
     setSearch('');
     setTagFilter(undefined);
+    setSort('alpha');
   };
 
   return (
