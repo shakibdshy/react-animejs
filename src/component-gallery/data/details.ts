@@ -490,23 +490,34 @@ const nextGrid = () => {
   },
 
   accordion: {
-    component: "Anime",
+    component: "animate",
     summary: "Expand/collapse panels with height animation and single/multi open modes.",
-    code: `<Anime
-  maxHeight={isOpen ? 200 : 0}
-  opacity={isOpen ? [0, 1] : [1, 0]}
-  duration={300}
-  ease="outExpo"
-  deps={[isOpen]}
->
-  <div className="panel-body">…</div>
-</Anime>`,
+    code: `// Animate imperatively from the click handler — read scrollHeight at
+// click time so the target is always the true content height, and let React
+// own the resting inline style so SSR + first paint are correct.
+const handleToggle = () => {
+  const target = isOpen ? 0 : contentRef.current!.scrollHeight
+  animate(panelRef.current!, {
+    height: target,
+    opacity: isOpen ? 0 : 1,
+    duration: 320,
+    ease: 'outExpo',
+  })
+  onToggle()
+}
+
+return (
+  <div ref={panelRef} className="overflow-hidden"
+       style={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}>
+    <div ref={contentRef}>…panel body…</div>
+  </div>
+)`,
     props: [
-      { name: "maxHeight", type: "number", default: "0 / N", desc: "Panel max-height target (use maxHeight for reliable collapse)" },
-      { name: "opacity", type: "number[]", default: "[0, 1]", desc: "Content fade" },
-      { name: "deps", type: "unknown[]", default: "[]", desc: "Re-init animation when state changes" },
-      { name: "duration", type: "number", default: "300", desc: "Expand/collapse ms" },
-      { name: "ease", type: "string", default: "outExpo", desc: "Decelerating curve" },
+      { name: "targets", type: "HTMLElement", default: "-", desc: "The panel wrapper element (panelRef.current)" },
+      { name: "height", type: "number", default: "0 / scrollHeight", desc: "Animate between 0 and measured content height" },
+      { name: "opacity", type: "number", default: "0 / 1", desc: "Content fade in/out" },
+      { name: "duration", type: "number", default: "320", desc: "Expand/collapse ms" },
+      { name: "ease", type: "string", default: "'outExpo'", desc: "Decelerating curve" },
     ],
   },
 

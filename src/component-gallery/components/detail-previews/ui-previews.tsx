@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { Anime, AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
+import { animate, Anime, AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
 import { DemoButton, PreviewCard } from './shared';
 import { cn } from './utils';
 import type { PreviewProps } from './types';
@@ -106,6 +106,71 @@ export const DropdownMenuPreview = memo(function DropdownMenuPreview(_props: Pre
   );
 });
 
+/** A single accordion item. The panel measures its content's scrollHeight and
+ *  animates between 0 and that value. Anime.js tweens the height imperatively
+ *  on each toggle (raw `animate` call from the click handler), so it never
+ *  fights React's inline style on mount — the resting state is owned by React. */
+const AccordionItem = memo(function AccordionItem({
+  title,
+  body,
+  isOpen,
+  onToggle,
+}: {
+  title: string;
+  body: string;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // Animate imperatively on toggle. By reading scrollHeight at click time we
+  // get the true content height even if it changed (e.g. responsive wrap).
+  const handleToggle = () => {
+    const panel = panelRef.current;
+    const content = contentRef.current;
+    if (panel && content) {
+      const targetHeight = isOpen ? 0 : content.scrollHeight;
+      animate(panel, {
+        height: targetHeight,
+        opacity: isOpen ? 0 : 1,
+        duration: 320,
+        ease: 'outExpo',
+      });
+    }
+    onToggle();
+  };
+
+  return (
+    <div className="rounded-lg border border-landing-border bg-landing-surface/40 overflow-hidden">
+      <button
+        onClick={handleToggle}
+        aria-expanded={isOpen}
+        className="w-full flex items-center justify-between px-3.5 py-2.5 text-left"
+      >
+        <span className="text-sm text-landing-fg">{title}</span>
+        <span
+          className={cn(
+            'landing-font-mono text-xs text-landing-muted transition-transform duration-300',
+            isOpen && 'rotate-180 text-landing-accent',
+          )}
+        >
+          ▼
+        </span>
+      </button>
+      <div
+        ref={panelRef}
+        style={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+        className="overflow-hidden"
+      >
+        <div ref={contentRef}>
+          <p className="px-3.5 pb-3 text-xs text-landing-muted leading-relaxed">{body}</p>
+        </div>
+      </div>
+    </div>
+  );
+});
+
 export const AccordionPreview = memo(function AccordionPreview(_props: PreviewProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
@@ -127,43 +192,15 @@ export const AccordionPreview = memo(function AccordionPreview(_props: PreviewPr
   return (
     <PreviewCard title="Accordion" description="Click a header to toggle">
       <div className="w-full max-w-80 flex flex-col gap-2">
-        {items.map((item, i) => {
-          const isOpen = openIndex === i;
-          return (
-            <div
-              key={item.title}
-              className="rounded-lg border border-landing-border bg-landing-surface/40 overflow-hidden"
-            >
-              <button
-                onClick={() => setOpenIndex(isOpen ? null : i)}
-                className="w-full flex items-center justify-between px-3.5 py-2.5 text-left"
-              >
-                <span className="text-sm text-landing-fg">{item.title}</span>
-                <span
-                  className={cn(
-                    'landing-font-mono text-xs text-landing-muted transition-transform',
-                    isOpen && 'rotate-180 text-landing-accent',
-                  )}
-                >
-                  ▼
-                </span>
-              </button>
-              <Anime
-                maxHeight={isOpen ? 120 : 0}
-                opacity={isOpen ? [0, 1] : [1, 0]}
-                duration={300}
-                ease="outExpo"
-                deps={[isOpen]}
-              >
-                <div className="overflow-hidden">
-                  <p className="px-3.5 pb-3 text-xs text-landing-muted leading-relaxed">
-                    {item.body}
-                  </p>
-                </div>
-              </Anime>
-            </div>
-          );
-        })}
+        {items.map((item, i) => (
+          <AccordionItem
+            key={item.title}
+            title={item.title}
+            body={item.body}
+            isOpen={openIndex === i}
+            onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+          />
+        ))}
       </div>
     </PreviewCard>
   );
