@@ -11,7 +11,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { Search } from 'lucide-react';
 import { AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
 import { useModalA11y } from '@/landing/hooks/use-modal-a11y';
-import { DIFFICULTY_META, demoSections } from '../data';
+import { demoSections, DIFFICULTY_META } from '../data';
 
 interface CommandPaletteProps {
   open: boolean;

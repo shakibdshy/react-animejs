@@ -1,7 +1,7 @@
 import { memo, Suspense, useCallback, useMemo, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeft, ArrowRight, BookOpen, Check, ExternalLink } from 'lucide-react';
-import { demoDetails, demoSections, demoDocsLinks, DIFFICULTY_META } from '../data';
+import { demoDetails, demoDocsLinks, demoSections, DIFFICULTY_META } from '../data';
 import { getDemoPreview } from './detail-previews';
 import { GalleryPreview } from './gallery-preview';
 import { CodeBlock } from './code-block';
