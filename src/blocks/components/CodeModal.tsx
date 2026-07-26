@@ -11,6 +11,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Check, Copy, X } from 'lucide-react';
 import { AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
+import { useModalA11y } from '@/landing/hooks/use-modal-a11y';
 import { CodeBlock } from '@/component-gallery/components/code-block';
 
 export interface CodeModalProps {
@@ -34,49 +35,14 @@ export const CodeModal = memo(function CodeModal({
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const copyResetTimerRef = useRef<number | null>(null);
 
-  // Keep keyboard focus inside the modal, restore it on close, and prevent the
-  // document behind the dialog from scrolling.
-  useEffect(() => {
-    if (!open) return;
-    const previousFocus = document.activeElement as HTMLElement | null;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    const frame = window.requestAnimationFrame(() => closeButtonRef.current?.focus());
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        onClose();
-        return;
-      }
-      if (e.key !== 'Tab') return;
-      const focusable = Array.from(
-        dialogRef.current?.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        ) ?? [],
-      );
-      if (focusable.length === 0) {
-        e.preventDefault();
-        return;
-      }
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = previousOverflow;
-      previousFocus?.focus();
-    };
-  }, [open, onClose]);
+  // Keyboard focus, scroll-lock, and Escape handling live in the shared hook so
+  // the command palette can reuse identical behavior.
+  useModalA11y({
+    open,
+    onClose,
+    panelRef: dialogRef,
+    initialFocusRef: closeButtonRef,
+  });
 
   // Reset copied state whenever the snippet changes / modal reopens.
   useEffect(() => {
