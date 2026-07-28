@@ -335,7 +335,7 @@ export const TabsPreview = memo(function TabsPreview(_props: PreviewProps) {
             duration={300}
             ease="outExpo"
             deps={[active]}
-            className="absolute bottom-[-1px] left-0 w-16 h-0.5 bg-landing-accent rounded-full"
+            className="absolute -bottom-px left-0 w-16 h-0.5 bg-landing-accent rounded-full"
           >
             <div className="w-full h-full bg-landing-accent rounded-full" />
           </Anime>

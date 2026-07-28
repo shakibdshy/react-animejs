@@ -377,7 +377,7 @@ function TabsCardPreview() {
             {t}
           </span>
         ))}
-        <span className="demo-prev-tab-underline absolute bottom-[-1px] left-0 w-6 h-0.5 bg-landing-accent rounded-full" />
+        <span className="demo-prev-tab-underline absolute -bottom-px left-0 w-6 h-0.5 bg-landing-accent rounded-full" />
       </div>
     </div>
   );
