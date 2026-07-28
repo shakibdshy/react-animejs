@@ -492,28 +492,51 @@ const nextGrid = () => {
   accordion: {
     component: "animate",
     summary: "Expand/collapse panels with height animation and single/multi open modes.",
-    code: `// Animate imperatively from the click handler — read scrollHeight at
-// click time so the target is always the true content height, and let React
-// own the resting inline style so SSR + first paint are correct.
-const handleToggle = () => {
-  const target = isOpen ? 0 : contentRef.current!.scrollHeight
-  animate(panelRef.current!, {
-    height: target,
-    opacity: isOpen ? 0 : 1,
-    duration: 320,
-    ease: 'outExpo',
-  })
-  onToggle()
-}
+    code: `const AccordionItem = ({ title, body, isOpen, onToggle }) => {
+  const contentRef = useRef(null)
+  const panelRef = useRef(null)
+  const isFirstRun = useRef(true)
 
-return (
-  <div ref={panelRef} className="overflow-hidden"
-       style={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}>
-    <div ref={contentRef}>…panel body…</div>
-  </div>
-)`,
+  // useLayoutEffect runs after React commits the DOM but BEFORE paint,
+  // so we can freeze the current pixel height and tween from it — no flash.
+  useLayoutEffect(() => {
+    const panel = panelRef.current
+    const content = contentRef.current
+    if (!panel || !content) return
+
+    // Skip animation on first mount; just sync to resting state.
+    if (isFirstRun.current) {
+      isFirstRun.current = false
+      panel.style.height = isOpen ? 'auto' : '0px'
+      return
+    }
+
+    // 1. Freeze at the current rendered height (gives the tween a real start).
+    const currentHeight = panel.getBoundingClientRect().height
+    panel.style.height = currentHeight + 'px'
+
+    // 2. Tween to the target (scrollHeight when opening, 0 when closing).
+    animate(panel, {
+      height: isOpen ? content.scrollHeight : 0,
+      opacity: isOpen ? 1 : 0,
+      duration: 320,
+      ease: 'outExpo',
+      // 3. Release inline height after opening so layout stays fluid.
+      onComplete: () => { if (isOpen) panel.style.height = 'auto' },
+    })
+  }, [isOpen])
+
+  return (
+    <div className="overflow-hidden rounded-lg border">
+      <button onClick={onToggle} aria-expanded={isOpen}>{title} ▼</button>
+      <div ref={panelRef} style={{ height: 0 }} className="overflow-hidden">
+        <div ref={contentRef}>{body}</div>
+      </div>
+    </div>
+  )
+}`,
     props: [
-      { name: "targets", type: "HTMLElement", default: "-", desc: "The panel wrapper element (panelRef.current)" },
+      { name: "targets", type: "HTMLElement", default: "panelRef.current", desc: "The panel wrapper element to animate" },
       { name: "height", type: "number", default: "0 / scrollHeight", desc: "Animate between 0 and measured content height" },
       { name: "opacity", type: "number", default: "0 / 1", desc: "Content fade in/out" },
       { name: "duration", type: "number", default: "320", desc: "Expand/collapse ms" },
