@@ -1,5 +1,7 @@
-import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { animate, Anime, AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
+import { memo, useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
+import { Anime, AnimeLayout, AnimeLayoutItem, AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
+import type { AnimeLayoutRef } from '@/lib/react-animejs';
 import { DemoButton, PreviewCard } from './shared';
 import { cn } from './utils';
 import type { PreviewProps } from './types';
@@ -108,11 +110,11 @@ export const DropdownMenuPreview = memo(function DropdownMenuPreview(_props: Pre
 
 /** A single accordion item.
  *
- *  Smooth height animation via animate() from react-animejs. anime.js cannot
- *  interpolate height:'auto', so we measure the panel's real pixel height
- *  (scrollHeight) and tween to that number. useLayoutEffect runs before paint,
- *  freezing the current height then animating — no flash. Panels animate in
- *  parallel when switching (one closes while another opens). */
+ *  Uses <AnimeLayout> (mode="manual") + controls.update() to FLIP-animate
+ *  the panel height. On toggle, update() commits the new state via flushSync,
+ *  then anime.js's layout engine measures the before/after height delta and
+ *  tweens it. This is the same pattern used by the AnimateCssGridFlip block —
+ *  the declarative component built for layout animations. */
 const AccordionItem = memo(function AccordionItem({
   title,
   body,
@@ -124,51 +126,32 @@ const AccordionItem = memo(function AccordionItem({
   isOpen: boolean;
   onToggle: () => void;
 }) {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const isFirstRun = useRef(true);
+  const layoutRef = useRef<AnimeLayoutRef>(null);
 
-  // useLayoutEffect bridges React's DOM commit and the browser paint: freeze
-  // the current pixel height, then animate to the target. Running here means
-  // the user never sees an intermediate snap.
-  useLayoutEffect(() => {
-    const panel = panelRef.current;
-    const content = contentRef.current;
-    if (!panel || !content) return;
-
-    // First render: just sync to the resting state without animating.
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      panel.style.height = isOpen ? 'auto' : '0px';
-      panel.style.opacity = isOpen ? '1' : '0';
+  const handleToggle = () => {
+    const layout = layoutRef.current;
+    if (!layout) {
+      onToggle();
       return;
     }
-
-    // Freeze at the current rendered pixel height so the tween has a real
-    // starting value (avoiding a flash from auto -> 0 or auto -> auto).
-    const currentHeight = panel.getBoundingClientRect().height;
-    panel.style.height = `${currentHeight}px`;
-
-    // Tween to the target. When opening, the target is the natural content
-    // height (scrollHeight); when closing, it's 0.
-    const targetHeight = isOpen ? content.scrollHeight : 0;
-    animate(panel, {
-      height: targetHeight,
-      opacity: isOpen ? 1 : 0,
-      duration: 320,
-      ease: 'outExpo',
-      // On complete, release the inline height so layout stays correct if the
-      // viewport/content resizes later (open panels return to 'auto').
-      onComplete: () => {
-        if (isOpen) panel.style.height = 'auto';
+    // update() records the current layout, runs the callback (which commits
+    // the new DOM state via flushSync), measures the new layout, and animates
+    // the delta — including height.
+    layout.update(
+      () => {
+        flushSync(() => onToggle());
       },
-    });
-  }, [isOpen]);
+      {
+        duration: 320,
+        ease: 'outExpo',
+      },
+    );
+  };
 
   return (
     <div className="rounded-lg border border-landing-border bg-landing-surface/40 overflow-hidden">
       <button
-        onClick={onToggle}
+        onClick={handleToggle}
         aria-expanded={isOpen}
         className="w-full flex items-center justify-between px-3.5 py-2.5 text-left"
       >
@@ -182,11 +165,21 @@ const AccordionItem = memo(function AccordionItem({
           ▼
         </span>
       </button>
-      <div ref={panelRef} style={{ height: 0 }} className="overflow-hidden">
-        <div ref={contentRef}>
-          <p className="px-3.5 pb-3 text-xs text-landing-muted leading-relaxed">{body}</p>
-        </div>
-      </div>
+      <AnimeLayout
+        ref={layoutRef}
+        mode="manual"
+        duration={320}
+        ease="outExpo"
+        enterFrom={{ opacity: 0 }}
+        leaveTo={{ opacity: 0 }}
+        className="overflow-hidden"
+      >
+        {isOpen && (
+          <AnimeLayoutItem key="panel" layoutId="panel">
+            <p className="px-3.5 pb-3 text-xs text-landing-muted leading-relaxed">{body}</p>
+          </AnimeLayoutItem>
+        )}
+      </AnimeLayout>
     </div>
   );
 });

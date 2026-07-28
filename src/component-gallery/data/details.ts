@@ -490,58 +490,47 @@ const nextGrid = () => {
   },
 
   accordion: {
-    component: "animate",
+    component: "AnimeLayout",
     summary: "Expand/collapse panels with height animation and single/multi open modes.",
-    code: `// Smooth height animation via animate() from react-animejs.
-// anime.js can't interpolate height:'auto', so measure scrollHeight and
-// tween to that number. useLayoutEffect runs before paint: freeze the
-// current height, then animate — no flash, parallel item switching.
+    code: `// <AnimeLayout> FLIP-animates the panel height. On toggle, update()
+// commits the new state (via flushSync), measures the before/after height
+// delta, and tweens it — no manual measurement or raw animate().
 const AccordionItem = ({ title, body, isOpen, onToggle }) => {
-  const contentRef = useRef(null)
-  const panelRef = useRef(null)
-  const isFirstRun = useRef(true)
+  const layoutRef = useRef(null)
 
-  useLayoutEffect(() => {
-    const panel = panelRef.current
-    const content = contentRef.current
-    if (!panel || !content) return
-
-    if (isFirstRun.current) {
-      isFirstRun.current = false
-      panel.style.height = isOpen ? 'auto' : '0px'
-      return
-    }
-
-    // 1. Freeze at current rendered height (real start value for the tween).
-    const currentHeight = panel.getBoundingClientRect().height
-    panel.style.height = currentHeight + 'px'
-
-    // 2. Tween to target (scrollHeight when opening, 0 when closing).
-    animate(panel, {
-      height: isOpen ? content.scrollHeight : 0,
-      opacity: isOpen ? 1 : 0,
-      duration: 320,
-      ease: 'outExpo',
-      // 3. Release inline height after opening so layout stays fluid.
-      onComplete: () => { if (isOpen) panel.style.height = 'auto' },
-    })
-  }, [isOpen])
+  const handleToggle = () => {
+    layoutRef.current?.update(
+      () => flushSync(() => onToggle()),
+      { duration: 320, ease: 'outExpo' },
+    )
+  }
 
   return (
     <div className="overflow-hidden rounded-lg border">
-      <button onClick={onToggle} aria-expanded={isOpen}>{title} ▼</button>
-      <div ref={panelRef} style={{ height: 0 }} className="overflow-hidden">
-        <div ref={contentRef}>{body}</div>
-      </div>
+      <button onClick={handleToggle} aria-expanded={isOpen}>{title} ▼</button>
+      <AnimeLayout
+        ref={layoutRef}
+        mode="manual"
+        duration={320}
+        ease="outExpo"
+        enterFrom={{ opacity: 0 }}
+        leaveTo={{ opacity: 0 }}
+      >
+        {isOpen && (
+          <AnimeLayout.Item key="panel" layoutId="panel">
+            {body}
+          </AnimeLayout.Item>
+        )}
+      </AnimeLayout>
     </div>
   )
 }`,
     props: [
-      { name: "targets", type: "HTMLElement", default: "panelRef.current", desc: "Panel wrapper element to animate" },
-      { name: "height", type: "number", default: "0 / scrollHeight", desc: "Animate between 0 and measured content height" },
-      { name: "opacity", type: "number", default: "0 / 1", desc: "Content fade in/out" },
+      { name: "mode", type: "'manual'|'auto'", default: "'manual'", desc: "manual = call update() to trigger FLIP; auto = animate on children change" },
+      { name: "update", type: "(cb, params) => Timeline", default: "-", desc: "Records layout, runs cb (flushSync), animates the delta" },
+      { name: "enterFrom", type: "CSSProperties", default: "{opacity:0}", desc: "Initial state for entering content" },
+      { name: "leaveTo", type: "CSSProperties", default: "{opacity:0}", desc: "Final state for leaving content" },
       { name: "duration", type: "number", default: "320", desc: "Expand/collapse ms" },
-      { name: "ease", type: "string", default: "'outExpo'", desc: "Decelerating curve" },
     ],
   },
 

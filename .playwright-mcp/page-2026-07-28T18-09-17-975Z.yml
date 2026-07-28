@@ -1,0 +1,257 @@
+- generic [ref=f7e3]:
+  - banner [ref=f7e4]:
+    - link [ref=f7e5] [cursor=pointer]:
+      - /url: /
+      - text: React AnimeJS
+      - emphasis [ref=f7e6]: ✦
+    - navigation [ref=f7e7]:
+      - link "Home" [ref=f7e8] [cursor=pointer]:
+        - /url: /
+      - link "Components" [ref=f7e9] [cursor=pointer]:
+        - /url: /demos
+      - link "Blocks" [ref=f7e10] [cursor=pointer]:
+        - /url: /blocks
+      - button "Open command palette" [ref=f7e11]:
+        - generic [ref=f7e12]: Search
+        - generic [ref=f7e13]: ⌘K
+      - button "Switch to light mode" [ref=f7e14] [cursor=pointer]: ☀️
+  - main [ref=f7e15]:
+    - generic [ref=f7e16]:
+      - generic [ref=f7e17]:
+        - generic [ref=f7e18]:
+          - link "Components" [ref=f7e19] [cursor=pointer]:
+            - /url: /demos
+          - generic [ref=f7e20]: /
+          - generic [ref=f7e21]: Accordion
+          - generic [ref=f7e22]: 22 / 24
+        - generic [ref=f7e23]:
+          - link "Previous" [ref=f7e24] [cursor=pointer]:
+            - /url: /demos/dropdown-menu
+          - link "Next" [ref=f7e27] [cursor=pointer]:
+            - /url: /demos/toast
+      - generic [ref=f7e30]:
+        - generic [ref=f7e31]:
+          - heading "Accordion" [level=1] [ref=f7e32]
+          - generic [ref=f7e33]:
+            - generic [ref=f7e34]: ui
+            - generic [ref=f7e35]: Intermediate
+            - link "Read the docs" [ref=f7e36] [cursor=pointer]:
+              - /url: /docs#anime-component
+          - generic [ref=f7e39]:
+            - heading "Code" [level=2] [ref=f7e40]
+            - button "Copy" [ref=f7e41]
+          - table [ref=f7e45]:
+            - rowgroup [ref=f7e46]:
+              - row [ref=f7e47]:
+                - cell "1" [ref=f7e48]
+                - cell "// Smooth height animation via animate() from react-animejs." [ref=f7e50]
+              - row [ref=f7e51]:
+                - cell "2" [ref=f7e52]
+                - cell "// anime.js can't interpolate height:'auto', so measure scrollHeight and" [ref=f7e54]
+              - row [ref=f7e55]:
+                - cell "3" [ref=f7e56]
+                - 'cell "// tween to that number. useLayoutEffect runs before paint: freeze the" [ref=f7e58]'
+              - row [ref=f7e59]:
+                - cell "4" [ref=f7e60]
+                - cell "// current height, then animate — no flash, parallel item switching." [ref=f7e62]
+              - row [ref=f7e63]:
+                - cell "5" [ref=f7e64]
+                - 'cell "const AccordionItem = ({ title, body, isOpen, onToggle }) => {" [ref=f7e66]'
+              - row [ref=f7e67]:
+                - cell "6" [ref=f7e68]
+                - cell "const contentRef = useRef(null)" [ref=f7e70]
+              - row [ref=f7e71]:
+                - cell "7" [ref=f7e72]
+                - cell "const panelRef = useRef(null)" [ref=f7e74]
+              - row [ref=f7e75]:
+                - cell "8" [ref=f7e76]
+                - cell "const isFirstRun = useRef(true)" [ref=f7e78]
+              - row [ref=f7e79]:
+                - cell "9" [ref=f7e80]
+                - cell [ref=f7e82]
+              - row [ref=f7e83]:
+                - cell "10" [ref=f7e84]
+                - 'cell "useLayoutEffect(() => {" [ref=f7e86]'
+              - row [ref=f7e87]:
+                - cell "11" [ref=f7e88]
+                - cell "const panel = panelRef.current" [ref=f7e90]
+              - row [ref=f7e91]:
+                - cell "12" [ref=f7e92]
+                - cell "const content = contentRef.current" [ref=f7e94]
+              - row [ref=f7e95]:
+                - cell "13" [ref=f7e96]
+                - cell "if (!panel || !content) return" [ref=f7e98]
+              - row [ref=f7e99]:
+                - cell "14" [ref=f7e100]
+                - cell [ref=f7e102]
+              - row [ref=f7e103]:
+                - cell "15" [ref=f7e104]
+                - 'cell "if (isFirstRun.current) {" [ref=f7e106]'
+              - row [ref=f7e107]:
+                - cell "16" [ref=f7e108]
+                - cell "isFirstRun.current = false" [ref=f7e110]
+              - row [ref=f7e111]:
+                - cell "17" [ref=f7e112]
+                - 'cell "panel.style.height = isOpen ? ''auto'' : ''0px''" [ref=f7e114]'
+              - row [ref=f7e115]:
+                - cell "18" [ref=f7e116]
+                - cell "return" [ref=f7e118]
+              - row [ref=f7e119]:
+                - cell "19" [ref=f7e120]
+                - 'cell "}" [ref=f7e122]'
+              - row [ref=f7e123]:
+                - cell "20" [ref=f7e124]
+                - cell [ref=f7e126]
+              - row [ref=f7e127]:
+                - cell "21" [ref=f7e128]
+                - cell "// 1. Freeze at current rendered height (real start value for the tween)." [ref=f7e130]
+              - row [ref=f7e131]:
+                - cell "22" [ref=f7e132]
+                - cell "const currentHeight = panel.getBoundingClientRect().height" [ref=f7e134]
+              - row [ref=f7e135]:
+                - cell "23" [ref=f7e136]
+                - cell "panel.style.height = currentHeight + 'px'" [ref=f7e138]
+              - row [ref=f7e139]:
+                - cell "24" [ref=f7e140]
+                - cell [ref=f7e142]
+              - row [ref=f7e143]:
+                - cell "25" [ref=f7e144]
+                - cell "// 2. Tween to target (scrollHeight when opening, 0 when closing)." [ref=f7e146]
+              - row [ref=f7e147]:
+                - cell "26" [ref=f7e148]
+                - 'cell "animate(panel, {" [ref=f7e150]'
+              - row [ref=f7e151]:
+                - cell "27" [ref=f7e152]
+                - 'cell "height: isOpen ? content.scrollHeight : 0," [ref=f7e154]'
+              - row [ref=f7e155]:
+                - cell "28" [ref=f7e156]
+                - 'cell "opacity: isOpen ? 1 : 0," [ref=f7e158]'
+              - row [ref=f7e159]:
+                - cell "29" [ref=f7e160]
+                - 'cell "duration: 320," [ref=f7e162]'
+              - row [ref=f7e163]:
+                - cell "30" [ref=f7e164]
+                - 'cell "ease: ''outExpo''," [ref=f7e166]'
+              - row [ref=f7e167]:
+                - cell "31" [ref=f7e168]
+                - cell "// 3. Release inline height after opening so layout stays fluid." [ref=f7e170]
+              - row [ref=f7e171]:
+                - cell "32" [ref=f7e172]
+                - 'cell "onComplete: () => { if (isOpen) panel.style.height = ''auto'' }," [ref=f7e174]'
+              - row [ref=f7e175]:
+                - cell "33" [ref=f7e176]
+                - 'cell "})" [ref=f7e178]'
+              - row [ref=f7e179]:
+                - cell "34" [ref=f7e180]
+                - 'cell "}, [isOpen])" [ref=f7e182]'
+              - row [ref=f7e183]:
+                - cell "35" [ref=f7e184]
+                - cell [ref=f7e186]
+              - row [ref=f7e187]:
+                - cell "36" [ref=f7e188]
+                - cell "return (" [ref=f7e190]
+              - row [ref=f7e191]:
+                - cell "37" [ref=f7e192]
+                - cell "<div className=\"overflow-hidden rounded-lg border\">" [ref=f7e194]
+              - row [ref=f7e195]:
+                - cell "38" [ref=f7e196]
+                - 'cell "<button onClick={onToggle} aria-expanded={isOpen}>{title} ▼</button>" [ref=f7e198]'
+              - row [ref=f7e199]:
+                - cell "39" [ref=f7e200]
+                - 'cell "<div ref={panelRef} style={{ height: 0 }} className=\"overflow-hidden\">" [ref=f7e202]'
+              - row [ref=f7e203]:
+                - cell "40" [ref=f7e204]
+                - 'cell "<div ref={contentRef}>{body}</div>" [ref=f7e206]'
+              - row [ref=f7e207]:
+                - cell "41" [ref=f7e208]
+                - cell "</div>" [ref=f7e210]
+              - row [ref=f7e211]:
+                - cell "42" [ref=f7e212]
+                - cell "</div>" [ref=f7e214]
+              - row [ref=f7e215]:
+                - cell "43" [ref=f7e216]
+                - cell ")" [ref=f7e218]
+              - row [ref=f7e219]:
+                - cell "44" [ref=f7e220]
+                - 'cell "}" [ref=f7e222]'
+        - generic [ref=f7e223]:
+          - paragraph [ref=f7e224]: Expand/collapse panels with height animation and single/multi open modes.
+          - generic [ref=f7e225]:
+            - generic [ref=f7e226]: Live preview
+            - generic [ref=f7e229]:
+              - generic [ref=f7e230]: AccordionClick a header to toggle
+              - generic [ref=f7e233]:
+                - generic [ref=f7e234]:
+                  - button "What is react-animejs? ▼" [expanded] [ref=f7e235]:
+                    - generic [ref=f7e236]: What is react-animejs?
+                    - generic [ref=f7e237]: ▼
+                  - paragraph [ref=f7e240]: A React wrapper around anime.js v4 — hooks-first, with declarative components where they help.
+                - button "Do I need anime.js installed? ▼" [ref=f7e242]:
+                  - generic [ref=f7e243]: Do I need anime.js installed?
+                  - generic [ref=f7e244]: ▼
+                - button "Is it SSR-safe? ▼" [ref=f7e246]:
+                  - generic [ref=f7e247]: Is it SSR-safe?
+                  - generic [ref=f7e248]: ▼
+          - generic [ref=f7e249]:
+            - generic [ref=f7e250]: Props
+            - table [ref=f7e252]:
+              - rowgroup [ref=f7e253]:
+                - row [ref=f7e254]:
+                  - columnheader "Name" [ref=f7e255]
+                  - columnheader "Type" [ref=f7e256]
+                  - columnheader "Default" [ref=f7e257]
+                  - columnheader "Description" [ref=f7e258]
+              - rowgroup [ref=f7e259]:
+                - row [ref=f7e260]:
+                  - cell "targets" [ref=f7e261]
+                  - cell "HTMLElement" [ref=f7e262]
+                  - cell "panelRef.current" [ref=f7e263]
+                  - cell "Panel wrapper element to animate" [ref=f7e264]
+                - row [ref=f7e265]:
+                  - cell "height" [ref=f7e266]
+                  - cell "number" [ref=f7e267]
+                  - cell "0 / scrollHeight" [ref=f7e268]
+                  - cell "Animate between 0 and measured content height" [ref=f7e269]
+                - row [ref=f7e270]:
+                  - cell "opacity" [ref=f7e271]
+                  - cell "number" [ref=f7e272]
+                  - cell "0 / 1" [ref=f7e273]
+                  - cell "Content fade in/out" [ref=f7e274]
+                - row [ref=f7e275]:
+                  - cell "duration" [ref=f7e276]
+                  - cell "number" [ref=f7e277]
+                  - cell "320" [ref=f7e278]
+                  - cell "Expand/collapse ms" [ref=f7e279]
+                - row [ref=f7e280]:
+                  - cell "ease" [ref=f7e281]
+                  - cell "string" [ref=f7e282]
+                  - cell "'outExpo'" [ref=f7e283]
+                  - cell "Decelerating curve" [ref=f7e284]
+      - generic [ref=f7e285]:
+        - heading "Related components" [level=2] [ref=f7e286]
+        - generic [ref=f7e287]:
+          - link [ref=f7e288] [cursor=pointer]:
+            - /url: /demos/animated-slider
+            - generic [ref=f7e294]:
+              - heading "Animated Slider" [level=3] [ref=f7e295]
+              - paragraph [ref=f7e296]: Slide, fade, scale, flip transitions with visual slide showcase
+          - link "0 Counter & Countdown Animated counter and countdown with padding and format options" [ref=f7e297] [cursor=pointer]:
+            - /url: /demos/counter-countdown
+            - generic [ref=f7e298]: "0"
+            - generic [ref=f7e300]:
+              - heading "Counter & Countdown" [level=3] [ref=f7e301]
+              - paragraph [ref=f7e302]: Animated counter and countdown with padding and format options
+          - link "Item one Item two Item three Dropdown Menu Button-triggered menu with staggered item entrance and click-outside dismiss" [ref=f7e303] [cursor=pointer]:
+            - /url: /demos/dropdown-menu
+            - generic [ref=f7e305]:
+              - generic [ref=f7e306]: Item one
+              - generic [ref=f7e308]: Item two
+              - generic [ref=f7e310]: Item three
+            - generic [ref=f7e312]:
+              - heading "Dropdown Menu" [level=3] [ref=f7e313]
+              - paragraph [ref=f7e314]: Button-triggered menu with staggered item entrance and click-outside dismiss
+      - generic [ref=f7e315]:
+        - link "Dropdown Menu" [ref=f7e316] [cursor=pointer]:
+          - /url: /demos/dropdown-menu
+        - link "Toast" [ref=f7e319] [cursor=pointer]:
+          - /url: /demos/toast
