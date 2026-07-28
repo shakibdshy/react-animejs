@@ -1,5 +1,5 @@
-import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { animate, Anime, AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
+import { memo, useEffect, useRef, useState } from 'react';
+import { Anime, AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
 import { DemoButton, PreviewCard } from './shared';
 import { cn } from './utils';
 import type { PreviewProps } from './types';
@@ -108,13 +108,10 @@ export const DropdownMenuPreview = memo(function DropdownMenuPreview(_props: Pre
 
 /** A single accordion item.
  *
- *  Animation model: React owns the resting height (auto when open, 0 when
- *  closed), but a `useLayoutEffect` runs *before paint* on every isOpen
- *  change to (1) freeze the panel at its current rendered pixel height, then
- *  (2) kick off the anime.js tween to the new target. This eliminates the
- *  flash where React's commit would otherwise paint the final height before
- *  the animation starts, and lets two panels animate in parallel when
- *  switching (the old one closes while the new one opens, simultaneously). */
+ *  The React-idiomatic model: the open panel is conditionally mounted inside
+ *  <AnimePresence>, so enter/exit (height + opacity) are driven by the
+ *  presence component — no manual useLayoutEffect / getBoundingClientRect /
+ *  raw animate() needed. This is what AnimePresence was built for. */
 const AccordionItem = memo(function AccordionItem({
   title,
   body,
@@ -126,50 +123,6 @@ const AccordionItem = memo(function AccordionItem({
   isOpen: boolean;
   onToggle: () => void;
 }) {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-  // Tracks whether the initial mount sync has happened, so we don't animate
-  // on first paint (only on real toggles thereafter).
-  const isFirstRun = useRef(true);
-
-  // Before the browser paints each isOpen change, measure the current pixel
-  // height and tween to the target. Running in useLayoutEffect means the
-  // freeze + animate happen between React's DOM commit and paint, so the user
-  // never sees an intermediate snap.
-  useLayoutEffect(() => {
-    const panel = panelRef.current;
-    const content = contentRef.current;
-    if (!panel || !content) return;
-
-    // First render: just sync to the resting state without animating.
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      panel.style.height = isOpen ? 'auto' : '0px';
-      panel.style.opacity = isOpen ? '1' : '0';
-      return;
-    }
-
-    // Freeze at the current rendered pixel height so the tween has a real
-    // starting value (avoiding a flash from auto -> 0 or auto -> auto).
-    const currentHeight = panel.getBoundingClientRect().height;
-    panel.style.height = `${currentHeight}px`;
-
-    // Tween to the target. When opening, the target is the natural content
-    // height (scrollHeight); when closing, it's 0.
-    const targetHeight = isOpen ? content.scrollHeight : 0;
-    animate(panel, {
-      height: targetHeight,
-      opacity: isOpen ? 1 : 0,
-      duration: 320,
-      ease: 'outExpo',
-      // On complete, release the inline height so layout stays correct if the
-      // viewport/content resizes later (open panels return to 'auto').
-      onComplete: () => {
-        if (isOpen) panel.style.height = 'auto';
-      },
-    });
-  }, [isOpen]);
-
   return (
     <div className="rounded-lg border border-landing-border bg-landing-surface/40 overflow-hidden">
       <button
@@ -187,11 +140,27 @@ const AccordionItem = memo(function AccordionItem({
           ▼
         </span>
       </button>
-      <div ref={panelRef} style={{ height: 0 }} className="overflow-hidden">
-        <div ref={contentRef}>
-          <p className="px-3.5 pb-3 text-xs text-landing-muted leading-relaxed">{body}</p>
-        </div>
-      </div>
+      {/* The open panel mounts/unmounts. AnimePresence drives the enter/exit
+          cross-fade — opacity + a small slide — which it animates smoothly.
+          (anime.js can't interpolate height:'auto', so we animate transform
+          and opacity instead of height. This is the same pattern Radix/shadcn
+          use for collapsible content.) mode="sync" lets the closing and
+          opening panels animate in parallel when switching items. */}
+      <AnimePresence mode="sync" initial={false}>
+        {isOpen && (
+          <AnimePresenceChild
+            key="panel"
+            enter={{ opacity: [0, 1], translateY: [-8, 0] }}
+            exit={{ opacity: [1, 0], translateY: [0, -8] }}
+            duration={280}
+            ease="outExpo"
+          >
+            <div className="overflow-hidden">
+              <p className="px-3.5 pb-3 text-xs text-landing-muted leading-relaxed">{body}</p>
+            </div>
+          </AnimePresenceChild>
+        )}
+      </AnimePresence>
     </div>
   );
 });
@@ -340,18 +309,21 @@ export const TabsPreview = memo(function TabsPreview(_props: PreviewProps) {
             <div className="w-full h-full bg-landing-accent rounded-full" />
           </Anime>
         </div>
+        {/* Active panel mounts/unmounts as `active` changes; AnimePresence
+            drives the cross-fade. mode="wait" gives a clean out-then-in swap
+            so two panels never overlap. */}
         <div className="relative min-h-20 mt-3">
-          {tabs.map((tab, i) => (
-            <Anime
-              key={tab.label}
-              opacity={active === i ? [0, 1] : [1, 0]}
-              duration={250}
-              deps={[active]}
-              className={cn(active === i ? 'static' : 'absolute inset-0 pointer-events-none opacity-0')}
+          <AnimePresence mode="wait" initial={false}>
+            <AnimePresenceChild
+              key={tabs[active].label}
+              enter={{ opacity: [0, 1], translateY: [6, 0] }}
+              exit={{ opacity: [1, 0], translateY: [0, -6] }}
+              duration={220}
+              ease="outQuad"
             >
-              <p className="text-xs text-landing-muted leading-relaxed">{tab.body}</p>
-            </Anime>
-          ))}
+              <p className="text-xs text-landing-muted leading-relaxed">{tabs[active].body}</p>
+            </AnimePresenceChild>
+          </AnimePresence>
         </div>
       </div>
     </PreviewCard>

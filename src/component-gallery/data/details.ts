@@ -490,56 +490,33 @@ const nextGrid = () => {
   },
 
   accordion: {
-    component: "animate",
+    component: "AnimePresence",
     summary: "Expand/collapse panels with height animation and single/multi open modes.",
-    code: `const AccordionItem = ({ title, body, isOpen, onToggle }) => {
-  const contentRef = useRef(null)
-  const panelRef = useRef(null)
-  const isFirstRun = useRef(true)
-
-  // useLayoutEffect runs after React commits the DOM but BEFORE paint,
-  // so we can freeze the current pixel height and tween from it — no flash.
-  useLayoutEffect(() => {
-    const panel = panelRef.current
-    const content = contentRef.current
-    if (!panel || !content) return
-
-    // Skip animation on first mount; just sync to resting state.
-    if (isFirstRun.current) {
-      isFirstRun.current = false
-      panel.style.height = isOpen ? 'auto' : '0px'
-      return
-    }
-
-    // 1. Freeze at the current rendered height (gives the tween a real start).
-    const currentHeight = panel.getBoundingClientRect().height
-    panel.style.height = currentHeight + 'px'
-
-    // 2. Tween to the target (scrollHeight when opening, 0 when closing).
-    animate(panel, {
-      height: isOpen ? content.scrollHeight : 0,
-      opacity: isOpen ? 1 : 0,
-      duration: 320,
-      ease: 'outExpo',
-      // 3. Release inline height after opening so layout stays fluid.
-      onComplete: () => { if (isOpen) panel.style.height = 'auto' },
-    })
-  }, [isOpen])
-
-  return (
-    <div className="overflow-hidden rounded-lg border">
-      <button onClick={onToggle} aria-expanded={isOpen}>{title} ▼</button>
-      <div ref={panelRef} style={{ height: 0 }} className="overflow-hidden">
-        <div ref={contentRef}>{body}</div>
-      </div>
-    </div>
-  )
-}`,
+    code: `// The open panel mounts/unmounts as isOpen flips. AnimePresence drives
+// the enter/exit cross-fade — no manual useLayoutEffect or raw animate().
+const AccordionItem = ({ title, body, isOpen, onToggle }) => (
+  <div className="overflow-hidden rounded-lg border">
+    <button onClick={onToggle} aria-expanded={isOpen}>{title} ▼</button>
+    <AnimePresence mode="sync" initial={false}>
+      {isOpen && (
+        <AnimePresenceChild
+          key="panel"
+          enter={{ opacity: [0, 1], translateY: [-8, 0] }}
+          exit={{ opacity: [1, 0], translateY: [0, -8] }}
+          duration={280}
+          ease="outExpo"
+        >
+          <div className="overflow-hidden">{body}</div>
+        </AnimePresenceChild>
+      )}
+    </AnimePresence>
+  </div>
+)`,
     props: [
-      { name: "targets", type: "HTMLElement", default: "panelRef.current", desc: "The panel wrapper element to animate" },
-      { name: "height", type: "number", default: "0 / scrollHeight", desc: "Animate between 0 and measured content height" },
-      { name: "opacity", type: "number", default: "0 / 1", desc: "Content fade in/out" },
-      { name: "duration", type: "number", default: "320", desc: "Expand/collapse ms" },
+      { name: "mode", type: "'sync'|'wait'|'popLayout'", default: "'sync'", desc: "sync = closing & opening panels animate in parallel" },
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes (opacity, translateY, etc.)" },
+      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Exit keyframes (mirror of enter)" },
+      { name: "duration", type: "number", default: "280", desc: "Enter/exit ms" },
       { name: "ease", type: "string", default: "'outExpo'", desc: "Decelerating curve" },
     ],
   },
@@ -570,9 +547,9 @@ const nextGrid = () => {
   },
 
   tabs: {
-    component: "Anime",
+    component: "AnimePresence",
     summary: "Animated underline indicator with cross-fading content panels.",
-    code: `// Sliding underline
+    code: `// Sliding underline — <Anime> tweens the indicator on each tab change.
 <Anime
   translateX={active * TAB_WIDTH}
   duration={300}
@@ -582,23 +559,25 @@ const nextGrid = () => {
   <span className="underline" />
 </Anime>
 
-// Cross-fading panels
-{panels.map((p, i) => (
-  <Anime
-    key={p.label}
-    opacity={active === i ? [0, 1] : [1, 0]}
-    duration={250}
-    deps={[active]}
+// Active panel mounts/unmounts as \`active\` changes. <AnimePresence>
+// drives the cross-fade; mode="wait" gives a clean out-then-in swap.
+<AnimePresence mode="wait" initial={false}>
+  <AnimePresenceChild
+    key={panels[active].label}
+    enter={{ opacity: [0, 1], translateY: [6, 0] }}
+    exit={{ opacity: [1, 0], translateY: [0, -6] }}
+    duration={220}
+    ease="outQuad"
   >
-    <div className="panel">{p.body}</div>
-  </Anime>
-))}`,
+    <div className="panel">{panels[active].body}</div>
+  </AnimePresenceChild>
+</AnimePresence>`,
     props: [
-      { name: "translateX", type: "number", default: "-", desc: "Indicator slide target" },
-      { name: "opacity", type: "number[]", default: "[0, 1]", desc: "Panel cross-fade" },
-      { name: "deps", type: "unknown[]", default: "[]", desc: "Re-init when active tab changes" },
-      { name: "duration", type: "number", default: "300", desc: "Transition ms" },
-      { name: "ease", type: "string", default: "'outExpo'", desc: "Decelerating curve" },
+      { name: "translateX", type: "number", default: "-", desc: "Indicator slide (via <Anime>)" },
+      { name: "mode", type: "'wait'", default: "'wait'", desc: "Exit completes before next panel enters" },
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Panel enter keyframes" },
+      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Panel exit keyframes" },
+      { name: "duration", type: "number", default: "220", desc: "Transition ms" },
     ],
   },
 } satisfies Record<DemoId, DemoDetail>;
