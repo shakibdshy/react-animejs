@@ -1,0 +1,59 @@
+[     116ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:20102
+[     224ms] Error: Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <div className="min-h-scre..." data-tsd-source="/src/compo...">
+      <header>
+      <main className="relative o..." data-tsd-source="/src/compo...">
+        <div>
+        <div>
+        <div className="relative m..." data-tsd-source="/src/compo...">
+          <div>
+          <div className="grid grid-..." data-tsd-source="/src/compo...">
+            <section className="flex flex-col" data-tsd-source="/src/compo...">
+              <h1>
+              <div>
+              <div>
+              <div className="rounded-xl..." data-tsd-source="/src/compo...">
+                <div className="p-5 overfl..." data-tsd-source="/src/compo...">
+                  <CodeBlock2 code={"// Smoot..."} data-tsd-source="/src/compo...">
+                    <Highlight2 theme={{...}} code={"// Smoot..."} language="jsx" data-tsd-source="/src/compo...">
+                      <Highlight theme={{...}} code={"// Smoot..."} language="jsx" data-tsd-source="/src/compo..." ...>
+                        <div className="code-block..." data-tsd-source="/src/compo...">
+                          <table className="code-block..." data-tsd-source="/src/compo...">
+                            <tbody data-tsd-source="/src/compo...">
+                              <tr className="code-block..." onMouseEnter={function onMouseEnter} ...>
+                                <td>
+                                <td className="code-block..." data-tsd-source="/src/compo...">
+                                  <span
+                                    className="cb-tok-comment"
+                                    data-tsd-source="/src/component-gallery/components/code-block.tsx:100:29"
+                                  >
++                                   // Smooth height animation via animate() from react-animejs.
+-                                   // Smooth height animation via the useAnime hook from react-animejs.
+                                  ...
+                              ...
+            ...
+          ...
+      ...
+
+    at throwOnHydrationMismatch (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:3920:13)
+    at prepareToHydrateHostInstance (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:3994:23)
+    at completeWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:8999:17)
+    at runWithFiberInDEV (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:997:72)
+    at completeUnitOfWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:12669:22)
+    at performUnitOfWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:12575:29)
+    at workLoopConcurrentByScheduler (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:12557:11)
+    at renderRootConcurrent (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:12539:71)
+    at performWorkOnRoot (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:11766:152)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:13505:9)

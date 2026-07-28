@@ -490,33 +490,57 @@ const nextGrid = () => {
   },
 
   accordion: {
-    component: "AnimePresence",
+    component: "animate",
     summary: "Expand/collapse panels with height animation and single/multi open modes.",
-    code: `// The open panel mounts/unmounts as isOpen flips. AnimePresence drives
-// the enter/exit cross-fade — no manual useLayoutEffect or raw animate().
-const AccordionItem = ({ title, body, isOpen, onToggle }) => (
-  <div className="overflow-hidden rounded-lg border">
-    <button onClick={onToggle} aria-expanded={isOpen}>{title} ▼</button>
-    <AnimePresence mode="sync" initial={false}>
-      {isOpen && (
-        <AnimePresenceChild
-          key="panel"
-          enter={{ opacity: [0, 1], translateY: [-8, 0] }}
-          exit={{ opacity: [1, 0], translateY: [0, -8] }}
-          duration={280}
-          ease="outExpo"
-        >
-          <div className="overflow-hidden">{body}</div>
-        </AnimePresenceChild>
-      )}
-    </AnimePresence>
-  </div>
-)`,
+    code: `// Smooth height animation via animate() from react-animejs.
+// anime.js can't interpolate height:'auto', so measure scrollHeight and
+// tween to that number. useLayoutEffect runs before paint: freeze the
+// current height, then animate — no flash, parallel item switching.
+const AccordionItem = ({ title, body, isOpen, onToggle }) => {
+  const contentRef = useRef(null)
+  const panelRef = useRef(null)
+  const isFirstRun = useRef(true)
+
+  useLayoutEffect(() => {
+    const panel = panelRef.current
+    const content = contentRef.current
+    if (!panel || !content) return
+
+    if (isFirstRun.current) {
+      isFirstRun.current = false
+      panel.style.height = isOpen ? 'auto' : '0px'
+      return
+    }
+
+    // 1. Freeze at current rendered height (real start value for the tween).
+    const currentHeight = panel.getBoundingClientRect().height
+    panel.style.height = currentHeight + 'px'
+
+    // 2. Tween to target (scrollHeight when opening, 0 when closing).
+    animate(panel, {
+      height: isOpen ? content.scrollHeight : 0,
+      opacity: isOpen ? 1 : 0,
+      duration: 320,
+      ease: 'outExpo',
+      // 3. Release inline height after opening so layout stays fluid.
+      onComplete: () => { if (isOpen) panel.style.height = 'auto' },
+    })
+  }, [isOpen])
+
+  return (
+    <div className="overflow-hidden rounded-lg border">
+      <button onClick={onToggle} aria-expanded={isOpen}>{title} ▼</button>
+      <div ref={panelRef} style={{ height: 0 }} className="overflow-hidden">
+        <div ref={contentRef}>{body}</div>
+      </div>
+    </div>
+  )
+}`,
     props: [
-      { name: "mode", type: "'sync'|'wait'|'popLayout'", default: "'sync'", desc: "sync = closing & opening panels animate in parallel" },
-      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes (opacity, translateY, etc.)" },
-      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Exit keyframes (mirror of enter)" },
-      { name: "duration", type: "number", default: "280", desc: "Enter/exit ms" },
+      { name: "targets", type: "HTMLElement", default: "panelRef.current", desc: "Panel wrapper element to animate" },
+      { name: "height", type: "number", default: "0 / scrollHeight", desc: "Animate between 0 and measured content height" },
+      { name: "opacity", type: "number", default: "0 / 1", desc: "Content fade in/out" },
+      { name: "duration", type: "number", default: "320", desc: "Expand/collapse ms" },
       { name: "ease", type: "string", default: "'outExpo'", desc: "Decelerating curve" },
     ],
   },
