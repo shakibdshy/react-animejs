@@ -249,6 +249,16 @@ export const demoSections = [
   },
 
   {
+    title: 'Accordion (Presence)',
+    description: 'Mount/unmount accordion panels with enter/exit cross-fade via AnimePresence',
+    category: 'ui',
+    componentId: 'accordion-presence',
+    tags: ['ui', 'collapse', 'presence'],
+    difficulty: 'beginner',
+    docsAnchor: 'anime-presence',
+  },
+
+  {
     title: 'Toast',
     description: 'Stacked notifications with enter/exit animations and auto-dismiss',
     category: 'ui',

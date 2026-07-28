@@ -332,6 +332,33 @@ function AccordionCardPreview() {
   );
 }
 
+function AccordionPresenceCardPreview() {
+  useAnime({
+    selector: '.demo-prev-acc-pres-panel',
+    opacity: [0, 1],
+    translateY: [-8, 0],
+    stagger: 250,
+    duration: 500,
+    ease: 'outExpo' as never,
+    loop: true,
+    direction: 'alternate',
+    delay: 600,
+  });
+
+  return (
+    <div className="flex flex-col gap-1 w-32">
+      {[0, 1, 2].map((i) => (
+        <div key={i} className="overflow-hidden">
+          <div className="h-3 rounded bg-landing-accent/30 mb-0.5" />
+          <div className="demo-prev-acc-pres-panel rounded bg-landing-surface border border-landing-border">
+            <div className="h-5" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ToastCardPreview() {
   useAnime({
     selector: '.demo-prev-toast',
@@ -406,6 +433,7 @@ export const galleryPreviewRegistry = {
   tooltip: TooltipCardPreview,
   'dropdown-menu': DropdownMenuCardPreview,
   accordion: AccordionCardPreview,
+  'accordion-presence': AccordionPresenceCardPreview,
   toast: ToastCardPreview,
   tabs: TabsCardPreview,
 } satisfies Record<DemoId, ComponentType>;

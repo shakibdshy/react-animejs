@@ -219,6 +219,94 @@ export const AccordionPreview = memo(function AccordionPreview(_props: PreviewPr
   );
 });
 
+/** A presence-driven accordion item: the open panel mounts/unmounts inside
+ *  <AnimePresence>, so enter/exit are opacity + translateY cross-fades. No
+ *  height measurement — cleaner API, different motion feel than the FLIP
+ *  version (which animates real height). mode="sync" = parallel switching. */
+const AccordionPresenceItem = memo(function AccordionPresenceItem({
+  title,
+  body,
+  isOpen,
+  onToggle,
+}: {
+  title: string;
+  body: string;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <div className="rounded-lg border border-landing-border bg-landing-surface/40 overflow-hidden">
+      <button
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        className="w-full flex items-center justify-between px-3.5 py-2.5 text-left"
+      >
+        <span className="text-sm text-landing-fg">{title}</span>
+        <span
+          className={cn(
+            'landing-font-mono text-xs text-landing-muted transition-transform duration-300',
+            isOpen && 'rotate-180 text-landing-accent',
+          )}
+        >
+          ▼
+        </span>
+      </button>
+      <AnimePresence mode="sync" initial={false}>
+        {isOpen && (
+          <AnimePresenceChild
+            key="panel"
+            enter={{ opacity: [0, 1], translateY: [-8, 0] }}
+            exit={{ opacity: [1, 0], translateY: [0, -8] }}
+            duration={280}
+            ease="outExpo"
+          >
+            <div className="overflow-hidden">
+              <p className="px-3.5 pb-3 text-xs text-landing-muted leading-relaxed">{body}</p>
+            </div>
+          </AnimePresenceChild>
+        )}
+      </AnimePresence>
+    </div>
+  );
+});
+
+export const AccordionPresencePreview = memo(function AccordionPresencePreview(
+  _props: PreviewProps,
+) {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const items = [
+    {
+      title: 'What is react-animejs?',
+      body: 'A React wrapper around anime.js v4 — hooks-first, with declarative components where they help.',
+    },
+    {
+      title: 'Do I need anime.js installed?',
+      body: 'Yes. Install animejs separately; this package wraps its primitives.',
+    },
+    {
+      title: 'Is it SSR-safe?',
+      body: 'Hooks access browser APIs inside effects, so they render safely on the server.',
+    },
+  ];
+
+  return (
+    <PreviewCard title="Accordion (Presence)" description="Click a header to toggle">
+      <div className="w-full max-w-80 flex flex-col gap-2">
+        {items.map((item, i) => (
+          <AccordionPresenceItem
+            key={item.title}
+            title={item.title}
+            body={item.body}
+            isOpen={openIndex === i}
+            onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+          />
+        ))}
+      </div>
+    </PreviewCard>
+  );
+});
+
 interface ToastItem {
   id: number;
   message: string;

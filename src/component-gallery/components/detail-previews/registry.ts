@@ -12,6 +12,7 @@ import { DraggablePreview, OnScrollPreview, ReorderListPreview, ScrollLinkedAnim
 import { AnimatedSliderPreview, ClipPathRevealPreview, CounterCountdownPreview, SpinningCubePreview, ToggleSwitchPreview } from './wrapper-previews';
 import {
   AccordionPreview,
+  AccordionPresencePreview,
   DropdownMenuPreview,
   TabsPreview,
   ToastPreview,
@@ -41,6 +42,7 @@ export const previewRegistry = {
   tooltip: TooltipPreview,
   'dropdown-menu': DropdownMenuPreview,
   accordion: AccordionPreview,
+  'accordion-presence': AccordionPresencePreview,
   toast: ToastPreview,
   tabs: TabsPreview,
 } satisfies Record<DemoId, React.FC<PreviewProps>>;

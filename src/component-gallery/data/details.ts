@@ -534,6 +534,40 @@ const AccordionItem = ({ title, body, isOpen, onToggle }) => {
     ],
   },
 
+  "accordion-presence": {
+    component: "AnimePresence",
+    summary:
+      "Mount/unmount accordion panels with enter/exit cross-fade via AnimePresence.",
+    code: `// The open panel mounts/unmounts as isOpen flips. AnimePresence drives
+// the enter/exit — opacity + a small slide — so there's no manual height
+// measurement. mode="sync" lets closing & opening panels animate in parallel.
+const AccordionItem = ({ title, body, isOpen, onToggle }) => (
+  <div className="overflow-hidden rounded-lg border">
+    <button onClick={onToggle} aria-expanded={isOpen}>{title} ▼</button>
+    <AnimePresence mode="sync" initial={false}>
+      {isOpen && (
+        <AnimePresenceChild
+          key="panel"
+          enter={{ opacity: [0, 1], translateY: [-8, 0] }}
+          exit={{ opacity: [1, 0], translateY: [0, -8] }}
+          duration={280}
+          ease="outExpo"
+        >
+          <div className="overflow-hidden">{body}</div>
+        </AnimePresenceChild>
+      )}
+    </AnimePresence>
+  </div>
+)`,
+    props: [
+      { name: "mode", type: "'sync'|'wait'|'popLayout'", default: "'sync'", desc: "sync = parallel enter/exit when switching items" },
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes (opacity, translateY)" },
+      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Exit keyframes (mirror of enter)" },
+      { name: "duration", type: "number", default: "280", desc: "Enter/exit ms" },
+      { name: "ease", type: "string", default: "'outExpo'", desc: "Decelerating curve" },
+    ],
+  },
+
   toast: {
     component: "AnimePresence",
     summary: "Stacked notifications with enter/exit animations and auto-dismiss.",
