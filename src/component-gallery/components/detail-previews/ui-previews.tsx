@@ -168,7 +168,7 @@ const AccordionItem = memo(function AccordionItem({
       <AnimeLayout
         ref={layoutRef}
         mode="manual"
-        duration={320}
+        duration={500}
         ease="outExpo"
         enterFrom={{ opacity: 0 }}
         leaveTo={{ opacity: 0 }}
