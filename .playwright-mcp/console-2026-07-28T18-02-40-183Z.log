@@ -131,3 +131,12 @@ Check the render method of `GalleryPreview2`. @ http://localhost:3002/node_modul
 [ 1069240ms] [ERROR] WebSocket connection to 'ws://localhost:3002/?token=k6jXrrJ7vxch' failed:  @ http://localhost:3002/@vite/client:744
 [ 1069240ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3002/@vite/client:864
 [ 1074311ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=6d8a4757:20102
+[ 1283660ms] [ERROR] WebSocket connection to 'ws://localhost:3002/?token=4H2Yn_LTziWH' failed:  @ http://localhost:3002/@vite/client:744
+[ 1283660ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3002/@vite/client:864
+[ 1289177ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=fcc126fc:20102
+[ 1484583ms] [ERROR] WebSocket connection to 'ws://localhost:3002/?token=ec9RwQVd9lo6' failed:  @ http://localhost:3002/@vite/client:744
+[ 1484583ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3002/@vite/client:864
+[ 1489755ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=7d9d2534:20102
+[ 1612782ms] [ERROR] WebSocket connection to 'ws://localhost:3002/?token=wWK65TflK9ir' failed:  @ http://localhost:3002/@vite/client:744
+[ 1612782ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3002/@vite/client:864
+[ 1617977ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=c0f434b9:20102

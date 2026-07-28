@@ -1,0 +1,186 @@
+- generic [ref=f15e3]:
+  - banner [ref=f15e4]:
+    - link [ref=f15e5] [cursor=pointer]:
+      - /url: /
+      - text: React AnimeJS
+      - emphasis [ref=f15e6]: ✦
+    - navigation [ref=f15e7]:
+      - link "Home" [ref=f15e8] [cursor=pointer]:
+        - /url: /
+      - link "Components" [ref=f15e9] [cursor=pointer]:
+        - /url: /demos
+      - link "Blocks" [ref=f15e10] [cursor=pointer]:
+        - /url: /blocks
+      - button "Open command palette" [ref=f15e11]:
+        - generic [ref=f15e12]: Search
+        - generic [ref=f15e13]: ⌘K
+      - button "Switch to light mode" [ref=f15e14] [cursor=pointer]: ☀️
+  - main [ref=f15e15]:
+    - generic [ref=f15e16]:
+      - generic [ref=f15e17]:
+        - generic [ref=f15e18]:
+          - link "Components" [ref=f15e19] [cursor=pointer]:
+            - /url: /demos
+          - generic [ref=f15e20]: /
+          - generic [ref=f15e21]: Accordion (Presence)
+          - generic [ref=f15e22]: 23 / 25
+        - generic [ref=f15e23]:
+          - link "Previous" [ref=f15e24] [cursor=pointer]:
+            - /url: /demos/accordion
+          - link "Next" [ref=f15e27] [cursor=pointer]:
+            - /url: /demos/toast
+      - generic [ref=f15e30]:
+        - generic [ref=f15e31]:
+          - heading "Accordion (Presence)" [level=1] [ref=f15e32]
+          - generic [ref=f15e33]:
+            - generic [ref=f15e34]: ui
+            - generic [ref=f15e35]: Beginner
+            - link "Read the docs" [ref=f15e36] [cursor=pointer]:
+              - /url: /docs#anime-presence
+          - generic [ref=f15e39]:
+            - heading "Code" [level=2] [ref=f15e40]
+            - button "Copy" [ref=f15e41]
+          - table [ref=f15e45]:
+            - rowgroup [ref=f15e46]:
+              - row [ref=f15e47]:
+                - cell "1" [ref=f15e48]
+                - 'cell "// The open panel mounts/unmounts as isOpen flips. Pass height: ''auto'' —" [ref=f15e50]'
+              - row [ref=f15e51]:
+                - cell "2" [ref=f15e52]
+                - cell "// AnimePresenceChild measures the real content height internally and animates" [ref=f15e54]
+              - row [ref=f15e55]:
+                - cell "3" [ref=f15e56]
+                - cell "// to it, then releases to 'auto' on completion. No manual measurement needed." [ref=f15e58]
+              - row [ref=f15e59]:
+                - cell "4" [ref=f15e60]
+                - 'cell "const AccordionItem = ({ title, body, isOpen, onToggle }) => (" [ref=f15e62]'
+              - row [ref=f15e63]:
+                - cell "5" [ref=f15e64]
+                - cell "<div className=\"overflow-hidden rounded-lg border\">" [ref=f15e66]
+              - row [ref=f15e67]:
+                - cell "6" [ref=f15e68]
+                - 'cell "<button onClick={onToggle} aria-expanded={isOpen}>{title} ▼</button>" [ref=f15e70]'
+              - row [ref=f15e71]:
+                - cell "7" [ref=f15e72]
+                - 'cell "<AnimePresence mode=\"sync\" initial={false}>" [ref=f15e74]'
+              - row [ref=f15e75]:
+                - cell "8" [ref=f15e76]
+                - 'cell "{isOpen && (" [ref=f15e78]'
+              - row [ref=f15e79]:
+                - cell "9" [ref=f15e80]
+                - cell "<AnimePresenceChild" [ref=f15e82]
+              - row [ref=f15e83]:
+                - cell "10" [ref=f15e84]
+                - cell "key=\"panel\"" [ref=f15e86]
+              - row [ref=f15e87]:
+                - cell "11" [ref=f15e88]
+                - 'cell "enter={{ height: [0, ''auto''], opacity: [0, 1] }}" [ref=f15e90]'
+              - row [ref=f15e91]:
+                - cell "12" [ref=f15e92]
+                - 'cell "exit={{ height: [''auto'', 0], opacity: [1, 0] }}" [ref=f15e94]'
+              - row [ref=f15e95]:
+                - cell "13" [ref=f15e96]
+                - 'cell "duration={320}" [ref=f15e98]'
+              - row [ref=f15e99]:
+                - cell "14" [ref=f15e100]
+                - cell "ease=\"outExpo\"" [ref=f15e102]
+              - row [ref=f15e103]:
+                - cell "15" [ref=f15e104]
+                - cell ">" [ref=f15e106]
+              - row [ref=f15e107]:
+                - cell "16" [ref=f15e108]
+                - 'cell "<div className=\"overflow-hidden\">{body}</div>" [ref=f15e110]'
+              - row [ref=f15e111]:
+                - cell "17" [ref=f15e112]
+                - cell "</AnimePresenceChild>" [ref=f15e114]
+              - row [ref=f15e115]:
+                - cell "18" [ref=f15e116]
+                - 'cell ")}" [ref=f15e118]'
+              - row [ref=f15e119]:
+                - cell "19" [ref=f15e120]
+                - cell "</AnimePresence>" [ref=f15e122]
+              - row [ref=f15e123]:
+                - cell "20" [ref=f15e124]
+                - cell "</div>" [ref=f15e126]
+              - row [ref=f15e127]:
+                - cell "21" [ref=f15e128]
+                - cell ")" [ref=f15e130]
+        - generic [ref=f15e131]:
+          - paragraph [ref=f15e132]: Mount/unmount accordion panels with smooth height + opacity animation via AnimePresence.
+          - generic [ref=f15e133]:
+            - generic [ref=f15e134]: Live preview
+            - generic [ref=f15e137]:
+              - generic [ref=f15e138]: Accordion (Presence)Click a header to toggle
+              - generic [ref=f15e141]:
+                - generic [ref=f15e142]:
+                  - button "What is react-animejs? ▼" [expanded] [ref=f15e143]:
+                    - generic [ref=f15e144]: What is react-animejs?
+                    - generic [ref=f15e145]: ▼
+                  - paragraph [ref=f15e147]: A React wrapper around anime.js v4 — hooks-first, with declarative components where they help.
+                - button "Do I need anime.js installed? ▼" [ref=f15e149]:
+                  - generic [ref=f15e150]: Do I need anime.js installed?
+                  - generic [ref=f15e151]: ▼
+                - button "Is it SSR-safe? ▼" [ref=f15e153]:
+                  - generic [ref=f15e154]: Is it SSR-safe?
+                  - generic [ref=f15e155]: ▼
+          - generic [ref=f15e156]:
+            - generic [ref=f15e157]: Props
+            - table [ref=f15e159]:
+              - rowgroup [ref=f15e160]:
+                - row [ref=f15e161]:
+                  - columnheader "Name" [ref=f15e162]
+                  - columnheader "Type" [ref=f15e163]
+                  - columnheader "Default" [ref=f15e164]
+                  - columnheader "Description" [ref=f15e165]
+              - rowgroup [ref=f15e166]:
+                - row [ref=f15e167]:
+                  - cell "mode" [ref=f15e168]
+                  - cell "'sync'|'wait'|'popLayout'" [ref=f15e169]
+                  - cell "'sync'" [ref=f15e170]
+                  - cell "sync = parallel enter/exit when switching items" [ref=f15e171]
+                - row [ref=f15e172]:
+                  - cell "enter" [ref=f15e173]
+                  - cell "UseAnimeOptions" [ref=f15e174]
+                  - cell "-" [ref=f15e175]
+                  - cell "Enter keyframes — height:'auto' is measured internally" [ref=f15e176]
+                - row [ref=f15e177]:
+                  - cell "exit" [ref=f15e178]
+                  - cell "UseAnimeOptions" [ref=f15e179]
+                  - cell "-" [ref=f15e180]
+                  - cell "Exit keyframes — mirror of enter" [ref=f15e181]
+                - row [ref=f15e182]:
+                  - cell "duration" [ref=f15e183]
+                  - cell "number" [ref=f15e184]
+                  - cell "320" [ref=f15e185]
+                  - cell "Enter/exit ms" [ref=f15e186]
+                - row [ref=f15e187]:
+                  - cell "ease" [ref=f15e188]
+                  - cell "string" [ref=f15e189]
+                  - cell "'outExpo'" [ref=f15e190]
+                  - cell "Decelerating curve" [ref=f15e191]
+      - generic [ref=f15e192]:
+        - heading "Related components" [level=2] [ref=f15e193]
+        - generic [ref=f15e194]:
+          - link [ref=f15e195] [cursor=pointer]:
+            - /url: /demos/accordion
+            - generic [ref=f15e210]:
+              - heading "Accordion" [level=3] [ref=f15e211]
+              - paragraph [ref=f15e212]: Expand/collapse panels with height animation and single/multi open modes
+          - link "✓ Saved ✓ Copied Toast Stacked notifications with enter/exit animations and auto-dismiss" [ref=f15e213] [cursor=pointer]:
+            - /url: /demos/toast
+            - generic [ref=f15e215]:
+              - generic [ref=f15e216]: ✓ Saved
+              - generic [ref=f15e217]: ✓ Copied
+            - generic [ref=f15e218]:
+              - heading "Toast" [level=3] [ref=f15e219]
+              - paragraph [ref=f15e220]: Stacked notifications with enter/exit animations and auto-dismiss
+          - link [ref=f15e221] [cursor=pointer]:
+            - /url: /demos/animated-slider
+            - generic [ref=f15e227]:
+              - heading "Animated Slider" [level=3] [ref=f15e228]
+              - paragraph [ref=f15e229]: Slide, fade, scale, flip transitions with visual slide showcase
+      - generic [ref=f15e230]:
+        - link "Accordion" [ref=f15e231] [cursor=pointer]:
+          - /url: /demos/accordion
+        - link "Toast" [ref=f15e234] [cursor=pointer]:
+          - /url: /demos/toast

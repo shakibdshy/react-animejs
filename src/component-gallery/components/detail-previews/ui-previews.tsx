@@ -219,10 +219,12 @@ export const AccordionPreview = memo(function AccordionPreview(_props: PreviewPr
   );
 });
 
-/** A presence-driven accordion item: the open panel mounts/unmounts inside
- *  <AnimePresence>, so enter/exit are opacity + translateY cross-fades. No
- *  height measurement — cleaner API, different motion feel than the FLIP
- *  version (which animates real height). mode="sync" = parallel switching. */
+/** A presence-driven accordion item that animates real height — same smooth
+ *  expand/collapse as the AnimeLayout version, but via <AnimePresence>.
+ *
+ *  Just pass height: 'auto' — AnimePresenceChild measures the content's real
+ *  pixel height internally and animates to it, then releases to 'auto' on
+ *  completion. No manual measurement needed. mode="sync" = parallel switching. */
 const AccordionPresenceItem = memo(function AccordionPresenceItem({
   title,
   body,
@@ -255,9 +257,9 @@ const AccordionPresenceItem = memo(function AccordionPresenceItem({
         {isOpen && (
           <AnimePresenceChild
             key="panel"
-            enter={{ opacity: [0, 1], translateY: [-8, 0] }}
-            exit={{ opacity: [1, 0], translateY: [0, -8] }}
-            duration={280}
+            enter={{ height: [0, 'auto'], opacity: [0, 1] }}
+            exit={{ height: ['auto', 0], opacity: [1, 0] }}
+            duration={320}
             ease="outExpo"
           >
             <div className="overflow-hidden">

@@ -537,10 +537,10 @@ const AccordionItem = ({ title, body, isOpen, onToggle }) => {
   "accordion-presence": {
     component: "AnimePresence",
     summary:
-      "Mount/unmount accordion panels with enter/exit cross-fade via AnimePresence.",
-    code: `// The open panel mounts/unmounts as isOpen flips. AnimePresence drives
-// the enter/exit — opacity + a small slide — so there's no manual height
-// measurement. mode="sync" lets closing & opening panels animate in parallel.
+      "Mount/unmount accordion panels with smooth height + opacity animation via AnimePresence.",
+    code: `// The open panel mounts/unmounts as isOpen flips. Pass height: 'auto' —
+// AnimePresenceChild measures the real content height internally and animates
+// to it, then releases to 'auto' on completion. No manual measurement needed.
 const AccordionItem = ({ title, body, isOpen, onToggle }) => (
   <div className="overflow-hidden rounded-lg border">
     <button onClick={onToggle} aria-expanded={isOpen}>{title} ▼</button>
@@ -548,9 +548,9 @@ const AccordionItem = ({ title, body, isOpen, onToggle }) => (
       {isOpen && (
         <AnimePresenceChild
           key="panel"
-          enter={{ opacity: [0, 1], translateY: [-8, 0] }}
-          exit={{ opacity: [1, 0], translateY: [0, -8] }}
-          duration={280}
+          enter={{ height: [0, 'auto'], opacity: [0, 1] }}
+          exit={{ height: ['auto', 0], opacity: [1, 0] }}
+          duration={320}
           ease="outExpo"
         >
           <div className="overflow-hidden">{body}</div>
@@ -561,9 +561,9 @@ const AccordionItem = ({ title, body, isOpen, onToggle }) => (
 )`,
     props: [
       { name: "mode", type: "'sync'|'wait'|'popLayout'", default: "'sync'", desc: "sync = parallel enter/exit when switching items" },
-      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes (opacity, translateY)" },
-      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Exit keyframes (mirror of enter)" },
-      { name: "duration", type: "number", default: "280", desc: "Enter/exit ms" },
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes — height:'auto' is measured internally" },
+      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Exit keyframes — mirror of enter" },
+      { name: "duration", type: "number", default: "320", desc: "Enter/exit ms" },
       { name: "ease", type: "string", default: "'outExpo'", desc: "Decelerating curve" },
     ],
   },
