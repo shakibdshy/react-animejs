@@ -61,14 +61,19 @@ export function PreviewCard({
   description,
   children,
   controls,
+  overflow = 'hidden',
 }: {
   title: string;
   description?: string;
   children: React.ReactNode;
   controls?: React.ReactNode;
+  /** Override the default overflow-hidden (e.g. for dropdowns that extend past the card). */
+  overflow?: 'hidden' | 'visible';
 }) {
   return (
-    <div className="bg-landing-bg/80 border border-landing-border rounded-xl overflow-hidden">
+    <div
+      className={`bg-landing-bg/80 border border-landing-border rounded-xl ${overflow === 'visible' ? 'overflow-visible' : 'overflow-hidden'}`}
+    >
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-landing-border">
         <div>
           <span className="landing-font-display text-sm text-landing-fg">{title}</span>

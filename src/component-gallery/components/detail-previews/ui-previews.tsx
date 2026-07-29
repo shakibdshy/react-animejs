@@ -68,23 +68,31 @@ export const DropdownMenuPreview = memo(function DropdownMenuPreview(_props: Pre
     <PreviewCard
       title="Dropdown Menu"
       description="Click the trigger"
+      overflow="visible"
       controls={
         <DemoButton onClick={() => setOpen((o) => !o)} variant="accent" small>
           {open ? 'Close' : 'Open'}
         </DemoButton>
       }
     >
-      <div ref={containerRef} className="flex flex-col items-center justify-center py-6 gap-2">
+      <div ref={containerRef} className="relative flex items-center justify-center py-6">
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className="px-4 py-2 rounded-lg border border-landing-border bg-landing-surface text-sm text-landing-fg hover:border-landing-accent/40 transition-colors flex items-center gap-2"
+        >
+          Menu
+          <span className="text-landing-muted text-xs">{open ? '▲' : '▼'}</span>
+        </button>
         <AnimePresence mode="sync">
           {open && (
             <AnimePresenceChild
               key="dropdown"
-              enter={{ opacity: [0, 1], height: [0, 'auto'] }}
-              exit={{ opacity: [1, 0], height: ['auto', 0] }}
-              duration={220}
+              enter={{ opacity: [0, 1], scale: [0.95, 1] }}
+              exit={{ opacity: [1, 0], scale: [1, 0.95] }}
+              duration={200}
               ease="outExpo"
             >
-              <div className="w-40 rounded-lg border border-landing-border bg-landing-surface shadow-xl overflow-hidden">
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-40 rounded-lg border border-landing-border bg-landing-surface shadow-xl overflow-hidden z-20">
                 {items.map((item, i) => (
                   <Anime
                     key={item}
@@ -107,13 +115,6 @@ export const DropdownMenuPreview = memo(function DropdownMenuPreview(_props: Pre
             </AnimePresenceChild>
           )}
         </AnimePresence>
-        <button
-          onClick={() => setOpen((o) => !o)}
-          className="px-4 py-2 rounded-lg border border-landing-border bg-landing-surface text-sm text-landing-fg hover:border-landing-accent/40 transition-colors flex items-center gap-2"
-        >
-          Menu
-          <span className="text-landing-muted text-xs">{open ? '▲' : '▼'}</span>
-        </button>
       </div>
     </PreviewCard>
   );
