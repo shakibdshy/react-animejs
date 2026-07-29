@@ -82,27 +82,38 @@ export const DropdownMenuPreview = memo(function DropdownMenuPreview(_props: Pre
           Menu
           <span className="text-landing-muted text-xs">{open ? '▲' : '▼'}</span>
         </button>
-        {open && (
-          <div className="absolute top-full mt-2 w-40 rounded-lg border border-landing-border bg-landing-surface shadow-xl overflow-hidden z-10">
-            {items.map((item, i) => (
-              <Anime
-                key={item}
-                opacity={[0, 1]}
-                translateY={[-8, 0]}
-                delay={i * 40}
-                duration={200}
-                ease="outQuad"
-              >
-                <button
-                  className="w-full text-left px-3 py-2 text-sm text-landing-fg hover:bg-landing-accent/10 transition-colors"
-                  onClick={() => setOpen(false)}
-                >
-                  {item}
-                </button>
-              </Anime>
-            ))}
-          </div>
-        )}
+        <AnimePresence mode="sync">
+          {open && (
+            <AnimePresenceChild
+              key="dropdown"
+              enter={{ opacity: [0, 1], scale: [0.95, 1], height: [0, 'auto'] }}
+              exit={{ opacity: [1, 0], scale: [1, 0.95], height: ['auto', 0] }}
+              duration={220}
+              ease="outExpo"
+            >
+              <div className="absolute top-full mt-2 w-40 rounded-lg border border-landing-border bg-landing-surface shadow-xl overflow-hidden z-10">
+                {items.map((item, i) => (
+                  <Anime
+                    key={item}
+                    opacity={[0, 1]}
+                    translateY={[-6, 0]}
+                    delay={i * 40}
+                    duration={200}
+                    ease="outQuad"
+                    autoplay
+                  >
+                    <button
+                      className="w-full text-left px-3 py-2 text-sm text-landing-fg hover:bg-landing-accent/10 transition-colors"
+                      onClick={() => setOpen(false)}
+                    >
+                      {item}
+                    </button>
+                  </Anime>
+                ))}
+              </div>
+            </AnimePresenceChild>
+          )}
+        </AnimePresence>
       </div>
     </PreviewCard>
   );

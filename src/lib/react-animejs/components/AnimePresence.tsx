@@ -16,8 +16,8 @@ import {
   useLayoutEffect,
   useRef,
   useState,
-} from "react";
-import { useAnime } from "../hooks/use-anime";
+} from 'react';
+import { useAnime } from '../hooks/use-anime';
 
 // =============================================================================
 // Helpers
@@ -28,7 +28,7 @@ import { useAnime } from "../hooks/use-anime";
  * a measured pixel value before being passed to anime.js (which can't
  * interpolate the string 'auto').
  */
-const AUTO_SIZE_PROPS = ["height", "width", "maxHeight", "minHeight"] as const;
+const AUTO_SIZE_PROPS = ['height', 'width', 'maxHeight', 'minHeight'] as const;
 type AutoSizeProp = (typeof AUTO_SIZE_PROPS)[number];
 
 /**
@@ -44,30 +44,25 @@ type AutoSizeProp = (typeof AUTO_SIZE_PROPS)[number];
  */
 function resolveAutoSize(
   props: Record<string, unknown> | undefined,
-  el: HTMLElement | null,
+  el: HTMLElement | null
 ): Record<string, unknown> | undefined {
   if (!props || !el) return props;
   let resolved = props;
   for (const prop of AUTO_SIZE_PROPS) {
     const val = props[prop];
-    if (val === "auto") {
+    if (val === 'auto') {
       if (resolved === props) resolved = { ...props }; // lazy clone
-      resolved[prop] =
-        prop === "height" || prop === "maxHeight"
-          ? el.scrollHeight
-          : el.scrollWidth;
+      resolved[prop] = prop === 'height' || prop === 'maxHeight' ? el.scrollHeight : el.scrollWidth;
     } else if (Array.isArray(val)) {
       // Keyframe form [from, to] — resolve any 'auto' entries.
       let cloned = false;
       const newArr = val.map((v) => {
-        if (v === "auto") {
+        if (v === 'auto') {
           if (!cloned) {
             cloned = true;
             if (resolved === props) resolved = { ...props };
           }
-          return prop === "height" || prop === "maxHeight"
-            ? el.scrollHeight
-            : el.scrollWidth;
+          return prop === 'height' || prop === 'maxHeight' ? el.scrollHeight : el.scrollWidth;
         }
         return v;
       });
@@ -88,7 +83,7 @@ function hasAutoSize(props: Record<string, unknown> | undefined): boolean {
   if (!props) return false;
   return AUTO_SIZE_PROPS.some((prop) => {
     const val = props[prop];
-    return val === "auto" || (Array.isArray(val) && val.includes("auto"));
+    return val === 'auto' || (Array.isArray(val) && val.includes('auto'));
   });
 }
 
@@ -109,7 +104,7 @@ export interface AnimePresenceProps {
    * - 'popLayout': Exit immediately, enter with layout animation
    * @default 'sync'
    */
-  mode?: "sync" | "wait" | "exitBeforeEnter" | "popLayout";
+  mode?: 'sync' | 'wait' | 'exitBeforeEnter' | 'popLayout';
 
   /**
    * Callback when all exit animations complete
@@ -226,13 +221,13 @@ function AnimatedChild({
     hasMeasuredPopLayout.current = true;
     const rect = nodeRef.current.getBoundingClientRect();
     setPopLayoutStyle({
-      position: "fixed",
+      position: 'fixed',
       top: `${rect.top}px`,
       left: `${rect.left}px`,
       width: `${rect.width}px`,
       height: `${rect.height}px`,
       margin: 0,
-      pointerEvents: "none",
+      pointerEvents: 'none',
     });
   }, [isPresent, popLayout, shouldRender, popLayoutStyle]);
 
@@ -246,9 +241,9 @@ function AnimatedChild({
       for (const prop of AUTO_SIZE_PROPS) {
         const val = animationProps?.[prop as AutoSizeProp];
         // Only release if this prop was auto-resolved (it's now a number).
-        if (typeof val === "number") {
-          if (prop === "height" || prop === "maxHeight" || prop === "minHeight") {
-            el.style.height = "auto";
+        if (typeof val === 'number') {
+          if (prop === 'height' || prop === 'maxHeight' || prop === 'minHeight') {
+            el.style.height = 'auto';
           }
         }
       }
@@ -315,7 +310,7 @@ function AnimatedChild({
 
 export function AnimePresence({
   children,
-  mode = "sync",
+  mode = 'sync',
   onExitComplete,
   initial = true,
 }: AnimePresenceProps) {
@@ -366,7 +361,7 @@ export function AnimePresence({
     }
   };
 
-  const isWaitMode = mode === "wait" || mode === "exitBeforeEnter";
+  const isWaitMode = mode === 'wait' || mode === 'exitBeforeEnter';
   const shouldWaitForExit = isWaitMode && exitingChildren.current.size > 0;
 
   const allChildren: ReactElement[] = [];
@@ -397,7 +392,7 @@ export function AnimePresence({
           delay={presenceProps.delay}
         >
           {renderedChild}
-        </AnimatedChild>,
+        </AnimatedChild>
       );
     });
   }
@@ -423,10 +418,10 @@ export function AnimePresence({
         ease={presenceProps.ease}
         delay={presenceProps.delay}
         onExitComplete={() => handleExitComplete(key)}
-        popLayout={mode === "popLayout"}
+        popLayout={mode === 'popLayout'}
       >
         {renderedChild}
-      </AnimatedChild>,
+      </AnimatedChild>
     );
   });
 
