@@ -146,6 +146,15 @@ export function useSvgAnimation<TSvg extends SVGElement = SVGElement>({
   const childRef = useRef<TSvg | null>(null);
   const animationRef = useRef<JSAnimation | null>(null);
   const scopeContext = useScopeContext();
+  const { rootRef: scopeRootRef, isScoped, registerCleanup } = scopeContext;
+  const callbacksRef = useRef(callbacks);
+  callbacksRef.current = callbacks;
+  const animationPropsRef = useRef(animationProps);
+  animationPropsRef.current = animationProps;
+  const autoplayRef = useRef(autoplay);
+  autoplayRef.current = autoplay;
+  const createConfigRef = useRef(createConfig);
+  createConfigRef.current = createConfig;
   const readyNotifiedRef = useRef(false);
   const controlsNotifiedRef = useRef(false);
 
@@ -197,18 +206,23 @@ export function useSvgAnimation<TSvg extends SVGElement = SVGElement>({
       return;
     }
 
-    const compiled = createConfig(source);
+    const compiled = createConfigRef.current(source);
     if (!compiled) return;
 
     const config: Record<string, unknown> = {
       ...compiled.config,
-      ...animationProps,
-      autoplay,
+      ...animationPropsRef.current,
+      autoplay: autoplayRef.current,
     };
 
     Object.assign(
       config,
-      buildCallbackConfig(setState, extractAnimationState, callbacks, DEFAULT_ANIMATION_STATE)
+      buildCallbackConfig(
+        setState,
+        extractAnimationState,
+        callbacksRef.current,
+        DEFAULT_ANIMATION_STATE,
+      )
     );
 
     cleanUndefinedValues(config);
@@ -218,8 +232,8 @@ export function useSvgAnimation<TSvg extends SVGElement = SVGElement>({
     setState(extractAnimationState(animation));
     setIsReady(true);
 
-    if (scopeContext.isScoped && scopeContext.registerCleanup) {
-      unregisterScopedCleanup = scopeContext.registerCleanup(() => {
+    if (isScoped && registerCleanup) {
+      unregisterScopedCleanup = registerCleanup(() => {
         animationRef.current?.revert();
       });
     }
@@ -230,25 +244,25 @@ export function useSvgAnimation<TSvg extends SVGElement = SVGElement>({
       animationRef.current = null;
       setIsReady(false);
     };
-  }, [enabled, optionsJson, depsHash, scopeContext.rootRef, scopeContext.isScoped]);
+  }, [enabled, optionsJson, depsHash, scopeRootRef, isScoped, registerCleanup]);
 
   useEffect(() => {
-    if (callbacks.onControlsReady && !controlsNotifiedRef.current) {
-      callbacks.onControlsReady(controls);
+    if (callbacksRef.current.onControlsReady && !controlsNotifiedRef.current) {
+      callbacksRef.current.onControlsReady?.(controls);
       controlsNotifiedRef.current = true;
     }
-  }, [controls, callbacks.onControlsReady]);
+  }, [controls]);
 
   useEffect(() => {
-    if (isReady && callbacks.onReady && !readyNotifiedRef.current) {
-      callbacks.onReady(refValue);
+    if (isReady && callbacksRef.current.onReady && !readyNotifiedRef.current) {
+      callbacksRef.current.onReady(refValue);
       readyNotifiedRef.current = true;
     }
-  }, [isReady, callbacks.onReady, refValue]);
+  }, [isReady, refValue]);
 
   useEffect(() => {
-    callbacks.onStateChange?.(state);
-  }, [state, callbacks.onStateChange]);
+    callbacksRef.current.onStateChange?.(state);
+  }, [state]);
 
   return { childRef };
 }

@@ -140,7 +140,6 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
     x,
     y,
     snap,
-    modifier,
     mapTo,
 
     // Settings
@@ -169,17 +168,11 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
     axis,
 
     // Callbacks
-    onGrab,
-    onDrag,
-    onRelease,
-    onSnap,
-    onUpdate,
-    onSettle,
-    onResize,
-    onAfterResize,
   } = options;
 
   const depsSignal = useDependencySignal(deps);
+  const latestOptionsRef = useRef(options);
+  latestOptionsRef.current = options;
 
   // ==========================================================================
   // Draggable Lifecycle
@@ -248,6 +241,42 @@ export function useAnimeDraggable<T extends HTMLElement = HTMLElement>(
 
   useEffect(() => {
     let unregisterScopedCleanup: (() => void) | undefined;
+    const {
+      x,
+      y,
+      snap,
+      modifier,
+      mapTo,
+      trigger,
+      container,
+      containerPadding,
+      containerFriction,
+      releaseContainerFriction,
+      releaseMass,
+      releaseStiffness,
+      releaseDamping,
+      velocityMultiplier,
+      minVelocity,
+      maxVelocity,
+      releaseEase,
+      releaseDuration,
+      releaseSpring,
+      releaseVelocity,
+      dragSpeed,
+      dragThreshold,
+      scrollThreshold,
+      scrollSpeed,
+      cursor,
+      axis,
+      onGrab,
+      onDrag,
+      onRelease,
+      onSnap,
+      onUpdate,
+      onSettle,
+      onResize,
+      onAfterResize,
+    } = latestOptionsRef.current;
 
     if (!enabled || disabled || !targetRef.current) {
       return;

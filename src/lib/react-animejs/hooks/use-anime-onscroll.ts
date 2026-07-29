@@ -133,6 +133,7 @@ export function useAnimeOnScroll<
   const observerRef = useRef<ScrollObserver | null>(null);
 
   const scopeContext = useScopeContext();
+  const { rootRef: scopeRootRef, isScoped, registerCleanup } = scopeContext;
 
   const [state, setState] = useState<ScrollObserverState>(
     DEFAULT_SCROLL_OBSERVER_STATE,
@@ -151,7 +152,6 @@ export function useAnimeOnScroll<
     debug,
     linked,
     deps = [],
-    enabled = true,
     onEnter,
     onLeave,
     onEnterForward,
@@ -166,6 +166,8 @@ export function useAnimeOnScroll<
   } = options;
 
   const depsSignal = useDependencySignal(deps);
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
 
   const callbackRefs = useRef({
     onEnter,
@@ -200,6 +202,8 @@ export function useAnimeOnScroll<
   const [imperativeLinked, setImperativeLinked] =
     useState<ScrollLinkedInstance>(null);
   const linkedInstance = resolvedPropLinked ?? imperativeLinked;
+  const linkedInstanceRef = useRef(linkedInstance);
+  linkedInstanceRef.current = linkedInstance;
 
   const controlledLinkedReady = Boolean(resolvedPropLinked);
 
@@ -248,8 +252,21 @@ export function useAnimeOnScroll<
 
   useEffect(() => {
     let unregisterScopedCleanup: (() => void) | undefined;
+    const currentOptions = optionsRef.current;
+    const {
+      id: currentId,
+      sync: currentSync,
+      container: currentContainer,
+      target: currentTarget,
+      axis: currentAxis,
+      enter: currentEnter,
+      leave: currentLeave,
+      repeat: currentRepeat,
+      debug: currentDebug,
+      enabled: currentEnabled = true,
+    } = currentOptions;
 
-    if (!enabled) {
+    if (!currentEnabled) {
       observerRef.current?.revert();
       observerRef.current = null;
       syncObserverState(null);
@@ -257,29 +274,33 @@ export function useAnimeOnScroll<
       return;
     }
 
-    const resolvedTarget = target
-      ? normalizeSingleElement(resolveTarget(target, scopeContext.rootRef.current))
+    const resolvedTarget = currentTarget
+      ? normalizeSingleElement(resolveTarget(currentTarget, scopeRootRef.current))
       : targetRef.current;
 
-    const resolvedContainer = container
-      ? normalizeSingleElement(resolveTarget(container, scopeContext.rootRef.current))
+    const resolvedContainer = currentContainer
+      ? normalizeSingleElement(resolveTarget(currentContainer, scopeRootRef.current))
       : containerRef.current;
 
-    if (!resolvedTarget && !controlledLinkedReady && !imperativeLinked) {
+    if (
+      !resolvedTarget &&
+      !controlledLinkedReady &&
+      !linkedInstanceRef.current
+    ) {
       return;
     }
 
     try {
       const config = {
-        id,
-        sync,
+        id: currentId,
+        sync: currentSync,
         container: resolvedContainer ?? undefined,
         target: resolvedTarget ?? undefined,
-        axis,
-        enter,
-        leave,
-        repeat,
-        debug,
+        axis: currentAxis,
+        enter: currentEnter,
+        leave: currentLeave,
+        repeat: currentRepeat,
+        debug: currentDebug,
         onEnter: createWrappedCallback("onEnter"),
         onLeave: createWrappedCallback("onLeave"),
         onEnterForward: createWrappedCallback("onEnterForward"),
@@ -298,8 +319,9 @@ export function useAnimeOnScroll<
       const observer = onScroll(config as ScrollObserverParams);
       observerRef.current = observer;
 
-      if (linkedInstance) {
-        observer.link(toAnimeScrollLinked(linkedInstance)!);
+      const currentLinkedInstance = linkedInstanceRef.current;
+      if (currentLinkedInstance) {
+        observer.link(toAnimeScrollLinked(currentLinkedInstance)!);
       }
 
       observer.refresh();
@@ -307,8 +329,8 @@ export function useAnimeOnScroll<
       syncObserverState(observer);
       setIsReady(true);
 
-      if (scopeContext.isScoped) {
-        unregisterScopedCleanup = scopeContext.registerCleanup(() => {
+      if (isScoped) {
+        unregisterScopedCleanup = registerCleanup(() => {
           try {
             observer.revert();
           } catch {}
@@ -334,7 +356,17 @@ export function useAnimeOnScroll<
       syncObserverState(null);
       setIsReady(false);
     }
-  }, [enabled, resolvedPropLinked, configJson, scopeContext, depsSignal]);
+  }, [
+    resolvedPropLinked,
+    configJson,
+    scopeRootRef,
+    isScoped,
+    registerCleanup,
+    controlledLinkedReady,
+    depsSignal,
+    createWrappedCallback,
+    syncObserverState,
+  ]);
 
   useEffect(() => {
     if (!observerRef.current || !linkedInstance) return;

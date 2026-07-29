@@ -34,9 +34,6 @@ export const ScopeRootDemo: React.FC = () => {
         ease: "inOutQuad",
       });
 
-      return () => {
-        console.log("[ScopeRootDemo] Scope reverted");
-      };
     });
   }, [isReady, add]);
 

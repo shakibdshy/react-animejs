@@ -15,15 +15,17 @@ import type {
   UseAnimeTimelineReturn,
 } from "../types";
 import {
+  appendTimelineEntry,
   buildCallbackConfig,
   cleanUndefinedValues,
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
-  resolveTarget,
+  resolveScopedTarget,
   safeJsonStringify,
   useScopeContext,
 } from "../core";
 import { useDependencySignal } from './use-dependency-signal';
+import { useLatestRef } from './use-latest-ref';
 
 function resolveSyncTarget(target: unknown) {
   if (
@@ -136,6 +138,31 @@ export function useAnimeTimeline(
   } = options;
 
   const depsSignal = useDependencySignal(deps);
+  const latestCallbacksRef = useLatestRef({
+    onBegin,
+    onComplete,
+    onUpdate,
+    onRender,
+    onBeforeUpdate,
+    onLoop,
+    onPause,
+  });
+  const latestOptionsRef = useLatestRef({
+    delay,
+    duration,
+    loop,
+    loopDelay,
+    alternate,
+    reversed,
+    autoplay,
+    frameRate,
+    playbackRate,
+    playbackEase,
+    persist,
+    defaults,
+    entries,
+  });
+  const { rootRef: scopeRootRef, isScoped, registerCleanup } = scopeContext;
 
   // ==========================================================================
   // Timeline Lifecycle
@@ -184,27 +211,37 @@ export function useAnimeTimeline(
     }
 
     try {
+      const currentOptions = latestOptionsRef.current;
       // Build timeline config
       const config: Record<string, unknown> = {
-        delay,
-        duration,
-        loop,
-        loopDelay,
-        alternate,
-        reversed,
-        autoplay,
-        frameRate,
-        playbackRate,
-        playbackEase,
-        persist,
-        defaults,
+        delay: currentOptions.delay,
+        duration: currentOptions.duration,
+        loop: currentOptions.loop,
+        loopDelay: currentOptions.loopDelay,
+        alternate: currentOptions.alternate,
+        reversed: currentOptions.reversed,
+        autoplay: currentOptions.autoplay,
+        frameRate: currentOptions.frameRate,
+        playbackRate: currentOptions.playbackRate,
+        playbackEase: currentOptions.playbackEase,
+        persist: currentOptions.persist,
+        defaults: currentOptions.defaults,
       };
 
       // Wrap callbacks with state updates
       const callbackConfig = buildCallbackConfig(
         setTimelineState,
         extractAnimationState,
-        { onBegin, onComplete, onUpdate, onRender, onBeforeUpdate, onLoop, onPause },
+        {
+          onBegin: (timeline) => latestCallbacksRef.current.onBegin?.(timeline),
+          onComplete: (timeline) => latestCallbacksRef.current.onComplete?.(timeline),
+          onUpdate: (timeline) => latestCallbacksRef.current.onUpdate?.(timeline),
+          onRender: (timeline) => latestCallbacksRef.current.onRender?.(timeline),
+          onBeforeUpdate: (timeline) =>
+            latestCallbacksRef.current.onBeforeUpdate?.(timeline),
+          onLoop: (timeline) => latestCallbacksRef.current.onLoop?.(timeline),
+          onPause: (timeline) => latestCallbacksRef.current.onPause?.(timeline),
+        },
         DEFAULT_ANIMATION_STATE,
       );
 
@@ -219,44 +256,10 @@ export function useAnimeTimeline(
       const timeline = createTimeline(config as any) as unknown as Timeline;
       timelineRef.current = timeline;
 
-      // Add entries
-      entries.forEach((entry) => {
-        if (!timeline) return;
-
-        if ("label" in entry) {
-          // Label entry
-          timeline.label(entry.label, entry.position);
-        } else if ("callback" in entry) {
-          // Function call
-          timeline.call(entry.callback, entry.position);
-        } else if ("target" in entry) {
-          // Sync timeline/WAAPI
-          const syncTarget = resolveSyncTarget(entry.target);
-
-          if (!syncTarget) return;
-
-          timeline.sync(syncTarget, entry.position);
-        } else if ("targets" in entry) {
-          // Animation entry
-          const { targets, position, ...animProps } = entry;
-
-          // Resolve target
-          const resolvedTarget = resolveTarget(
-            targets,
-            scopeContext.rootRef.current,
-          );
-
-          if (!resolvedTarget) return;
-
-          // Add to timeline
-           
-          timeline.add(resolvedTarget as any, animProps as any, position);
-        } else {
-          // Timer entry
-          const { position, ...timerProps } = entry;
-          timeline.add(timerProps as any, position);
-        }
-      });
+      // Add entries through the same dispatcher used by controls.add().
+      currentOptions.entries.forEach((entry) =>
+        appendTimelineEntry(timeline, entry, undefined, scopeRootRef.current),
+      );
 
       entriesAddedRef.current = true;
 
@@ -265,8 +268,8 @@ export function useAnimeTimeline(
       setIsReady(true);
 
       // Register cleanup with parent scope
-      if (scopeContext.isScoped) {
-        unregisterScopedCleanup = scopeContext.registerCleanup(() => {
+      if (isScoped) {
+        unregisterScopedCleanup = registerCleanup(() => {
           if (timelineRef.current) {
             try {
               timelineRef.current.revert();
@@ -295,7 +298,17 @@ export function useAnimeTimeline(
       entriesAddedRef.current = false;
       setIsReady(false);
     };
-  }, [enabled, optionsJson, entriesJson, scopeContext, depsSignal]);
+  }, [
+    enabled,
+    optionsJson,
+    entriesJson,
+    scopeRootRef,
+    isScoped,
+    registerCleanup,
+    depsSignal,
+    latestOptionsRef,
+    latestCallbacksRef,
+  ]);
 
   // ==========================================================================
   // Dynamic Methods
@@ -313,40 +326,14 @@ export function useAnimeTimeline(
         return;
       }
 
-      if ("label" in entry) {
-        timelineRef.current.label(entry.label, position ?? entry.position);
-      } else if ("callback" in entry) {
-        timelineRef.current.call(entry.callback, position ?? entry.position);
-      } else if ("target" in entry) {
-        const syncTarget = resolveSyncTarget(entry.target);
-
-        if (!syncTarget) return;
-
-        timelineRef.current.sync(syncTarget, position ?? entry.position);
-      } else if ("targets" in entry) {
-        const { targets, position: entryPos, ...animProps } = entry;
-
-        // Resolve target
-        const resolvedTarget = resolveTarget(
-          targets,
-          scopeContext.rootRef.current,
-        );
-
-        if (!resolvedTarget) return;
-
-        // Add to timeline
-         
-        timelineRef.current.add(
-          resolvedTarget as any,
-          animProps as any,
-          position ?? entryPos,
-        );
-      } else {
-        const { position: entryPos, ...timerProps } = entry;
-        timelineRef.current.add(timerProps as any, position ?? entryPos);
-      }
+      appendTimelineEntry(
+        timelineRef.current,
+        entry,
+        position,
+        scopeRootRef.current,
+      );
     },
-    [],
+    [scopeRootRef],
   );
 
   /**
@@ -393,7 +380,10 @@ export function useAnimeTimeline(
   const set = useCallback(
     (targets: any, parameters: any, position?: number | string) => {
       if (!timelineRef.current) return;
-      const resolvedTarget = resolveTarget(targets);
+      const resolvedTarget = resolveScopedTarget(
+        targets,
+        scopeRootRef.current,
+      );
       if (!resolvedTarget) return;
 
       // If no position specified, use current time to ensure it applies now
@@ -406,7 +396,7 @@ export function useAnimeTimeline(
 
       setTimelineState(extractAnimationState(timelineRef.current));
     },
-    [],
+    [scopeRootRef],
   );
 
   /**
@@ -424,13 +414,15 @@ export function useAnimeTimeline(
           typeof targetsOrInstance === "object" &&
           !("id" in targetsOrInstance))
       ) {
-        resolved = resolveTarget(targetsOrInstance) || targetsOrInstance;
+        resolved =
+          resolveScopedTarget(targetsOrInstance, scopeRootRef.current) ||
+          targetsOrInstance;
       }
 
       timelineRef.current.remove(resolved, propertyOrPosition);
       setTimelineState(extractAnimationState(timelineRef.current));
     },
-    [],
+    [scopeRootRef],
   );
 
   /**

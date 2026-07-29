@@ -11,8 +11,8 @@ import { SvgDrawPreview, SvgMorphPreview, SvgMotionPathPreview } from './svg-pre
 import { DraggablePreview, OnScrollPreview, ReorderListPreview, ScrollLinkedAnimationsPreview } from './interaction-previews';
 import { AnimatedSliderPreview, ClipPathRevealPreview, CounterCountdownPreview, SpinningCubePreview, ToggleSwitchPreview } from './wrapper-previews';
 import {
-  AccordionPreview,
   AccordionPresencePreview,
+  AccordionPreview,
   DropdownMenuPreview,
   TabsPreview,
   ToastPreview,

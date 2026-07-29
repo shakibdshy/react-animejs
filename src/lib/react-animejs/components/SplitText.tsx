@@ -20,6 +20,7 @@ import { splitText } from 'animejs';
 import type { TextSplitter, TextSplitterParams } from 'animejs';
 import { safeJsonStringify } from '../core';
 import { mergeChildProps } from '../utils/svg-component-utils';
+import { useDependencySignal } from '../hooks/use-dependency-signal';
 
 export interface SplitTextRef {
   /**
@@ -126,6 +127,12 @@ export interface SplitTextProps {
   splitOnMount?: boolean;
 
   /**
+   * Dependencies that trigger a fresh split. Useful when params contain
+   * function-valued templates whose identity should be observed explicitly.
+   */
+  deps?: unknown[];
+
+  /**
    * Callback when split is ready
    */
   onReady?: (split: TextSplitter) => void;
@@ -141,6 +148,7 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
     children,
     params = { lines: true, words: true, chars: true },
     splitOnMount = true,
+    deps = [],
     onReady,
     className,
   },
@@ -149,6 +157,11 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
   const containerRef = useRef<HTMLDivElement>(null);
   const splitRef = useRef<TextSplitter | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const paramsRef = useRef(params);
+  paramsRef.current = params;
+  const readyFrameRef = useRef<number | null>(null);
+  const readyGenerationRef = useRef(0);
+  const depsSignal = useDependencySignal(deps);
   const onReadyRef = useRef(onReady);
 
   useEffect(() => {
@@ -183,8 +196,7 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
         }
 
         try {
-          const parsedParams = JSON.parse(paramsStr);
-          const instance = splitText(child, parsedParams);
+          const instance = splitText(child, paramsRef.current);
           splitRef.current = instance;
           setIsReady(true);
 
@@ -269,7 +281,7 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
         }
       },
     }),
-    [paramsStr, isReady]
+    [isReady]
   );
 
   // Use useLayoutEffect for synchronous DOM manipulation.
@@ -278,6 +290,8 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
   // any useEffect in sibling components fires.
   useLayoutEffect(() => {
     if (!splitOnMount) return;
+
+    const generation = ++readyGenerationRef.current;
 
     const container = containerRef.current;
     if (!container) return;
@@ -289,15 +303,18 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
     }
 
     try {
-      const parsedParams = JSON.parse(paramsStr);
-      const instance = splitText(child, parsedParams);
+      const instance = splitText(child, paramsRef.current);
       splitRef.current = instance;
 
       // Set ready synchronously so the ref is usable by sibling effects
       setIsReady(true);
 
       // Fire the onReady callback after a frame to ensure DOM is painted
-      requestAnimationFrame(() => {
+      readyFrameRef.current = requestAnimationFrame(() => {
+        readyFrameRef.current = null;
+        if (readyGenerationRef.current !== generation || splitRef.current !== instance) {
+          return;
+        }
         if (onReadyRef.current) {
           onReadyRef.current(instance);
         }
@@ -309,6 +326,11 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
     }
 
     return () => {
+      readyGenerationRef.current += 1;
+      if (readyFrameRef.current !== null) {
+        cancelAnimationFrame(readyFrameRef.current);
+        readyFrameRef.current = null;
+      }
       if (splitRef.current) {
         try {
           splitRef.current.revert();
@@ -317,7 +339,7 @@ export const SplitText = forwardRef<SplitTextRef, SplitTextProps>(function Split
       }
       setIsReady(false);
     };
-  }, [paramsStr, splitOnMount]);
+  }, [paramsStr, splitOnMount, depsSignal]);
 
   if (!isValidElement(children)) {
     console.warn('[react-animejs] SplitText requires a single valid React element as child');

@@ -1,6 +1,7 @@
-import { type ReactNode, useCallback, useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { AnimeProvider } from '@/lib/react-animejs';
+import { useTheme } from '@/theme';
 import { CommandPalette } from './command-palette';
 
 interface ComponentGalleryShellProps {
@@ -9,15 +10,8 @@ interface ComponentGalleryShellProps {
 
 /** Shared application shell for the component catalog and canonical details. */
 export function ComponentGalleryShell({ children }: ComponentGalleryShellProps) {
-  const [isDark, setIsDark] = useState(true);
   const [paletteOpen, setPaletteOpen] = useState(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem('demo-theme');
-    const preferDark = stored !== null ? stored === 'dark' : true;
-    setIsDark(preferDark);
-    document.documentElement.classList.toggle('dark', preferDark);
-  }, []);
+  const { isDark, toggleTheme } = useTheme();
 
   // ⌘K / Ctrl+K toggles the command palette. Lives in the shell so it works
   // on both the gallery index and the detail pages.
@@ -31,13 +25,6 @@ export function ComponentGalleryShell({ children }: ComponentGalleryShellProps) 
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
-
-  const toggleTheme = useCallback(() => {
-    const next = !isDark;
-    setIsDark(next);
-    document.documentElement.classList.toggle('dark', next);
-    localStorage.setItem('demo-theme', next ? 'dark' : 'light');
-  }, [isDark]);
 
   return (
     <AnimeProvider>

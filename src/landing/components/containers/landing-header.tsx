@@ -1,7 +1,8 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/landing/utils/cn';
 import type { NavItem } from '@/landing/types';
+import { useTheme } from '@/theme';
 
 const defaultNavItems: NavItem[] = [
   { label: 'Components', href: '/demos' },
@@ -23,27 +24,15 @@ export const LandingHeader = memo(function LandingHeader({
   navItems = defaultNavItems,
   className,
 }: LandingHeaderProps) {
-  const [isDark, setIsDark] = useState(true);
   const [scrolled, setScrolled] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
 
   useEffect(() => {
-    const stored = localStorage.getItem('demo-theme');
-    const preferDark = stored !== null ? stored === 'dark' : true;
-    setIsDark(preferDark);
-    document.documentElement.classList.toggle('dark', preferDark);
-
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  const toggleTheme = useCallback(() => {
-    const next = !isDark;
-    setIsDark(next);
-    document.documentElement.classList.toggle('dark', next);
-    localStorage.setItem('demo-theme', next ? 'dark' : 'light');
-  }, [isDark]);
 
   return (
     <header

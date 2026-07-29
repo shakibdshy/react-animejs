@@ -14,7 +14,8 @@ export {
   DEFAULT_ANIMATION_STATE,
   RESERVED_KEYS,
 } from './constants';
-export { resolveTarget, isRef } from './targets';
+export { resolveScopedTarget, resolveTarget, isRef } from './targets';
+export { appendTimelineEntry } from './timeline-entries';
 export { parseAnimeOptions } from './props';
 export { extractAnimationState, buildCallbackConfig } from './state';
 export { createSafeCallback, cleanUndefinedValues } from './callbacks';

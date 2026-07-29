@@ -22,6 +22,7 @@ import {
   useScopeContext,
 } from "../core";
 import { useDependencySignal } from './use-dependency-signal';
+import { useLatestRef } from './use-latest-ref';
 
 /**
  * useAnimeWAAPI - Create and control WAAPI animations declaratively
@@ -57,10 +58,33 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
   } = options;
 
   const depsSignal = useDependencySignal(deps);
+  const latestCallbacksRef = useLatestRef({
+    onBegin,
+    onComplete,
+    onUpdate,
+    onRender,
+    onLoop,
+    onPause,
+  });
+  const latestOptionsRef = useLatestRef({
+    externalTargets,
+    autoplay,
+    stagger,
+    restOptions,
+  });
+  const { rootRef: scopeRootRef, isScoped, registerCleanup } = scopeContext;
 
   // Stability for animatable props
   const optionsJson = useMemo(() => {
-    const { onBegin, onComplete, onUpdate, onRender, onLoop, ...serializable } = options;
+    const {
+      onBegin: _onBegin,
+      onComplete: _onComplete,
+      onUpdate: _onUpdate,
+      onRender: _onRender,
+      onLoop: _onLoop,
+      onPause: _onPause,
+      ...serializable
+    } = options;
     return safeJsonStringify(serializable);
   }, [options]);
 
@@ -72,37 +96,38 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
       return;
     }
 
+    const currentOptions = latestOptionsRef.current;
     // Resolve target
     const target = resolveTarget(
-      externalTargets || targetRef,
-      scopeContext.rootRef.current,
+      currentOptions.externalTargets || targetRef,
+      scopeRootRef.current,
     );
 
     if (!target) return;
 
     try {
       const config: Record<string, unknown> = {
-        ...restOptions,
-        autoplay,
+        ...currentOptions.restOptions,
+        autoplay: currentOptions.autoplay,
       };
 
-      if (stagger !== undefined) {
-        config.stagger = stagger;
+      if (currentOptions.stagger !== undefined) {
+        config.stagger = currentOptions.stagger;
       }
 
       // Wrap callbacks
-      const wrapCallback = (cb: ((anim: WAAPIAnimation) => void) | undefined, name: string) => 
+      const wrapCallback = (name: keyof typeof latestCallbacksRef.current) =>
         (anim: WAAPIAnimation) => {
           setAnimationState(extractAnimationState(anim));
-          createSafeCallback(cb, name)?.(anim);
+          createSafeCallback(latestCallbacksRef.current[name], name)?.(anim);
         };
 
-      config.onBegin = wrapCallback(onBegin, "onBegin");
-      config.onComplete = wrapCallback(onComplete, "onComplete");
-      config.onUpdate = wrapCallback(onUpdate, "onUpdate");
-      config.onRender = wrapCallback(onRender, "onRender");
-      config.onLoop = wrapCallback(onLoop, "onLoop");
-      config.onPause = wrapCallback(onPause, "onPause");
+      config.onBegin = wrapCallback("onBegin");
+      config.onComplete = wrapCallback("onComplete");
+      config.onUpdate = wrapCallback("onUpdate");
+      config.onRender = wrapCallback("onRender");
+      config.onLoop = wrapCallback("onLoop");
+      config.onPause = wrapCallback("onPause");
 
       const anim = waapi.animate(target as any, config as any) as unknown as WAAPIAnimation;
       animationRef.current = anim;
@@ -110,8 +135,8 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
       setAnimationState(extractAnimationState(anim));
       setIsReady(true);
 
-      if (scopeContext.isScoped) {
-        unregisterScopedCleanup = scopeContext.registerCleanup(() => {
+      if (isScoped) {
+        unregisterScopedCleanup = registerCleanup(() => {
           animationRef.current?.revert();
         });
       }
@@ -126,7 +151,16 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
       animationRef.current = null;
       setIsReady(false);
     };
-  }, [enabled, optionsJson, scopeContext, depsSignal]);
+  }, [
+    enabled,
+    optionsJson,
+    scopeRootRef,
+    isScoped,
+    registerCleanup,
+    latestOptionsRef,
+    latestCallbacksRef,
+    depsSignal,
+  ]);
 
   const controls: PlaybackControls = useMemo(
     () => ({
@@ -197,7 +231,7 @@ export function useAnimeWAAPI<T extends HTMLElement | SVGElement = HTMLElement>(
       },
       setPlaybackRate: (rate: number) => {
         if (animationRef.current) {
-          (animationRef.current as any).playbackRate = rate;
+          (animationRef.current as unknown as Record<string, unknown>).speed = rate;
           setAnimationState(extractAnimationState(animationRef.current));
         }
       },

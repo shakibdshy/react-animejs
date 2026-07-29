@@ -1,7 +1,8 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Code as CodeIcon } from 'lucide-react';
 import { AnimeProvider } from '@/lib/react-animejs';
+import { useTheme } from '@/theme';
 import { ErrorBoundary } from '@/landing/components/ui/error-boundary';
 import { CursorTrailImagesDemo } from '@/demo-examples/components/CursorTrailImagesDemo';
 import { AddToCard } from './components/AddToCard';
@@ -25,65 +26,7 @@ import { ScrollImageComparison } from './components/ScrollImageComparison';
 import { AnimatedContinuousSections } from './components/AnimatedContinuousSections';
 import { LayeredPinningLoop } from './components/LayeredPinningLoop';
 import { ScrollShader } from './components/ScrollShader';
-// Exact source for each block, pulled at build time via Vite's ?raw so the
-// "View Code" modal always shows the real, current code.
-import cursorTrailSource from '@/demo-examples/components/CursorTrailImagesDemo.tsx?raw';
-import addToCardSource from './components/AddToCard.tsx?raw';
-import pointerGridSource from './components/PointerCollisionGrid.tsx?raw';
-import tiltCardSource from './components/TiltCard.tsx?raw';
-import imageRevealSource from './components/ImageRevealSlider.tsx?raw';
-import cursorTrackingSource from './components/CursorTrackingPreview.tsx?raw';
-import dockSource from './components/MacOSDock.tsx?raw';
-import easeReverseSource from './components/OrchestratedEaseReverse.tsx?raw';
-import scrubbedBentoSource from './components/ScrubbedBentoGallery.tsx?raw';
-import scrollBatchSource from './components/ScrollBatchGallery.tsx?raw';
-import canvasParticlesSource from './components/CanvasParticles.tsx?raw';
-import curveSwipeSource from './components/CurveSwipe.tsx?raw';
-import dynamicShapeOverlaysSource from './components/DynamicShapeOverlays.tsx?raw';
-import horizontalSplitTextSource from './components/HorizontalSplitText.tsx?raw';
-import gridFlipModalSource from './components/GridFlipModal.tsx?raw';
-import animateCssGridFlipSource from './components/AnimateCssGridFlip.tsx?raw';
-import scrollImageSequenceSource from './components/ScrollImageSequence.tsx?raw';
-import scrollImageComparisonSource from './components/ScrollImageComparison.tsx?raw';
-import animatedContinuousSectionsSource from './components/AnimatedContinuousSections.tsx?raw';
-import layeredPinningLoopSource from './components/LayeredPinningLoop.tsx?raw';
-import scrollShaderSource from './components/ScrollShader.tsx?raw';
-
-/** The set of blocks that can be shown in the code modal. */
-type CodeTarget = {
-  title: string;
-  code: string;
-};
-
-const SOURCE_BY_KEY: Record<string, CodeTarget> = {
-  'cursor-trail': { title: 'CursorTrailImagesDemo.tsx', code: cursorTrailSource },
-  'grid-flip-modal': { title: 'GridFlipModal.tsx', code: gridFlipModalSource },
-  'animate-css-grid-flip': { title: 'AnimateCssGridFlip.tsx', code: animateCssGridFlipSource },
-  'add-to-card': { title: 'AddToCard.tsx', code: addToCardSource },
-  'pointer-grid': { title: 'PointerCollisionGrid.tsx', code: pointerGridSource },
-  'tilt-card': { title: 'TiltCard.tsx', code: tiltCardSource },
-  'image-reveal': { title: 'ImageRevealSlider.tsx', code: imageRevealSource },
-  'cursor-tracking': { title: 'CursorTrackingPreview.tsx', code: cursorTrackingSource },
-  'macos-dock': { title: 'MacOSDock.tsx', code: dockSource },
-  'orchestrated-easereverse': { title: 'OrchestratedEaseReverse.tsx', code: easeReverseSource },
-  'scrubbed-bento': { title: 'ScrubbedBentoGallery.tsx', code: scrubbedBentoSource },
-  'scroll-batch': { title: 'ScrollBatchGallery.tsx', code: scrollBatchSource },
-  'canvas-particles': { title: 'CanvasParticles.tsx', code: canvasParticlesSource },
-  'curve-swipe': { title: 'CurveSwipe.tsx', code: curveSwipeSource },
-  'dynamic-shape-overlays': { title: 'DynamicShapeOverlays.tsx', code: dynamicShapeOverlaysSource },
-  'horizontal-split-text': { title: 'HorizontalSplitText.tsx', code: horizontalSplitTextSource },
-  'scroll-image-sequence': { title: 'ScrollImageSequence.tsx', code: scrollImageSequenceSource },
-  'scroll-image-comparison': {
-    title: 'ScrollImageComparison.tsx',
-    code: scrollImageComparisonSource,
-  },
-  'animated-continuous-sections': {
-    title: 'AnimatedContinuousSections.tsx',
-    code: animatedContinuousSectionsSource,
-  },
-  'layered-pinning-loop': { title: 'LayeredPinningLoop.tsx', code: layeredPinningLoopSource },
-  'scroll-shader': { title: 'ScrollShader.tsx', code: scrollShaderSource },
-};
+import { SOURCE_BY_KEY } from './registry';
 
 /** Header row for a block section: title, library-primitive chip, and a
  *  "View Code" button that opens the source modal. */
@@ -124,27 +67,13 @@ function SectionHeader({
  * layout hides the sidebar Header on top-level pages).
  */
 export const BlocksPage = memo(function BlocksPage() {
-  const [isDark, setIsDark] = useState(true);
   const [codeKey, setCodeKey] = useState<string | null>(null);
+  const { isDark, toggleTheme } = useTheme();
 
   const openCode = useCallback((key: string) => setCodeKey(key), []);
   const closeCode = useCallback(() => setCodeKey(null), []);
 
   const activeCode = codeKey ? SOURCE_BY_KEY[codeKey] : null;
-
-  useEffect(() => {
-    const stored = localStorage.getItem('demo-theme');
-    const preferDark = stored !== null ? stored === 'dark' : true;
-    setIsDark(preferDark);
-    document.documentElement.classList.toggle('dark', preferDark);
-  }, []);
-
-  const toggleTheme = useCallback(() => {
-    const next = !isDark;
-    setIsDark(next);
-    document.documentElement.classList.toggle('dark', next);
-    localStorage.setItem('demo-theme', next ? 'dark' : 'light');
-  }, [isDark]);
 
   return (
     <AnimeProvider>

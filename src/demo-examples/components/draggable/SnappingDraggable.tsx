@@ -9,7 +9,6 @@ export function SnappingDraggable() {
     snap: 50,
     releaseStiffness: 200,
     releaseDamping: 25,
-    onSnap: () => console.log('Snapped!'),
   });
 
   const gridLines = [];

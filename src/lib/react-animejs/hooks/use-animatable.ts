@@ -128,6 +128,8 @@ export function useAnimatable<T extends HTMLElement | SVGElement = HTMLElement>(
   const animatableRef = useRef<AnimatableInstance | null>(null);
   const [isReady, setIsReady] = useState(false);
   const scopeContext = useScopeContext();
+  const configRef = useRef(config);
+  configRef.current = config;
 
   const configKey = useMemo(() => {
     try {
@@ -156,7 +158,10 @@ export function useAnimatable<T extends HTMLElement | SVGElement = HTMLElement>(
     }
 
     try {
-      const instance = createAnimatable(resolvedTargets as any, config as any);
+      const instance = createAnimatable(
+        resolvedTargets as any,
+        configRef.current as any,
+      );
       animatableRef.current = instance as unknown as AnimatableInstance;
       setIsReady(true);
     } catch (error) {

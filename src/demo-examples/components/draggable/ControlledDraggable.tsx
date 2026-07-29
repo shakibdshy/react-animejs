@@ -20,7 +20,6 @@ export function ControlledDraggable() {
     containerPadding: 16,
     releaseStiffness: 100,
     releaseDamping: 20,
-    onSettle: () => console.log('Settled!'),
   });
 
   const handleDisable = () => {

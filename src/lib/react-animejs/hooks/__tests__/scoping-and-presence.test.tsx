@@ -193,6 +193,8 @@ vi.mock("animejs", () => {
       const instance: Record<string, any> = {
         ...createAnimationInstance(config),
         addCalls: [] as Array<{ target: unknown; params: unknown; position: unknown }>,
+        setCalls: [] as Array<{ target: unknown; params: unknown; position: unknown }>,
+        removeCalls: [] as Array<{ target: unknown; propertyOrPosition: unknown }>,
         syncCalls: [] as Array<{ target: unknown; position: unknown }>,
         add(targetOrParams: unknown, paramsOrPosition?: unknown, maybePosition?: unknown) {
           if (maybePosition !== undefined || arguments.length > 2) {
@@ -210,10 +212,12 @@ vi.mock("animejs", () => {
           }
           return this;
         },
-        set() {
+        set(target: unknown, params: unknown, position: unknown) {
+          this.setCalls.push({ target, params, position });
           return this;
         },
-        remove() {
+        remove(target: unknown, propertyOrPosition: unknown) {
+          this.removeCalls.push({ target, propertyOrPosition });
           return this;
         },
         sync(...args: [target: unknown, position: unknown]) {
@@ -310,6 +314,8 @@ afterEach(() => {
 });
 
 function createScopedWrapper(root: HTMLElement) {
+  const rootRef = { current: root };
+  const registerCleanup = () => () => {};
   return function ScopedWrapper({
     children,
   }: {
@@ -319,9 +325,9 @@ function createScopedWrapper(root: HTMLElement) {
       <ScopeContext.Provider
         value={{
           scope: null,
-          rootRef: { current: root },
+          rootRef,
           isScoped: true,
-          registerCleanup: () => () => {},
+          registerCleanup,
           matches: {},
         }}
       >
@@ -640,6 +646,43 @@ describe("scoped selector handling", () => {
     expect(Array.from(timelineInstance.addCalls[1].target as NodeListOf<Element>)).toEqual([
       root.querySelector(".item"),
     ]);
+
+    act(() => {
+      result.current.controls.set(".item", { opacity: 1 });
+      result.current.controls.remove(".item");
+    });
+
+    expect(Array.from(timelineInstance.setCalls[0].target as NodeListOf<Element>)).toEqual([
+      root.querySelector(".item"),
+    ]);
+    expect(Array.from(timelineInstance.removeCalls[0].target as NodeListOf<Element>)).toEqual([
+      root.querySelector(".item"),
+    ]);
+  });
+
+  it("uses the latest timeline callback without recreating the timeline", async () => {
+    const firstCallback = vi.fn();
+    const latestCallback = vi.fn();
+
+    const { result, rerender } = renderHook(
+      ({ onComplete }) => useAnimeTimeline({ duration: 100, onComplete }),
+      { initialProps: { onComplete: firstCallback } },
+    );
+
+    await waitFor(() => {
+      expect(result.current.isReady).toBe(true);
+    });
+
+    rerender({ onComplete: latestCallback });
+    const [{ config, instance }] = __mock.timelineCalls;
+
+    act(() => {
+      config.onComplete?.(instance);
+    });
+
+    expect(__mock.timelineCalls).toHaveLength(1);
+    expect(latestCallback).toHaveBeenCalledTimes(1);
+    expect(firstCallback).not.toHaveBeenCalled();
   });
 
   it("unwraps sync targets passed as hook refs", async () => {
@@ -708,6 +751,43 @@ describe("scoped selector handling", () => {
       result.current.controls.play();
     });
     expect(result.current.state.paused).toBe(false);
+
+    act(() => {
+      result.current.controls.setPlaybackRate(1.5);
+      result.current.controls.setFrameRate(30);
+    });
+    expect(__mock.waapiCalls[0].instance.speed).toBe(1.5);
+    expect(__mock.waapiCalls[0].instance.fps).toBe(30);
+  });
+
+  it("uses the latest WAAPI callback without recreating the animation", async () => {
+    const root = document.createElement("div");
+    root.innerHTML = '<div class="item"></div>';
+    document.body.appendChild(root);
+
+    const firstCallback = vi.fn();
+    const latestCallback = vi.fn();
+    const wrapper = createScopedWrapper(root);
+    const { rerender } = renderHook(
+      ({ onComplete }) =>
+        useAnimeWAAPI({ targets: ".item", onComplete, autoplay: false }),
+      { initialProps: { onComplete: firstCallback }, wrapper },
+    );
+
+    await waitFor(() => {
+      expect(__mock.waapiCalls).toHaveLength(1);
+    });
+
+    rerender({ onComplete: latestCallback });
+    const [{ config, instance }] = __mock.waapiCalls;
+
+    act(() => {
+      config.onComplete?.(instance);
+    });
+
+    expect(__mock.waapiCalls).toHaveLength(1);
+    expect(latestCallback).toHaveBeenCalledTimes(1);
+    expect(firstCallback).not.toHaveBeenCalled();
   });
 
   it("exposes the created provider scope through context consumers", async () => {

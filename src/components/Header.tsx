@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useTheme } from '@/theme'
 import {
   ArrowUpDown,
   Box,
@@ -53,21 +54,7 @@ const demoLinks = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isDark, setIsDark] = useState(true)
-
-  useEffect(() => {
-    const stored = localStorage.getItem('demo-theme')
-    const preferDark = stored !== null ? stored === 'dark' : true
-    setIsDark(preferDark)
-    document.documentElement.classList.toggle('dark', preferDark)
-  }, [])
-
-  const toggleTheme = () => {
-    const next = !isDark
-    setIsDark(next)
-    document.documentElement.classList.toggle('dark', next)
-    localStorage.setItem('demo-theme', next ? 'dark' : 'light')
-  }
+  const { isDark, toggleTheme } = useTheme()
 
   return (
     <>

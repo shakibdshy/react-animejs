@@ -368,6 +368,28 @@ describe("useAnimeTimer", () => {
   });
 
   describe("Backward Compatibility", () => {
+    it("uses the latest lifecycle callback without recreating the timer", async () => {
+      const firstCallback = vi.fn();
+      const latestCallback = vi.fn();
+
+      const { result, rerender } = renderHook(
+        ({ onComplete }) => useAnimeTimer({ duration: 1000, onComplete }),
+        { initialProps: { onComplete: firstCallback } },
+      );
+
+      await waitFor(() => {
+        expect(result.current.isReady).toBe(true);
+      });
+
+      rerender({ onComplete: latestCallback });
+
+      act(() => {
+        result.current.controls.complete();
+      });
+
+      expect(latestCallback).toHaveBeenCalledTimes(1);
+      expect(firstCallback).not.toHaveBeenCalled();
+    });
     it("should work without any tracking options", async () => {
       const { result } = renderHook(() =>
         useAnimeTimer({

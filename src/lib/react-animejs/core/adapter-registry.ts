@@ -11,10 +11,7 @@
  */
 
 import { registerAdapter } from 'animejs/adapters';
-import type {
-  AnimeAdapterConfig,
-  AnimeAdapterInstance,
-} from '../types/adapter';
+import type { AnimeAdapterConfig, AnimeAdapterInstance } from '../types/adapter';
 
 // =============================================================================
 // Module-level singleton
@@ -46,37 +43,28 @@ const registry = new Map<string, AnimeAdapterInstance>();
  * @param config - declarative adapter config
  * @returns the anime.js `Adapter` instance (newly created or existing)
  */
-export function registerAnimeAdapter(
-  config: AnimeAdapterConfig,
-): AnimeAdapterInstance {
+export function registerAnimeAdapter(config: AnimeAdapterConfig): AnimeAdapterInstance {
   const existing = registry.get(config.id);
   if (existing) return existing;
 
-  const adapter = registerAdapter(config.detect) as AnimeAdapterInstance;
+  const adapter = registerAdapter(
+    config.detect as unknown as ((target: unknown) => boolean) | undefined
+  ) as AnimeAdapterInstance;
 
   // Wire up each target-adapter group and its properties
   if (config.targets) {
     for (const targetConfig of config.targets) {
-      const targetAdapter = adapter.registerTargetAdapter(
-        targetConfig.detect,
-      ) as unknown as {
+      const targetAdapter = adapter.registerTargetAdapter(targetConfig.detect) as unknown as {
         registerProperty: (
           name: string,
-          getter: (t: any) => any,
-          setter: (target: any, value: number, tween: any) => void,
-          gate?: (t: any) => boolean,
+          getter: (t: Record<string, unknown>) => unknown,
+          setter: (target: Record<string, unknown>, value: number, tween: unknown) => void,
+          gate?: (t: Record<string, unknown>) => unknown
         ) => void;
       };
-      for (const [name, property] of Object.entries(
-        targetConfig.properties,
-      )) {
+      for (const [name, property] of Object.entries(targetConfig.properties)) {
         // anime.js's registerProperty signature: (name, getter, setter, gate?)
-        targetAdapter.registerProperty(
-          name,
-          property.get,
-          property.set,
-          property.gate,
-        );
+        targetAdapter.registerProperty(name, property.get, property.set, property.gate);
       }
     }
   }
@@ -90,9 +78,7 @@ export function registerAnimeAdapter(
  *
  * @returns the adapter, or `undefined` if none is registered under that id
  */
-export function getRegisteredAdapter(
-  id: string,
-): AnimeAdapterInstance | undefined {
+export function getRegisteredAdapter(id: string): AnimeAdapterInstance | undefined {
   return registry.get(id);
 }
 

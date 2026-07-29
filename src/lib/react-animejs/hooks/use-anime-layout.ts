@@ -105,6 +105,8 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
     () => safeJsonStringify(layoutParams),
     [layoutParams],
   );
+  const layoutParamsRef = useRef(layoutParams);
+  layoutParamsRef.current = layoutParams;
 
   // Destructure to stable primitives for the dep array. Using the `scopeContext`
   // object directly would re-init the layout whenever the provider's context
@@ -142,7 +144,7 @@ export function useAnimeLayout<T extends HTMLElement = HTMLElement>(
       // layout with nothing.
       const layout = createLayout(
         resolvedRoot,
-        layoutParams as any,
+        layoutParamsRef.current as any,
       ) as AutoLayout;
       layoutRef.current = layout;
       timelineRef.current = null;

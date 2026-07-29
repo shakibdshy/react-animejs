@@ -14,92 +14,23 @@ import type {
   PlaybackControls,
   UseAnimeOptions,
   UseAnimeReturn,
-  UseAnimeScrollTriggerOptions,
 } from "../types";
 import {
   buildCallbackConfig,
   cleanUndefinedValues,
   DEFAULT_ANIMATION_STATE,
   extractAnimationState,
-  isPlainObject,
   resolveTarget,
   safeJsonStringify,
   useScopeContext,
 } from "../core";
 import { useDependencySignal } from './use-dependency-signal';
-
-type ScrollObserverCallbackKey =
-  | "onEnter"
-  | "onLeave"
-  | "onEnterForward"
-  | "onLeaveForward"
-  | "onEnterBackward"
-  | "onLeaveBackward"
-  | "onSyncEnter"
-  | "onSyncLeave"
-  | "onUpdate"
-  | "onResize"
-  | "onSyncComplete";
-
-function normalizeSingleElement(
-  target:
-    | HTMLElement
-    | SVGElement
-    | NodeList
-    | (HTMLElement | SVGElement)[]
-    | null,
-): HTMLElement | SVGElement | null {
-  if (!target) return null;
-
-  if (Array.isArray(target)) {
-    return (target[0] as HTMLElement | SVGElement) ?? null;
-  }
-
-  if (typeof NodeList !== "undefined" && target instanceof NodeList) {
-    return (target[0] as HTMLElement | SVGElement) ?? null;
-  }
-
-  return target as HTMLElement | SVGElement;
-}
-
-function isScrollObserverInstance(value: unknown): value is ScrollObserver {
-  return Boolean(
-    value &&
-      typeof value === "object" &&
-      "link" in value &&
-      "refresh" in value &&
-      "revert" in value,
-  );
-}
-
-function isScrollTriggerOptions(
-  value: UseAnimeOptions["autoplay"],
-): value is UseAnimeScrollTriggerOptions {
-  if (!isPlainObject(value)) return false;
-
-  return [
-    "id",
-    "sync",
-    "container",
-    "target",
-    "axis",
-    "enter",
-    "leave",
-    "repeat",
-    "debug",
-    "onEnter",
-    "onLeave",
-    "onEnterForward",
-    "onLeaveForward",
-    "onEnterBackward",
-    "onLeaveBackward",
-    "onSyncEnter",
-    "onSyncLeave",
-    "onUpdate",
-    "onResize",
-    "onSyncComplete",
-  ].some((key) => key in value);
-}
+import {
+  isScrollObserverInstance,
+  isScrollTriggerOptions,
+  normalizeSingleElement,
+  type ScrollObserverCallbackKey,
+} from '../core/scroll-observer';
 
 // =============================================================================
 // Hook Implementation
@@ -156,6 +87,11 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
 
   // Get parent scope context (if inside AnimeProvider)
   const scopeContext = useScopeContext();
+  const {
+    rootRef: scopeRootRef,
+    isScoped,
+    registerCleanup,
+  } = scopeContext;
 
   // ==========================================================================
   // State
@@ -540,7 +476,7 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     try {
       // Create animation within a scope for proper cleanup
       scopeRef.current = createScope({
-        root: scopeContext.rootRef.current || undefined,
+        root: scopeRootRef.current || undefined,
       });
 
       scrollObserverRef.current = scrollObserver;
@@ -566,8 +502,8 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
       setIsReady(true);
 
       // Register cleanup with parent scope if available
-      if (scopeContext.isScoped) {
-        unregisterScopedCleanup = scopeContext.registerCleanup(() => {
+      if (isScoped) {
+        unregisterScopedCleanup = registerCleanup(() => {
           if (animationRef.current) {
             try {
               animationRef.current.revert();
@@ -635,9 +571,10 @@ export function useAnime<T extends HTMLElement | SVGElement = HTMLElement>(
     externalTargets,
     selector,
     controller,
-    scopeContext.isScoped,
-    scopeContext.registerCleanup,
-    scopeContext.rootRef,
+    buildConfig,
+    isScoped,
+    registerCleanup,
+    scopeRootRef,
     animatablePropsJson,
     configJson,
     autoplayDependency,

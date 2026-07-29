@@ -60,7 +60,6 @@ export const ScopeRevertDemo: React.FC = () => {
       // Cleanup function called when revert() is invoked
       return () => {
         setStatus("cleaned");
-        console.log("[ScopeRevertDemo] All animations cleaned up!");
       };
     });
   };

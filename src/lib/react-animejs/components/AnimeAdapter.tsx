@@ -34,7 +34,7 @@ export interface AnimeAdapterProps {
   /** Stable unique id for this adapter (dedupes across mounts). */
   id: string;
   /** Optional adapter-level gate; early-reject unrelated targets. */
-  detect?: (target: any) => boolean;
+  detect?: (target: Record<string, unknown>) => unknown;
   /** Target-adapter groups, each claiming a target type + properties. */
   targets?: ReactAdapterTargetSpec[];
   /** Children to render (no DOM wrapper is added). */
@@ -45,24 +45,18 @@ export interface AnimeAdapterProps {
 
 /** Local subset of AnimeAdapterTarget to avoid importing internal types. */
 interface ReactAdapterTargetSpec {
-  detect: (target: any) => boolean;
+  detect: (target: Record<string, unknown>) => unknown;
   properties: Record<
     string,
     {
-      get: (target: any) => any;
-      set: (target: any, value: number, tween: any) => void;
-      gate?: (target: any) => boolean;
+      get: (target: Record<string, unknown>) => unknown;
+      set: (target: Record<string, unknown>, value: number, tween: unknown) => void;
+      gate?: (target: Record<string, unknown>) => unknown;
     }
   >;
 }
 
-export function AnimeAdapter({
-  id,
-  detect,
-  targets,
-  children,
-  onReady,
-}: AnimeAdapterProps) {
+export function AnimeAdapter({ id, detect, targets, children, onReady }: AnimeAdapterProps) {
   const { adapter, isReady } = useAnimeAdapter({ id, detect, targets });
 
   // Fire onReady exactly once when the adapter registers

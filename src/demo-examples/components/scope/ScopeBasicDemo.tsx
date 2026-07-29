@@ -29,10 +29,6 @@ export const ScopeBasicDemo: React.FC = () => {
         ease: "inOutQuad",
       });
 
-      // Cleanup function (optional)
-      return () => {
-        console.log("[ScopeBasicDemo] Scope reverted or refreshed");
-      };
     });
   }, [isReady, add]);
 

@@ -22,6 +22,7 @@ import {
   useScopeContext,
 } from "../core";
 import { useDependencySignal } from './use-dependency-signal';
+import { useLatestRef } from './use-latest-ref';
 
 // =============================================================================
 // Hook Implementation
@@ -129,6 +130,29 @@ export function useAnimeTimer(
   } = options;
 
   const depsSignal = useDependencySignal(deps);
+  const latestOptionsRef = useLatestRef({
+    delay,
+    duration,
+    loop,
+    loopDelay,
+    alternate,
+    reversed,
+    autoplay,
+    frameRate,
+    playbackRate,
+    playbackEase,
+    persist,
+    onBegin,
+    onComplete,
+    onUpdate,
+    onRender,
+    onBeforeUpdate,
+    onLoop,
+    onPause,
+    trackLoopCount,
+    trackIterationTime,
+    autoUpdateRefs,
+  });
 
   // ==========================================================================
   // Mount State Management
@@ -192,29 +216,30 @@ export function useAnimeTimer(
 
     try {
       // Build timer config - note: frameRate is included for initial creation only
+      const currentOptions = latestOptionsRef.current;
       const config: Record<string, unknown> = {
-        delay,
-        duration,
-        loop,
-        loopDelay,
-        alternate,
-        reversed,
-        autoplay,
-        frameRate, // Only used for initial creation
-        playbackRate,
-        playbackEase,
-        persist,
+        delay: currentOptions.delay,
+        duration: currentOptions.duration,
+        loop: currentOptions.loop,
+        loopDelay: currentOptions.loopDelay,
+        alternate: currentOptions.alternate,
+        reversed: currentOptions.reversed,
+        autoplay: currentOptions.autoplay,
+        frameRate: currentOptions.frameRate, // Only used for initial creation
+        playbackRate: currentOptions.playbackRate,
+        playbackEase: currentOptions.playbackEase,
+        persist: currentOptions.persist,
       };
 
       // Wrap callbacks with state updates (only for lifecycle events, NOT onUpdate)
       config.onBegin = (timer: Timer) => {
         setTimerState(extractAnimationState(timer));
-        createSafeCallback(onBegin, "onBegin")?.(timer);
+        createSafeCallback(latestOptionsRef.current.onBegin, "onBegin")?.(timer);
       };
 
       config.onComplete = (timer: Timer) => {
         setTimerState(extractAnimationState(timer));
-        createSafeCallback(onComplete, "onComplete")?.(timer);
+        createSafeCallback(latestOptionsRef.current.onComplete, "onComplete")?.(timer);
       };
 
       config.onUpdate = (timer: Timer) => {
@@ -222,50 +247,48 @@ export function useAnimeTimer(
         // React state updates on every frame interfere with Anime.js timing.
         // Users should use refs for per-frame updates (like the vanilla JS docs example).
 
-        if (trackIterationTime) {
+        if (latestOptionsRef.current.trackIterationTime) {
           const time = timer.iterationCurrentTime ?? timer.iterationTime ?? timer.currentTime ?? 0;
           iterationTimeRef.current = time;
           setTrackedIterationTime(Math.round(time));
 
-          if (autoUpdateRefs && iterationTimeDisplayRef.current) {
+          if (latestOptionsRef.current.autoUpdateRefs && iterationTimeDisplayRef.current) {
             iterationTimeDisplayRef.current.textContent = String(Math.round(time));
           }
         }
 
-        createSafeCallback(onUpdate, "onUpdate")?.(timer);
+        createSafeCallback(latestOptionsRef.current.onUpdate, "onUpdate")?.(timer);
       };
 
       config.onRender = (timer: Timer) => {
         setTimerState(extractAnimationState(timer));
-        createSafeCallback(onRender, "onRender")?.(timer);
+        createSafeCallback(latestOptionsRef.current.onRender, "onRender")?.(timer);
       };
 
       config.onBeforeUpdate = (timer: Timer) => {
         setTimerState(extractAnimationState(timer));
-        createSafeCallback(onBeforeUpdate, "onBeforeUpdate")?.(timer);
+        createSafeCallback(latestOptionsRef.current.onBeforeUpdate, "onBeforeUpdate")?.(timer);
       };
 
       config.onLoop = (timer: Timer) => {
         setTimerState(extractAnimationState(timer));
 
-        if (trackLoopCount) {
+        if (latestOptionsRef.current.trackLoopCount) {
           loopCountRef.current += 1;
           setTrackedCount(loopCountRef.current);
 
-          if (autoUpdateRefs && countDisplayRef.current) {
+          if (latestOptionsRef.current.autoUpdateRefs && countDisplayRef.current) {
             countDisplayRef.current.textContent = String(loopCountRef.current);
           }
         }
 
-        createSafeCallback(onLoop, "onLoop")?.(timer);
+        createSafeCallback(latestOptionsRef.current.onLoop, "onLoop")?.(timer);
       };
 
-      if (onPause) {
-        config.onPause = (timer: Timer) => {
-          setTimerState(extractAnimationState(timer));
-          createSafeCallback(onPause, "onPause")?.(timer);
-        };
-      }
+      config.onPause = (timer: Timer) => {
+        setTimerState(extractAnimationState(timer));
+        createSafeCallback(latestOptionsRef.current.onPause, "onPause")?.(timer);
+      };
 
       // Clean undefined values
       Object.keys(config).forEach((key) => {
@@ -319,7 +342,7 @@ export function useAnimeTimer(
       }
       setIsReady(false);
     };
-  }, [enabled, optionsJson, depsSignal]);
+  }, [enabled, optionsJson, depsSignal, latestOptionsRef]);
 
   // ==========================================================================
   // Dynamic frameRate update (matches Anime.js docs pattern: timer.fps = value)
@@ -434,9 +457,8 @@ export function useAnimeTimer(
       },
       setPlaybackRate: (rate: number) => {
         if (timerRef.current) {
-          (
-            timerRef.current as unknown as Record<string, unknown>
-          ).playbackRate = rate;
+          (timerRef.current as unknown as Record<string, unknown>).speed = rate;
+          setTimerState(extractAnimationState(timerRef.current));
         }
       },
       setFrameRate: (fps: number) => {

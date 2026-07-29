@@ -33,7 +33,7 @@
  * @see https://animejs.com/documentation/adapters/
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { registerAnimeAdapter } from '../core/adapter-registry';
 import type {
   AnimeAdapterConfig,
@@ -51,13 +51,15 @@ export function useAnimeAdapter(
   config: AnimeAdapterConfig,
 ): UseAnimeAdapterReturn {
   const [adapter, setAdapter] = useState<AnimeAdapterInstance | null>(null);
+  const configRef = useRef(config);
+  configRef.current = config;
 
   // Register idempotently. `config.id` is the key — the same id always
   // returns the existing adapter, never a duplicate. We register in an effect
   // (not during render) to keep side effects out of the render phase, and
   // because adapter registration touches a module-level singleton.
   useEffect(() => {
-    const instance = registerAnimeAdapter(config);
+    const instance = registerAnimeAdapter(configRef.current);
     setAdapter(instance);
   }, [config.id]); // intentionally only re-run on id change; config is stable per id
 

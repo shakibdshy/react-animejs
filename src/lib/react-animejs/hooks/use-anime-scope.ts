@@ -227,6 +227,8 @@ export function useAnimeScope<T extends ScopeMediaQueries = ScopeMediaQueries>(
       }),
     [defaults, mediaQueries],
   );
+  const scopeConfigRef = useRef({ defaults, mediaQueries });
+  scopeConfigRef.current = { defaults, mediaQueries };
 
   // ==========================================================================
   // Scope Lifecycle
@@ -270,6 +272,7 @@ export function useAnimeScope<T extends ScopeMediaQueries = ScopeMediaQueries>(
     }
 
     try {
+      const currentConfig = scopeConfigRef.current;
       // Build scope config
        
       const scopeConfig: Record<string, any> = {};
@@ -278,12 +281,12 @@ export function useAnimeScope<T extends ScopeMediaQueries = ScopeMediaQueries>(
         scopeConfig.root = rootElement;
       }
 
-      if (defaults) {
-        scopeConfig.defaults = defaults;
+      if (currentConfig.defaults) {
+        scopeConfig.defaults = currentConfig.defaults;
       }
 
-      if (mediaQueries) {
-        scopeConfig.mediaQueries = mediaQueries;
+      if (currentConfig.mediaQueries) {
+        scopeConfig.mediaQueries = currentConfig.mediaQueries;
       }
 
       // Create the scope
@@ -291,7 +294,7 @@ export function useAnimeScope<T extends ScopeMediaQueries = ScopeMediaQueries>(
       scopeRef.current = scope;
 
       // Update matches state
-      const currentMatches = extractMatches(scope, mediaQueries);
+      const currentMatches = extractMatches(scope, currentConfig.mediaQueries);
       setMatches(currentMatches);
 
       // Process queued constructors
@@ -344,9 +347,7 @@ export function useAnimeScope<T extends ScopeMediaQueries = ScopeMediaQueries>(
   useEffect(() => {
     if (!isReady || !scopeRef.current || !mediaQueries) return;
 
-    // Poll for matches changes (Anime.js doesn't expose a change callback)
-    // This is a trade-off for React integration
-    const intervalId = setInterval(() => {
+    const syncMatches = () => {
       const scope = scopeRef.current;
       if (!scope) return;
 
@@ -359,7 +360,49 @@ export function useAnimeScope<T extends ScopeMediaQueries = ScopeMediaQueries>(
         setMethods({ ...scope.methods });
         onMediaChangeRef.current?.(currentMatches);
       }
-    }, 100); // Check every 100ms
+    };
+
+    syncMatches();
+
+    if (typeof window !== 'undefined' && 'matchMedia' in window) {
+      const mediaQueryLists = Object.values(mediaQueries).map((query) =>
+        window.matchMedia(query),
+      );
+      const listeners = mediaQueryLists.map((mediaQueryList) => {
+        const listener = () => {
+          scopeRef.current?.refresh();
+          syncMatches();
+        };
+
+        if ('addEventListener' in mediaQueryList) {
+          mediaQueryList.addEventListener('change', listener);
+        } else {
+          const legacyMediaQueryList = mediaQueryList as MediaQueryList & {
+            addListener: (listener: (event: MediaQueryListEvent) => void) => void;
+          };
+          legacyMediaQueryList.addListener(listener);
+        }
+
+        return { mediaQueryList, listener };
+      });
+
+      return () => {
+        listeners.forEach(({ mediaQueryList, listener }) => {
+          if ('removeEventListener' in mediaQueryList) {
+            mediaQueryList.removeEventListener('change', listener);
+          } else {
+            const legacyMediaQueryList = mediaQueryList as MediaQueryList & {
+              removeListener: (listener: (event: MediaQueryListEvent) => void) => void;
+            };
+            legacyMediaQueryList.removeListener(listener);
+          }
+        });
+      };
+    }
+
+    // Older/non-browser environments do not expose matchMedia events. Keep a
+    // low-frequency fallback so the hook remains reactive there.
+    const intervalId = setInterval(syncMatches, 100);
 
     return () => {
       clearInterval(intervalId);

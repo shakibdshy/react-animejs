@@ -25,17 +25,20 @@
  *
  * @see registry.d.ts `TargetAdapterEntry` in animejs
  */
-export interface AnimeAdapterProperty {
+export interface AnimeAdapterProperty<
+  TTarget extends object = Record<string, unknown>,
+  TTween = unknown,
+> {
   /** Read the current value of the property from the target. */
-  get: (target: any) => any;
+  get: (target: TTarget) => unknown;
   /** Write the interpolated value to the target. */
-  set: (target: any, value: number, tween: any) => void;
+  set: (target: TTarget, value: number, tween: TTween) => void;
   /**
    * Optional gate. When provided and returning falsy, this property is
    * skipped for the given target. Use to scope a property to a subset of
    * matching targets (e.g. only materials that have an `opacity` field).
    */
-  gate?: (target: any) => boolean;
+  gate?: (target: TTarget) => unknown;
 }
 
 /**
@@ -45,14 +48,17 @@ export interface AnimeAdapterProperty {
  * `Object3D` (position, rotation, scale) and another for `Material`
  * (opacity, color).
  */
-export interface AnimeAdapterTarget {
+export interface AnimeAdapterTarget<
+  TTarget extends object = Record<string, unknown>,
+  TTween = unknown,
+> {
   /**
    * Predicate that claims a target for this target-adapter. The first
    * target-adapter whose `detect` returns truthy wins (registration order).
    */
-  detect: (target: any) => boolean;
+  detect: (target: TTarget) => unknown;
   /** Properties to wire up for targets matching `detect`. */
-  properties: Record<string, AnimeAdapterProperty>;
+  properties: Record<string, AnimeAdapterProperty<TTarget, TTween>>;
 }
 
 /**
@@ -68,7 +74,10 @@ export interface AnimeAdapterTarget {
  * StrictMode double-invoke). anime.js itself has no unregister, so once an
  * `id` is registered it persists for the app's lifetime.
  */
-export interface AnimeAdapterConfig {
+export interface AnimeAdapterConfig<
+  TTarget extends object = Record<string, unknown>,
+  TTween = unknown,
+> {
   /**
    * Stable unique identifier for this adapter. Used to dedupe registrations
    * across React renders/mounts. Choose a descriptive name ('pixi',
@@ -81,14 +90,14 @@ export interface AnimeAdapterConfig {
    * performance: early-reject DOM nodes and unrelated objects so the per-
    * target adapters don't run on every animated element.
    */
-  detect?: (target: any) => boolean;
+  detect?: (target: TTarget) => unknown;
   /**
    * Target-adapter groups. Each defines a `detect` predicate and a set of
    * `properties`. Resolution order: target adapters first (in array order,
    * first match wins), then property resolvers (none here — for advanced
    * pattern-matching use `registerAdapter` from `animejs/adapters` directly).
    */
-  targets?: AnimeAdapterTarget[];
+  targets?: AnimeAdapterTarget<TTarget, TTween>[];
 }
 
 /**
@@ -96,12 +105,10 @@ export interface AnimeAdapterConfig {
  * `registerAdapter()`. Returned by `useAnimeAdapter` so consumers can
  * inspect/extend a registered adapter imperatively if needed.
  */
-export interface AnimeAdapterInstance {
-  detect: ((target: any) => boolean) | null;
+export interface AnimeAdapterInstance<TTarget extends object = Record<string, unknown>> {
+  detect: ((target: TTarget) => boolean) | null;
   targetAdapters: unknown[];
   propertyResolvers: unknown[];
-  registerTargetAdapter: (detect: (target: any) => boolean) => unknown;
-  registerPropertyResolver: (
-    resolver: (target: any, name: string) => unknown,
-  ) => void;
+  registerTargetAdapter: (detect: (target: TTarget) => unknown) => unknown;
+  registerPropertyResolver: (resolver: (target: TTarget, name: string) => unknown) => void;
 }

@@ -125,9 +125,6 @@ const scopeRef = useRef<AnimeScopeRef>(null);
               ease: "inOutQuad",
             });
 
-            return () => {
-              console.log("[ScopePropertiesDemo] Cleanup");
-            };
           }}
         >
           {/* Animated element */}

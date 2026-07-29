@@ -120,9 +120,6 @@ scopeRef.current?.refresh();`}
               });
             }
 
-            return () => {
-              console.log("[ScopeRefreshDemo] Cleanup");
-            };
           }}
           // Re-run when boxCount changes
           deps={[boxCount]}
