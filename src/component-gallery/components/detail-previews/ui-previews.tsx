@@ -22,14 +22,25 @@ const TooltipVariant = memo(function TooltipVariant({
       exit: { opacity: [1, 0] },
     },
     slide: {
-      enter: { opacity: [0, 1], translateY: [10, 0] },
-      exit: { opacity: [1, 0], translateY: [0, 10] },
+      enter: { opacity: [0, 1], translateX: [-16, 0] },
+      exit: { opacity: [1, 0], translateX: [0, -16] },
     },
     bounce: {
-      enter: { opacity: [0, 1], scale: [0.7, 1], translateY: [8, 0] },
-      exit: { opacity: [1, 0], scale: [1, 0.7], translateY: [0, 8] },
+      enter: { opacity: [0, 1], scale: [0.6, 1], translateY: [10, 0] },
+      exit: { opacity: [1, 0], scale: [1, 0.6], translateY: [0, 10] },
     },
   }[variant];
+
+  const durations: Record<typeof variant, number> = {
+    fade: 400,
+    slide: 450,
+    bounce: 600,
+  };
+  const eases: Record<typeof variant, string> = {
+    fade: 'outExpo',
+    slide: 'outQuart',
+    bounce: 'outBack',
+  };
 
   return (
     <div className="flex flex-col items-center gap-3">
@@ -37,7 +48,7 @@ const TooltipVariant = memo(function TooltipVariant({
         {variant}
       </span>
       <div
-        className="relative pt-10"
+        className="relative pt-6"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
@@ -47,8 +58,8 @@ const TooltipVariant = memo(function TooltipVariant({
               key="tip"
               enter={enterExit.enter}
               exit={enterExit.exit}
-              duration={variant === 'bounce' ? 350 : 200}
-              ease={variant === 'bounce' ? 'outBack' : 'outExpo'}
+              duration={durations[variant]}
+              ease={eases[variant]}
             >
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 landing-font-mono text-[10px] text-landing-bg bg-landing-accent px-2.5 py-1 rounded-md shadow-lg whitespace-nowrap pointer-events-none">
                 {label}
@@ -73,8 +84,8 @@ export const TooltipPreview = memo(function TooltipPreview(_props: PreviewProps)
     <PreviewCard title="Tooltip" description="Hover any target to reveal">
       <div className="flex items-start justify-center gap-8 w-full">
         <TooltipVariant label="Simple fade" variant="fade" />
-        <TooltipVariant label="Slide up" variant="slide" />
-        <TooltipVariant label="Bounce in" variant="bounce" />
+        <TooltipVariant label="Slides from left" variant="slide" />
+        <TooltipVariant label="Bounces in" variant="bounce" />
       </div>
     </PreviewCard>
   );

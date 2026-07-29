@@ -445,33 +445,34 @@ const nextGrid = () => {
     summary: "Hover-triggered tooltip with three animation variants: Fade, Slide, and Bounce.",
     code: `const [open, setOpen] = useState(false)
 
-// Three variants — pick one by changing enter/exit keyframes:
-// Fade:    { opacity: [0, 1] }
-// Slide:   { opacity: [0, 1], translateY: [10, 0] }
-// Bounce:  { opacity: [0, 1], scale: [0.7, 1], translateY: [8, 0] }
+// Three variants — pick one by changing enter/exit keyframes + duration:
+// Fade:    { opacity: [0, 1] }                       400ms  outExpo
+// Slide:   { opacity: [0, 1], translateX: [-16, 0] }  450ms outQuart
+// Bounce:  { opacity: [0, 1], scale: [0.6, 1],
+//            translateY: [10, 0] }                     600ms outBack
 
 <div onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
   <AnimePresence mode="sync" initial={false}>
     {open && (
       <AnimePresenceChild
         key="tip"
-        enter={{ opacity: [0, 1], scale: [0.7, 1], translateY: [8, 0] }}
-        exit={{ opacity: [1, 0], scale: [1, 0.7], translateY: [0, 8] }}
-        duration={350}
+        enter={{ opacity: [0, 1], scale: [0.6, 1], translateY: [10, 0] }}
+        exit={{ opacity: [1, 0], scale: [1, 0.6], translateY: [0, 10] }}
+        duration={600}
         ease="outBack"
       >
-        <span className="tooltip">Bounce in</span>
+        <span className="tooltip">Bounces in</span>
       </AnimePresenceChild>
     )}
   </AnimePresence>
   <button>Hover me</button>
 </div>`,
     props: [
-      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes — opacity, translateY, scale" },
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes — opacity, translateX, scale, translateY" },
       { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Exit keyframes (mirror of enter)" },
       { name: "mode", type: "'sync'|'wait'|'popLayout'", default: "'sync'", desc: "Enter/exit sequencing" },
-      { name: "duration", type: "number", default: "200-350", desc: "Enter/exit ms (higher for bounce)" },
-      { name: "ease", type: "string", default: "'outExpo'|'outBack'", desc: "outExpo for fade/slide, outBack for bounce" },
+      { name: "duration", type: "number", default: "400-600", desc: "Enter/exit ms (400 fade, 450 slide, 600 bounce)" },
+      { name: "ease", type: "string", default: "'outExpo'|'outQuart'|'outBack'", desc: "Per-variant easing" },
     ],
   },
 
