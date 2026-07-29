@@ -6,42 +6,75 @@ import { DemoButton, PreviewCard } from './shared';
 import { cn } from './utils';
 import type { PreviewProps } from './types';
 
-export const TooltipPreview = memo(function TooltipPreview(_props: PreviewProps) {
+/** A single tooltip with a configurable animation variant. */
+const TooltipVariant = memo(function TooltipVariant({
+  label,
+  variant,
+}: {
+  label: string;
+  variant: 'fade' | 'slide' | 'bounce';
+}) {
   const [open, setOpen] = useState(false);
 
+  const enterExit = {
+    fade: {
+      enter: { opacity: [0, 1] },
+      exit: { opacity: [1, 0] },
+    },
+    slide: {
+      enter: { opacity: [0, 1], translateY: [10, 0] },
+      exit: { opacity: [1, 0], translateY: [0, 10] },
+    },
+    bounce: {
+      enter: { opacity: [0, 1], scale: [0.7, 1], translateY: [8, 0] },
+      exit: { opacity: [1, 0], scale: [1, 0.7], translateY: [0, 8] },
+    },
+  }[variant];
+
   return (
-    <PreviewCard
-      title="Tooltip"
-      description="Hover or tap the target"
-      controls={
-        <DemoButton onClick={() => setOpen((o) => !o)} variant="accent" small>
-          {open ? 'Hide' : 'Reveal'}
-        </DemoButton>
-      }
-    >
-      <div className="relative flex items-center justify-center py-10">
+    <div className="flex flex-col items-center gap-3">
+      <span className="landing-font-mono text-[10px] tracking-widest uppercase text-landing-muted/60">
+        {variant}
+      </span>
+      <div
+        className="relative pt-10"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
+        <AnimePresence mode="sync" initial={false}>
+          {open && (
+            <AnimePresenceChild
+              key="tip"
+              enter={enterExit.enter}
+              exit={enterExit.exit}
+              duration={variant === 'bounce' ? 350 : 200}
+              ease={variant === 'bounce' ? 'outBack' : 'outExpo'}
+            >
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 landing-font-mono text-[10px] text-landing-bg bg-landing-accent px-2.5 py-1 rounded-md shadow-lg whitespace-nowrap pointer-events-none">
+                {label}
+                <div className="absolute left-1/2 -translate-x-1/2 -bottom-1 w-2 h-2 bg-landing-accent rotate-45" />
+              </div>
+            </AnimePresenceChild>
+          )}
+        </AnimePresence>
         <button
-          onMouseEnter={() => setOpen(true)}
-          onMouseLeave={() => setOpen(false)}
           onClick={() => setOpen((o) => !o)}
-          className="px-4 py-2 rounded-lg border border-landing-border bg-landing-surface text-sm text-landing-fg hover:border-landing-accent/40 transition-colors"
+          className="px-3 py-1.5 rounded-lg border border-landing-border bg-landing-surface text-xs text-landing-fg hover:border-landing-accent/40 transition-colors"
         >
-          Hover or tap me
+          Hover me
         </button>
-        <Anime
-          opacity={open ? [0, 1] : [1, 0]}
-          translateY={open ? [8, 0] : [0, 8]}
-          scale={open ? [0.9, 1] : [1, 0.9]}
-          duration={220}
-          ease="outBack"
-          deps={[open]}
-          className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full pointer-events-none"
-        >
-          <div className="landing-font-mono text-[11px] text-landing-bg bg-landing-accent px-2.5 py-1.5 rounded-md shadow-lg whitespace-nowrap">
-            Helpful tip
-            <div className="absolute left-1/2 -translate-x-1/2 -bottom-1 w-2 h-2 bg-landing-accent rotate-45" />
-          </div>
-        </Anime>
+      </div>
+    </div>
+  );
+});
+
+export const TooltipPreview = memo(function TooltipPreview(_props: PreviewProps) {
+  return (
+    <PreviewCard title="Tooltip" description="Hover any target to reveal">
+      <div className="flex items-start justify-center gap-8 w-full">
+        <TooltipVariant label="Simple fade" variant="fade" />
+        <TooltipVariant label="Slide up" variant="slide" />
+        <TooltipVariant label="Bounce in" variant="bounce" />
       </div>
     </PreviewCard>
   );

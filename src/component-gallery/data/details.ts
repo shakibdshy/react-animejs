@@ -441,26 +441,37 @@ const nextGrid = () => {
   },
 
   tooltip: {
-    component: "Anime",
-    summary: "Hover or focus trigger with spring enter/exit and smart placement.",
+    component: "AnimePresence",
+    summary: "Hover-triggered tooltip with three animation variants: Fade, Slide, and Bounce.",
     code: `const [open, setOpen] = useState(false)
 
-<Anime
-  opacity={open ? [0, 1] : [1, 0]}
-  translateY={open ? [6, 0] : [0, 6]}
-  scale={open ? [0.9, 1] : [1, 0.9]}
-  duration={220}
-  ease="outBack"
-  deps={[open]}
->
-  <span className="tooltip-pop">Tooltip text</span>
-</Anime>`,
+// Three variants — pick one by changing enter/exit keyframes:
+// Fade:    { opacity: [0, 1] }
+// Slide:   { opacity: [0, 1], translateY: [10, 0] }
+// Bounce:  { opacity: [0, 1], scale: [0.7, 1], translateY: [8, 0] }
+
+<div onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+  <AnimePresence mode="sync" initial={false}>
+    {open && (
+      <AnimePresenceChild
+        key="tip"
+        enter={{ opacity: [0, 1], scale: [0.7, 1], translateY: [8, 0] }}
+        exit={{ opacity: [1, 0], scale: [1, 0.7], translateY: [0, 8] }}
+        duration={350}
+        ease="outBack"
+      >
+        <span className="tooltip">Bounce in</span>
+      </AnimePresenceChild>
+    )}
+  </AnimePresence>
+  <button>Hover me</button>
+</div>`,
     props: [
-      { name: "opacity", type: "number[]", default: "[0, 1]", desc: "Fade keyframes" },
-      { name: "translateY", type: "number[]", default: "[6, 0]", desc: "Slide-in offset" },
-      { name: "scale", type: "number[]", default: "[0.9, 1]", desc: "Pop scale" },
-      { name: "duration", type: "number", default: "220", desc: "Enter/exit ms" },
-      { name: "ease", type: "string", default: "outBack", desc: "Spring-like easing" },
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes — opacity, translateY, scale" },
+      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Exit keyframes (mirror of enter)" },
+      { name: "mode", type: "'sync'|'wait'|'popLayout'", default: "'sync'", desc: "Enter/exit sequencing" },
+      { name: "duration", type: "number", default: "200-350", desc: "Enter/exit ms (higher for bounce)" },
+      { name: "ease", type: "string", default: "'outExpo'|'outBack'", desc: "outExpo for fade/slide, outBack for bounce" },
     ],
   },
 
