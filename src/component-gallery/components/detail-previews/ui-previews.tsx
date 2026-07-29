@@ -74,24 +74,17 @@ export const DropdownMenuPreview = memo(function DropdownMenuPreview(_props: Pre
         </DemoButton>
       }
     >
-      <div ref={containerRef} className="relative flex items-center justify-center py-6">
-        <button
-          onClick={() => setOpen((o) => !o)}
-          className="px-4 py-2 rounded-lg border border-landing-border bg-landing-surface text-sm text-landing-fg hover:border-landing-accent/40 transition-colors flex items-center gap-2"
-        >
-          Menu
-          <span className="text-landing-muted text-xs">{open ? '▲' : '▼'}</span>
-        </button>
+      <div ref={containerRef} className="flex flex-col items-center justify-center py-6 gap-2">
         <AnimePresence mode="sync">
           {open && (
             <AnimePresenceChild
               key="dropdown"
-              enter={{ opacity: [0, 1], scale: [0.95, 1], height: [0, 'auto'] }}
-              exit={{ opacity: [1, 0], scale: [1, 0.95], height: ['auto', 0] }}
+              enter={{ opacity: [0, 1], height: [0, 'auto'] }}
+              exit={{ opacity: [1, 0], height: ['auto', 0] }}
               duration={220}
               ease="outExpo"
             >
-              <div className="absolute top-full mt-2 w-40 rounded-lg border border-landing-border bg-landing-surface shadow-xl overflow-hidden z-10">
+              <div className="w-40 rounded-lg border border-landing-border bg-landing-surface shadow-xl overflow-hidden">
                 {items.map((item, i) => (
                   <Anime
                     key={item}
@@ -114,6 +107,13 @@ export const DropdownMenuPreview = memo(function DropdownMenuPreview(_props: Pre
             </AnimePresenceChild>
           )}
         </AnimePresence>
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className="px-4 py-2 rounded-lg border border-landing-border bg-landing-surface text-sm text-landing-fg hover:border-landing-accent/40 transition-colors flex items-center gap-2"
+        >
+          Menu
+          <span className="text-landing-muted text-xs">{open ? '▲' : '▼'}</span>
+        </button>
       </div>
     </PreviewCard>
   );
