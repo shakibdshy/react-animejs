@@ -70,13 +70,15 @@ export const DropdownMenuPreview = memo(function DropdownMenuPreview(_props: Pre
       description="Click the trigger"
       overflow="visible"
       controls={
-        <DemoButton
-          onClick={() => setOpen(false)}
-          variant="accent"
-          small
-        >
-          {open ? 'Close' : 'Open'}
-        </DemoButton>
+        <div onPointerDown={(e) => e.stopPropagation()}>
+          <DemoButton
+            onClick={() => setOpen((o) => !o)}
+            variant="accent"
+            small
+          >
+            {open ? 'Close' : 'Open'}
+          </DemoButton>
+        </div>
       }
     >
       <div ref={containerRef} className="flex items-center justify-center py-6">
