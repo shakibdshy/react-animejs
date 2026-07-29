@@ -175,41 +175,33 @@ function AnimatedChild({
 
   // Pick the animation for the current state — enter or exit
   const rawAnimationProps = isPresent ? enter : exit;
-
-  // Resolve any 'auto' size values (height, width, etc.) to measured pixels.
-  // anime.js can't interpolate 'auto', so we measure the element's natural
-  // content size before the animation runs. The resolved props are re-derived
-  // whenever isPresent flips (switching between enter/exit) or the node mounts.
-  const [resolvedProps, setResolvedProps] = useState(rawAnimationProps);
   const needsAutoSize = hasAutoSize(rawAnimationProps);
 
+  // Resolve 'auto' size values synchronously during render. nodeRef.current is
+  // valid on every render after the first commit (the ref callback fires during
+  // commit). So when isPresent flips (triggering a re-render), the measured
+  // height is immediately available — no async state round-trip, no race
+  // between resolution and controls.restart().
+  //
+  // On the very first render nodeRef.current is null, so we can't measure yet.
+  // We use a tick state to force one re-render after mount, which gives the ref
+  // a chance to populate. After that, all renders have a valid measurement.
+  const [measured, setMeasured] = useState(false);
   useLayoutEffect(() => {
-    if (!needsAutoSize) {
-      setResolvedProps(rawAnimationProps);
-      return;
-    }
-    // Measure the node's natural size, then resolve 'auto' → pixels.
-    // The node is rendered (shouldRender is true) by the time this runs.
-    setResolvedProps(resolveAutoSize(rawAnimationProps, nodeRef.current));
-    // Re-run when isPresent flips (enter↔exit) — the raw props change.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPresent, needsAutoSize, rawAnimationProps]);
+    if (needsAutoSize && !measured) setMeasured(true);
+  }, [needsAutoSize, measured]);
+
+  const animationProps = needsAutoSize
+    ? resolveAutoSize(rawAnimationProps, measured ? nodeRef.current : null)
+    : rawAnimationProps;
 
   const { ref, controls, state } = useAnime({
-    ...(resolvedProps || {}),
+    ...(animationProps || {}),
     duration,
     ease,
     delay,
-    autoplay: !needsAutoSize, // defer autoplay until measured props are ready
+    autoplay: true,
   });
-
-  // Once resolved props are set (after measurement), play/restart the animation.
-  // This handles both enter (mount) and exit (unmount) when auto-size is involved.
-  useEffect(() => {
-    if (needsAutoSize && resolvedProps !== rawAnimationProps) {
-      controls.restart();
-    }
-  }, [needsAutoSize, resolvedProps, rawAnimationProps, controls]);
 
   // Handle mounting
   useEffect(() => {
@@ -252,7 +244,7 @@ function AnimatedChild({
     if (isPresent && state.completed && needsAutoSize && nodeRef.current) {
       const el = nodeRef.current;
       for (const prop of AUTO_SIZE_PROPS) {
-        const val = resolvedProps?.[prop as AutoSizeProp];
+        const val = animationProps?.[prop as AutoSizeProp];
         // Only release if this prop was auto-resolved (it's now a number).
         if (typeof val === "number") {
           if (prop === "height" || prop === "maxHeight" || prop === "minHeight") {
@@ -261,24 +253,39 @@ function AnimatedChild({
         }
       }
     }
-  }, [isPresent, state.completed, needsAutoSize, resolvedProps]);
+  }, [isPresent, state.completed, needsAutoSize, animationProps]);
 
-  // Handle exit animation completion
+  // Track whether the exit animation has started. state.completed carries over
+  // from the enter animation, so we can't rely on it alone to know the EXIT
+  // finished. We reset this ref when isPresent flips to false, and set it
+  // once controls.restart() fires the exit animation.
+  const exitStartedRef = useRef(false);
+
+  // Reset exit tracking when the child becomes present again (re-entering).
   useEffect(() => {
-    if (!isPresent && state.completed) {
+    if (isPresent) {
+      exitStartedRef.current = false;
+    }
+  }, [isPresent]);
+
+  // Handle exit animation completion — only unmount after the EXIT animation
+  // has actually started AND completed, not from stale enter-completed state.
+  useEffect(() => {
+    if (!isPresent && exitStartedRef.current && state.completed) {
       setShouldRender(false);
       onExitComplete?.();
     }
   }, [isPresent, state.completed, onExitComplete]);
 
-  // Play exit animation when removed. For auto-size exits, the resolution
-  // effect above (line 207) handles playback after measuring. For normal
-  // exits, restart the animation directly.
+  // Play exit animation when removed. The animation props have already been
+  // resolved synchronously during render (including 'auto' → measured pixels
+  // for the exit keyframes), so just restart to play them.
   useEffect(() => {
-    if (!isPresent && shouldRender && !needsAutoSize) {
+    if (!isPresent && shouldRender) {
+      exitStartedRef.current = true;
       controls.restart();
     }
-  }, [isPresent, shouldRender, controls, needsAutoSize]);
+  }, [isPresent, shouldRender, controls]);
 
   if (!shouldRender) {
     return null;
