@@ -18,7 +18,7 @@ import { useActiveSection } from './hooks/use-active-section';
 import { componentReferences, hookReferences } from './reference-data';
 import { ReferenceSection } from './components/reference-section';
 
-const installCode = `pnpm add animejs`;
+const installCode = `pnpm add @shakibdshy/react-animejs animejs`;
 
 const importCode = `import {
   useAnime,

@@ -11,7 +11,7 @@ const TABS = [
   },
   {
     label: 'Install',
-    body: 'pnpm add animejs — then import from @shakibdshy/react-animejs. React 19+ and anime.js v4.',
+    body: 'pnpm add @shakibdshy/react-animejs animejs — then import from @shakibdshy/react-animejs. React 19+ and anime.js v4.',
   },
   {
     label: 'Learn',
