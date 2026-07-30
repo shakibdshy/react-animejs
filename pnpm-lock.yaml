@@ -12,8 +12,8 @@ importers:
         specifier: ^1.17.0
         version: 1.29.0(zod@4.2.1)
       '@shakibdshy/react-animejs':
-        specifier: link:../react-animejs-package
-        version: link:../react-animejs-package
+        specifier: ^1.0.0
+        version: 1.0.0(animejs@4.5.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@tailwindcss/vite':
         specifier: ^4.0.6
         version: 4.2.2(vite@7.3.1(@types/node@22.19.15)(lightningcss@1.32.0)(tsx@4.21.0))
@@ -812,6 +812,14 @@ packages:
     resolution: {integrity: sha512-lWMnixq/QzxyhTV6NjQJ4SFo1J6PvOX8vUx5Wb4bBPsEb+8xZ89Bz6kOXpfXj9ak9AHTQVQzlgzBEc1SyM27xQ==}
     cpu: [x64]
     os: [win32]
+
+  '@shakibdshy/react-animejs@1.0.0':
+    resolution: {integrity: sha512-ZctjO40u6tRzb8KSuiHlpuHiy8GfxPQSA7gz+YqFxFxw4lLD5DTWgOdDs9mYi5bG1HNAGqCJ05fDBIfv2oinhA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      animejs: '>=4.5.0'
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
 
   '@solid-primitives/event-listener@2.4.5':
     resolution: {integrity: sha512-nwRV558mIabl4yVAhZKY8cb6G+O1F0M6Z75ttTu5hk+SxdOnKSGj+eetDIu7Oax1P138ZdUU01qnBPR8rnxaEA==}
@@ -3900,6 +3908,12 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.60.1':
     optional: true
+
+  '@shakibdshy/react-animejs@1.0.0(animejs@4.5.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      animejs: 4.5.0
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
 
   '@solid-primitives/event-listener@2.4.5(solid-js@1.9.12)':
     dependencies:
