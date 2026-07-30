@@ -74,21 +74,6 @@ The demo installs the package from the npm registry like any other consumer:
 }
 ```
 
-### Developing the package and demo together
-
-By default the demo uses the published version. For local development where edits to the package hot-reload into the demo, temporarily link it:
-
-```bash
-# In the package folder
-cd ../react-animejs-package
-pnpm build          # produces dist/
-npm link
-
-# In the demo folder
-cd ../react-animejs-demo-docs
-npm link @shakibdshy/react-animejs
-```
-
 Run `pnpm dev` in the package (`tsup --watch`) alongside the demo's `pnpm dev` for live rebuilding. **Switch back to the versioned dependency (`pnpm install`) before pushing** so Vercel can build from the registry.
 
 ## 📁 Project structure
