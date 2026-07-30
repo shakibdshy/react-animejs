@@ -5,44 +5,52 @@ export const demoDetails = {
   "basic-animation": {
     component: "useAnime",
     summary: "Animate targets with CSS selectors, stagger, easing, and callbacks.",
-    code: `useAnime({
+    code: `const { controls } = useAnime({
   selector: '.box',
+  // Per-segment durations live inside keyframe objects, not at the top level.
   translateX: [{ to: 120, duration: 600 }, { to: 0, duration: 400 }],
   scale: [{ to: 1.2, duration: 300 }, { to: 1, duration: 300 }],
   stagger: 80,
   ease: 'inOutQuad',
+  autoplay: false, // trigger manually via controls.restart()
 })`,
     props: [
       { name: "selector", type: "string", default: "-", desc: "CSS selector to target" },
-      { name: "translateX", type: "number[]", default: "-", desc: "Horizontal translation keyframes" },
+      { name: "translateX", type: "object[]", default: "-", desc: "Keyframes with per-segment { to, duration }" },
       { name: "stagger", type: "number", default: "0", desc: "Stagger delay between targets" },
-      { name: "ease", type: "string", default: "linear", desc: "Easing function" },
-      { name: "duration", type: "number", default: "1000", desc: "Animation duration in ms" },
+      { name: "ease", type: "string", default: "'inOutQuad'", desc: "Easing function" },
+      { name: "autoplay", type: "boolean", default: "false", desc: "Start on mount (false = trigger via controls)" },
+      { name: "controls.restart", type: "function", default: "-", desc: "Replay the animation" },
     ],
   },
 
   "svg-morph": {
     component: "AnimeMorph",
     summary: "Morph between different SVG path shapes smoothly.",
-    code: `<AnimeMorph target={targetRef} duration={2000} alternate loop autoplay>
+    code: `<AnimeMorph target={targetRef} duration={800} ease="inOutQuad" alternate loop autoplay deps={[shape]}>
   <polygon points={shapeA} />
 </AnimeMorph>`,
     props: [
       { name: "target", type: "RefObject", default: "-", desc: "Target polygon/path ref" },
       { name: "duration", type: "number", default: "1000", desc: "Morph duration in ms" },
-      { name: "ease", type: "string", default: "linear", desc: "Easing function" },
+      { name: "ease", type: "string", default: "'inOutQuad'", desc: "Easing function" },
+      { name: "alternate", type: "boolean", default: "false", desc: "Reverse direction each iteration" },
+      { name: "loop", type: "boolean", default: "false", desc: "Loop the morph" },
+      { name: "deps", type: "unknown[]", default: "[]", desc: "Re-run when the shape changes" },
     ],
   },
   "svg-draw": {
     component: "AnimeDraw",
     summary: "Animate SVG path drawing with stroke-dashoffset.",
-    code: `<AnimeDraw draw={['0 0', '0 1', '1 1']} duration={2000} loop autoplay>
+    code: `<AnimeDraw draw={['0 0', '0 1', '1 1']} delay={index * 100} duration={2000} ease="inOutQuad" loop autoplay>
   <path d={svgPath} stroke="currentColor" strokeWidth={2} />
 </AnimeDraw>`,
     props: [
       { name: "draw", type: "string[]", default: "-", desc: "Draw range keyframes" },
       { name: "duration", type: "number", default: "1000", desc: "Draw duration in ms" },
-      { name: "strokeWidth", type: "number", default: "2", desc: "Stroke width" },
+      { name: "ease", type: "string", default: "'inOutQuad'", desc: "Easing function" },
+      { name: "delay", type: "number", default: "0", desc: "Start delay (use index * N to stagger)" },
+      { name: "loop", type: "boolean", default: "false", desc: "Loop the draw" },
     ],
   },
   "svg-motion-path": {
@@ -64,10 +72,8 @@ export const demoDetails = {
     code: `const { controls, state, isRunning } = useAnimeTimer({
   duration: 1000,
   loop: true,
-  direction: 'alternate',
-  frameRate: 60,
-  onComplete: () => {},
-  onUpdate: ({ progress, currentTime }) => {},
+  autoplay: true, // start immediately; pause/restart via controls
+  frameRate: 30,
 })`,
     props: [
       { name: "duration", type: "number", default: "1000", desc: "Timer duration in ms" },
@@ -78,7 +84,9 @@ export const demoDetails = {
       { name: "controls.play", type: "function", default: "-", desc: "Start/resume playback" },
       { name: "controls.pause", type: "function", default: "-", desc: "Pause playback" },
       { name: "controls.restart", type: "function", default: "-", desc: "Restart timer" },
+      { name: "state.currentTime", type: "number", default: "-", desc: "Elapsed ms" },
       { name: "state.progress", type: "number", default: "-", desc: "Current progress 0→1" },
+      { name: "state.currentIteration", type: "number", default: "-", desc: "Loop iteration count" },
     ],
   },
 
@@ -86,9 +94,9 @@ export const demoDetails = {
     component: "AnimeTimeline",
     summary: "Sequenced timeline animations with sync, labels, and imperative methods.",
     code: `const entries = [
-  { targets: circleRef, translateX: [0, 100], duration: 800, position: 0 },
-  { targets: diamondRef, translateX: [0, 100], rotate: ['0turn', '1turn'], position: 0 },
-  { targets: sqRef, translateX: [0, 100], position: 400 },
+  { targets: circleRef, translateX: [0, 60, 0], duration: 1200, ease: 'inOutQuad', position: 0 },
+  { targets: diamondRef, translateX: [0, 60, 0], rotate: ['0turn', '0.5turn', '0turn'], duration: 1200, ease: 'inOutQuad', position: 0 },
+  { targets: sqRef, translateX: [0, 60, 0], scale: [1, 1.15, 1], duration: 1200, ease: 'inOutQuad', position: 200 },
 ];
 <AnimeTimeline autoplay={false} entries={entries}>
   {({ controls, state }) => (
@@ -100,6 +108,7 @@ export const demoDetails = {
       { name: "entries[].targets", type: "Ref | string", default: "-", desc: "Animation target" },
       { name: "entries[].position", type: "number | string", default: "-", desc: "Position offset or label" },
       { name: "entries[].duration", type: "number", default: "1000", desc: "Step duration in ms" },
+      { name: "entries[].ease", type: "string", default: "'inOutQuad'", desc: "Per-entry easing" },
       { name: "autoplay", type: "boolean", default: "false", desc: "Auto-start on mount" },
       { name: "controls.restart", type: "function", default: "-", desc: "Restart timeline" },
       { name: "state.progress", type: "number", default: "-", desc: "Current progress 0→1" },
@@ -155,21 +164,26 @@ export const demoDetails = {
 })
 
 const p = Math.max(0, Math.min(1, progress))
+const t = p * TOTAL // TOTAL = (slides.length - 1) * STEP + DELAY
 
+// Each slide rotates in/out as a rolodex card. First & last slides have
+// special-cased branches (no preceding/following card).
 function getRotationX(i: number): number {
   const outStart = i * STEP + DELAY
   const outEnd   = outStart + DUR
   const inStart  = (i - 1) * STEP + DELAY
   const inEnd    = inStart + DUR
 
-  if (t >= outStart && t < outEnd) {
-    const s = (t - outStart) / DUR; return -s * 90
+  if (i === 0) {
+    if (t <= outStart) return 0
+    if (t >= outEnd) return 90
+    return ((t - outStart) / DUR) * 90
   }
-  if (t >= outEnd && t < inStart) { return -90 }
-  if (t >= inStart && t < inEnd) {
-    const s = (t - inStart) / DUR; return 90 - s * 90
-  }
-  return 0
+  if (t <= inStart) return -90
+  if (t <= inEnd) return -90 + ((t - inStart) / DUR) * 90
+  if (t <= outStart) return 0
+  if (t >= outEnd) return 90
+  return ((t - outStart) / DUR) * 90
 }
 
 // ref → observed trigger element
@@ -229,7 +243,7 @@ const nextGrid = () => {
       setGrid((prev) => (prev % 4) + 1);
     });
   });
-} satisfies Record<DemoId, DemoDetail>;
+}
 
 <AnimeLayout
   ref={layoutRef}
@@ -253,190 +267,307 @@ const nextGrid = () => {
   },
 
   "scope": {
-    component: "useAnimeScope",
-    summary: "Animation scopes with media queries, methods, and keepTime support.",
-    code: `const { scope, scopeRef } = useAnimeScope({
-  rootRef,
-  defaults: { duration: 400 },
-  mediaQueries: { '(min-width: 768px)': { duration: 800 } },
-  onScopeReady: (scope) => {},
-})`,
+    component: "useAnime",
+    summary: "Scoped animation contexts — one useAnime call targets many elements via a selector.",
+    code: `// A single useAnime() with a CSS selector scopes the animation to every
+// matching element inside the component. \`stagger\` ripples the tween across
+// the matched targets. autoplay:false + controls.restart() = click-to-play.
+const { controls } = useAnime({
+  selector: '.scope-dot',
+  scale: [
+    { to: 1.5, duration: 200 },
+    { to: 1, duration: 300 },
+  ],
+  stagger: 50,
+  autoplay: false,
+})
+
+// Trigger re-runs the same scoped tween against all dots.
+<button onClick={() => controls.restart()}>Trigger</button>`,
     props: [
-      { name: "rootRef", type: "RefObject", default: "-", desc: "Scope root element ref" },
-      { name: "defaults", type: "object", default: "-", desc: "Default animation parameters" },
-      { name: "mediaQueries", type: "Record<string, object>", default: "-", desc: "Media query overrides" },
-      { name: "keepTime", type: "boolean", default: "false", desc: "Preserve timing across re-renders" },
-      { name: "scope.revert", type: "function", default: "-", desc: "Revert all scoped animations" },
-      { name: "scope.refresh", type: "function", default: "-", desc: "Refresh scope state" },
-      { name: "scope.add", type: "function", default: "-", desc: "Add scoped animation" },
+      { name: "selector", type: "string", default: "-", desc: "CSS selector scoping the animation to multiple elements" },
+      { name: "scale", type: "object[]", default: "-", desc: "Keyframes with per-segment { to, duration }" },
+      { name: "stagger", type: "number", default: "0", desc: "Delay ripple between matched targets" },
+      { name: "autoplay", type: "boolean", default: "false", desc: "Start on mount (false = trigger via controls)" },
+      { name: "controls.restart", type: "function", default: "-", desc: "Re-run the scoped animation" },
     ],
   },
 
   "split-text": {
-    component: "useSplitText",
-    summary: "Text splitting into chars, words, lines with CJK support and effects.",
-    code: `const { ref } = useSplitText({
-  type: 'chars,words,lines',
-  tag: 'span',
-  aria: true,
-  onSetup: ({ chars, words }) => {
-    animate(chars, { translateY: [20, 0], opacity: [0, 1], stagger: 30 })
-  },
-})`,
+    component: "SplitText",
+    summary: "Declarative text splitting into chars/words/lines, animated via SplitTextEntry inside an AnimeTimeline.",
+    code: `// Declarative SplitText + SplitTextEntry + AnimeTimeline. The animation is
+// bound to the split elements themselves, so it reliably targets characters.
+const timelineRef = useRef<AnimeTimelineRef>(null);
+const splitRef = useRef<SplitTextRef>(null);
+
+<AnimeTimeline ref={timelineRef} autoplay={false} defaults={{ ease: 'outBack', duration: 600 }}>
+  <SplitText ref={splitRef} params={{ lines: true, words: true, chars: true }}>
+    <p>SplitText</p>
+  </SplitText>
+
+  <SplitTextEntry
+    splitRef={splitRef}
+    splitMode="chars"
+    opacity={[0, 1]}
+    translateY={[40, 0]}
+    scale={[0.8, 1]}
+    stagger={40}
+  />
+</AnimeTimeline>
+
+// Re-trigger: timelineRef.current?.controls.restart()`,
     props: [
-      { name: "type", type: "string", default: "chars", desc: "Split type: chars, words, lines" },
-      { name: "tag", type: "string", default: "span", desc: "Wrapper element tag" },
-      { name: "aria", type: "boolean", default: "false", desc: "Add accessibility attributes" },
-      { name: "letterSpacing", type: "number", default: "0", desc: "Letter spacing adjustment" },
-      { name: "splitLength", type: "string", default: "-", desc: "Custom split pattern" },
-      { name: "onSetup", type: "(result) => void", default: "-", desc: "Setup callback with split elements" },
+      { name: "params", type: "object", default: "-", desc: "What to split: { lines, words, chars }" },
+      { name: "splitMode", type: "'chars'|'words'|'lines'", default: "-", desc: "Which split units SplitTextEntry animates" },
+      { name: "translateY", type: "number[]", default: "[40, 0]", desc: "Per-unit rise" },
+      { name: "scale", type: "number[]", default: "[0.8, 1]", desc: "Per-unit scale" },
+      { name: "stagger", type: "number", default: "40", desc: "Delay ripple between units" },
+      { name: "defaults.ease", type: "string", default: "'outBack'", desc: "Timeline-wide easing" },
+      { name: "autoplay", type: "boolean", default: "false", desc: "false = trigger via controls.restart()" },
     ],
   },
 
   "toggle-switch": {
-    component: "useAnime",
-    summary: "Animated toggle switch with styled and disabled states.",
-    code: `const { controls } = useAnime({
-  selector: '.thumb',
-  translateX: checked ? 20 : 0,
-  backgroundColor: checked ? '#10b981' : '#374151',
-  duration: 300,
-  ease: 'outQuad',
-  autoplay: false,
-})`,
+    component: "Anime",
+    summary: "Springy toggle: track color cross-fade, thumb slide + squash, and a ripple on every flip.",
+    code: `// travel = track width - height, so the thumb hugs both edges symmetrically.
+const travel = dims.width - dims.height;
+
+{/* Thumb — slides with a springy settle (outBack) + subtle squash */}
+<Anime autoplay duration={360} ease="outBack"
+  translateX={isChecked ? travel : 0}
+  scaleX={[1, 1.12, 1]}
+>
+  <div className="thumb" />
+</Anime>
+
+{/* Track — color cross-fade */}
+<Anime autoplay duration={280} ease="outQuad"
+  backgroundColor={isChecked ? 'var(--landing-accent)' : 'var(--landing-surface)'}
+>
+  <div className="track" />
+</Anime>
+
+{/* Ripple — remounted (key) on each toggle so it replays */}
+<Anime key={rippleId} autoplay duration={420} ease="outQuad"
+  scale={[0.4, 1.6]} opacity={[0.5, 0]}
+>
+  <div className="ripple" />
+</Anime>`,
     props: [
-      { name: "translateX", type: "number", default: "-", desc: "Thumb position" },
-      { name: "backgroundColor", type: "string", default: "-", desc: "Track background color" },
-      { name: "duration", type: "number", default: "300", desc: "Animation duration in ms" },
+      { name: "translateX", type: "number", default: "-", desc: "Thumb travel (track width − height)" },
+      { name: "scaleX", type: "number[]", default: "[1, 1.12, 1]", desc: "Thumb squash on slide" },
+      { name: "backgroundColor", type: "string", default: "-", desc: "Track color by state" },
+      { name: "ease", type: "string", default: "'outBack'", desc: "Springy settle for the thumb" },
+      { name: "autoplay", type: "boolean", default: "true", desc: "Plays on every state change" },
       { name: "disabled", type: "boolean", default: "false", desc: "Disable interaction" },
+      { name: "size", type: "'sm'|'md'|'lg'", default: "'md'", desc: "Switch size" },
     ],
   },
 
   "counter-countdown": {
-    component: "useAnimeTimer",
-    summary: "Animated counter and countdown with padding and format options.",
-    code: `const { state } = useAnimeTimer({
-  duration: 2000,
-  onUpdate: ({ progress }) => {
-    setValue(Math.round(from + (to - from) * progress));
-  },
-})`,
+    component: "useAnime",
+    summary: "Number tween (counter) and a duration-based countdown, both via useAnime object targets.",
+    code: `// The animated value lives on a stable plain object; anime.js mutates it
+// in place each frame and we write it to the DOM in onUpdate.
+const target = useMemo(() => ({ val: from }), [from]);
+
+// Counter: tween val from current → \`to\`, round to integers.
+const { controls } = useAnime({
+  targets: target,
+  val: to,
+  duration,        // counter: 2500; countdown: from * 1000
+  round: 1,
+  ease: 'outExpo', // counter; countdown uses 'linear'
+  loop,            // counter loops; countdown does not
+  autoplay,
+  onUpdate: () => writeValue(target.val),
+});`,
     props: [
-      { name: "from", type: "number", default: "0", desc: "Start value" },
-      { name: "to", type: "number", default: "-", desc: "End value" },
-      { name: "duration", type: "number", default: "1000", desc: "Duration in ms" },
-      { name: "format", type: "string", default: "-", desc: "Display format (padded, mm:ss)" },
+      { name: "targets", type: "object", default: "-", desc: "Plain object holding the tweened value ({ val })" },
+      { name: "val", type: "number", default: "-", desc: "Target value to tween to" },
+      { name: "round", type: "number", default: "1", desc: "Round to whole numbers each frame" },
+      { name: "duration", type: "number", default: "-", desc: "Counter ms; countdown = from × 1000" },
+      { name: "ease", type: "string", default: "'outExpo'", desc: "outExpo (counter) | linear (countdown)" },
+      { name: "loop", type: "boolean", default: "false", desc: "Loop (counter) or run once (countdown)" },
+      { name: "format", type: "'seconds'|'mm:ss'|'padded'", default: "-", desc: "Display format" },
+      { name: "size", type: "'sm'|'md'|'lg'", default: "'md'", desc: "Font size" },
     ],
   },
 
   "spinning-cube": {
-    component: "useAnime",
-    summary: "3D cube rotation with speed variants and interactive controls.",
-    code: `useAnime({
-  rotateY: 360,
-  rotateX: 15,
-  loop: true,
-  duration: 4000,
-  ease: 'linear',
-})`,
+    component: "Anime",
+    summary: "3D cube with dual-axis rotation via turn/deg values and controls.",
+    code: `<Anime
+  autoplay={autoplay}
+  duration={4000}
+  loop
+  ease="inOutQuad"
+  rotateX={axis === 'y' ? '-20deg' : '1turn'}
+  rotateY={axis === 'x' ? '-30deg' : '1turn'}
+  onControlsReady={handleControlsReady}
+>
+  <div style={{ transformStyle: 'preserve-3d' }}>{faces}</div>
+</Anime>`,
     props: [
-      { name: "rotateY", type: "number", default: "-", desc: "Y rotation degrees" },
-      { name: "rotateX", type: "number", default: "-", desc: "X rotation degrees" },
-      { name: "loop", type: "boolean", default: "true", desc: "Enable looping" },
-      { name: "duration", type: "number", default: "4000", desc: "Duration in ms" },
+      { name: "rotateY", type: "string | number", default: "'1turn'", desc: "Y rotation (turn/deg units; '-30deg' when axis='x')" },
+      { name: "rotateX", type: "string | number", default: "'1turn'", desc: "X rotation (turn/deg units; '-20deg' when axis='y')" },
+      { name: "ease", type: "string", default: "'inOutQuad'", desc: "Easing (not linear)" },
+      { name: "loop", type: "boolean", default: "true", desc: "Loop the rotation" },
+      { name: "duration", type: "number", default: "3000", desc: "Duration in ms" },
+      { name: "axis", type: "'x'|'y'|'both'", default: "'both'", desc: "Rotation axis" },
+      { name: "onControlsReady", type: "function", default: "-", desc: "Receives playback controls for pause/resume/reverse" },
     ],
   },
 
   "clippath-reveal": {
-    component: "useAnime",
-    summary: "Circle, diamond, star, and wipe clipPath reveal animations.",
-    code: `useAnime({
-  clipPath: ['circle(0%)', 'circle(70%)'],
-  duration: 800,
-  ease: 'outExpo',
-})`,
+    component: "Anime",
+    summary: "clipPath wipe reveal — circle, diamond, star, or inset — with loop/alternate.",
+    code: `// 150% reliably covers corners on wide boxes (75% leaves gaps).
+// The shape's from/to are derived from the \`shape\` prop.
+<Anime
+  autoplay
+  loop
+  alternate
+  duration={1800}
+  ease="outExpo"
+  clipPath={['circle(0% at 50% 50%)', 'circle(150% at 50% 50%)']}
+>
+  <div className="reveal-panel">{children}</div>
+</Anime>`,
     props: [
-      { name: "clipPath", type: "string[]", default: "-", desc: "Clip path keyframes" },
-      { name: "duration", type: "number", default: "800", desc: "Duration in ms" },
-      { name: "ease", type: "string", default: "outExpo", desc: "Easing function" },
+      { name: "clipPath", type: "string[]", default: "-", desc: "From/to clip paths derived from shape" },
+      { name: "shape", type: "'circle'|'diamond'|'horizontal'|'vertical'|'star'", default: "'circle'", desc: "Reveal shape" },
+      { name: "duration", type: "number", default: "1200", desc: "Duration in ms" },
+      { name: "ease", type: "string", default: "'outCubic'", desc: "Easing (preview uses outExpo)" },
+      { name: "loop", type: "boolean", default: "false", desc: "Loop the wipe" },
+      { name: "alternate", type: "boolean", default: "false", desc: "Reverse each iteration" },
+      { name: "onComplete", type: "function", default: "-", desc: "Fires when the reveal finishes" },
     ],
   },
 
   "animated-slider": {
-    component: "useAnime",
-    summary: "Slide, fade, scale, flip transitions with visual slide showcase.",
-    code: `useAnime({
-  translateX: \`-\${current * 100}%\`,
-  opacity: [0, 1],
-  scale: [0.9, 1],
-  duration: 500,
-  ease: 'outExpo',
-})`,
+    component: "AnimePresence",
+    summary: "Carousel with crossfading slide transitions (slide, fade, scale, fade-slide, flip).",
+    code: `// Each slide mounts/unmounts as \`current\` changes; AnimePresence animates
+// the enter/exit. Directions swap based on nav direction (prev vs next).
+const TRANSITIONS = {
+  slide: {
+    enter: { opacity: [0, 1], translateX: [80, 0] },
+    exit:  { opacity: [1, 0], translateX: [0, -80] },
+  },
+  // fade, scale, fade-slide, flip follow the same enter/exit shape.
+};
+
+<AnimePresence mode="sync">
+  <AnimePresenceChild
+    key={current}
+    enter={enter}
+    exit={exit}
+    duration={450}
+    ease="outExpo"
+  >
+    <div>{children(items[current], current)}</div>
+  </AnimePresenceChild>
+</AnimePresence>`,
     props: [
-      { name: "translateX", type: "string", default: "-", desc: "Slide offset" },
-      { name: "opacity", type: "number[]", default: "-", desc: "Opacity keyframes" },
-      { name: "scale", type: "number[]", default: "-", desc: "Scale keyframes" },
-      { name: "rotateY", type: "number[]", default: "-", desc: "Flip rotation keyframes" },
-      { name: "perspective", type: "number", default: "500", desc: "3D perspective" },
-      { name: "duration", type: "number", default: "500", desc: "Duration in ms" },
-      { name: "ease", type: "string", default: "outExpo", desc: "Easing function" },
+      { name: "transition", type: "'slide'|'fade'|'scale'|'fade-slide'|'flip'", default: "'slide'", desc: "Enter/exit preset" },
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes (direction-aware)" },
+      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Exit keyframes (direction-aware)" },
+      { name: "duration", type: "number", default: "500", desc: "Transition ms" },
+      { name: "ease", type: "string", default: "'outCubic'", desc: "Easing (preview uses outExpo)" },
+      { name: "loop", type: "boolean", default: "true", desc: "Wrap around at edges" },
+      { name: "dots", type: "boolean", default: "true", desc: "Show nav dots" },
+      { name: "arrows", type: "boolean", default: "true", desc: "Show prev/next arrows" },
     ],
   },
 
   "reorder-list": {
-    component: "AnimeLayout + AnimePresence",
-    summary: "FLIP-based shuffle, move, add/remove, and grid reorder animations.",
-    code: `<AnimePresence mode="popLayout">
-  <AnimeLayout mode="auto" duration={400} ease="outExpo">
-    {items.map(id => (
-      <AnimeLayoutItem key={id}>...</AnimeLayoutItem>
-    ))}
-  </AnimeLayout>
-</AnimePresence>`,
+    component: "AnimeLayout",
+    summary: "FLIP-based reorder/shuffle — auto mode animates items as their order changes.",
+    code: `<AnimeLayout
+  mode="auto"
+  duration={450}
+  ease="outExpo"
+  enterFrom={{ opacity: 0, transform: 'scale(0.9)' }}
+  leaveTo={{ opacity: 0, transform: 'scale(0.9)' }}
+  style={{ gap }}
+>
+  {items.map((item) => (
+    <AnimeLayoutItem key={getKey(item)} layoutId={getKey(item)} className="w-full">
+      {children(item)}
+    </AnimeLayoutItem>
+  ))}
+</AnimeLayout>`,
     props: [
-      { name: "mode", type: "string", default: "auto", desc: "Layout mode" },
+      { name: "mode", type: "'auto'|'manual'", default: "'auto'", desc: "auto = animate on children change" },
       { name: "duration", type: "number", default: "500", desc: "Duration in ms" },
-      { name: "ease", type: "string", default: "outExpo", desc: "Easing function" },
-      { name: "stagger", type: "number", default: "0", desc: "Stagger delay" },
+      { name: "ease", type: "string", default: "'outExpo'", desc: "Easing function" },
+      { name: "layoutId", type: "string", default: "-", desc: "Stable id tracking each item across reorders" },
+      { name: "enterFrom", type: "CSSProperties", default: "{opacity:0}", desc: "Initial state for entering items" },
+      { name: "leaveTo", type: "CSSProperties", default: "{opacity:0}", desc: "Final state for leaving items" },
+      { name: "gap", type: "number", default: "8", desc: "Gap between items in px" },
     ],
   },
 
   "scroll-linked-animations": {
     component: "useAnimeOnScroll",
-    summary: "Parallax depth, reveal columns, conveyor, morph tile, and wave bar.",
-    code: `useAnimeOnScroll({
-  enter: 'min 80%',
-  leave: 'max 20%',
-  linked: animationRef.current,
-  onEnter: (observer) => {},
-  onUpdate: (observer) => {},
-})`,
+    summary: "Scroll-driven parallax — layer translate/opacity derived from scroll progress.",
+    code: `// No linked animation or callbacks here: progress is read each scroll
+// tick and mapped to per-layer transforms manually.
+const { ref, containerRef, isInView, progress } = useAnimeOnScroll({
+  enter: 'bottom top',
+  leave: 'top bottom',
+});
+
+const p = Math.max(0, Math.min(1, progress));
+const ty = p * layer.depth * -56; // depth drives parallax rate
+
+<div ref={containerRef} style={{ overflowY: 'auto' }}>
+  <div ref={ref}>
+    {layers.map((layer) => (
+      <div style={{ transform: \`translateY(\${p * layer.depth * -56}px)\` }}>
+        {layer.label}
+      </div>
+    ))}
+  </div>
+</div>`,
     props: [
-      { name: "enter", type: "string", default: "-", desc: "Enter boundary condition" },
-      { name: "leave", type: "string", default: "-", desc: "Leave boundary condition" },
-      { name: "linked", type: "ScrollLinkedTarget", default: "-", desc: "Animation to link" },
-      { name: "sync", type: "boolean", default: "-", desc: "Sync to scroll" },
-      { name: "axis", type: "'x' | 'y'", default: "'y'", desc: "Scroll axis" },
+      { name: "enter", type: "string", default: "-", desc: "Enter boundary (e.g. 'bottom top')" },
+      { name: "leave", type: "string", default: "-", desc: "Leave boundary (e.g. 'top bottom')" },
+      { name: "ref", type: "RefObject<T>", default: "-", desc: "Observed trigger element" },
+      { name: "containerRef", type: "RefObject<T>", default: "-", desc: "Inner scroll container" },
+      { name: "progress", type: "number", default: "-", desc: "Clamped 0-1 scroll progress" },
+      { name: "isInView", type: "boolean", default: "-", desc: "True when trigger is in viewport" },
+      { name: "linked", type: "ScrollLinkedTarget", default: "-", desc: "Optional: animation to scrub (not used in this demo)" },
     ],
   },
 
   "scramble-text": {
     component: "useAnimeScramble",
-    summary: "Text scramble animation with autoplay, loop, and custom chars.",
-    code: `const { ref, controls } = useAnimeScramble({
-  text: 'Hello World',
+    summary: "Decoding character scramble with a custom charset and optional cursor.",
+    code: `// Takes a target ref + a nested params object; returns { rescramble, isReady }.
+// No loop: each call decodes once. Call rescramble() to re-run (e.g. on shuffle).
+const { rescramble, isReady } = useAnimeScramble({
+  target: targetRef,
+  params: {
+    text: 'Hello World',
+    chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!<>-_\\\\/[]{}—=+*^?#',
+    cursor: true,
+  },
   autoplay: true,
-  loop: true,
-  reversed: false,
-  chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-})`,
+});
+
+<p ref={targetRef}>{text}</p>`,
     props: [
-      { name: "text", type: "string", default: "-", desc: "Text to scramble" },
-      { name: "chars", type: "string", default: "-", desc: "Custom character set" },
-      { name: "autoplay", type: "boolean", default: "false", desc: "Auto-start" },
-      { name: "loop", type: "boolean", default: "false", desc: "Enable looping" },
-      { name: "reversed", type: "boolean", default: "false", desc: "Reverse direction" },
-      { name: "duration", type: "number", default: "1000", desc: "Duration in ms" },
+      { name: "target", type: "RefObject<T>", default: "-", desc: "Element ref to scramble (input)" },
+      { name: "params.text", type: "string", default: "-", desc: "Final text to decode into" },
+      { name: "params.chars", type: "string", default: "-", desc: "Scramble character set" },
+      { name: "params.cursor", type: "boolean", default: "false", desc: "Show a blinking cursor" },
+      { name: "autoplay", type: "boolean", default: "false", desc: "Auto-start on mount" },
+      { name: "rescramble", type: "function", default: "-", desc: "Re-trigger the decode (returned)" },
+      { name: "isReady", type: "boolean", default: "-", desc: "True once the hook is initialized (returned)" },
     ],
   },
 
@@ -477,27 +608,44 @@ const nextGrid = () => {
   },
 
   "dropdown-menu": {
-    component: "Anime",
-    summary: "Button-triggered menu with staggered item entrance and click-outside dismiss.",
-    code: `{items.map((item) => (
-  <Anime
-    key={item}
-    opacity={open ? [0, 1] : [1, 0]}
-    translateY={open ? [-8, 0] : [0, -8]}
-    stagger={40}
-    duration={200}
-    ease="outQuad"
-    deps={[open]}
-  >
-    <button className="menu-item">{item}</button>
-  </Anime>
-))}`,
+    component: "AnimePresence",
+    summary: "Button-triggered menu — the container scales/fades in, items cascade via per-item delay.",
+    code: `// The whole menu mounts/unmounts on open; AnimePresenceChild animates the
+// container (scale + fade). Each item <Anime> cascades via delay = index * 40.
+<AnimePresence mode="sync">
+  {open && (
+    <AnimePresenceChild
+      key="dropdown"
+      enter={{ opacity: [0, 1], scale: [0.95, 1] }}
+      exit={{ opacity: [1, 0], scale: [1, 0.95] }}
+      duration={200}
+      ease="outExpo"
+    >
+      <div className="menu">
+        {items.map((item, index) => (
+          <Anime
+            key={item}
+            opacity={[0, 1]}
+            translateY={[-6, 0]}
+            delay={index * 40}   // per-item cascade (not stagger)
+            duration={200}
+            ease="outQuad"
+            autoplay
+          >
+            <button className="menu-item">{item}</button>
+          </Anime>
+        ))}
+      </div>
+    </AnimePresenceChild>
+  )}
+</AnimePresence>`,
     props: [
-      { name: "stagger", type: "number", default: "40", desc: "Per-item delay cascade" },
-      { name: "translateY", type: "number[]", default: "[-8, 0]", desc: "Item slide-in" },
+      { name: "mode", type: "'sync'|'wait'|'popLayout'", default: "'sync'", desc: "Container enter/exit sequencing" },
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Container scale + fade in" },
+      { name: "delay", type: "number", default: "0", desc: "Per-item delay (index * N) for the cascade" },
+      { name: "translateY", type: "number[]", default: "[-6, 0]", desc: "Item slide-in" },
       { name: "opacity", type: "number[]", default: "[0, 1]", desc: "Item fade" },
       { name: "duration", type: "number", default: "200", desc: "Per-item ms" },
-      { name: "ease", type: "string", default: "outQuad", desc: "Item easing" },
     ],
   },
 
@@ -523,7 +671,7 @@ const AccordionItem = ({ title, body, isOpen, onToggle }) => {
       <AnimeLayout
         ref={layoutRef}
         mode="manual"
-        duration={320}
+        duration={500}
         ease="outExpo"
         enterFrom={{ opacity: 0 }}
         leaveTo={{ opacity: 0 }}
@@ -542,7 +690,7 @@ const AccordionItem = ({ title, body, isOpen, onToggle }) => {
       { name: "update", type: "(cb, params) => Timeline", default: "-", desc: "Records layout, runs cb (flushSync), animates the delta" },
       { name: "enterFrom", type: "CSSProperties", default: "{opacity:0}", desc: "Initial state for entering content" },
       { name: "leaveTo", type: "CSSProperties", default: "{opacity:0}", desc: "Final state for leaving content" },
-      { name: "duration", type: "number", default: "320", desc: "Expand/collapse ms" },
+      { name: "duration", type: "number", default: "500", desc: "Layout transition ms (update override uses 320)" },
     ],
   },
 
