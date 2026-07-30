@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { useAnime } from '@/lib/react-animejs/hooks';
-import { AnimeTimeline } from '@/lib/react-animejs/components';
+import { useAnime } from '@shakibdshy/react-animejs';
+import { AnimeTimeline } from '@shakibdshy/react-animejs';
 import { DemoSection } from './DemoSection';
 import { TimelineDemoFrame } from './TimelineDemoFrame';
 

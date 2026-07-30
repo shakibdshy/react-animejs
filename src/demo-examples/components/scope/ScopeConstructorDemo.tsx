@@ -17,7 +17,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DemoCard } from "../DemoCard";
-import { useAnimeScope } from "@/lib/react-animejs/hooks/use-anime-scope";
+import { useAnimeScope } from "@shakibdshy/react-animejs";
 import { animate, createDraggable } from "animejs";
 import { GripVertical, RotateCcw } from "lucide-react";
 

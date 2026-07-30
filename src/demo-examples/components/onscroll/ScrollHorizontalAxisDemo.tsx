@@ -1,5 +1,5 @@
 import { ArrowDown, Waves } from 'lucide-react';
-import { useAnimeOnScroll } from '@/lib/react-animejs';
+import { useAnimeOnScroll } from '@shakibdshy/react-animejs';
 import { DemoCard } from '../DemoCard';
 
 export function ScrollHorizontalAxisDemo() {

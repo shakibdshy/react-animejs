@@ -5,12 +5,12 @@ import {
   AnimeLayout,
   AnimeLayoutItem,
   type AnimeLayoutRef,
-} from "@/lib/react-animejs/components/AnimeLayout";
+} from "@shakibdshy/react-animejs";
 import { AnimatedReorderList } from "@/demo-examples/components/common/AnimatedReorderList";
 import {
   AnimePresence,
   AnimePresenceChild,
-} from "@/lib/react-animejs/components/AnimePresence";
+} from "@shakibdshy/react-animejs";
 
 // =============================================================================
 // Helpers

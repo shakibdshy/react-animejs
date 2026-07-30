@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useAnimeDraggable } from '@/lib/react-animejs';
+import { useAnimeDraggable } from '@shakibdshy/react-animejs';
 
 export function CallbackDraggable() {
   const containerRef = useRef<HTMLDivElement>(null);

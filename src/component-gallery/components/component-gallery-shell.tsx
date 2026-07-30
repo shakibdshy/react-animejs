@@ -1,6 +1,6 @@
 import { type ReactNode, useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { AnimeProvider } from '@/lib/react-animejs';
+import { AnimeProvider } from '@shakibdshy/react-animejs';
 import { useTheme } from '@/theme';
 import { CommandPalette } from './command-palette';
 

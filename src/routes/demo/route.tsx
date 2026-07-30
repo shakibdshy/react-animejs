@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { AnimeProvider } from "@/lib/react-animejs/index";
+import { AnimeProvider } from "@shakibdshy/react-animejs";
 import { useTheme } from "@/theme";
 
 export const Route = createFileRoute("/demo")({

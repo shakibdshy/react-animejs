@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { AnimeProvider } from '@/lib/react-animejs';
+import { AnimeProvider } from '@shakibdshy/react-animejs';
 import { ErrorBoundary } from '@/landing/components/ui/error-boundary';
 import { LandingHeader } from '@/landing/components/containers/landing-header';
 import { HeroSection } from '@/landing/components/containers/hero-section';

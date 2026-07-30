@@ -9,7 +9,7 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { Search } from 'lucide-react';
-import { AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
+import { AnimePresence, AnimePresenceChild } from '@shakibdshy/react-animejs';
 import { useModalA11y } from '@/landing/hooks/use-modal-a11y';
 import { demoSections, DIFFICULTY_META } from '../data';
 

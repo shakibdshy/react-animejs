@@ -1,5 +1,5 @@
 import { memo, useCallback, useState } from 'react';
-import { useAnime } from '@/lib/react-animejs/hooks';
+import { useAnime } from '@shakibdshy/react-animejs';
 import { DemoButton, PreviewCard } from './shared';
 import type { PreviewProps } from './types';
 

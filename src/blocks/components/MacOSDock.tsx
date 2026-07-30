@@ -23,7 +23,7 @@ import {
   useEffect,
   useRef,
 } from 'react';
-import { useAnimatable } from '@/lib/react-animejs';
+import { useAnimatable } from '@shakibdshy/react-animejs';
 
 interface DockApp {
   id: string;

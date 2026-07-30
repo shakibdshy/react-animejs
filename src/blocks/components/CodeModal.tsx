@@ -10,7 +10,7 @@
  */
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Check, Copy, X } from 'lucide-react';
-import { AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
+import { AnimePresence, AnimePresenceChild } from '@shakibdshy/react-animejs';
 import { useModalA11y } from '@/landing/hooks/use-modal-a11y';
 import { CodeBlock } from '@/component-gallery/components/code-block';
 

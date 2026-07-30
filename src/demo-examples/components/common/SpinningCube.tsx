@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
-import { Anime } from '@/lib/react-animejs/components/Anime';
-import type { AnimationState, PlaybackControls } from '@/lib/react-animejs/types';
+import { Anime } from '@shakibdshy/react-animejs';
+import type { AnimationState, PlaybackControls } from '@shakibdshy/react-animejs';
 
 export interface SpinningCubeProps {
   /** Cube size in px */

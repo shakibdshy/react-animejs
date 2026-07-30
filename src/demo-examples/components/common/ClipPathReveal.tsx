@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
-import { Anime } from '@/lib/react-animejs/components/Anime';
-import type { PlaybackControls } from '@/lib/react-animejs/types';
+import { Anime } from '@shakibdshy/react-animejs';
+import type { PlaybackControls } from '@shakibdshy/react-animejs';
 
 export type ClipPathShape = 'circle' | 'diamond' | 'horizontal' | 'vertical' | 'star';
 

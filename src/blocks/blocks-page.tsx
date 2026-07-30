@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Code as CodeIcon } from 'lucide-react';
-import { AnimeProvider } from '@/lib/react-animejs';
+import { AnimeProvider } from '@shakibdshy/react-animejs';
 import { useTheme } from '@/theme';
 import { ErrorBoundary } from '@/landing/components/ui/error-boundary';
 import { CursorTrailImagesDemo } from '@/demo-examples/components/CursorTrailImagesDemo';

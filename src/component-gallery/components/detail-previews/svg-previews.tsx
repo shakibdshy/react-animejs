@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef, useState } from 'react';
-import { AnimeDraw, AnimeMorph, AnimeMotionPath } from '@/lib/react-animejs/components';
+import { AnimeDraw, AnimeMorph, AnimeMotionPath } from '@shakibdshy/react-animejs';
 import { DRAWABLE_SHAPES, MORPH_HEXAGON, MORPH_TRIANGLE, SUZUKA_TRACK_PATH } from './constants';
 import { DemoButton, PreviewCard } from './shared';
 import type { PreviewProps } from './types';

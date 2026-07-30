@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useAnimeTimer } from '@/lib/react-animejs/hooks';
+import { useAnimeTimer } from '@shakibdshy/react-animejs';
 import { DemoButton, PreviewCard, StatBlock } from './shared';
 import type { PreviewProps } from './types';
 

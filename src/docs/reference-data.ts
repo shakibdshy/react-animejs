@@ -15,7 +15,7 @@ export interface ReferenceEntry {
   properties: ReferenceProperty[];
 }
 
-const localImport = "from '@/lib/react-animejs'";
+const localImport = "from '@shakibdshy/react-animejs'";
 
 export const hookReferences: ReferenceEntry[] = [
   {

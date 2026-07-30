@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useAnimeDraggable } from '@/lib/react-animejs';
+import { useAnimeDraggable } from '@shakibdshy/react-animejs';
 
 export function DragSpeedDemo() {
   const containerRef = useRef<HTMLDivElement>(null);

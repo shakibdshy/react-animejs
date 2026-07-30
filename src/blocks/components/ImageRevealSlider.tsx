@@ -17,7 +17,7 @@ import {
   useCallback,
   useRef,
 } from 'react';
-import { useAnimatable } from '@/lib/react-animejs';
+import { useAnimatable } from '@shakibdshy/react-animejs';
 
 const EASE_MS = 90; // near-instant follow so drag feels direct, not laggy
 

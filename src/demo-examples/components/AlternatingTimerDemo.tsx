@@ -1,4 +1,4 @@
-import { useAnimeTimer } from "@/lib/react-animejs";
+import { useAnimeTimer } from "@shakibdshy/react-animejs";
 
 export function AlternatingTimerDemo() {
   const { countRef, iterationTimeRef, isMounted } = useAnimeTimer({

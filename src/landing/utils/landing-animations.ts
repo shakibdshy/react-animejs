@@ -1,4 +1,4 @@
-import type { UseAnimeOptions } from '@/lib/react-animejs';
+import type { UseAnimeOptions } from '@shakibdshy/react-animejs';
 
 export const revealFromBelow: Partial<UseAnimeOptions> = {
   translateY: [30, 0],

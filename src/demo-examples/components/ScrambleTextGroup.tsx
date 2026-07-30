@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useAnimeScramble } from '@/lib/react-animejs/hooks';
+import { useAnimeScramble } from '@shakibdshy/react-animejs';
 import { DemoCard } from './DemoCard';
 import { DemoSection } from './DemoSection';
 

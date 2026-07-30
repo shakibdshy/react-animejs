@@ -32,7 +32,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Anime } from '@/lib/react-animejs';
+import { Anime } from '@shakibdshy/react-animejs';
 
 /** Predefined set of images cycled through as the cursor moves. */
 const IMAGES = [

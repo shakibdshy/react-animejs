@@ -7,8 +7,8 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DemoCard } from "../DemoCard";
-import { useAnime } from "@/lib/react-animejs";
-import { useAnimeScope } from "@/lib/react-animejs/hooks";
+import { useAnime } from "@shakibdshy/react-animejs";
+import { useAnimeScope } from "@shakibdshy/react-animejs";
 import { GripVertical } from "lucide-react";
 
 // Media queries to track

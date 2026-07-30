@@ -23,7 +23,7 @@
  * `utils.lerp`; the reveal is plain document flow.
  */
 import { memo, useRef } from 'react';
-import { useAnimeOnScroll, utils } from '@/lib/react-animejs';
+import { useAnimeOnScroll, utils } from '@shakibdshy/react-animejs';
 
 const { lerp, clamp } = utils;
 

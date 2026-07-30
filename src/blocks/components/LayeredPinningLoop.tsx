@@ -7,7 +7,7 @@
  */
 import { memo, useLayoutEffect, useRef, useState } from 'react';
 import { ArrowDown, Layers3 } from 'lucide-react';
-import { Anime, AnimeScroll, utils } from '@/lib/react-animejs';
+import { Anime, AnimeScroll, utils } from '@shakibdshy/react-animejs';
 
 const { clamp } = utils;
 

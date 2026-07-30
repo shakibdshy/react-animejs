@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { AnimeTimeline } from '@/lib/react-animejs/components';
+import { AnimeTimeline } from '@shakibdshy/react-animejs';
 import { DemoSection } from './DemoSection';
 
 /**

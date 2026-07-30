@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useAnimeTimeline, utils } from "@/lib/react-animejs";
+import { useAnimeTimeline, utils } from "@shakibdshy/react-animejs";
 import { DemoSection } from "../DemoSection";
 
 const TimelineRefreshDemo: React.FC = () => {

@@ -9,7 +9,7 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ArrowDown, Gauge, Sparkles } from 'lucide-react';
 import type { ScrollObserver } from 'animejs';
-import { Anime, AnimeScroll, utils } from '@/lib/react-animejs';
+import { Anime, AnimeScroll, utils } from '@shakibdshy/react-animejs';
 
 const { clamp } = utils;
 

@@ -1,5 +1,5 @@
 import { memo, useRef } from 'react';
-import { AnimeTimeline } from '@/lib/react-animejs/components';
+import { AnimeTimeline } from '@shakibdshy/react-animejs';
 import { DemoButton, PreviewCard } from './shared';
 import { cn } from './utils';
 import type { PreviewProps } from './types';

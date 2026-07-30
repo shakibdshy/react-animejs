@@ -5,8 +5,8 @@ import {
   AnimeLayoutItem,
   AnimePresence,
   AnimePresenceChild,
-} from '@/lib/react-animejs';
-import type { AnimeLayoutRef } from '@/lib/react-animejs';
+} from '@shakibdshy/react-animejs';
+import type { AnimeLayoutRef } from '@shakibdshy/react-animejs';
 import { PreviewCard } from './shared';
 import { cn } from './utils';
 import type { PreviewProps } from './types';

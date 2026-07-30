@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Anime } from '@/lib/react-animejs/components/Anime';
+import { Anime } from '@shakibdshy/react-animejs';
 
 export interface ToggleSwitchProps {
   checked?: boolean;

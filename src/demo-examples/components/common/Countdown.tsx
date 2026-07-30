@@ -1,5 +1,5 @@
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useAnime } from '@/lib/react-animejs/hooks/use-anime';
+import { useAnime } from '@shakibdshy/react-animejs';
 
 export interface CountdownProps {
   /** Starting value (seconds) */

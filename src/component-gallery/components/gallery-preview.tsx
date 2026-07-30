@@ -1,6 +1,6 @@
 import { type ComponentType, memo, useEffect, useRef } from 'react';
-import { AnimeScope } from '@/lib/react-animejs';
-import { useAnime } from '@/lib/react-animejs/hooks';
+import { AnimeScope } from '@shakibdshy/react-animejs';
+import { useAnime } from '@shakibdshy/react-animejs';
 import type { DemoId } from '../data';
 
 interface GalleryPreviewProps {

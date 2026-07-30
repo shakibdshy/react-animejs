@@ -10,8 +10,8 @@
  * it to rest with a `back.out` curve (anime.js `utils` + `SplitText`).
  */
 import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { SplitText, useAnimeOnScroll, utils } from '@/lib/react-animejs';
-import type { SplitTextRef } from '@/lib/react-animejs/components';
+import { SplitText, useAnimeOnScroll, utils } from '@shakibdshy/react-animejs';
+import type { SplitTextRef } from '@shakibdshy/react-animejs';
 
 const { clamp, random } = utils;
 

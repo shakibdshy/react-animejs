@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { Anime, AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
+import { Anime, AnimePresence, AnimePresenceChild } from '@shakibdshy/react-animejs';
 import { PreviewCard } from './shared';
 import { cn } from './utils';
 import type { PreviewProps } from './types';
@@ -11,7 +11,7 @@ const TABS = [
   },
   {
     label: 'Install',
-    body: 'pnpm add animejs — then import from @/lib/react-animejs. React 19+ and anime.js v4.',
+    body: 'pnpm add animejs — then import from @shakibdshy/react-animejs. React 19+ and anime.js v4.',
   },
   {
     label: 'Learn',

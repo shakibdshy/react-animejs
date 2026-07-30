@@ -8,15 +8,15 @@ import {
   useImperativeHandle,
   useRef,
 } from 'react';
-import { useTimelineContext } from '@/lib/react-animejs/core';
-import { resolveTarget, safeJsonStringify } from '@/lib/react-animejs/core';
+import { useTimelineContext } from '@shakibdshy/react-animejs';
+import { resolveTarget, safeJsonStringify } from '@shakibdshy/react-animejs';
 import type {
   AnimatableProperties,
   AnimationTargets,
   PlaybackSettings,
   TimelineEntry as TimelineEntryType,
   TweenParameters,
-} from '@/lib/react-animejs/types';
+} from '@shakibdshy/react-animejs';
 
 export interface TimelineEntryProps
   extends Partial<AnimatableProperties>, TweenParameters, Omit<PlaybackSettings, 'autoplay'> {

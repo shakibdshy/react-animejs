@@ -10,7 +10,7 @@
 
 import React, { useCallback, useState } from 'react';
 import { DemoCard } from '../DemoCard';
-import { AnimeScope } from '@/lib/react-animejs/components/AnimeScope';
+import { AnimeScope } from '@shakibdshy/react-animejs';
 import { animate } from 'animejs';
 import { Zap } from 'lucide-react';
 

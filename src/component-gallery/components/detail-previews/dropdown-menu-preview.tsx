@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { Anime, AnimePresence, AnimePresenceChild } from '@/lib/react-animejs';
+import { Anime, AnimePresence, AnimePresenceChild } from '@shakibdshy/react-animejs';
 import { DemoButton, PreviewCard } from './shared';
 import type { PreviewProps } from './types';
 
