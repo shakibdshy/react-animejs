@@ -57,14 +57,14 @@ The dev server starts on **http://localhost:3002**.
 
 ## Relationship to the package
 
-This repo is the **docs & demos site**. The actual animation library is a separate, independently-versioned npm package:
+This repo is the **docs & demos site**. The animation library itself is a separate npm package, **[`@shakibdshy/react-animejs`](https://www.npmjs.com/package/@shakibdshy/react-animejs)**, which is published to the npm registry only (its source is not in this repo).
 
 | | This repo | The package |
 | --- | --- | --- |
-| **Path** | `react-animejs-demo-docs/` | `react-animejs-package/` (sibling) |
-| **npm name** | _(not published — `private: true`)_ | `@shakibdshy/react-animejs` |
-| **Purpose** | Showcase & docs | The reusable library |
-| **Consumes** | `@shakibdshy/react-animejs` (`^1.0.0`) | — |
+| **What** | Docs site & component gallery (deployed to Vercel) | The reusable animation library |
+| **npm** | _(not published — `private: true`)_ | `@shakibdshy/react-animejs` |
+| **Source on GitHub** | ✅ This repo | ❌ npm-only |
+| **Relationship** | Consumes the package | Independent |
 
 The demo installs the package from the npm registry like any other consumer:
 
@@ -74,22 +74,22 @@ The demo installs the package from the npm registry like any other consumer:
 }
 ```
 
-### Developing the package and demo together
+> **Note on the `repository` field:** the package's npm `repository` link points to this repo (`github.com/shakibdshy/react-animejs`) as the project's public home, even though the library source itself lives only on npm. This is intentional — this repo is where issues, the live demo, and project context live.
 
-By default the demo uses the published version. For local development where edits to the package hot-reload into the demo, temporarily link it:
+### Local development against the package
+
+If you have the package source locally and want edits to hot-reload into this demo, link it temporarily:
 
 ```bash
-# In the package folder
-cd ../react-animejs-package
+# In your local package source folder
 pnpm build          # produces dist/
 npm link
 
-# In the demo folder
-cd ../react-animejs-demo-docs
+# In this demo folder
 npm link @shakibdshy/react-animejs
 ```
 
-Run `pnpm dev` in the package (`tsup --watch`) alongside the demo's `pnpm dev` for live rebuilding. **Switch back to the versioned dependency (`pnpm install`) before pushing** so Vercel can build from the registry.
+Run `tsup --watch` in the package alongside the demo's `pnpm dev` for live rebuilding. **Switch back to the registry version (`pnpm install`) before pushing** so Vercel can build from npm.
 
 ## 📁 Project structure
 
