@@ -518,4 +518,43 @@ code {
   .cube-face-bottom { transform: rotateX(-90deg) translateZ(24px); }
 
   .no-scroll { overflow: hidden !important; }
+
+  /* Header wordmark — per-letter slow fade+rise on an infinite loop.
+     Each char is offset via inline `animationDelay` for a gentle stagger. */
+  .landing-wordmark-char {
+    display: inline-block;
+    opacity: 1;
+    animation: wordmarkPulse 4.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    transform-origin: center bottom;
+    will-change: transform, opacity;
+  }
+
+  @keyframes wordmarkPulse {
+    /* Settled most of the time; a brief, slow lift + fade near the end of each cycle */
+    0%, 72% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    82% {
+      opacity: 0.35;
+      transform: translateY(5px);
+    }
+    92%, 100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Screen-reader-only utility for accessible text alternatives */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 }

@@ -8,33 +8,14 @@ const defaultProductLinks: NavItem[] = [
   { label: 'Components', href: '/demos' },
   { label: 'Documentation', href: '/docs' },
   { label: 'Blocks', href: '/blocks' },
-  { label: 'Changelog', href: '#' },
-];
-
-const defaultCommunityLinks: NavItem[] = [
-  { label: 'GitHub', href: '#' },
-  { label: 'Discord', href: '#' },
-  { label: 'Twitter', href: '#' },
-  { label: 'Stack Overflow', href: '#' },
-];
-
-const defaultCompanyLinks: NavItem[] = [
-  { label: 'About', href: '#' },
-  { label: 'Blog', href: '#' },
-  { label: 'Brand', href: '#' },
-  { label: 'Contact', href: '#' },
 ];
 
 const defaultFooterColumns: FooterColumn[] = [
   { heading: 'Product', links: defaultProductLinks },
-  { heading: 'Community', links: defaultCommunityLinks },
-  { heading: 'Company', links: defaultCompanyLinks },
 ];
 
 const defaultSocials: NavItem[] = [
-  { label: 'GitHub', href: '#' },
-  { label: 'Twitter', href: '#' },
-  { label: 'Discord', href: '#' },
+  { label: 'GitHub', href: 'https://github.com/shakibdshy/react-animejs' },
 ];
 
 interface FooterSectionProps {
@@ -75,7 +56,7 @@ export const FooterSection = memo(function FooterSection({
         </span>
 
         {/* Link grid */}
-        <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 pb-12 border-b border-landing-border">
+        <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr] gap-10 pb-12 border-b border-landing-border">
           <div>
             <p className="landing-font-mono text-[11px] tracking-[0.2em] uppercase text-landing-muted mb-4">
               The Field Guide
@@ -111,12 +92,13 @@ export const FooterSection = memo(function FooterSection({
         {/* Colophon line */}
         <div className="pt-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-[12px] text-landing-muted landing-font-mono tracking-[0.08em]">
           <span className="uppercase">{'\u00A9'} 2026 React AnimeJS — MIT licensed</span>
-          <span className="uppercase opacity-70">Set in Iowan Old Style &amp; JetBrains Mono</span>
           <div className="flex gap-4">
             {socials.map((s) => (
               <a
                 key={s.label}
                 href={s.href}
+                target={s.href.startsWith('http') ? '_blank' : undefined}
+                rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                 aria-label={s.label}
                 className="text-landing-muted hover:text-landing-accent transition-colors duration-200 no-underline uppercase"
               >

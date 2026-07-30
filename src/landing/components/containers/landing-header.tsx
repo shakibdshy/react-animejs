@@ -1,5 +1,6 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { Github } from 'lucide-react';
 import { cn } from '@/landing/utils/cn';
 import type { NavItem } from '@/landing/types';
 import { useTheme } from '@/theme';
@@ -26,6 +27,16 @@ export const LandingHeader = memo(function LandingHeader({
 }: LandingHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const { isDark, toggleTheme } = useTheme();
+
+  // Split the wordmark into per-letter spans so each can fade+rise on a
+  // slow, infinite stagger loop. useMemo keeps the array stable across renders.
+  const wordmarkChars = useMemo(() => [...'React AnimeJS'].map((char, i) => ({
+    key: i,
+    char,
+    // Hold each letter off for a beat, then rise in, then settle.
+    // Negative offset spreads the start; long delay creates the slow loop gap.
+    delay: `${i * 0.18 + 0.4}s`,
+  })), []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -66,8 +77,18 @@ export const LandingHeader = memo(function LandingHeader({
           >
             {'\u2726'}
           </span>
-          <span className="landing-font-display text-[17px] font-bold tracking-tight">
-            React AnimeJS
+          <span className="landing-font-display text-[17px] font-bold tracking-tight landing-wordmark">
+            {wordmarkChars.map(({ key, char, delay }) => (
+              <span
+                key={key}
+                className="landing-wordmark-char"
+                style={{ animationDelay: delay }}
+                aria-hidden="true"
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </span>
+            ))}
+            <span className="sr-only">React AnimeJS</span>
           </span>
         </a>
 
@@ -102,6 +123,16 @@ export const LandingHeader = memo(function LandingHeader({
           >
             {isDark ? '\u2600\uFE0F' : '\uD83C\uDF19'}
           </button>
+          <a
+            href="https://github.com/shakibdshy/react-animejs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-transparent border border-landing-border rounded-full w-9 h-9 cursor-pointer text-landing-muted flex items-center justify-center hover:bg-landing-surface hover:text-landing-fg transition-all duration-200"
+            aria-label="GitHub repository"
+            title="GitHub"
+          >
+            <Github size={16} strokeWidth={2} />
+          </a>
           <Link
             to="/demos"
             className="hidden md:inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-landing-fg text-landing-bg text-[13px] font-semibold no-underline hover:bg-landing-accent transition-colors duration-200"
