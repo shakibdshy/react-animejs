@@ -17,7 +17,7 @@ interface CtaSectionProps {
 export const CtaSection = memo(function CtaSection({ className }: CtaSectionProps) {
   const [ref, visible] = useScrollReveal();
   const { copied, copy } = useCopyToClipboard();
-  const installCmd = 'npm install react-animejs animejs';
+  const installCmd = 'npm install @shakibdshy/react-animejs animejs';
 
   return (
     <LandingContainer
@@ -75,7 +75,7 @@ export const CtaSection = memo(function CtaSection({ className }: CtaSectionProp
               <span className="text-landing-muted select-none">~/app</span>
               <span className="text-landing-fg/40 select-none">{'\u25B8'}</span>
               <span className="text-landing-fg">
-                npm install <span className="text-landing-accent">react-animejs</span> animejs
+                npm install <span className="text-landing-accent">@shakibdshy/react-animejs</span> animejs
                 <span className="landing-caret" aria-hidden="true">
                   {'\u25AE'}
                 </span>

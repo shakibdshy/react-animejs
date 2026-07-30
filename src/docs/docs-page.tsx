@@ -119,10 +119,9 @@ export function DocsPage() {
                 The React layer for Anime.js.
               </h1>
               <p className="mt-5 max-w-2xl text-[17px] leading-8 text-landing-muted">
-                A practical reference for the hooks, declarative components, and helpers that live
-                in this project’s{' '}
+                A practical reference for the hooks, declarative components, and helpers in the{' '}
                 <code className="landing-font-mono text-sm text-landing-fg">
-                  src/lib/react-animejs
+                  @shakibdshy/react-animejs
                 </code>{' '}
                 package.
               </p>

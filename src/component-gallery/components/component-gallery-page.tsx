@@ -93,7 +93,7 @@ export const ComponentGalleryPage = memo(function ComponentGalleryPage() {
             Every component runs on React AnimeJS — install once, animate everywhere.
           </p>
           <code className="inline-block landing-font-mono text-sm text-landing-accent bg-landing-surface border border-landing-border rounded-full px-5 py-2.5">
-            npm install react-animejs
+            npm install @shakibdshy/react-animejs
           </code>
         </section>
       </ErrorBoundary>

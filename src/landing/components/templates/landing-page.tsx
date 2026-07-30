@@ -41,7 +41,7 @@ export const LandingPage = memo(function LandingPage({
               description="The animation power of anime.js, wrapped in beautiful React components. Zero boilerplate. Production-ready."
               primaryCta={{ label: 'See the demos \u2192', href: '/demos' }}
               secondaryCta={{
-                label: 'npm install react-animejs',
+                label: 'npm install @shakibdshy/react-animejs',
                 href: '#install',
               }}
             />

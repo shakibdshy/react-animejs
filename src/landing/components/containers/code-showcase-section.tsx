@@ -38,7 +38,7 @@ function FadeIn({ children }) {
     },
     react: {
       title: 'react-animejs — hook',
-      raw: `import { useAnime } from 'react-animejs'
+      raw: `import { useAnime } from '@shakibdshy/react-animejs'
 
 function FadeIn({ children }) {
   const { ref } = useAnime({
@@ -70,7 +70,7 @@ function animateCards() {
     },
     react: {
       title: 'react-animejs — stagger helper',
-      raw: `import { useAnime, stagger } from 'react-animejs'
+      raw: `import { useAnime, stagger } from '@shakibdshy/react-animejs'
 
 function Cards() {
   const { controls } = useAnime({
@@ -102,7 +102,7 @@ function animateSequence() {
     },
     react: {
       title: 'react-animejs — timeline component',
-      raw: `import { AnimeTimeline } from 'react-animejs'
+      raw: `import { AnimeTimeline } from '@shakibdshy/react-animejs'
 
 function Sequence() {
   return (
@@ -130,7 +130,7 @@ onScroll('.reveal-section', {
     },
     react: {
       title: 'react-animejs — onScroll hook',
-      raw: `import { useAnimeOnScroll } from 'react-animejs'
+      raw: `import { useAnimeOnScroll } from '@shakibdshy/react-animejs'
 
 function RevealSection({ children }) {
   const { ref } = useAnimeOnScroll({
