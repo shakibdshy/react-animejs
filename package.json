@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.0",
-    "@shakibdshy/react-animejs": "link:../react-animejs-package",
+    "@shakibdshy/react-animejs": "^1.0.0",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-router": "1.157.15",
