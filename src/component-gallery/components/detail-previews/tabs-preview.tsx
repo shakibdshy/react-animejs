@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useLayoutEffect, useRef, useState } from 'react';
 import { Anime, AnimePresence, AnimePresenceChild } from '@shakibdshy/react-animejs';
 import { PreviewCard } from './shared';
 import { cn } from './utils';
@@ -21,17 +21,31 @@ const TABS = [
 
 export const TabsPreview = memo(function TabsPreview(_props: PreviewProps) {
   const [active, setActive] = useState(0);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  // Active tab's measured offset + width, so the indicator hugs each label
+  // exactly instead of using a fixed-width box that drifts off the text.
+  const [indicator, setIndicator] = useState({ x: 0, w: 0 });
+
+  useLayoutEffect(() => {
+    const el = tabRefs.current[active];
+    if (el) {
+      setIndicator({ x: el.offsetLeft, w: el.offsetWidth });
+    }
+  }, [active]);
 
   return (
     <PreviewCard title="Tabs" description="Click a tab to switch">
       <div className="w-full max-w-80">
-        <div className="relative flex border-b border-landing-border">
+        <div className="relative flex gap-6 border-b border-landing-border">
           {TABS.map((tab, index) => (
             <button
               key={tab.label}
+              ref={(el) => {
+                tabRefs.current[index] = el;
+              }}
               onClick={() => setActive(index)}
               className={cn(
-                'px-3 py-2 text-sm transition-colors w-16 text-center',
+                'px-2 py-2 text-sm transition-colors text-center',
                 active === index
                   ? 'text-landing-accent'
                   : 'text-landing-muted hover:text-landing-fg'
@@ -41,13 +55,14 @@ export const TabsPreview = memo(function TabsPreview(_props: PreviewProps) {
             </button>
           ))}
           <Anime
-            translateX={active * 64}
+            translateX={indicator.x}
+            width={indicator.w}
             duration={300}
             ease="outExpo"
-            deps={[active]}
-            className="absolute -bottom-px left-0 w-16 h-0.5 bg-landing-accent rounded-full"
+            autoplay
+            deps={[indicator.x, indicator.w]}
           >
-            <div className="w-full h-full bg-landing-accent rounded-full" />
+            <div className="absolute -bottom-px left-0 h-0.5 bg-landing-accent rounded-full" />
           </Anime>
         </div>
         <div className="relative min-h-20 mt-3">

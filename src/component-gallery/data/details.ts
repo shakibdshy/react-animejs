@@ -608,12 +608,25 @@ const AccordionItem = ({ title, body, isOpen, onToggle }) => (
   tabs: {
     component: "AnimePresence",
     summary: "Animated underline indicator with cross-fading content panels.",
-    code: `// Sliding underline — <Anime> tweens the indicator on each tab change.
+    code: `// Measure the active tab's offset + width so the underline hugs each
+// label exactly (no fixed-width box, no hardcoded offset math).
+const [indicator, setIndicator] = useState({ x: 0, w: 0 });
+
+useLayoutEffect(() => {
+  const el = tabRefs.current[active];
+  if (el) setIndicator({ x: el.offsetLeft, w: el.offsetWidth });
+}, [active]);
+
+// <Anime> slides AND resizes the underline to the active tab.
+// \`autoplay\` is required: hooks default to autoplay={false}, so deps
+// alone would recreate the tween without ever playing it.
 <Anime
-  translateX={active * TAB_WIDTH}
+  translateX={indicator.x}
+  width={indicator.w}
   duration={300}
   ease="outExpo"
-  deps={[active]}
+  autoplay
+  deps={[indicator.x, indicator.w]}
 >
   <span className="underline" />
 </Anime>
@@ -632,7 +645,10 @@ const AccordionItem = ({ title, body, isOpen, onToggle }) => (
   </AnimePresenceChild>
 </AnimePresence>`,
     props: [
-      { name: "translateX", type: "number", default: "-", desc: "Indicator slide (via <Anime>)" },
+      { name: "translateX", type: "number", default: "-", desc: "Indicator slide to active tab offset" },
+      { name: "width", type: "number", default: "-", desc: "Indicator width matching active tab" },
+      { name: "autoplay", type: "boolean", default: "false", desc: "Plays the (re)created tween — required with deps" },
+      { name: "deps", type: "unknown[]", default: "[]", desc: "Re-runs the animation when values change" },
       { name: "mode", type: "'wait'", default: "'wait'", desc: "Exit completes before next panel enters" },
       { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Panel enter keyframes" },
       { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Panel exit keyframes" },
