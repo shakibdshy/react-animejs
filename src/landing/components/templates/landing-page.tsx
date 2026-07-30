@@ -8,7 +8,7 @@ import { FeaturesSection } from '@/landing/components/containers/features-sectio
 import { DemosSection } from '@/landing/components/containers/demos-section';
 import { CodeShowcaseSection } from '@/landing/components/containers/code-showcase-section';
 import { StatsSection } from '@/landing/components/containers/stats-section';
-import { TestimonialsSection } from '@/landing/components/containers/testimonials-section';
+// import { TestimonialsSection } from '@/landing/components/containers/testimonials-section';
 import { CtaSection } from '@/landing/components/containers/cta-section';
 import { FooterSection } from '@/landing/components/containers/footer-section';
 import { BackToTop } from '@/landing/components/ui/back-to-top';
@@ -61,9 +61,9 @@ export const LandingPage = memo(function LandingPage({
           <ErrorBoundary>
             <StatsSection />
           </ErrorBoundary>
-          <ErrorBoundary>
+          {/* <ErrorBoundary>
             <TestimonialsSection testimonials={testimonials} />
-          </ErrorBoundary>
+          </ErrorBoundary> */}
           <ErrorBoundary>
             <CtaSection />
           </ErrorBoundary>
