@@ -545,6 +545,32 @@ code {
     }
   }
 
+  /* Footer masthead wordmark — same loop as the header, but em-based lift so
+     the motion is visible at the oversized 148px scale. Slower (5s) + wider
+     stagger suits the larger, calmer surface. */
+  .landing-wordmark-char-lg {
+    display: inline-block;
+    opacity: 1;
+    animation: wordmarkPulseLg 5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    transform-origin: center bottom;
+    will-change: transform, opacity;
+  }
+
+  @keyframes wordmarkPulseLg {
+    0%, 70% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    82% {
+      opacity: 0.4;
+      transform: translateY(0.14em);
+    }
+    92%, 100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   /* Screen-reader-only utility for accessible text alternatives */
   .sr-only {
     position: absolute;
