@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   AnimePresence,
   AnimePresenceChild,
-} from '@/lib/react-animejs/components/AnimePresence';
+} from '@shakibdshy/react-animejs';
 
 export type SlideDirection = 'left' | 'right';
 

@@ -1,0 +1,152 @@
+- generic [ref=f6e3]:
+  - banner [ref=f6e4]:
+    - link [ref=f6e5] [cursor=pointer]:
+      - /url: /
+      - text: React AnimeJS
+      - emphasis [ref=f6e6]: ✦
+    - navigation [ref=f6e7]:
+      - link "Home" [ref=f6e8] [cursor=pointer]:
+        - /url: /
+      - link "Components" [ref=f6e9] [cursor=pointer]:
+        - /url: /demos
+      - link "Blocks" [ref=f6e10] [cursor=pointer]:
+        - /url: /blocks
+      - button "Open command palette" [ref=f6e11]:
+        - generic [ref=f6e12]: Search
+        - generic [ref=f6e13]: ⌘K
+      - button "Switch to light mode" [ref=f6e14] [cursor=pointer]: ☀️
+  - main [ref=f6e15]:
+    - generic [ref=f6e16]:
+      - generic [ref=f6e17]:
+        - generic [ref=f6e18]:
+          - link "Components" [ref=f6e19] [cursor=pointer]:
+            - /url: /demos
+          - generic [ref=f6e20]: /
+          - generic [ref=f6e21]: Dropdown Menu
+          - generic [ref=f6e22]: 21 / 25
+        - generic [ref=f6e23]:
+          - link "Previous" [ref=f6e24] [cursor=pointer]:
+            - /url: /demos/tooltip
+          - link "Next" [ref=f6e27] [cursor=pointer]:
+            - /url: /demos/accordion
+      - generic [ref=f6e30]:
+        - generic [ref=f6e31]:
+          - heading "Dropdown Menu" [level=1] [ref=f6e32]
+          - generic [ref=f6e33]:
+            - generic [ref=f6e34]: ui
+            - generic [ref=f6e35]: Intermediate
+            - link "Read the docs" [ref=f6e36] [cursor=pointer]:
+              - /url: /docs#anime-component
+          - generic [ref=f6e39]:
+            - heading "Code" [level=2] [ref=f6e40]
+            - button "Copy" [ref=f6e41]
+          - table [ref=f6e45]:
+            - rowgroup [ref=f6e46]:
+              - row [ref=f6e47]:
+                - cell "1" [ref=f6e48]
+                - 'cell "{items.map((item) => (" [ref=f6e50]'
+              - row [ref=f6e51]:
+                - cell "2" [ref=f6e52]
+                - cell "<Anime" [ref=f6e54]
+              - row [ref=f6e55]:
+                - cell "3" [ref=f6e56]
+                - 'cell "key={item}" [ref=f6e58]'
+              - row [ref=f6e59]:
+                - cell "4" [ref=f6e60]
+                - 'cell "opacity={open ? [0, 1] : [1, 0]}" [ref=f6e62]'
+              - row [ref=f6e63]:
+                - cell "5" [ref=f6e64]
+                - 'cell "translateY={open ? [-8, 0] : [0, -8]}" [ref=f6e66]'
+              - row [ref=f6e67]:
+                - cell "6" [ref=f6e68]
+                - 'cell "stagger={40}" [ref=f6e70]'
+              - row [ref=f6e71]:
+                - cell "7" [ref=f6e72]
+                - 'cell "duration={200}" [ref=f6e74]'
+              - row [ref=f6e75]:
+                - cell "8" [ref=f6e76]
+                - cell "ease=\"outQuad\"" [ref=f6e78]
+              - row [ref=f6e79]:
+                - cell "9" [ref=f6e80]
+                - 'cell "deps={[open]}" [ref=f6e82]'
+              - row [ref=f6e83]:
+                - cell "10" [ref=f6e84]
+                - cell ">" [ref=f6e86]
+              - row [ref=f6e87]:
+                - cell "11" [ref=f6e88]
+                - 'cell "<button className=\"menu-item\">{item}</button>" [ref=f6e90]'
+              - row [ref=f6e91]:
+                - cell "12" [ref=f6e92]
+                - cell "</Anime>" [ref=f6e94]
+              - row [ref=f6e95]:
+                - cell "13" [ref=f6e96]
+                - 'cell "))}" [ref=f6e98]'
+        - generic [ref=f6e99]:
+          - paragraph [ref=f6e100]: Button-triggered menu with staggered item entrance and click-outside dismiss.
+          - generic [ref=f6e101]:
+            - generic [ref=f6e102]: Live preview
+            - generic [ref=f6e105]:
+              - generic [ref=f6e106]:
+                - generic [ref=f6e107]: Dropdown MenuClick the trigger
+                - button "Open" [ref=f6e109] [cursor=pointer]
+              - button "Menu ▼" [ref=f6e112]:
+                - text: Menu
+                - generic [ref=f6e113]: ▼
+          - generic [ref=f6e114]:
+            - generic [ref=f6e115]: Props
+            - table [ref=f6e117]:
+              - rowgroup [ref=f6e118]:
+                - row [ref=f6e119]:
+                  - columnheader "Name" [ref=f6e120]
+                  - columnheader "Type" [ref=f6e121]
+                  - columnheader "Default" [ref=f6e122]
+                  - columnheader "Description" [ref=f6e123]
+              - rowgroup [ref=f6e124]:
+                - row [ref=f6e125]:
+                  - cell "stagger" [ref=f6e126]
+                  - cell "number" [ref=f6e127]
+                  - cell "40" [ref=f6e128]
+                  - cell "Per-item delay cascade" [ref=f6e129]
+                - row [ref=f6e130]:
+                  - cell "translateY" [ref=f6e131]
+                  - cell "number[]" [ref=f6e132]
+                  - cell "[-8, 0]" [ref=f6e133]
+                  - cell "Item slide-in" [ref=f6e134]
+                - row [ref=f6e135]:
+                  - cell "opacity" [ref=f6e136]
+                  - cell "number[]" [ref=f6e137]
+                  - cell "[0, 1]" [ref=f6e138]
+                  - cell "Item fade" [ref=f6e139]
+                - row [ref=f6e140]:
+                  - cell "duration" [ref=f6e141]
+                  - cell "number" [ref=f6e142]
+                  - cell "200" [ref=f6e143]
+                  - cell "Per-item ms" [ref=f6e144]
+                - row [ref=f6e145]:
+                  - cell "ease" [ref=f6e146]
+                  - cell "string" [ref=f6e147]
+                  - cell "outQuad" [ref=f6e148]
+                  - cell "Item easing" [ref=f6e149]
+      - generic [ref=f6e150]:
+        - heading "Related components" [level=2] [ref=f6e151]
+        - generic [ref=f6e152]:
+          - link [ref=f6e153] [cursor=pointer]:
+            - /url: /demos/accordion
+            - generic [ref=f6e168]:
+              - heading "Accordion" [level=3] [ref=f6e169]
+              - paragraph [ref=f6e170]: Expand/collapse panels with height animation and single/multi open modes
+          - link [ref=f6e171] [cursor=pointer]:
+            - /url: /demos/accordion-presence
+            - generic [ref=f6e186]:
+              - heading "Accordion (Presence)" [level=3] [ref=f6e187]
+              - paragraph [ref=f6e188]: Mount/unmount accordion panels with enter/exit cross-fade via AnimePresence
+          - link [ref=f6e189] [cursor=pointer]:
+            - /url: /demos/animated-slider
+            - generic [ref=f6e195]:
+              - heading "Animated Slider" [level=3] [ref=f6e196]
+              - paragraph [ref=f6e197]: Slide, fade, scale, flip transitions with visual slide showcase
+      - generic [ref=f6e198]:
+        - link "Tooltip" [ref=f6e199] [cursor=pointer]:
+          - /url: /demos/tooltip
+        - link "Accordion" [ref=f6e202] [cursor=pointer]:
+          - /url: /demos/accordion

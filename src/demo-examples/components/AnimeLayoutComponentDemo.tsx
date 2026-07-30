@@ -3,7 +3,7 @@ import {
   AnimeLayout,
   AnimeLayoutItem,
   type AnimeLayoutRef,
-} from '@/lib/react-animejs/components/AnimeLayout';
+} from '@shakibdshy/react-animejs';
 import { DemoCard } from "@/landing/components/base/demo-card";
 import { DemoBox } from "@/landing/components/base/demo-box";
 import { DemoBtn } from "@/landing/components/base/demo-btn";

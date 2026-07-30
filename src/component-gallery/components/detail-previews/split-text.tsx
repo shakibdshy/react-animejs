@@ -5,7 +5,7 @@ import {
   SplitText,
   SplitTextEntry,
   type SplitTextRef,
-} from '@/lib/react-animejs/components';
+} from '@shakibdshy/react-animejs';
 import { DemoButton, PreviewCard } from './shared';
 import type { PreviewProps } from './types';
 

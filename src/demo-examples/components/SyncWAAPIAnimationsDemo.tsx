@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import type { WAAPIAnimation } from '@/lib/react-animejs/types';
-import type { AnimeWAAPIRef } from '@/lib/react-animejs/components';
-import { AnimeTimeline, AnimeWAAPI } from '@/lib/react-animejs/components';
+import type { WAAPIAnimation } from '@shakibdshy/react-animejs';
+import type { AnimeWAAPIRef } from '@shakibdshy/react-animejs';
+import { AnimeTimeline, AnimeWAAPI } from '@shakibdshy/react-animejs';
 import { DemoSection } from './DemoSection';
 import { TimelineDemoFrame } from './TimelineDemoFrame';
 

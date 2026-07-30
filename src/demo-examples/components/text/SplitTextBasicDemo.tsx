@@ -4,8 +4,8 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { AnimeTimeline, SplitText, SplitTextEntry } from '@/lib/react-animejs/components';
-import type { SplitTextRef } from '@/lib/react-animejs/components';
+import { AnimeTimeline, SplitText, SplitTextEntry } from '@shakibdshy/react-animejs';
+import type { SplitTextRef } from '@shakibdshy/react-animejs';
 import { DemoCard } from '../DemoCard';
 
 export const SplitTextBasicDemo: React.FC = () => {

@@ -1,0 +1,149 @@
+- generic [ref=f11e3]:
+  - banner [ref=f11e4]:
+    - link [ref=f11e5] [cursor=pointer]:
+      - /url: /
+      - text: React AnimeJS
+      - emphasis [ref=f11e6]: ✦
+    - navigation [ref=f11e7]:
+      - link "Home" [ref=f11e8] [cursor=pointer]:
+        - /url: /
+      - link "Components" [ref=f11e9] [cursor=pointer]:
+        - /url: /demos
+      - link "Blocks" [ref=f11e10] [cursor=pointer]:
+        - /url: /blocks
+      - button "Open command palette" [ref=f11e11]:
+        - generic [ref=f11e12]: Search
+        - generic [ref=f11e13]: ⌘K
+      - button "Switch to light mode" [ref=f11e14] [cursor=pointer]: ☀️
+  - main [ref=f11e15]:
+    - generic [ref=f11e16]:
+      - generic [ref=f11e17]:
+        - generic [ref=f11e18]:
+          - link "Components" [ref=f11e19] [cursor=pointer]:
+            - /url: /demos
+          - generic [ref=f11e20]: /
+          - generic [ref=f11e21]: Tooltip
+          - generic [ref=f11e22]: 20 / 25
+        - generic [ref=f11e23]:
+          - link "Previous" [ref=f11e24] [cursor=pointer]:
+            - /url: /demos/scramble-text
+          - link "Next" [ref=f11e27] [cursor=pointer]:
+            - /url: /demos/dropdown-menu
+      - generic [ref=f11e30]:
+        - generic [ref=f11e31]:
+          - heading "Tooltip" [level=1] [ref=f11e32]
+          - generic [ref=f11e33]:
+            - generic [ref=f11e34]: ui
+            - generic [ref=f11e35]: Beginner
+            - link "Read the docs" [ref=f11e36] [cursor=pointer]:
+              - /url: /docs#use-anime
+          - generic [ref=f11e39]:
+            - heading "Code" [level=2] [ref=f11e40]
+            - button "Copy" [ref=f11e41]
+          - table [ref=f11e45]:
+            - rowgroup [ref=f11e46]:
+              - row [ref=f11e47]:
+                - cell "1" [ref=f11e48]
+                - cell "const [open, setOpen] = useState(false)" [ref=f11e50]
+              - row [ref=f11e51]:
+                - cell "2" [ref=f11e52]
+                - cell [ref=f11e54]
+              - row [ref=f11e55]:
+                - cell "3" [ref=f11e56]
+                - cell "<Anime" [ref=f11e58]
+              - row [ref=f11e59]:
+                - cell "4" [ref=f11e60]
+                - 'cell "opacity={open ? [0, 1] : [1, 0]}" [ref=f11e62]'
+              - row [ref=f11e63]:
+                - cell "5" [ref=f11e64]
+                - 'cell "translateY={open ? [6, 0] : [0, 6]}" [ref=f11e66]'
+              - row [ref=f11e67]:
+                - cell "6" [ref=f11e68]
+                - 'cell "scale={open ? [0.9, 1] : [1, 0.9]}" [ref=f11e70]'
+              - row [ref=f11e71]:
+                - cell "7" [ref=f11e72]
+                - 'cell "duration={220}" [ref=f11e74]'
+              - row [ref=f11e75]:
+                - cell "8" [ref=f11e76]
+                - cell "ease=\"outBack\"" [ref=f11e78]
+              - row [ref=f11e79]:
+                - cell "9" [ref=f11e80]
+                - 'cell "deps={[open]}" [ref=f11e82]'
+              - row [ref=f11e83]:
+                - cell "10" [ref=f11e84]
+                - cell ">" [ref=f11e86]
+              - row [ref=f11e87]:
+                - cell "11" [ref=f11e88]
+                - cell "<span className=\"tooltip-pop\">Tooltip text</span>" [ref=f11e90]
+              - row [ref=f11e91]:
+                - cell "12" [ref=f11e92]
+                - cell "</Anime>" [ref=f11e94]
+        - generic [ref=f11e95]:
+          - paragraph [ref=f11e96]: Hover or focus trigger with spring enter/exit and smart placement.
+          - generic [ref=f11e97]:
+            - generic [ref=f11e98]: Live preview
+            - generic [ref=f11e101]:
+              - generic [ref=f11e102]:
+                - generic [ref=f11e103]: TooltipHover or tap the target
+                - button "Reveal" [ref=f11e105] [cursor=pointer]
+              - generic [ref=f11e107]:
+                - button "Hover or tap me" [ref=f11e108]
+                - generic: Helpful tip
+          - generic [ref=f11e109]:
+            - generic [ref=f11e110]: Props
+            - table [ref=f11e112]:
+              - rowgroup [ref=f11e113]:
+                - row [ref=f11e114]:
+                  - columnheader "Name" [ref=f11e115]
+                  - columnheader "Type" [ref=f11e116]
+                  - columnheader "Default" [ref=f11e117]
+                  - columnheader "Description" [ref=f11e118]
+              - rowgroup [ref=f11e119]:
+                - row [ref=f11e120]:
+                  - cell "opacity" [ref=f11e121]
+                  - cell "number[]" [ref=f11e122]
+                  - cell "[0, 1]" [ref=f11e123]
+                  - cell "Fade keyframes" [ref=f11e124]
+                - row [ref=f11e125]:
+                  - cell "translateY" [ref=f11e126]
+                  - cell "number[]" [ref=f11e127]
+                  - cell "[6, 0]" [ref=f11e128]
+                  - cell "Slide-in offset" [ref=f11e129]
+                - row [ref=f11e130]:
+                  - cell "scale" [ref=f11e131]
+                  - cell "number[]" [ref=f11e132]
+                  - cell "[0.9, 1]" [ref=f11e133]
+                  - cell "Pop scale" [ref=f11e134]
+                - row [ref=f11e135]:
+                  - cell "duration" [ref=f11e136]
+                  - cell "number" [ref=f11e137]
+                  - cell "220" [ref=f11e138]
+                  - cell "Enter/exit ms" [ref=f11e139]
+                - row [ref=f11e140]:
+                  - cell "ease" [ref=f11e141]
+                  - cell "string" [ref=f11e142]
+                  - cell "outBack" [ref=f11e143]
+                  - cell "Spring-like easing" [ref=f11e144]
+      - generic [ref=f11e145]:
+        - heading "Related components" [level=2] [ref=f11e146]
+        - generic [ref=f11e147]:
+          - link [ref=f11e148] [cursor=pointer]:
+            - /url: /demos/accordion
+            - generic [ref=f11e163]:
+              - heading "Accordion" [level=3] [ref=f11e164]
+              - paragraph [ref=f11e165]: Expand/collapse panels with height animation and single/multi open modes
+          - link [ref=f11e166] [cursor=pointer]:
+            - /url: /demos/accordion-presence
+            - generic [ref=f11e181]:
+              - heading "Accordion (Presence)" [level=3] [ref=f11e182]
+              - paragraph [ref=f11e183]: Mount/unmount accordion panels with enter/exit cross-fade via AnimePresence
+          - link [ref=f11e184] [cursor=pointer]:
+            - /url: /demos/animated-slider
+            - generic [ref=f11e190]:
+              - heading "Animated Slider" [level=3] [ref=f11e191]
+              - paragraph [ref=f11e192]: Slide, fade, scale, flip transitions with visual slide showcase
+      - generic [ref=f11e193]:
+        - link "Scramble Text" [ref=f11e194] [cursor=pointer]:
+          - /url: /demos/scramble-text
+        - link "Dropdown Menu" [ref=f11e197] [cursor=pointer]:
+          - /url: /demos/dropdown-menu

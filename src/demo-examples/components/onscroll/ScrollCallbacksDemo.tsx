@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useAnimeOnScroll } from '@/lib/react-animejs';
+import { useAnimeOnScroll } from '@shakibdshy/react-animejs';
 import { DemoCard } from '../DemoCard';
 import { ScrollHint } from './ScrollHint';
 

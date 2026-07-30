@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useAnimeDraggable } from '@/lib/react-animejs';
+import { useAnimeDraggable } from '@shakibdshy/react-animejs';
 
 export function CursorDemo() {
   const containerRef = useRef<HTMLDivElement>(null);

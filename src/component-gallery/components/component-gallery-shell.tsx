@@ -1,6 +1,8 @@
-import { type ReactNode, useCallback, useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { AnimeProvider } from '@/lib/react-animejs';
+import { AnimeProvider } from '@shakibdshy/react-animejs';
+import { useTheme } from '@/theme';
+import { CommandPalette } from './command-palette';
 
 interface ComponentGalleryShellProps {
   children: ReactNode;
@@ -8,21 +10,21 @@ interface ComponentGalleryShellProps {
 
 /** Shared application shell for the component catalog and canonical details. */
 export function ComponentGalleryShell({ children }: ComponentGalleryShellProps) {
-  const [isDark, setIsDark] = useState(true);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
 
+  // ⌘K / Ctrl+K toggles the command palette. Lives in the shell so it works
+  // on both the gallery index and the detail pages.
   useEffect(() => {
-    const stored = localStorage.getItem('demo-theme');
-    const preferDark = stored !== null ? stored === 'dark' : true;
-    setIsDark(preferDark);
-    document.documentElement.classList.toggle('dark', preferDark);
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, []);
-
-  const toggleTheme = useCallback(() => {
-    const next = !isDark;
-    setIsDark(next);
-    document.documentElement.classList.toggle('dark', next);
-    localStorage.setItem('demo-theme', next ? 'dark' : 'light');
-  }, [isDark]);
 
   return (
     <AnimeProvider>
@@ -51,6 +53,16 @@ export function ComponentGalleryShell({ children }: ComponentGalleryShellProps) 
               Blocks
             </Link>
             <button
+              onClick={() => setPaletteOpen(true)}
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-landing-border bg-landing-surface text-xs text-landing-muted hover:border-landing-accent hover:text-landing-accent transition-all"
+              aria-label="Open command palette"
+            >
+              <span className="landing-font-mono">Search</span>
+              <kbd className="landing-font-mono text-[10px] px-1 py-0.5 rounded border border-landing-border">
+                ⌘K
+              </kbd>
+            </button>
+            <button
               onClick={toggleTheme}
               className="bg-transparent border border-landing-border rounded-full w-10 h-10 cursor-pointer text-base text-landing-muted flex items-center justify-center hover:bg-landing-surface hover:text-landing-fg transition-all duration-200"
               aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
@@ -60,6 +72,7 @@ export function ComponentGalleryShell({ children }: ComponentGalleryShellProps) 
           </nav>
         </header>
         {children}
+        <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
       </div>
     </AnimeProvider>
   );

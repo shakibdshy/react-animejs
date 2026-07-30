@@ -1,0 +1,191 @@
+- generic [ref=f10e3]:
+  - banner [ref=f10e4]:
+    - link [ref=f10e5] [cursor=pointer]:
+      - /url: /
+      - text: React AnimeJS
+      - emphasis [ref=f10e6]: ✦
+    - navigation [ref=f10e7]:
+      - link "Home" [ref=f10e8] [cursor=pointer]:
+        - /url: /
+      - link "Components" [ref=f10e9] [cursor=pointer]:
+        - /url: /demos
+      - link "Blocks" [ref=f10e10] [cursor=pointer]:
+        - /url: /blocks
+      - button "Open command palette" [ref=f10e11]:
+        - generic [ref=f10e12]: Search
+        - generic [ref=f10e13]: ⌘K
+      - button "Switch to light mode" [ref=f10e14] [cursor=pointer]: ☀️
+  - main [ref=f10e15]:
+    - generic [ref=f10e16]:
+      - generic [ref=f10e17]:
+        - generic [ref=f10e18]:
+          - link "Components" [ref=f10e19] [cursor=pointer]:
+            - /url: /demos
+          - generic [ref=f10e20]: /
+          - generic [ref=f10e21]: Accordion (Presence)
+          - generic [ref=f10e22]: 23 / 25
+        - generic [ref=f10e23]:
+          - link "Previous" [ref=f10e24] [cursor=pointer]:
+            - /url: /demos/accordion
+          - link "Next" [ref=f10e27] [cursor=pointer]:
+            - /url: /demos/toast
+      - generic [ref=f10e30]:
+        - generic [ref=f10e31]:
+          - heading "Accordion (Presence)" [level=1] [ref=f10e32]
+          - generic [ref=f10e33]:
+            - generic [ref=f10e34]: ui
+            - generic [ref=f10e35]: Beginner
+            - link "Read the docs" [ref=f10e36] [cursor=pointer]:
+              - /url: /docs#anime-presence
+          - generic [ref=f10e39]:
+            - heading "Code" [level=2] [ref=f10e40]
+            - button "Copy" [ref=f10e41]
+          - table [ref=f10e45]:
+            - rowgroup [ref=f10e46]:
+              - row [ref=f10e47]:
+                - cell "1" [ref=f10e48]
+                - cell "// The open panel mounts/unmounts as isOpen flips. AnimePresence drives" [ref=f10e50]
+              - row [ref=f10e51]:
+                - cell "2" [ref=f10e52]
+                - cell "// the enter/exit — opacity + a small slide — so there's no manual height" [ref=f10e54]
+              - row [ref=f10e55]:
+                - cell "3" [ref=f10e56]
+                - cell "// measurement. mode=\"sync\" lets closing & opening panels animate in parallel." [ref=f10e58]
+              - row [ref=f10e59]:
+                - cell "4" [ref=f10e60]
+                - 'cell "const AccordionItem = ({ title, body, isOpen, onToggle }) => (" [ref=f10e62]'
+              - row [ref=f10e63]:
+                - cell "5" [ref=f10e64]
+                - cell "<div className=\"overflow-hidden rounded-lg border\">" [ref=f10e66]
+              - row [ref=f10e67]:
+                - cell "6" [ref=f10e68]
+                - 'cell "<button onClick={onToggle} aria-expanded={isOpen}>{title} ▼</button>" [ref=f10e70]'
+              - row [ref=f10e71]:
+                - cell "7" [ref=f10e72]
+                - 'cell "<AnimePresence mode=\"sync\" initial={false}>" [ref=f10e74]'
+              - row [ref=f10e75]:
+                - cell "8" [ref=f10e76]
+                - 'cell "{isOpen && (" [ref=f10e78]'
+              - row [ref=f10e79]:
+                - cell "9" [ref=f10e80]
+                - cell "<AnimePresenceChild" [ref=f10e82]
+              - row [ref=f10e83]:
+                - cell "10" [ref=f10e84]
+                - cell "key=\"panel\"" [ref=f10e86]
+              - row [ref=f10e87]:
+                - cell "11" [ref=f10e88]
+                - 'cell "enter={{ opacity: [0, 1], translateY: [-8, 0] }}" [ref=f10e90]'
+              - row [ref=f10e91]:
+                - cell "12" [ref=f10e92]
+                - 'cell "exit={{ opacity: [1, 0], translateY: [0, -8] }}" [ref=f10e94]'
+              - row [ref=f10e95]:
+                - cell "13" [ref=f10e96]
+                - 'cell "duration={280}" [ref=f10e98]'
+              - row [ref=f10e99]:
+                - cell "14" [ref=f10e100]
+                - cell "ease=\"outExpo\"" [ref=f10e102]
+              - row [ref=f10e103]:
+                - cell "15" [ref=f10e104]
+                - cell ">" [ref=f10e106]
+              - row [ref=f10e107]:
+                - cell "16" [ref=f10e108]
+                - 'cell "<div className=\"overflow-hidden\">{body}</div>" [ref=f10e110]'
+              - row [ref=f10e111]:
+                - cell "17" [ref=f10e112]
+                - cell "</AnimePresenceChild>" [ref=f10e114]
+              - row [ref=f10e115]:
+                - cell "18" [ref=f10e116]
+                - 'cell ")}" [ref=f10e118]'
+              - row [ref=f10e119]:
+                - cell "19" [ref=f10e120]
+                - cell "</AnimePresence>" [ref=f10e122]
+              - row [ref=f10e123]:
+                - cell "20" [ref=f10e124]
+                - cell "</div>" [ref=f10e126]
+              - row [ref=f10e127]:
+                - cell "21" [ref=f10e128]
+                - cell ")" [ref=f10e130]
+        - generic [ref=f10e131]:
+          - paragraph [ref=f10e132]: Mount/unmount accordion panels with enter/exit cross-fade via AnimePresence.
+          - generic [ref=f10e133]:
+            - generic [ref=f10e134]: Live preview
+            - generic [ref=f10e137]:
+              - generic [ref=f10e138]: Accordion (Presence)Click a header to toggle
+              - generic [ref=f10e141]:
+                - generic [ref=f10e142]:
+                  - button "What is react-animejs? ▼" [expanded] [ref=f10e143]:
+                    - generic [ref=f10e144]: What is react-animejs?
+                    - generic [ref=f10e145]: ▼
+                  - generic: A React wrapper around anime.js v4 — hooks-first, with declarative components where they help.
+                  - paragraph [ref=f10e147]: A React wrapper around anime.js v4 — hooks-first, with declarative components where they help.
+                - generic [ref=f10e148]:
+                  - button "Do I need anime.js installed? ▼" [ref=f10e149]:
+                    - generic [ref=f10e150]: Do I need anime.js installed?
+                    - generic [ref=f10e151]: ▼
+                  - generic: Yes. Install animejs separately; this package wraps its primitives.
+                - generic [ref=f10e152]:
+                  - button "Is it SSR-safe? ▼" [ref=f10e153]:
+                    - generic [ref=f10e154]: Is it SSR-safe?
+                    - generic [ref=f10e155]: ▼
+                  - generic: Hooks access browser APIs inside effects, so they render safely on the server.
+          - generic [ref=f10e156]:
+            - generic [ref=f10e157]: Props
+            - table [ref=f10e159]:
+              - rowgroup [ref=f10e160]:
+                - row [ref=f10e161]:
+                  - columnheader "Name" [ref=f10e162]
+                  - columnheader "Type" [ref=f10e163]
+                  - columnheader "Default" [ref=f10e164]
+                  - columnheader "Description" [ref=f10e165]
+              - rowgroup [ref=f10e166]:
+                - row [ref=f10e167]:
+                  - cell "mode" [ref=f10e168]
+                  - cell "'sync'|'wait'|'popLayout'" [ref=f10e169]
+                  - cell "'sync'" [ref=f10e170]
+                  - cell "sync = parallel enter/exit when switching items" [ref=f10e171]
+                - row [ref=f10e172]:
+                  - cell "enter" [ref=f10e173]
+                  - cell "UseAnimeOptions" [ref=f10e174]
+                  - cell "-" [ref=f10e175]
+                  - cell "Enter keyframes (opacity, translateY)" [ref=f10e176]
+                - row [ref=f10e177]:
+                  - cell "exit" [ref=f10e178]
+                  - cell "UseAnimeOptions" [ref=f10e179]
+                  - cell "-" [ref=f10e180]
+                  - cell "Exit keyframes (mirror of enter)" [ref=f10e181]
+                - row [ref=f10e182]:
+                  - cell "duration" [ref=f10e183]
+                  - cell "number" [ref=f10e184]
+                  - cell "280" [ref=f10e185]
+                  - cell "Enter/exit ms" [ref=f10e186]
+                - row [ref=f10e187]:
+                  - cell "ease" [ref=f10e188]
+                  - cell "string" [ref=f10e189]
+                  - cell "'outExpo'" [ref=f10e190]
+                  - cell "Decelerating curve" [ref=f10e191]
+      - generic [ref=f10e192]:
+        - heading "Related components" [level=2] [ref=f10e193]
+        - generic [ref=f10e194]:
+          - link [ref=f10e195] [cursor=pointer]:
+            - /url: /demos/accordion
+            - generic [ref=f10e210]:
+              - heading "Accordion" [level=3] [ref=f10e211]
+              - paragraph [ref=f10e212]: Expand/collapse panels with height animation and single/multi open modes
+          - link "✓ Saved ✓ Copied Toast Stacked notifications with enter/exit animations and auto-dismiss" [ref=f10e213] [cursor=pointer]:
+            - /url: /demos/toast
+            - generic [ref=f10e215]:
+              - generic [ref=f10e216]: ✓ Saved
+              - generic [ref=f10e217]: ✓ Copied
+            - generic [ref=f10e218]:
+              - heading "Toast" [level=3] [ref=f10e219]
+              - paragraph [ref=f10e220]: Stacked notifications with enter/exit animations and auto-dismiss
+          - link [ref=f10e221] [cursor=pointer]:
+            - /url: /demos/animated-slider
+            - generic [ref=f10e227]:
+              - heading "Animated Slider" [level=3] [ref=f10e228]
+              - paragraph [ref=f10e229]: Slide, fade, scale, flip transitions with visual slide showcase
+      - generic [ref=f10e230]:
+        - link "Accordion" [ref=f10e231] [cursor=pointer]:
+          - /url: /demos/accordion
+        - link "Toast" [ref=f10e234] [cursor=pointer]:
+          - /url: /demos/toast

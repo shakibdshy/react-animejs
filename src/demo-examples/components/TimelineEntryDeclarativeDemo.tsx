@@ -6,11 +6,11 @@
  */
 
 import React, { useRef, useState } from "react";
-import { AnimeTimeline, SplitText } from "@/lib/react-animejs/components";
+import { AnimeTimeline, SplitText } from "@shakibdshy/react-animejs";
 import { TimelineEntry } from "@/demo-examples/components/common/TimelineEntry";
-import type { AnimeTimelineRef, SplitTextRef } from "@/lib/react-animejs/components";
+import type { AnimeTimelineRef, SplitTextRef } from "@shakibdshy/react-animejs";
 import type { TextSplitter } from "animejs";
-import { stagger } from "@/lib/react-animejs";
+import { stagger } from "@shakibdshy/react-animejs";
 import { DemoCard } from "./DemoCard";
 
 export const TimelineEntryDeclarativeDemo: React.FC = () => {

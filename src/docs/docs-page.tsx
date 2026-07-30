@@ -24,13 +24,13 @@ const importCode = `import {
   useAnime,
   fadeInUp,
   stagger,
-} from '@/lib/react-animejs'`;
+} from '@shakibdshy/react-animejs'`;
 
 const navigationSectionIds = docsNavigation.flatMap((group) =>
   group.items.map((item) => item.href.slice(1))
 );
 
-const firstAnimationCode = `import { useAnime } from '@/lib/react-animejs'
+const firstAnimationCode = `import { useAnime } from '@shakibdshy/react-animejs'
 
 export function Welcome() {
   const { ref, controls, state } = useAnime({
@@ -258,7 +258,7 @@ export function DocsPage() {
                   </p>
                 </div>
               </div>
-              <CodeBlock>{`import { fadeInUp, gridStagger, clamp, lerp } from '@/lib/react-animejs'
+              <CodeBlock>{`import { fadeInUp, gridStagger, clamp, lerp } from '@shakibdshy/react-animejs'
 
 const cardAnimation = {
   ...fadeInUp,
@@ -310,7 +310,7 @@ const translateX = lerp(0, 120, safeProgress)`}</CodeBlock>
   UseAnimeReturn,
   AnimeTimelineRef,
   UseAnimeOnScrollOptions,
-} from '@/lib/react-animejs'`}</CodeBlock>
+} from '@shakibdshy/react-animejs'`}</CodeBlock>
               <p className="text-[15px] leading-7 text-landing-muted">
                 Let the hook own the animation lifecycle whenever possible. If you create raw
                 Anime.js instances yourself, clean them up in an effect cleanup function. Keep

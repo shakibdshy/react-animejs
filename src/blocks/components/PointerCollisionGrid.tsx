@@ -19,7 +19,7 @@ import {
   useCallback,
   useRef,
 } from 'react';
-import { useAnimatable } from '@/lib/react-animejs';
+import { useAnimatable } from '@shakibdshy/react-animejs';
 
 const COLS = 20;
 const ROWS = 20;

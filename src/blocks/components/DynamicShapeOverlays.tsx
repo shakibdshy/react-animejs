@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { AnimeMorph, type AnimeMorphRef } from '@/lib/react-animejs';
+import { AnimeMorph, type AnimeMorphRef } from '@shakibdshy/react-animejs';
 
 // ── Path states ─────────────────────────────────────────────────────────────
 // Every layer shares the same flat baseline and full-cover top state; only the

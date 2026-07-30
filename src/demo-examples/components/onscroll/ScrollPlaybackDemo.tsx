@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { RefreshCw, Zap } from 'lucide-react';
-import { useAnime } from '@/lib/react-animejs';
+import { useAnime } from '@shakibdshy/react-animejs';
 import { DemoCard } from '../DemoCard';
 import { ScrollHint } from './ScrollHint';
 import { DEFAULT_SCROLL_OBSERVER_SNAPSHOT, type DemoScrollObserverSnapshot, toObserverSnapshot } from './utils';

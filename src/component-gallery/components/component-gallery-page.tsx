@@ -6,7 +6,25 @@ import { FilterBar } from './filter-bar';
 import { GalleryCard } from './gallery-card';
 
 export const ComponentGalleryPage = memo(function ComponentGalleryPage() {
-  const { category, setCategory, search, setSearch, filtered } = useDemoFilter();
+  const {
+    category,
+    setCategory,
+    search,
+    setSearch,
+    sort,
+    setSort,
+    allTags,
+    tag,
+    setTagFilter,
+    filtered,
+  } = useDemoFilter();
+
+  const resetFilters = () => {
+    setCategory('all');
+    setSearch('');
+    setTagFilter(undefined);
+    setSort('alpha');
+  };
 
   return (
     <ComponentGalleryShell>
@@ -19,6 +37,13 @@ export const ComponentGalleryPage = memo(function ComponentGalleryPage() {
           <p className="text-landing-muted max-w-xl mx-auto text-lg leading-relaxed mt-4">
             Discover the API, try a live preview, and open a Playground only when the interaction needs more room.
           </p>
+          <p className="landing-font-mono text-[11px] text-landing-muted/70 mt-3">
+            Press{' '}
+            <kbd className="px-1.5 py-0.5 rounded border border-landing-border bg-landing-surface text-[10px]">
+              ⌘K
+            </kbd>{' '}
+            to jump to any component
+          </p>
         </section>
       </ErrorBoundary>
 
@@ -30,13 +55,34 @@ export const ComponentGalleryPage = memo(function ComponentGalleryPage() {
             resultCount={filtered.length}
             onCategoryChange={setCategory}
             onSearchChange={setSearch}
+            sort={sort}
+            onSortChange={setSort}
+            allTags={allTags}
+            tag={tag}
+            onTagChange={setTagFilter}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
-            {filtered.map((demo, i) => (
-              <GalleryCard key={demo.componentId} demo={demo} demoIndex={i} />
-            ))}
-          </div>
+          {filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-24 text-center">
+              <p className="landing-font-mono text-sm text-landing-accent mb-3">No matches</p>
+              <h2 className="landing-font-display text-2xl mb-2">No components match your filters</h2>
+              <p className="text-landing-muted max-w-sm mb-6">
+                Try clearing the search, switching category, or removing the active tag.
+              </p>
+              <button
+                onClick={resetFilters}
+                className="px-5 py-2.5 rounded-full border border-landing-border bg-landing-surface text-landing-fg text-sm landing-font-mono hover:border-landing-accent hover:text-landing-accent transition-all"
+              >
+                Reset filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
+              {filtered.map((demo, i) => (
+                <GalleryCard key={demo.componentId} demo={demo} demoIndex={i} />
+              ))}
+            </div>
+          )}
         </div>
       </ErrorBoundary>
 

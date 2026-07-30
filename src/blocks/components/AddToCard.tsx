@@ -16,7 +16,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Anime } from '@/lib/react-animejs';
+import { Anime } from '@shakibdshy/react-animejs';
 
 interface Flyer {
   id: number;

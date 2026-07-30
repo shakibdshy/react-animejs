@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { utils } from 'animejs';
-import { AnimeDraw, AnimeMorph, AnimeMotionPath } from '@/lib/react-animejs/components';
+import { AnimeDraw, AnimeMorph, AnimeMotionPath } from '@shakibdshy/react-animejs';
 import { DemoCard } from './DemoCard';
 
 const MORPH_SOURCE_POINTS =

@@ -1,0 +1,94 @@
+[     100ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:20102
+[  507518ms] [ERROR] %o
+
+%s
+
+%s
+ Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `GalleryPreview2`.
+    at createFiberFromTypeAndProps (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:3741:30)
+    at createFiberFromElement (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:3754:16)
+    at reconcileChildFibersImpl (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:5120:248)
+    at http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:5237:35
+    at reconcileChildren (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:7182:53)
+    at beginWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:8701:104)
+    at runWithFiberInDEV (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:997:72)
+    at performUnitOfWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:12561:98)
+    at workLoopSync (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:12424:43)
+    at renderRootSync (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:12408:13) The above error occurred in the <div> component. React will try to recreate this component tree from scratch using the error boundary you provided, CatchBoundaryImpl. @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:7000
+[  507518ms] [WARNING] Warning: The following error wasn't caught by any route! At the very least, consider setting an 'errorComponent' in your RootRoute! @ http://localhost:3002/node_modules/.pnpm/tiny-warning@1.0.3/node_modules/tiny-warning/dist/tiny-warning.esm.js?v=408bc27c:8
+[  507518ms] [WARNING] Warning: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `GalleryPreview2`. @ http://localhost:3002/node_modules/.pnpm/tiny-warning@1.0.3/node_modules/tiny-warning/dist/tiny-warning.esm.js?v=408bc27c:8
+[  507519ms] [ERROR] %o
+
+%s
+
+%s
+ NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at removeChild (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:15918:24)
+    at runWithFiberInDEV (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:997:72)
+    at commitDeletionEffectsOnFiber (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:10190:19)
+    at recursivelyTraverseDeletionEffects (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:10115:11)
+    at commitDeletionEffectsOnFiber (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:10237:13)
+    at recursivelyTraverseDeletionEffects (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:10115:11)
+    at commitDeletionEffectsOnFiber (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:10237:13)
+    at recursivelyTraverseDeletionEffects (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:10115:11)
+    at commitDeletionEffectsOnFiber (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:10146:13)
+    at recursivelyTraverseDeletionEffects (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:10115:11) The above error occurred in the <link> component. React will try to recreate this component tree from scratch using the error boundary you provided, CatchBoundaryImpl. @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:7000
+[  507519ms] [WARNING] Warning: The following error wasn't caught by any route! At the very least, consider setting an 'errorComponent' in your RootRoute! @ http://localhost:3002/node_modules/.pnpm/tiny-warning@1.0.3/node_modules/tiny-warning/dist/tiny-warning.esm.js?v=408bc27c:8
+[  507520ms] [WARNING] Warning: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node. @ http://localhost:3002/node_modules/.pnpm/tiny-warning@1.0.3/node_modules/tiny-warning/dist/tiny-warning.esm.js?v=408bc27c:8
+[  514926ms] [ERROR] %o
+
+%s
+
+%s
+ Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `GalleryPreview2`.
+    at createFiberFromTypeAndProps (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:3741:30)
+    at createFiberFromElement (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:3754:16)
+    at reconcileChildFibersImpl (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:5120:248)
+    at http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:5237:35
+    at reconcileChildren (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:7182:53)
+    at beginWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:8701:104)
+    at runWithFiberInDEV (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:997:72)
+    at performUnitOfWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:12561:98)
+    at workLoopSync (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:12424:43)
+    at renderRootSync (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:12408:13) The above error occurred in the <div> component. React will try to recreate this component tree from scratch using the error boundary you provided, CatchBoundaryImpl. @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:7000
+[  514927ms] [WARNING] Warning: The following error wasn't caught by any route! At the very least, consider setting an 'errorComponent' in your RootRoute! @ http://localhost:3002/node_modules/.pnpm/tiny-warning@1.0.3/node_modules/tiny-warning/dist/tiny-warning.esm.js?v=408bc27c:8
+[  514927ms] [WARNING] Warning: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `GalleryPreview2`. @ http://localhost:3002/node_modules/.pnpm/tiny-warning@1.0.3/node_modules/tiny-warning/dist/tiny-warning.esm.js?v=408bc27c:8
+[  551197ms] [ERROR] %o
+
+%s
+
+%s
+ Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `GalleryPreview2`.
+    at createFiberFromTypeAndProps (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:3741:30)
+    at createFiberFromElement (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:3754:16)
+    at reconcileChildFibersImpl (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:5120:248)
+    at http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:5237:35
+    at reconcileChildren (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:7182:53)
+    at beginWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:8701:104)
+    at runWithFiberInDEV (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:997:72)
+    at performUnitOfWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:12561:98)
+    at workLoopSync (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:12424:43)
+    at renderRootSync (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:12408:13) The above error occurred in the <div> component. React will try to recreate this component tree from scratch using the error boundary you provided, CatchBoundaryImpl. @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=821a3d58:7000
+[  551197ms] [WARNING] Warning: The following error wasn't caught by any route! At the very least, consider setting an 'errorComponent' in your RootRoute! @ http://localhost:3002/node_modules/.pnpm/tiny-warning@1.0.3/node_modules/tiny-warning/dist/tiny-warning.esm.js?v=408bc27c:8
+[  551197ms] [WARNING] Warning: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `GalleryPreview2`. @ http://localhost:3002/node_modules/.pnpm/tiny-warning@1.0.3/node_modules/tiny-warning/dist/tiny-warning.esm.js?v=408bc27c:8
+[  572257ms] [ERROR] [vite] ReferenceError: AccordionPresenceCardPreview is not defined
+    at http://localhost:3002/src/component-gallery/components/gallery-preview.tsx?t=1785262730048:888:25 @ http://localhost:3002/@vite/client:808
+[  572257ms] [ERROR] [vite] Failed to reload /src/component-gallery/components/gallery-preview.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:3002/@vite/client:808
+[  671547ms] [ERROR] WebSocket connection to 'ws://localhost:3002/?token=k6jXrrJ7vxch' failed:  @ http://localhost:3002/@vite/client:744
+[  671547ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3002/@vite/client:864
+[  676556ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=6d8a4757:20102
+[  885967ms] [ERROR] WebSocket connection to 'ws://localhost:3002/?token=4H2Yn_LTziWH' failed:  @ http://localhost:3002/@vite/client:744
+[  885967ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:3002/@vite/client:864
+[  891426ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=fcc126fc:20102

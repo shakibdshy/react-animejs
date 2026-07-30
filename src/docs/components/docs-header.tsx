@@ -1,27 +1,13 @@
 import { Link } from '@tanstack/react-router';
 import { Menu, Moon, Sun } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useTheme } from '@/theme';
 
 interface DocsHeaderProps {
   onOpenNavigation: () => void;
 }
 
 export function DocsHeader({ onOpenNavigation }: DocsHeaderProps) {
-  const [isDark, setIsDark] = useState(true);
-
-  useEffect(() => {
-    const stored = localStorage.getItem('demo-theme');
-    const preferDark = stored !== null ? stored === 'dark' : true;
-    setIsDark(preferDark);
-    document.documentElement.classList.toggle('dark', preferDark);
-  }, []);
-
-  const toggleTheme = () => {
-    const next = !isDark;
-    setIsDark(next);
-    document.documentElement.classList.toggle('dark', next);
-    localStorage.setItem('demo-theme', next ? 'dark' : 'light');
-  };
+  const { isDark, toggleTheme } = useTheme();
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center border-b border-landing-border bg-landing-bg/90 px-4 backdrop-blur-xl sm:px-6">

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useAnimeDraggable } from '@/lib/react-animejs';
+import { useAnimeDraggable } from '@shakibdshy/react-animejs';
 
 export function ControlledDraggable() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -20,7 +20,6 @@ export function ControlledDraggable() {
     containerPadding: 16,
     releaseStiffness: 100,
     releaseDamping: 20,
-    onSettle: () => console.log('Settled!'),
   });
 
   const handleDisable = () => {

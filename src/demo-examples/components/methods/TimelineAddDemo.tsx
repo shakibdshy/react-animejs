@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useAnimeTimeline } from "@/lib/react-animejs/hooks";
+import { useAnimeTimeline } from "@shakibdshy/react-animejs";
 import { DemoCard } from "../DemoCard";
 
 export const TimelineAddDemo: React.FC = () => {

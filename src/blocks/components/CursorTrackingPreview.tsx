@@ -14,7 +14,7 @@
  *     preview never hard-cuts when you move between thumbnails.
  */
 import { memo, type PointerEvent as ReactPointerEvent, useCallback, useRef, useState } from 'react';
-import { Anime, useAnimatable } from '@/lib/react-animejs';
+import { Anime, useAnimatable } from '@shakibdshy/react-animejs';
 
 interface Thumb {
   id: number;

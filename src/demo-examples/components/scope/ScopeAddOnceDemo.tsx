@@ -10,7 +10,7 @@
 
 import React, { useCallback, useState } from 'react';
 import { DemoCard } from '../DemoCard';
-import { AnimeScope } from '@/lib/react-animejs/components/AnimeScope';
+import { AnimeScope } from '@shakibdshy/react-animejs';
 import { animate } from 'animejs';
 import { Zap } from 'lucide-react';
 
@@ -79,9 +79,6 @@ export const ScopeAddOnceDemo: React.FC = () => {
               ease: 'outElastic(1, 0.5)',
             });
 
-            return () => {
-              console.log('[animateOnce] Cleanup (only on full revert)');
-            };
           }}
           // animate - runs on every media query change
           animate={() => {
@@ -96,9 +93,6 @@ export const ScopeAddOnceDemo: React.FC = () => {
               ease: 'inOutQuad',
             });
 
-            return () => {
-              console.log('[animate] Cleanup');
-            };
           }}
         >
           {/* Animated elements */}

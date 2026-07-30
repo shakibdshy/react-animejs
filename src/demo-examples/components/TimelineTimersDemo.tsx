@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useAnimeTimer } from '@/lib/react-animejs/hooks';
-import { AnimeTimeline } from '@/lib/react-animejs/components';
+import { useAnimeTimer } from '@shakibdshy/react-animejs';
+import { AnimeTimeline } from '@shakibdshy/react-animejs';
 import { DemoSection } from './DemoSection';
 import { TimelineDemoFrame } from './TimelineDemoFrame';
 

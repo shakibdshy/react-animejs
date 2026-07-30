@@ -13,8 +13,8 @@
  */
 import { memo, useCallback, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
-import { AnimeLayout, AnimeLayoutItem } from '@/lib/react-animejs';
-import type { AnimeLayoutRef } from '@/lib/react-animejs';
+import { AnimeLayout, AnimeLayoutItem } from '@shakibdshy/react-animejs';
+import type { AnimeLayoutRef } from '@shakibdshy/react-animejs';
 import { cn } from '@/lib/utils';
 
 /** Six portrait sources (stable seeds so each tile is a distinct image). */

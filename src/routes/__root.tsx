@@ -1,6 +1,7 @@
 import { createRootRoute, HeadContent, Scripts, useLocation } from '@tanstack/react-router';
 
 import Header from '../components/Header';
+import { ThemeProvider } from '@/theme';
 
 import appCss from '../styles.css?url';
 
@@ -40,7 +41,7 @@ export const Route = createRootRoute({
     scripts: [
       {
         children:
-          "(function(){try{var t=localStorage.getItem('demo-theme');if(t==='light'||t===null)document.documentElement.classList.remove('dark');else document.documentElement.classList.add('dark')}catch(e){}})()",
+          "(function(){try{var t=localStorage.getItem('demo-theme');if(t==='light')document.documentElement.classList.remove('dark');else document.documentElement.classList.add('dark')}catch(e){}})()",
         type: 'text/javascript',
       },
     ],
@@ -64,8 +65,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {!hideHeader && <Header />}
-        {children}
+        <ThemeProvider>
+          {!hideHeader && <Header />}
+          {children}
+        </ThemeProvider>
         <Scripts />
       </body>
     </html>

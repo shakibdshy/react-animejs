@@ -1,5 +1,5 @@
 import { memo, useRef, useState } from 'react';
-import { AnimeMorph, type AnimeMorphRef } from '@/lib/react-animejs';
+import { AnimeMorph, type AnimeMorphRef } from '@shakibdshy/react-animejs';
 
 const BASE_PATH = 'M 0 100 V 100 Q 50 100 100 100 V 100 z';
 const CURVE_PATH = 'M 0 100 V 50 Q 50 0 100 50 V 100 z';

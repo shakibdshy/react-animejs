@@ -7,6 +7,9 @@ export const demoSections = [
     description: 'Animate targets with CSS selectors, stagger, easing, and callbacks',
     category: 'core',
     componentId: 'basic-animation',
+    tags: ['stagger', 'easing', 'selectors'],
+    difficulty: 'beginner',
+    docsAnchor: 'use-anime',
   },
 
   {
@@ -15,20 +18,31 @@ export const demoSections = [
     description: 'Morph between different SVG path shapes smoothly',
     category: 'svg',
     componentId: 'svg-morph',
+    tags: ['svg', 'morph', 'path'],
+    difficulty: 'intermediate',
+    docsAnchor: 'anime-morph',
   },
+
   {
     title: 'SVG Draw',
     playgroundPath: '/demo/svg',
     description: 'Animate SVG path drawing with stroke-dashoffset',
     category: 'svg',
     componentId: 'svg-draw',
+    tags: ['svg', 'stroke', 'draw'],
+    difficulty: 'intermediate',
+    docsAnchor: 'anime-draw',
   },
+
   {
     title: 'SVG Motion Path',
     playgroundPath: '/demo/svg',
     description: 'Move elements along an SVG motion path',
     category: 'svg',
     componentId: 'svg-motion-path',
+    tags: ['svg', 'motion-path', 'path'],
+    difficulty: 'intermediate',
+    docsAnchor: 'anime-motion-path',
   },
 
   {
@@ -37,6 +51,9 @@ export const demoSections = [
     description: 'Standalone timer with playback controls, callbacks, and methods',
     category: 'core',
     componentId: 'timer',
+    tags: ['timer', 'loop', 'callbacks'],
+    difficulty: 'beginner',
+    docsAnchor: 'use-anime-timer',
   },
 
   {
@@ -46,6 +63,9 @@ export const demoSections = [
     description: 'Sequenced timeline animations with sync, labels, and methods',
     category: 'core',
     componentId: 'timeline',
+    tags: ['timeline', 'sequence', 'sync'],
+    difficulty: 'intermediate',
+    docsAnchor: 'anime-timeline',
   },
 
   {
@@ -55,6 +75,9 @@ export const demoSections = [
     description: 'Physics-based drag with snap, spring release, and programmatic controls',
     category: 'interaction',
     componentId: 'draggable',
+    tags: ['drag', 'physics', 'snap'],
+    difficulty: 'intermediate',
+    docsAnchor: 'use-anime-draggable',
   },
 
   {
@@ -64,6 +87,9 @@ export const demoSections = [
     description: 'Scroll-linked animation with enter/leave callbacks and progress tracking',
     category: 'scroll',
     componentId: 'on-scroll',
+    tags: ['scroll', 'callbacks', 'progress'],
+    difficulty: 'intermediate',
+    docsAnchor: 'use-anime-onscroll',
   },
 
   {
@@ -73,6 +99,9 @@ export const demoSections = [
     description: 'FLIP-based layout animations with enter/exit, stagger, and methods',
     category: 'core',
     componentId: 'layout',
+    tags: ['layout', 'flip', 'enter-exit'],
+    difficulty: 'advanced',
+    docsAnchor: 'anime-layout',
   },
 
   {
@@ -82,6 +111,9 @@ export const demoSections = [
     description: 'Animation scopes with media queries, methods, and keepTime',
     category: 'core',
     componentId: 'scope',
+    tags: ['scope', 'media-query', 'cleanup'],
+    difficulty: 'advanced',
+    docsAnchor: 'use-anime-scope',
   },
 
   {
@@ -91,6 +123,9 @@ export const demoSections = [
     description: 'Text splitting into chars, words, lines with CJK and effects',
     category: 'core',
     componentId: 'split-text',
+    tags: ['text', 'chars', 'words', 'lines'],
+    difficulty: 'intermediate',
+    docsAnchor: 'split-text',
   },
 
   {
@@ -99,6 +134,9 @@ export const demoSections = [
     description: 'Animated toggle switch with styled and disabled states',
     category: 'ui',
     componentId: 'toggle-switch',
+    tags: ['ui', 'toggle', 'states'],
+    difficulty: 'beginner',
+    docsAnchor: 'use-anime',
   },
 
   {
@@ -107,6 +145,9 @@ export const demoSections = [
     description: 'Animated counter and countdown with padding and format options',
     category: 'ui',
     componentId: 'counter-countdown',
+    tags: ['ui', 'counter', 'countdown'],
+    difficulty: 'beginner',
+    docsAnchor: 'use-anime-timer',
   },
 
   {
@@ -115,6 +156,9 @@ export const demoSections = [
     description: '3D cube rotation with speed variants and interactive controls',
     category: 'ui',
     componentId: 'spinning-cube',
+    tags: ['ui', '3d', 'rotate'],
+    difficulty: 'beginner',
+    docsAnchor: 'use-anime',
   },
 
   {
@@ -123,6 +167,9 @@ export const demoSections = [
     description: 'Circle, diamond, star, and wipe clipPath reveal animations',
     category: 'svg',
     componentId: 'clippath-reveal',
+    tags: ['svg', 'clippath', 'reveal'],
+    difficulty: 'intermediate',
+    docsAnchor: 'use-anime',
   },
 
   {
@@ -131,6 +178,9 @@ export const demoSections = [
     description: 'Slide, fade, scale, flip transitions with visual slide showcase',
     category: 'ui',
     componentId: 'animated-slider',
+    tags: ['ui', 'slider', 'transitions'],
+    difficulty: 'intermediate',
+    docsAnchor: 'use-anime',
   },
 
   {
@@ -140,6 +190,9 @@ export const demoSections = [
     description: 'FLIP-based shuffle, move, add/remove, and grid reorder animations',
     category: 'ui',
     componentId: 'reorder-list',
+    tags: ['ui', 'flip', 'reorder', 'layout'],
+    difficulty: 'advanced',
+    docsAnchor: 'anime-layout',
   },
 
   {
@@ -149,6 +202,9 @@ export const demoSections = [
     description: 'Parallax depth, reveal columns, conveyor, morph tile, and wave bar',
     category: 'scroll',
     componentId: 'scroll-linked-animations',
+    tags: ['scroll', 'parallax', 'reveal'],
+    difficulty: 'advanced',
+    docsAnchor: 'use-anime-onscroll',
   },
 
   {
@@ -157,6 +213,69 @@ export const demoSections = [
     description: 'Text scramble animation with autoplay, loop, and custom chars',
     category: 'ui',
     componentId: 'scramble-text',
+    tags: ['ui', 'text', 'scramble'],
+    difficulty: 'intermediate',
+    docsAnchor: 'use-anime-scramble',
+  },
+
+  {
+    title: 'Tooltip',
+    description: 'Hover or focus trigger with spring enter/exit and smart placement',
+    category: 'ui',
+    componentId: 'tooltip',
+    tags: ['ui', 'hover', 'reveal'],
+    difficulty: 'beginner',
+    docsAnchor: 'use-anime',
+  },
+
+  {
+    title: 'Dropdown Menu',
+    description: 'Button-triggered menu with staggered item entrance and click-outside dismiss',
+    category: 'ui',
+    componentId: 'dropdown-menu',
+    tags: ['ui', 'menu', 'stagger'],
+    difficulty: 'intermediate',
+    docsAnchor: 'anime-component',
+  },
+
+  {
+    title: 'Accordion',
+    description: 'Expand/collapse panels with height animation and single/multi open modes',
+    category: 'ui',
+    componentId: 'accordion',
+    tags: ['ui', 'collapse', 'height'],
+    difficulty: 'intermediate',
+    docsAnchor: 'anime-component',
+  },
+
+  {
+    title: 'Accordion (Presence)',
+    description: 'Mount/unmount accordion panels with enter/exit cross-fade via AnimePresence',
+    category: 'ui',
+    componentId: 'accordion-presence',
+    tags: ['ui', 'collapse', 'presence'],
+    difficulty: 'beginner',
+    docsAnchor: 'anime-presence',
+  },
+
+  {
+    title: 'Toast',
+    description: 'Stacked notifications with enter/exit animations and auto-dismiss',
+    category: 'ui',
+    componentId: 'toast',
+    tags: ['ui', 'notification', 'presence'],
+    difficulty: 'intermediate',
+    docsAnchor: 'anime-presence',
+  },
+
+  {
+    title: 'Tabs',
+    description: 'Animated underline indicator with cross-fading content panels',
+    category: 'ui',
+    componentId: 'tabs',
+    tags: ['ui', 'indicator', 'crossfade'],
+    difficulty: 'beginner',
+    docsAnchor: 'anime-component',
   },
 ] as const satisfies readonly DemoSection[];
 

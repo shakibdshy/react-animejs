@@ -1,0 +1,58 @@
+[     116ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=a0101deb:20102
+[     189ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <div ref={{...}} data-tsd-source="/src/lib/r...">
+      <div className="min-h-scre..." data-tsd-source="/src/compo...">
+        <header>
+        <main className="relative o..." data-tsd-source="/src/compo...">
+          <div>
+          <div>
+          <div className="relative m..." data-tsd-source="/src/compo...">
+            <div>
+            <div className="grid grid-..." data-tsd-source="/src/compo...">
+              <section>
+              <section className="flex flex-..." data-tsd-source="/src/compo...">
+                <p>
+                <div className="rounded-xl..." data-tsd-source="/src/compo...">
+                  <div>
+                  <div className="flex-1 ove..." data-tsd-source="/src/compo...">
+                    <Suspense fallback={<div>} data-tsd-source="/src/compo...">
+                      <DropdownMenuPreview2 data-tsd-source="/src/compo...">
+                        <PreviewCard title="Dropdown Menu" description="Click the ..." controls={<DemoButton>} ...>
+                          <div className="bg-landing..." data-tsd-source="/src/compo...">
+                            <div>
+                            <div className="p-5 flex i..." data-tsd-source="/src/compo...">
+                              <div
+                                ref={{current:null}}
++                               className="flex flex-col items-center justify-center py-6 gap-2"
+-                               className="relative flex items-center justify-center py-6"
+                                data-tsd-source="/src/component-gallery/components/detail-previews/ui-previews.tsx:77:7"
+                              >
+                                <AnimePresence>
+                                <button
+                                  onClick={function t8}
+                                  className="px-4 py-2 rounded-lg border border-landing-border bg-landing-surface text..."
++                                 data-tsd-source="/src/component-gallery/components/detail-previews/ui-previews.tsx:1..."
+-                                 data-tsd-source="/src/component-gallery/components/detail-previews/ui-previews.tsx:78:9"
+                                >
+                                  <span
+                                    className="text-landing-muted text-xs"
++                                   data-tsd-source="/src/component-gallery/components/detail-previews/ui-previews.tsx..."
+-                                   data-tsd-source="/src/component-gallery/components/detail-previews/ui-previews.tsx..."
+                                  >
++                                   ▼
+                ...
+            ...
+        ...
+ @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=a0101deb:4072

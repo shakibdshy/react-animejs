@@ -12,8 +12,8 @@ import type {
   WheelEvent as ReactWheelEvent,
 } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { animeStagger, createTimeline, SplitText } from '@/lib/react-animejs';
-import type { SplitTextRef } from '@/lib/react-animejs/components';
+import { animeStagger, createTimeline, SplitText } from '@shakibdshy/react-animejs';
+import type { SplitTextRef } from '@shakibdshy/react-animejs';
 
 const PANEL_HEIGHT = 'min(78vh, 620px)';
 const SCENE_DURATION = 1250;

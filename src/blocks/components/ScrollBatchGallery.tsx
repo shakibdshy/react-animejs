@@ -7,7 +7,7 @@
  * batch with its native `stagger()` utility.
  */
 import { memo, useRef } from 'react';
-import { AnimeBatch, stagger } from '@/lib/react-animejs';
+import { AnimeBatch, stagger } from '@shakibdshy/react-animejs';
 
 const img = (seed: string, w = 800, h = 450) => `https://picsum.photos/seed/${seed}/${w}/${h}`;
 

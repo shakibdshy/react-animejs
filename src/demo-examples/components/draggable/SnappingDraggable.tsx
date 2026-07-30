@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useAnimeDraggable } from '@/lib/react-animejs';
+import { useAnimeDraggable } from '@shakibdshy/react-animejs';
 
 export function SnappingDraggable() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -9,7 +9,6 @@ export function SnappingDraggable() {
     snap: 50,
     releaseStiffness: 200,
     releaseDamping: 25,
-    onSnap: () => console.log('Snapped!'),
   });
 
   const gridLines = [];

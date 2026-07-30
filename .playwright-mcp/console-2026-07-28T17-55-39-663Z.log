@@ -1,0 +1,37 @@
+[     987ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:20102
+[   19844ms] [ERROR] %o
+
+%s
+
+%s
+ ReferenceError: useAnime is not defined
+    at AccordionItem2 (http://localhost:3002/src/component-gallery/components/detail-previews/ui-previews.tsx?t=1785261359340:283:7)
+    at Object.react_stack_bottom_frame (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:18509:20)
+    at renderWithHooks (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:5654:24)
+    at updateFunctionComponent (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:7475:21)
+    at beginWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:8525:20)
+    at runWithFiberInDEV (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:997:72)
+    at performUnitOfWork (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:12561:98)
+    at workLoopSync (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:12424:43)
+    at renderRootSync (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:12408:13)
+    at performWorkOnRoot (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:11827:37) The above error occurred in the <AccordionItem2> component. React will try to recreate this component tree from scratch using the error boundary you provided, CatchBoundaryImpl. @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:7000
+[   19844ms] [WARNING] Warning: The following error wasn't caught by any route! At the very least, consider setting an 'errorComponent' in your RootRoute! @ http://localhost:3002/node_modules/.pnpm/tiny-warning@1.0.3/node_modules/tiny-warning/dist/tiny-warning.esm.js?v=0aa92a05:8
+[   19844ms] [WARNING] Warning: useAnime is not defined @ http://localhost:3002/node_modules/.pnpm/tiny-warning@1.0.3/node_modules/tiny-warning/dist/tiny-warning.esm.js?v=0aa92a05:8
+[   19846ms] [ERROR] %o
+
+%s
+
+%s
+ NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.
+    at removeChild (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:15918:24)
+    at runWithFiberInDEV (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:997:72)
+    at commitDeletionEffectsOnFiber (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:10190:19)
+    at recursivelyTraverseDeletionEffects (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:10115:11)
+    at commitDeletionEffectsOnFiber (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:10237:13)
+    at recursivelyTraverseDeletionEffects (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:10115:11)
+    at commitDeletionEffectsOnFiber (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:10237:13)
+    at recursivelyTraverseDeletionEffects (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:10115:11)
+    at commitDeletionEffectsOnFiber (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:10146:13)
+    at recursivelyTraverseDeletionEffects (http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:10115:11) The above error occurred in the <link> component. React will try to recreate this component tree from scratch using the error boundary you provided, CatchBoundaryImpl. @ http://localhost:3002/node_modules/.vite/deps/react-dom_client.js?v=0aa92a05:7000
+[   19847ms] [WARNING] Warning: The following error wasn't caught by any route! At the very least, consider setting an 'errorComponent' in your RootRoute! @ http://localhost:3002/node_modules/.pnpm/tiny-warning@1.0.3/node_modules/tiny-warning/dist/tiny-warning.esm.js?v=0aa92a05:8
+[   19847ms] [WARNING] Warning: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node. @ http://localhost:3002/node_modules/.pnpm/tiny-warning@1.0.3/node_modules/tiny-warning/dist/tiny-warning.esm.js?v=0aa92a05:8

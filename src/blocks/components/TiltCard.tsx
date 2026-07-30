@@ -14,7 +14,7 @@ import {
   type PointerEvent as ReactPointerEvent,
   useCallback,
 } from 'react';
-import { useAnimatable } from '@/lib/react-animejs';
+import { useAnimatable } from '@shakibdshy/react-animejs';
 
 const MAX_TILT = 12; // max degrees of rotation
 const EASE_MS = 300; // how snappy the tilt follows / resets

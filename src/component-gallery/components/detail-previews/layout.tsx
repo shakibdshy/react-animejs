@@ -3,7 +3,7 @@ import {
   AnimeLayout,
   AnimeLayoutItem,
   type AnimeLayoutRef,
-} from '@/lib/react-animejs/components/AnimeLayout';
+} from '@shakibdshy/react-animejs';
 import { DemoButton, PreviewCard } from './shared';
 import type { PreviewProps } from './types';
 import { flushSync } from 'react-dom';

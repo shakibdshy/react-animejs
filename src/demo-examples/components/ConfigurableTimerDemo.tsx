@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useAnimeTimer } from "@/lib/react-animejs";
+import { useAnimeTimer } from "@shakibdshy/react-animejs";
 import { DemoSection } from "./DemoSection";
 
 /**
@@ -93,15 +93,8 @@ export function ConfigurableTimerDemo() {
     }
   }, [timer]);
 
-  // Debug: Log timer state when it changes
   useEffect(() => {
     if (timer) {
-      console.log("[ConfigurableTimerDemo] New timer created:", {
-        id: timer.id,
-        reversed: timer.reversed,
-        duration: timer.duration,
-        fps: (timer as any).fps,
-      });
       // Ensure fps is set correctly on creation
       if (fpsInputRef.current) {
         (timer as any).fps = Number(fpsInputRef.current.value);

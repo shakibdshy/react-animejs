@@ -10,6 +10,14 @@ import { ScrambleTextPreview } from './scramble-text';
 import { SvgDrawPreview, SvgMorphPreview, SvgMotionPathPreview } from './svg-previews';
 import { DraggablePreview, OnScrollPreview, ReorderListPreview, ScrollLinkedAnimationsPreview } from './interaction-previews';
 import { AnimatedSliderPreview, ClipPathRevealPreview, CounterCountdownPreview, SpinningCubePreview, ToggleSwitchPreview } from './wrapper-previews';
+import {
+  AccordionPresencePreview,
+  AccordionPreview,
+  DropdownMenuPreview,
+  TabsPreview,
+  ToastPreview,
+  TooltipPreview,
+} from './ui-previews';
 
 export const previewRegistry = {
   'basic-animation': BasicAnimationPreview,
@@ -31,6 +39,12 @@ export const previewRegistry = {
   'reorder-list': ReorderListPreview,
   'scroll-linked-animations': ScrollLinkedAnimationsPreview,
   'scramble-text': ScrambleTextPreview,
+  tooltip: TooltipPreview,
+  'dropdown-menu': DropdownMenuPreview,
+  accordion: AccordionPreview,
+  'accordion-presence': AccordionPresencePreview,
+  toast: ToastPreview,
+  tabs: TabsPreview,
 } satisfies Record<DemoId, React.FC<PreviewProps>>;
 
 export function getDemoPreview(componentId: DemoId): React.FC<PreviewProps> {

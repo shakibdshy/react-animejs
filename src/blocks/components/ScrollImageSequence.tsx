@@ -12,7 +12,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { Activity, Cpu, Layers, Pause, Play, RotateCcw, Sparkles, Volume2 } from 'lucide-react';
-import { useAnime, useAnimeOnScroll } from '@/lib/react-animejs';
+import { useAnime, useAnimeOnScroll } from '@shakibdshy/react-animejs';
 
 const FRAME_COUNT = 147;
 const IMAGE_WIDTH = 1158;

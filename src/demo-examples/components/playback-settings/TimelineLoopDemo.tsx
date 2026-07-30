@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useAnimeTimeline } from "@/lib/react-animejs/hooks";
+import { useAnimeTimeline } from "@shakibdshy/react-animejs";
 import { Edit2, RotateCcw } from "lucide-react";
 
 export const TimelineLoopDemo: React.FC = () => {

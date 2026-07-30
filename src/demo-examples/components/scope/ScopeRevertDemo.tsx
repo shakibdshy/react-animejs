@@ -7,7 +7,7 @@
 
 import React, { useState } from "react";
 import { DemoCard } from "../DemoCard";
-import { useAnimeScope } from "@/lib/react-animejs/hooks/use-anime-scope";
+import { useAnimeScope } from "@shakibdshy/react-animejs";
 import { animate } from "animejs";
 import { Play, RotateCcw, Trash2 } from "lucide-react";
 
@@ -60,7 +60,6 @@ export const ScopeRevertDemo: React.FC = () => {
       // Cleanup function called when revert() is invoked
       return () => {
         setStatus("cleaned");
-        console.log("[ScopeRevertDemo] All animations cleaned up!");
       };
     });
   };

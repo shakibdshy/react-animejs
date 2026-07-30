@@ -2,8 +2,8 @@ import { memo, type ReactNode, useCallback, useEffect, useRef, useState } from '
 import { cn } from '@/landing/utils/cn';
 import { useScrollReveal } from '@/landing/hooks/use-scroll-reveal';
 import { useMagnetic } from '@/landing/hooks/use-magnetic';
-import { useAnime } from '@/lib/react-animejs/hooks';
-import { stagger } from '@/lib/react-animejs';
+import { useAnime } from '@shakibdshy/react-animejs';
+import { stagger } from '@shakibdshy/react-animejs';
 import { LandingContainer } from '@/landing/components/ui/landing-container';
 import { SectionHeader } from '@/landing/components/ui/section-header';
 import { Btn } from '@/landing/components/ui/btn';

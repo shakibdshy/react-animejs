@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAnime } from '@/lib/react-animejs/hooks';
+import { useAnime } from '@shakibdshy/react-animejs';
 import { DemoSection } from './DemoSection';
 
 /**

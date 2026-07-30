@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { useScrollReveal } from '@/landing/hooks/use-scroll-reveal';
 import { GalleryPreview } from './gallery-preview';
+import { DIFFICULTY_META } from '../data';
 import type { DemoSection } from '../types';
 import type { DemoId } from '../data';
 
@@ -36,9 +37,38 @@ export const GalleryCard = memo(function GalleryCard({
           {demo.title}
         </h3>
         <p className="text-[13px] text-landing-muted leading-relaxed flex-1">{demo.description}</p>
-        <div className="landing-font-mono text-[11px] text-landing-muted/60 mt-3 pt-3 border-t border-landing-border flex items-center gap-1.5">
-          <span className="text-landing-accent">&rarr;</span>
-          Open details
+
+        {demo.tags && demo.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            {demo.tags.slice(0, 3).map((t) => (
+              <span
+                key={t}
+                className="landing-font-mono text-[10px] text-landing-muted/70 px-1.5 py-0.5 rounded border border-landing-border/60"
+              >
+                #{t}
+              </span>
+            ))}
+            {demo.tags.length > 3 && (
+              <span className="landing-font-mono text-[10px] text-landing-muted/50">
+                +{demo.tags.length - 3}
+              </span>
+            )}
+          </div>
+        )}
+
+        <div className="landing-font-mono text-[11px] text-landing-muted/60 mt-3 pt-3 border-t border-landing-border flex items-center justify-between gap-1.5">
+          <span className="flex items-center gap-1.5">
+            <span className="text-landing-accent">&rarr;</span>
+            Open details
+          </span>
+          {demo.difficulty && (
+            <span className="flex items-center gap-1.5 capitalize">
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${DIFFICULTY_META[demo.difficulty].dotClassName}`}
+              />
+              {demo.difficulty}
+            </span>
+          )}
         </div>
       </div>
     </Link>

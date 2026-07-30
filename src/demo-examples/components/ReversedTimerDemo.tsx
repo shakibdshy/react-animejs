@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import { useAnimeTimer } from "@/lib/react-animejs";
+import { useAnimeTimer } from "@shakibdshy/react-animejs";
 import { DemoSection } from "./DemoSection";
 
 export function ReversedTimerDemo() {

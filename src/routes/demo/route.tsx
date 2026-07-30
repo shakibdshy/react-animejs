@@ -1,27 +1,13 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { useCallback, useEffect, useState } from "react";
-import { AnimeProvider } from "@/lib/react-animejs/index";
+import { AnimeProvider } from "@shakibdshy/react-animejs";
+import { useTheme } from "@/theme";
 
 export const Route = createFileRoute("/demo")({
   component: DemoLayout,
 });
 
 function DemoLayout() {
-  const [isDark, setIsDark] = useState(true);
-
-  useEffect(() => {
-    const stored = localStorage.getItem('demo-theme');
-    const preferDark = stored !== null ? stored === 'dark' : true;
-    setIsDark(preferDark);
-    document.documentElement.classList.toggle('dark', preferDark);
-  }, []);
-
-  const toggleTheme = useCallback(() => {
-    const next = !isDark;
-    setIsDark(next);
-    document.documentElement.classList.toggle('dark', next);
-    localStorage.setItem('demo-theme', next ? 'dark' : 'light');
-  }, [isDark]);
+  const { isDark, toggleTheme } = useTheme();
 
   return (
     <AnimeProvider>

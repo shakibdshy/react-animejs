@@ -1,0 +1,177 @@
+- generic [ref=f6e3]:
+  - banner [ref=f6e4]:
+    - link [ref=f6e5] [cursor=pointer]:
+      - /url: /
+      - text: React AnimeJS
+      - emphasis [ref=f6e6]: ✦
+    - navigation [ref=f6e7]:
+      - link "Home" [ref=f6e8] [cursor=pointer]:
+        - /url: /
+      - link "Components" [ref=f6e9] [cursor=pointer]:
+        - /url: /demos
+      - link "Blocks" [ref=f6e10] [cursor=pointer]:
+        - /url: /blocks
+      - button "Open command palette" [ref=f6e11]:
+        - generic [ref=f6e12]: Search
+        - generic [ref=f6e13]: ⌘K
+      - button "Switch to light mode" [ref=f6e14] [cursor=pointer]: ☀️
+  - main [ref=f6e15]:
+    - generic [ref=f6e16]:
+      - generic [ref=f6e17]:
+        - generic [ref=f6e18]:
+          - link "Components" [ref=f6e19] [cursor=pointer]:
+            - /url: /demos
+          - generic [ref=f6e20]: /
+          - generic [ref=f6e21]: Accordion
+          - generic [ref=f6e22]: 22 / 24
+        - generic [ref=f6e23]:
+          - link "Previous" [ref=f6e24] [cursor=pointer]:
+            - /url: /demos/dropdown-menu
+          - link "Next" [ref=f6e27] [cursor=pointer]:
+            - /url: /demos/toast
+      - generic [ref=f6e30]:
+        - generic [ref=f6e31]:
+          - heading "Accordion" [level=1] [ref=f6e32]
+          - generic [ref=f6e33]:
+            - generic [ref=f6e34]: ui
+            - generic [ref=f6e35]: Intermediate
+            - link "Read the docs" [ref=f6e36] [cursor=pointer]:
+              - /url: /docs#anime-component
+          - generic [ref=f6e39]:
+            - heading "Code" [level=2] [ref=f6e40]
+            - button "Copy" [ref=f6e41]
+          - table [ref=f6e45]:
+            - rowgroup [ref=f6e46]:
+              - row [ref=f6e47]:
+                - cell "1" [ref=f6e48]
+                - cell "// Measure content height with a ref, then animate height between" [ref=f6e50]
+              - row [ref=f6e51]:
+                - cell "2" [ref=f6e52]
+                - cell "// 0 and the measured value — the reliable way to animate to \"auto\"." [ref=f6e54]
+              - row [ref=f6e55]:
+                - cell "3" [ref=f6e56]
+                - cell "const contentRef = useRef<HTMLDivElement>(null)" [ref=f6e58]
+              - row [ref=f6e59]:
+                - cell "4" [ref=f6e60]
+                - 'cell "const { ref } = useAnime<HTMLDivElement>({" [ref=f6e62]'
+              - row [ref=f6e63]:
+                - cell "5" [ref=f6e64]
+                - 'cell "height: isOpen ? (contentRef.current?.scrollHeight ?? 0) : 0," [ref=f6e66]'
+              - row [ref=f6e67]:
+                - cell "6" [ref=f6e68]
+                - 'cell "opacity: isOpen ? [0, 1] : [1, 0]," [ref=f6e70]'
+              - row [ref=f6e71]:
+                - cell "7" [ref=f6e72]
+                - 'cell "duration: 320," [ref=f6e74]'
+              - row [ref=f6e75]:
+                - cell "8" [ref=f6e76]
+                - 'cell "ease: ''outExpo''," [ref=f6e78]'
+              - row [ref=f6e79]:
+                - cell "9" [ref=f6e80]
+                - 'cell "deps: [isOpen]," [ref=f6e82]'
+              - row [ref=f6e83]:
+                - cell "10" [ref=f6e84]
+                - 'cell "})" [ref=f6e86]'
+              - row [ref=f6e87]:
+                - cell "11" [ref=f6e88]
+                - cell [ref=f6e90]
+              - row [ref=f6e91]:
+                - cell "12" [ref=f6e92]
+                - cell "return (" [ref=f6e94]
+              - row [ref=f6e95]:
+                - cell "13" [ref=f6e96]
+                - 'cell "<div ref={ref} className=\"overflow-hidden\" style={{ height: isOpen ? ''auto'' : 0 }}>" [ref=f6e98]'
+              - row [ref=f6e99]:
+                - cell "14" [ref=f6e100]
+                - 'cell "<div ref={contentRef}>…panel body…</div>" [ref=f6e102]'
+              - row [ref=f6e103]:
+                - cell "15" [ref=f6e104]
+                - cell "</div>" [ref=f6e106]
+              - row [ref=f6e107]:
+                - cell "16" [ref=f6e108]
+                - cell ")" [ref=f6e110]
+        - generic [ref=f6e111]:
+          - paragraph [ref=f6e112]: Expand/collapse panels with height animation and single/multi open modes.
+          - generic [ref=f6e113]:
+            - generic [ref=f6e114]: Live preview
+            - generic [ref=f6e117]:
+              - generic [ref=f6e118]: AccordionClick a header to toggle
+              - generic [ref=f6e121]:
+                - generic [ref=f6e122]:
+                  - button "What is react-animejs? ▼" [expanded] [ref=f6e123]:
+                    - generic [ref=f6e124]: What is react-animejs?
+                    - generic [ref=f6e125]: ▼
+                  - paragraph [ref=f6e127]: A React wrapper around anime.js v4 — hooks-first, with declarative components where they help.
+                - generic [ref=f6e128]:
+                  - button "Do I need anime.js installed? ▼" [ref=f6e129]:
+                    - generic [ref=f6e130]: Do I need anime.js installed?
+                    - generic [ref=f6e131]: ▼
+                  - paragraph [ref=f6e133]: Yes. Install animejs separately; this package wraps its primitives.
+                - generic [ref=f6e134]:
+                  - button "Is it SSR-safe? ▼" [ref=f6e135]:
+                    - generic [ref=f6e136]: Is it SSR-safe?
+                    - generic [ref=f6e137]: ▼
+                  - paragraph [ref=f6e139]: Hooks access browser APIs inside effects, so they render safely on the server.
+          - generic [ref=f6e140]:
+            - generic [ref=f6e141]: Props
+            - table [ref=f6e143]:
+              - rowgroup [ref=f6e144]:
+                - row [ref=f6e145]:
+                  - columnheader "Name" [ref=f6e146]
+                  - columnheader "Type" [ref=f6e147]
+                  - columnheader "Default" [ref=f6e148]
+                  - columnheader "Description" [ref=f6e149]
+              - rowgroup [ref=f6e150]:
+                - row [ref=f6e151]:
+                  - cell "height" [ref=f6e152]
+                  - cell "number" [ref=f6e153]
+                  - cell "0 / scrollHeight" [ref=f6e154]
+                  - cell "Animate between 0 and measured content height (NOT maxHeight)" [ref=f6e155]
+                - row [ref=f6e156]:
+                  - cell "opacity" [ref=f6e157]
+                  - cell "number[]" [ref=f6e158]
+                  - cell "[0, 1]" [ref=f6e159]
+                  - cell "Content fade" [ref=f6e160]
+                - row [ref=f6e161]:
+                  - cell "deps" [ref=f6e162]
+                  - cell "unknown[]" [ref=f6e163]
+                  - cell "[isOpen]" [ref=f6e164]
+                  - cell "Re-init animation when open state changes" [ref=f6e165]
+                - row [ref=f6e166]:
+                  - cell "duration" [ref=f6e167]
+                  - cell "number" [ref=f6e168]
+                  - cell "320" [ref=f6e169]
+                  - cell "Expand/collapse ms" [ref=f6e170]
+                - row [ref=f6e171]:
+                  - cell "ease" [ref=f6e172]
+                  - cell "string" [ref=f6e173]
+                  - cell "outExpo" [ref=f6e174]
+                  - cell "Decelerating curve" [ref=f6e175]
+      - generic [ref=f6e176]:
+        - heading "Related components" [level=2] [ref=f6e177]
+        - generic [ref=f6e178]:
+          - link [ref=f6e179] [cursor=pointer]:
+            - /url: /demos/animated-slider
+            - generic [ref=f6e185]:
+              - heading "Animated Slider" [level=3] [ref=f6e186]
+              - paragraph [ref=f6e187]: Slide, fade, scale, flip transitions with visual slide showcase
+          - link "0 Counter & Countdown Animated counter and countdown with padding and format options" [ref=f6e188] [cursor=pointer]:
+            - /url: /demos/counter-countdown
+            - generic [ref=f6e189]: "0"
+            - generic [ref=f6e191]:
+              - heading "Counter & Countdown" [level=3] [ref=f6e192]
+              - paragraph [ref=f6e193]: Animated counter and countdown with padding and format options
+          - link "Item one Item two Item three Dropdown Menu Button-triggered menu with staggered item entrance and click-outside dismiss" [ref=f6e194] [cursor=pointer]:
+            - /url: /demos/dropdown-menu
+            - generic [ref=f6e196]:
+              - generic [ref=f6e197]: Item one
+              - generic [ref=f6e199]: Item two
+              - generic [ref=f6e201]: Item three
+            - generic [ref=f6e203]:
+              - heading "Dropdown Menu" [level=3] [ref=f6e204]
+              - paragraph [ref=f6e205]: Button-triggered menu with staggered item entrance and click-outside dismiss
+      - generic [ref=f6e206]:
+        - link "Dropdown Menu" [ref=f6e207] [cursor=pointer]:
+          - /url: /demos/dropdown-menu
+        - link "Toast" [ref=f6e210] [cursor=pointer]:
+          - /url: /demos/toast

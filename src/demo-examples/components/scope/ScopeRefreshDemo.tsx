@@ -9,8 +9,8 @@
 
 import React, { useCallback, useRef, useState } from "react";
 import { DemoCard } from "../DemoCard";
-import { AnimeScope } from "@/lib/react-animejs/components/AnimeScope";
-import type { AnimeScopeRef } from "@/lib/react-animejs/components/AnimeScope";
+import { AnimeScope } from "@shakibdshy/react-animejs";
+import type { AnimeScopeRef } from "@shakibdshy/react-animejs";
 import { animate } from "animejs";
 import { Minus, Plus, RefreshCw } from "lucide-react";
 
@@ -120,9 +120,6 @@ scopeRef.current?.refresh();`}
               });
             }
 
-            return () => {
-              console.log("[ScopeRefreshDemo] Cleanup");
-            };
           }}
           // Re-run when boxCount changes
           deps={[boxCount]}

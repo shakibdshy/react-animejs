@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef, useState } from 'react';
-import { useAnimeDraggable, useAnimeOnScroll } from '@/lib/react-animejs/hooks';
+import { useAnimeDraggable, useAnimeOnScroll } from '@shakibdshy/react-animejs';
 import { AnimatedReorderList } from '@/demo-examples/components/common/AnimatedReorderList';
 import { DemoButton, PreviewCard } from './shared';
 import { cn } from './utils';

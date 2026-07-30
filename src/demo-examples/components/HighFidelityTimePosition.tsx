@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Edit2, RotateCcw } from "lucide-react";
-import { useAnimeTimeline } from "@/lib/react-animejs/hooks";
+import { useAnimeTimeline } from "@shakibdshy/react-animejs";
 
 /**
  * HighFidelityTimePosition - A premium recreation of the Anime.js "Time Position" documentation example.

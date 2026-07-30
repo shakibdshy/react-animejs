@@ -11,6 +11,9 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.17.0
         version: 1.29.0(zod@4.2.1)
+      '@shakibdshy/react-animejs':
+        specifier: link:../react-animejs-package
+        version: link:../react-animejs-package
       '@tailwindcss/vite':
         specifier: ^4.0.6
         version: 4.2.2(vite@7.3.1(@types/node@22.19.15)(lightningcss@1.32.0)(tsx@4.21.0))

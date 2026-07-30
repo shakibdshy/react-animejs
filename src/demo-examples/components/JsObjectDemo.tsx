@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useAnime, utils } from '@/lib/react-animejs';
+import { useAnime, utils } from '@shakibdshy/react-animejs';
 import { DemoSection } from './DemoSection';
 
 /**

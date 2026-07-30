@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
-import { useAnimeTimeline } from "@/lib/react-animejs/hooks";
+import { useAnimeTimeline } from "@shakibdshy/react-animejs";
 import { RotateCcw } from "lucide-react";
-import type { EasingName } from "@/lib/react-animejs/types";
+import type { EasingName } from "@shakibdshy/react-animejs";
 
 export const TimelinePlaybackEaseDemo: React.FC = () => {
   const squareRef = useRef<HTMLDivElement>(null);

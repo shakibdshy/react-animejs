@@ -7,7 +7,7 @@
 
 import React, { useEffect, useState } from "react";
 import { DemoCard } from "../DemoCard";
-import { useAnimeScope } from "@/lib/react-animejs/hooks/use-anime-scope";
+import { useAnimeScope } from "@shakibdshy/react-animejs";
 import { animate } from "animejs";
 
 export const ScopeBasicDemo: React.FC = () => {
@@ -29,10 +29,6 @@ export const ScopeBasicDemo: React.FC = () => {
         ease: "inOutQuad",
       });
 
-      // Cleanup function (optional)
-      return () => {
-        console.log("[ScopeBasicDemo] Scope reverted or refreshed");
-      };
     });
   }, [isReady, add]);
 

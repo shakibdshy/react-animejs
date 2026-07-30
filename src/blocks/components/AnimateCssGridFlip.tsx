@@ -8,8 +8,8 @@
  */
 import { memo, useCallback, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
-import { AnimeLayout, AnimeLayoutItem } from '@/lib/react-animejs';
-import type { AnimeLayoutRef } from '@/lib/react-animejs';
+import { AnimeLayout, AnimeLayoutItem } from '@shakibdshy/react-animejs';
+import type { AnimeLayoutRef } from '@shakibdshy/react-animejs';
 
 const GRID_AREAS = '"hero hero hero" "hero hero hero" "hero hero hero" "slot-a slot-b slot-c"';
 const SMALL_SLOTS = ['slot-a', 'slot-b', 'slot-c'] as const;

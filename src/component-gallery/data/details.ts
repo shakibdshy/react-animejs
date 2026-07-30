@@ -439,4 +439,204 @@ const nextGrid = () => {
       { name: "duration", type: "number", default: "1000", desc: "Duration in ms" },
     ],
   },
+
+  tooltip: {
+    component: "AnimePresence",
+    summary: "Hover-triggered tooltip with three animation variants: Fade, Slide, and Bounce.",
+    code: `const [open, setOpen] = useState(false)
+
+// Three variants — pick one by changing enter/exit keyframes + duration:
+// Fade:    { opacity: [0, 1] }                       400ms  outExpo
+// Slide:   { opacity: [0, 1], translateX: [-16, 0] }  450ms outQuart
+// Bounce:  { opacity: [0, 1], scale: [0.6, 1],
+//            translateY: [10, 0] }                     600ms outBack
+
+<div onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+  <AnimePresence mode="sync" initial={false}>
+    {open && (
+      <AnimePresenceChild
+        key="tip"
+        enter={{ opacity: [0, 1], scale: [0.6, 1], translateY: [10, 0] }}
+        exit={{ opacity: [1, 0], scale: [1, 0.6], translateY: [0, 10] }}
+        duration={600}
+        ease="outBack"
+      >
+        <span className="tooltip">Bounces in</span>
+      </AnimePresenceChild>
+    )}
+  </AnimePresence>
+  <button>Hover me</button>
+</div>`,
+    props: [
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes — opacity, translateX, scale, translateY" },
+      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Exit keyframes (mirror of enter)" },
+      { name: "mode", type: "'sync'|'wait'|'popLayout'", default: "'sync'", desc: "Enter/exit sequencing" },
+      { name: "duration", type: "number", default: "400-600", desc: "Enter/exit ms (400 fade, 450 slide, 600 bounce)" },
+      { name: "ease", type: "string", default: "'outExpo'|'outQuart'|'outBack'", desc: "Per-variant easing" },
+    ],
+  },
+
+  "dropdown-menu": {
+    component: "Anime",
+    summary: "Button-triggered menu with staggered item entrance and click-outside dismiss.",
+    code: `{items.map((item) => (
+  <Anime
+    key={item}
+    opacity={open ? [0, 1] : [1, 0]}
+    translateY={open ? [-8, 0] : [0, -8]}
+    stagger={40}
+    duration={200}
+    ease="outQuad"
+    deps={[open]}
+  >
+    <button className="menu-item">{item}</button>
+  </Anime>
+))}`,
+    props: [
+      { name: "stagger", type: "number", default: "40", desc: "Per-item delay cascade" },
+      { name: "translateY", type: "number[]", default: "[-8, 0]", desc: "Item slide-in" },
+      { name: "opacity", type: "number[]", default: "[0, 1]", desc: "Item fade" },
+      { name: "duration", type: "number", default: "200", desc: "Per-item ms" },
+      { name: "ease", type: "string", default: "outQuad", desc: "Item easing" },
+    ],
+  },
+
+  accordion: {
+    component: "AnimeLayout",
+    summary: "Expand/collapse panels with height animation and single/multi open modes.",
+    code: `// <AnimeLayout> FLIP-animates the panel height. On toggle, update()
+// commits the new state (via flushSync), measures the before/after height
+// delta, and tweens it — no manual measurement or raw animate().
+const AccordionItem = ({ title, body, isOpen, onToggle }) => {
+  const layoutRef = useRef(null)
+
+  const handleToggle = () => {
+    layoutRef.current?.update(
+      () => flushSync(() => onToggle()),
+      { duration: 320, ease: 'outExpo' },
+    )
+  }
+
+  return (
+    <div className="overflow-hidden rounded-lg border">
+      <button onClick={handleToggle} aria-expanded={isOpen}>{title} ▼</button>
+      <AnimeLayout
+        ref={layoutRef}
+        mode="manual"
+        duration={320}
+        ease="outExpo"
+        enterFrom={{ opacity: 0 }}
+        leaveTo={{ opacity: 0 }}
+      >
+        {isOpen && (
+          <AnimeLayout.Item key="panel" layoutId="panel">
+            {body}
+          </AnimeLayout.Item>
+        )}
+      </AnimeLayout>
+    </div>
+  )
+}`,
+    props: [
+      { name: "mode", type: "'manual'|'auto'", default: "'manual'", desc: "manual = call update() to trigger FLIP; auto = animate on children change" },
+      { name: "update", type: "(cb, params) => Timeline", default: "-", desc: "Records layout, runs cb (flushSync), animates the delta" },
+      { name: "enterFrom", type: "CSSProperties", default: "{opacity:0}", desc: "Initial state for entering content" },
+      { name: "leaveTo", type: "CSSProperties", default: "{opacity:0}", desc: "Final state for leaving content" },
+      { name: "duration", type: "number", default: "320", desc: "Expand/collapse ms" },
+    ],
+  },
+
+  "accordion-presence": {
+    component: "AnimePresence",
+    summary:
+      "Mount/unmount accordion panels with smooth height + opacity animation via AnimePresence.",
+    code: `// The open panel mounts/unmounts as isOpen flips. Pass height: 'auto' —
+// AnimePresenceChild measures the real content height internally and animates
+// to it, then releases to 'auto' on completion. No manual measurement needed.
+const AccordionItem = ({ title, body, isOpen, onToggle }) => (
+  <div className="overflow-hidden rounded-lg border">
+    <button onClick={onToggle} aria-expanded={isOpen}>{title} ▼</button>
+    <AnimePresence mode="sync" initial={false}>
+      {isOpen && (
+        <AnimePresenceChild
+          key="panel"
+          enter={{ height: [0, 'auto'], opacity: [0, 1] }}
+          exit={{ height: ['auto', 0], opacity: [1, 0] }}
+          duration={320}
+          ease="outExpo"
+        >
+          <div className="overflow-hidden">{body}</div>
+        </AnimePresenceChild>
+      )}
+    </AnimePresence>
+  </div>
+)`,
+    props: [
+      { name: "mode", type: "'sync'|'wait'|'popLayout'", default: "'sync'", desc: "sync = parallel enter/exit when switching items" },
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes — height:'auto' is measured internally" },
+      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Exit keyframes — mirror of enter" },
+      { name: "duration", type: "number", default: "320", desc: "Enter/exit ms" },
+      { name: "ease", type: "string", default: "'outExpo'", desc: "Decelerating curve" },
+    ],
+  },
+
+  toast: {
+    component: "AnimePresence",
+    summary: "Stacked notifications with enter/exit animations and auto-dismiss.",
+    code: `<AnimePresence mode="popLayout">
+  {toasts.map((t) => (
+    <AnimePresenceChild
+      key={t.id}
+      enter={{ opacity: [0, 1], translateX: [40, 0], scale: [0.9, 1] }}
+      exit={{ opacity: [1, 0], translateX: [0, 40], scale: [1, 0.9] }}
+      duration={300}
+      ease="outExpo"
+    >
+      <Toast onDismiss={() => dismiss(t.id)}>{t.msg}</Toast>
+    </AnimePresenceChild>
+  ))}
+</AnimePresence>`,
+    props: [
+      { name: "mode", type: "'sync'|'wait'|'popLayout'", default: "'popLayout'", desc: "Exit sequencing" },
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Enter keyframes per child" },
+      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Exit keyframes per child" },
+      { name: "duration", type: "number", default: "300", desc: "Enter/exit ms" },
+      { name: "ease", type: "string", default: "'outExpo'", desc: "Easing curve" },
+    ],
+  },
+
+  tabs: {
+    component: "AnimePresence",
+    summary: "Animated underline indicator with cross-fading content panels.",
+    code: `// Sliding underline — <Anime> tweens the indicator on each tab change.
+<Anime
+  translateX={active * TAB_WIDTH}
+  duration={300}
+  ease="outExpo"
+  deps={[active]}
+>
+  <span className="underline" />
+</Anime>
+
+// Active panel mounts/unmounts as \`active\` changes. <AnimePresence>
+// drives the cross-fade; mode="wait" gives a clean out-then-in swap.
+<AnimePresence mode="wait" initial={false}>
+  <AnimePresenceChild
+    key={panels[active].label}
+    enter={{ opacity: [0, 1], translateY: [6, 0] }}
+    exit={{ opacity: [1, 0], translateY: [0, -6] }}
+    duration={220}
+    ease="outQuad"
+  >
+    <div className="panel">{panels[active].body}</div>
+  </AnimePresenceChild>
+</AnimePresence>`,
+    props: [
+      { name: "translateX", type: "number", default: "-", desc: "Indicator slide (via <Anime>)" },
+      { name: "mode", type: "'wait'", default: "'wait'", desc: "Exit completes before next panel enters" },
+      { name: "enter", type: "UseAnimeOptions", default: "-", desc: "Panel enter keyframes" },
+      { name: "exit", type: "UseAnimeOptions", default: "-", desc: "Panel exit keyframes" },
+      { name: "duration", type: "number", default: "220", desc: "Transition ms" },
+    ],
+  },
 } satisfies Record<DemoId, DemoDetail>;

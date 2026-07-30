@@ -1,4 +1,4 @@
-import { useAnimeOnScroll } from '@/lib/react-animejs';
+import { useAnimeOnScroll } from '@shakibdshy/react-animejs';
 import { DemoCard } from '../DemoCard';
 import { Panel, ScrollHint } from './shared';
 

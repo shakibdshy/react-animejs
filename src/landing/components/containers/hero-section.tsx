@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useState } from 'react';
 import { cn } from '@/landing/utils/cn';
-import { Anime, fadeIn } from '@/lib/react-animejs';
+import { Anime, fadeIn } from '@shakibdshy/react-animejs';
 import { Btn } from '@/landing/components/ui/btn';
 import type { HeroProps } from '@/landing/types';
 

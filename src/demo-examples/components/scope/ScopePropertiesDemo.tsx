@@ -16,8 +16,8 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DemoCard } from "../DemoCard";
-import { AnimeScope } from "@/lib/react-animejs/components/AnimeScope";
-import type { AnimeScopeRef } from "@/lib/react-animejs/components/AnimeScope";
+import { AnimeScope } from "@shakibdshy/react-animejs";
+import type { AnimeScopeRef } from "@shakibdshy/react-animejs";
 import { animate } from "animejs";
 import { Info } from "lucide-react";
 
@@ -125,9 +125,6 @@ const scopeRef = useRef<AnimeScopeRef>(null);
               ease: "inOutQuad",
             });
 
-            return () => {
-              console.log("[ScopePropertiesDemo] Cleanup");
-            };
           }}
         >
           {/* Animated element */}

@@ -27,7 +27,7 @@ import {
   type AnimeTimelineRef,
   stagger,
   type TimelineEntry,
-} from '@/lib/react-animejs';
+} from '@shakibdshy/react-animejs';
 
 interface NavLink {
   label: string;
