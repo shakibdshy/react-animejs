@@ -1,5 +1,19 @@
 # React AnimeJS — Docs & Demos
 
+[![npm version](https://img.shields.io/npm/v/@shakibdshy/react-animejs?label=%40shakibdshy%2Freact-animejs)](https://www.npmjs.com/package/@shakibdshy/react-animejs)
+[![npm downloads](https://img.shields.io/npm/dt/@shakibdshy/react-animejs)](https://www.npmjs.com/package/@shakibdshy/react-animejs)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](#license)
+[![live demo](https://img.shields.io/badge/live%20demo-Vercel-black?logo=vercel)](https://react-animejs.vercel.app/)
+[![GitHub stars](https://img.shields.io/github/stars/shakibdshy/react-animejs?style=social)](https://github.com/shakibdshy/react-animejs/stargazers)
+[![last commit](https://img.shields.io/github/last-commit/shakibdshy/react-animejs)](https://github.com/shakibdshy/react-animejs/commits/main)
+
+[![TanStack Start](https://img.shields.io/badge/TanStack-Start-FFD85F?logo=tanstack)](https://tanstack.com/start)
+[![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-v4-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Anime.js v4](https://img.shields.io/badge/Anime.js-v4-FF6B6B?logo=anime.js&logoColor=white)](https://animejs.com/)
+[![React 19](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+
 The documentation site and component gallery for **[`@shakibdshy/react-animejs`](https://www.npmjs.com/package/@shakibdshy/react-animejs)** — a comprehensive React wrapper for [Anime.js v4](https://animejs.com).
 
 🌐 **Live site:** [react-animejs.vercel.app](https://react-animejs.vercel.app/)
