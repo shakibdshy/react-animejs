@@ -42,17 +42,19 @@ function SectionHeader({
   onViewCode: (key: string) => void;
 }) {
   return (
-    <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-      <h2 className="landing-font-display text-xl font-bold text-landing-fg">{title}</h2>
+    <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-landing-border/60 pb-3">
+      <h2 className="landing-font-display text-xl font-bold tracking-tight text-landing-fg">
+        {title}
+      </h2>
       <div className="flex items-center gap-3">
         <span className="landing-font-mono text-[10px] tracking-[0.2em] uppercase text-landing-muted/70">
           {chip}
         </span>
         <button
           onClick={() => onViewCode(codeKey)}
-          className="flex items-center gap-1.5 rounded-full border border-landing-border bg-landing-surface px-3 py-1.5 landing-font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-landing-muted transition-all hover:border-landing-accent hover:text-landing-accent"
+          className="flex items-center gap-1.5 rounded-full border border-landing-accent/40 bg-landing-accent/10 px-3.5 py-1.5 landing-font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-landing-accent transition-all hover:border-landing-accent hover:bg-landing-accent/20 hover:shadow-[0_0_0_3px] hover:shadow-landing-accent/15 active:scale-[0.97]"
         >
-          <CodeIcon size={12} />
+          <CodeIcon size={13} className="text-landing-accent" />
           View Code
         </button>
       </div>
