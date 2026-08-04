@@ -19,4 +19,4 @@ mcp-todos.json
 .playwright-mcp
 .vscode
 .zcode
-docs
+/docs
