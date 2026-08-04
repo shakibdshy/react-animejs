@@ -99,7 +99,7 @@ export function DocsPage() {
           onClose={() => setIsNavigationOpen(false)}
           activeSection={activeSection}
         />
-        <main className="grid min-w-0 flex-1 grid-cols-1 gap-12 px-5 py-11 sm:px-10 lg:px-14 lg:py-14 xl:grid-cols-[minmax(0,52rem)_12rem] xl:justify-center xl:gap-16">
+        <main className="grid min-w-0 flex-1 grid-cols-1 gap-12 px-5 py-11 sm:px-10 lg:px-14 lg:py-14 xl:grid-cols-[minmax(0,1fr)_12rem] xl:gap-16">
           <article className="w-full max-w-3xl xl:max-w-none">
             <header className="mb-14 border-b border-landing-border pb-10">
               <nav

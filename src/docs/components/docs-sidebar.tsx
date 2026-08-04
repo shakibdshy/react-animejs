@@ -19,7 +19,7 @@ export function DocsSidebar({ isOpen, onClose, activeSection }: DocsSidebarProps
         />
       )}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 border-r border-landing-border bg-landing-bg px-5 pb-8 pt-5 transition-transform md:sticky md:top-16 md:z-20 md:h-[calc(100vh-4rem)] md:w-68 md:translate-x-0 md:overflow-y-auto ${isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'}`}
+        className={`scroll-themed fixed inset-y-0 left-0 z-50 w-72 overflow-y-auto border-r border-landing-border bg-landing-bg px-5 pb-8 pt-5 transition-transform md:sticky md:top-16 md:z-20 md:h-[calc(100vh-4rem)] md:w-68 md:translate-x-0 ${isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'}`}
       >
         <div className="mb-8 flex items-center justify-between md:hidden">
           <span className="landing-font-mono text-xs font-semibold tracking-[0.14em] text-landing-muted uppercase">
