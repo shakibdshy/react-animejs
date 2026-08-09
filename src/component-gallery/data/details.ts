@@ -544,6 +544,38 @@ const ty = p * layer.depth * -56; // depth drives parallax rate
     ],
   },
 
+  "scroll-pin": {
+    component: "useAnimeOnScroll (pin)",
+    summary:
+      "GSAP-style scroll pinning — full-viewport cards lock to the viewport and recede in 3D as the next card covers them.",
+    code: `// pin:true equivalent. Each card pins as its top meets the viewport top
+// and releases as its bottom meets the viewport top.
+const { ref, progress } = useAnimeOnScrollPin({
+  pin: true,
+  start: 'top top',
+  end: 'bottom top',
+  pinSpacing: false,
+});
+
+// progress (0→1) drives how far the next card has covered this one.
+const p = clamp(progress, 0, 1);
+<section ref={ref} className="h-screen">
+  <div style={{
+    opacity: 1 - p,
+    transform: \`translateY(\${-25 * p}%) translateZ(\${-800 * p}px) rotateX(\${80 * p}deg)\`,
+  }} />
+</section>`,
+    props: [
+      { name: "pin", type: "boolean", default: "false", desc: "Lock the element to the viewport across the pin range" },
+      { name: "start", type: "ScrollThreshold", default: "'top top'", desc: "When pinning begins (container edge + target edge)" },
+      { name: "end", type: "ScrollThreshold", default: "'top bottom'", desc: "When pinning ends" },
+      { name: "pinSpacing", type: "boolean", default: "true", desc: "Reserve layout space while pinned (false overlaps)" },
+      { name: "progress", type: "number", default: "-", desc: "Clamped 0-1 progress across the [start, end] pin range" },
+      { name: "isPinned", type: "boolean", default: "-", desc: "True while the element is actively pinned" },
+      { name: "onPin / onUnpin", type: "(instance) => void", default: "-", desc: "Fire once when the pin state changes" },
+    ],
+  },
+
   "scramble-text": {
     component: "useAnimeScramble",
     summary: "Decoding character scramble with a custom charset and optional cursor.",

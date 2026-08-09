@@ -185,6 +185,29 @@ export const hookReferences: ReferenceEntry[] = [
         description: 'Viewport threshold values that define the active range.',
       },
       {
+        name: 'pin?',
+        type: 'boolean',
+        description:
+          'Locks the element to the viewport across a scroll range (GSAP ScrollTrigger pin:true). When on, the observer is bypassed and progress comes from the pin engine, so it survives overflow-hidden ancestors that break sticky.',
+      },
+      {
+        name: 'start? / end?',
+        type: "ScrollThreshold ('top top' / 'top bottom')",
+        description:
+          'Pin range thresholds. Defaults pin from "container top meets target top" to "container top meets target bottom".',
+      },
+      {
+        name: 'pinSpacing?',
+        type: 'boolean',
+        description:
+          'When true (default) reserves layout space while pinned so downstream content does not jump; false lets it overlap.',
+      },
+      {
+        name: 'onPin? / onUnpin?',
+        type: '(instance) => void',
+        description: 'Fired once when the element enters or leaves the pinned state.',
+      },
+      {
         name: 'returns',
         type: 'UseAnimeOnScrollReturn<T, C>',
         description: 'refs, observer, controls, state, progress, visibility, and readiness.',
@@ -488,6 +511,12 @@ export const componentReferences: ReferenceEntry[] = [
         name: 'enter? / leave?',
         type: 'ScrollThresholdValue',
         description: 'Observer thresholds.',
+      },
+      {
+        name: 'pin?',
+        type: 'boolean',
+        description:
+          'Locks the element to the viewport across a scroll range. Use with start/end/pinSpacing for stacked-card and pinned-section effects.',
       },
       { name: 'onReady?', type: '(api) => void', description: 'Runs once the observer is ready.' },
     ],
