@@ -15,7 +15,7 @@
 
 import { useMemo, useState } from 'react';
 import { Power } from 'lucide-react';
-import { useAnimeOnScrollPin } from '@/lib/pin';
+import { useAnimeOnScroll } from '@shakibdshy/react-animejs';
 
 const CARDS = [
   { label: 'Origins', tint: '#22d3ee' },
@@ -57,10 +57,10 @@ export function StackedCardsDemo() {
   // One pin for the whole stack. The container is a single h-screen viewport;
   // it pins at 'top top' and stays pinned for (N-1) viewport-heights via
   // endSpacing, so there is one viewport of scroll per card transition.
-  const { ref, progress, isPinned } = useAnimeOnScrollPin<HTMLDivElement>({
+  const { ref, progress, isPinned } = useAnimeOnScroll<HTMLDivElement>({
     pin: enabled,
-    start: 'top top',
-    end: 'top top',
+    pinStart: 'top top',
+    pinEnd: 'top top',
     // (N-1) viewports of extra scroll distance = one per card transition.
     endSpacing: enabled ? last * (typeof window !== 'undefined' ? window.innerHeight : 800) : 0,
     pinSpacing: true,
