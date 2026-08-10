@@ -12,8 +12,8 @@ importers:
         specifier: ^1.17.0
         version: 1.29.0(zod@4.2.1)
       '@shakibdshy/react-animejs':
-        specifier: ^1.0.0
-        version: 1.0.0(animejs@4.5.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: ^1.1.0
+        version: 1.1.0(animejs@4.5.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@tailwindcss/vite':
         specifier: ^4.0.6
         version: 4.2.2(vite@7.3.1(@types/node@22.19.15)(lightningcss@1.32.0)(tsx@4.21.0))
@@ -813,8 +813,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@shakibdshy/react-animejs@1.0.0':
-    resolution: {integrity: sha512-ZctjO40u6tRzb8KSuiHlpuHiy8GfxPQSA7gz+YqFxFxw4lLD5DTWgOdDs9mYi5bG1HNAGqCJ05fDBIfv2oinhA==}
+  '@shakibdshy/react-animejs@1.1.0':
+    resolution: {integrity: sha512-eGjSaPjO+ZA+PLOVxu8zYfB/M/kQNEbqD0fbEpGvB8P4T5yvJp7zgQ1jMUHgyw+wv3IVzrvkxURenWHM90YhVQ==}
     engines: {node: '>=18'}
     peerDependencies:
       animejs: '>=4.5.0'
@@ -3909,7 +3909,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.60.1':
     optional: true
 
-  '@shakibdshy/react-animejs@1.0.0(animejs@4.5.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@shakibdshy/react-animejs@1.1.0(animejs@4.5.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       animejs: 4.5.0
       react: 19.2.4

@@ -24,6 +24,7 @@ import { Route as DemoSvgPathDrawRouteImport } from './routes/demo/svg-path-draw
 import { Route as DemoSvgRouteImport } from './routes/demo/svg'
 import { Route as DemoSplitTextRouteImport } from './routes/demo/split-text'
 import { Route as DemoSpinningCubeRouteImport } from './routes/demo/spinning-cube'
+import { Route as DemoScrollPinRouteImport } from './routes/demo/scroll-pin'
 import { Route as DemoScrollLinkedAnimationsRouteImport } from './routes/demo/scroll-linked-animations'
 import { Route as DemoScrambleTextRouteImport } from './routes/demo/scramble-text'
 import { Route as DemoScopeRouteImport } from './routes/demo/scope'
@@ -112,6 +113,11 @@ const DemoSplitTextRoute = DemoSplitTextRouteImport.update({
 const DemoSpinningCubeRoute = DemoSpinningCubeRouteImport.update({
   id: '/spinning-cube',
   path: '/spinning-cube',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoScrollPinRoute = DemoScrollPinRouteImport.update({
+  id: '/scroll-pin',
+  path: '/scroll-pin',
   getParentRoute: () => DemoRouteRoute,
 } as any)
 const DemoScrollLinkedAnimationsRoute =
@@ -207,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/demo/scope': typeof DemoScopeRoute
   '/demo/scramble-text': typeof DemoScrambleTextRoute
   '/demo/scroll-linked-animations': typeof DemoScrollLinkedAnimationsRoute
+  '/demo/scroll-pin': typeof DemoScrollPinRoute
   '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
   '/demo/svg': typeof DemoSvgRoute
@@ -237,6 +244,7 @@ export interface FileRoutesByTo {
   '/demo/scope': typeof DemoScopeRoute
   '/demo/scramble-text': typeof DemoScrambleTextRoute
   '/demo/scroll-linked-animations': typeof DemoScrollLinkedAnimationsRoute
+  '/demo/scroll-pin': typeof DemoScrollPinRoute
   '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
   '/demo/svg': typeof DemoSvgRoute
@@ -269,6 +277,7 @@ export interface FileRoutesById {
   '/demo/scope': typeof DemoScopeRoute
   '/demo/scramble-text': typeof DemoScrambleTextRoute
   '/demo/scroll-linked-animations': typeof DemoScrollLinkedAnimationsRoute
+  '/demo/scroll-pin': typeof DemoScrollPinRoute
   '/demo/spinning-cube': typeof DemoSpinningCubeRoute
   '/demo/split-text': typeof DemoSplitTextRoute
   '/demo/svg': typeof DemoSvgRoute
@@ -302,6 +311,7 @@ export interface FileRouteTypes {
     | '/demo/scope'
     | '/demo/scramble-text'
     | '/demo/scroll-linked-animations'
+    | '/demo/scroll-pin'
     | '/demo/spinning-cube'
     | '/demo/split-text'
     | '/demo/svg'
@@ -332,6 +342,7 @@ export interface FileRouteTypes {
     | '/demo/scope'
     | '/demo/scramble-text'
     | '/demo/scroll-linked-animations'
+    | '/demo/scroll-pin'
     | '/demo/spinning-cube'
     | '/demo/split-text'
     | '/demo/svg'
@@ -363,6 +374,7 @@ export interface FileRouteTypes {
     | '/demo/scope'
     | '/demo/scramble-text'
     | '/demo/scroll-linked-animations'
+    | '/demo/scroll-pin'
     | '/demo/spinning-cube'
     | '/demo/split-text'
     | '/demo/svg'
@@ -490,6 +502,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoSpinningCubeRouteImport
       parentRoute: typeof DemoRouteRoute
     }
+    '/demo/scroll-pin': {
+      id: '/demo/scroll-pin'
+      path: '/scroll-pin'
+      fullPath: '/demo/scroll-pin'
+      preLoaderRoute: typeof DemoScrollPinRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
     '/demo/scroll-linked-animations': {
       id: '/demo/scroll-linked-animations'
       path: '/scroll-linked-animations'
@@ -606,6 +625,7 @@ interface DemoRouteRouteChildren {
   DemoScopeRoute: typeof DemoScopeRoute
   DemoScrambleTextRoute: typeof DemoScrambleTextRoute
   DemoScrollLinkedAnimationsRoute: typeof DemoScrollLinkedAnimationsRoute
+  DemoScrollPinRoute: typeof DemoScrollPinRoute
   DemoSpinningCubeRoute: typeof DemoSpinningCubeRoute
   DemoSplitTextRoute: typeof DemoSplitTextRoute
   DemoSvgRoute: typeof DemoSvgRoute
@@ -630,6 +650,7 @@ const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoScopeRoute: DemoScopeRoute,
   DemoScrambleTextRoute: DemoScrambleTextRoute,
   DemoScrollLinkedAnimationsRoute: DemoScrollLinkedAnimationsRoute,
+  DemoScrollPinRoute: DemoScrollPinRoute,
   DemoSpinningCubeRoute: DemoSpinningCubeRoute,
   DemoSplitTextRoute: DemoSplitTextRoute,
   DemoSvgRoute: DemoSvgRoute,

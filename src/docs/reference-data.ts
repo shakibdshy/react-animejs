@@ -185,6 +185,88 @@ export const hookReferences: ReferenceEntry[] = [
         description: 'Viewport threshold values that define the active range.',
       },
       {
+        name: 'pin?',
+        type: 'boolean',
+        description:
+          'Locks the element to the viewport across a scroll range (GSAP ScrollTrigger pin:true). When on, the observer is bypassed and progress comes from the pin engine, so it survives overflow-hidden ancestors that break sticky.',
+      },
+      {
+        name: 'start? / end?',
+        type: "ScrollThreshold ('top top' / 'top bottom')",
+        description:
+          'Pin range thresholds. Defaults pin from "container top meets target top" to "container top meets target bottom".',
+      },
+      {
+        name: 'pinSpacing?',
+        type: 'boolean',
+        description:
+          'When true (default) reserves layout space while pinned so downstream content does not jump; false lets it overlap.',
+      },
+      {
+        name: 'endSpacing?',
+        type: 'number (px)',
+        description:
+          'Extra trailing scroll room below the spacer — e.g. (N-1) * innerHeight for stacked cards. Inert on axis: "x".',
+      },
+      {
+        name: 'axis?',
+        type: "'y' | 'x'",
+        description:
+          'Pin axis. "x" reads scrollX/scrollLeft and fixes left (true horizontal pin from an overflow-x container).',
+      },
+      {
+        name: 'anticipatePin?',
+        type: 'number (seconds)',
+        description:
+          'Pre-pin on fast forward entry by this many seconds of anticipated scroll — smooths the 1-frame flash. Forward-only; 0 disables.',
+      },
+      {
+        name: 'pinType?',
+        type: "'auto' | 'fixed' | 'sticky'",
+        description:
+          'Pin positioning strategy. "auto" ancestor-walks: transform/perspective → sticky; overflow:hidden → fixed; neither → fixed. "sticky" uses a wrapper that survives transformed ancestors.',
+      },
+      {
+        name: 'pinReparent?',
+        type: 'boolean',
+        description:
+          '<AnimeScroll> only. Portal pinned children to document.body to escape hostile ancestors. Subtree re-mounts during pin; prefer pinType: "sticky" to preserve ephemeral DOM state.',
+      },
+      {
+        name: 'scrub?',
+        type: 'boolean | number',
+        description:
+          'Drive a linked anime.js instance playhead from pin progress. true = 1:1; a number in (0,1) = smoothing factor.',
+      },
+      {
+        name: 'snap?',
+        type: 'number | number[]',
+        description:
+          'On scroll-end, settle progress to the nearest snap point. A number = increment (e.g. 0.25); an array = explicit points. Cancels immediately on new scroll.',
+      },
+      {
+        name: 'snapDuration?',
+        type: 'number (seconds)',
+        description: 'Duration of the snap settle tween. Default 0.3.',
+      },
+      {
+        name: 'onRefresh?',
+        type: '(state) => void',
+        description:
+          'Fired after every pin bounds recomputation (resize, manual refresh, or ResizeObserver-triggered).',
+      },
+      {
+        name: 'invalidateOnRefresh?',
+        type: 'boolean',
+        description:
+          'Re-capture target geometry on size change (dynamic content: accordions, lazy images). Attaches a ResizeObserver.',
+      },
+      {
+        name: 'onPin? / onUnpin?',
+        type: '(instance) => void',
+        description: 'Fired once when the element enters or leaves the pinned state.',
+      },
+      {
         name: 'returns',
         type: 'UseAnimeOnScrollReturn<T, C>',
         description: 'refs, observer, controls, state, progress, visibility, and readiness.',
@@ -488,6 +570,12 @@ export const componentReferences: ReferenceEntry[] = [
         name: 'enter? / leave?',
         type: 'ScrollThresholdValue',
         description: 'Observer thresholds.',
+      },
+      {
+        name: 'pin?',
+        type: 'boolean',
+        description:
+          'Locks the element to the viewport across a scroll range. Use with start/end/pinSpacing for stacked-card and pinned-section effects.',
       },
       { name: 'onReady?', type: '(api) => void', description: 'Runs once the observer is ready.' },
     ],

@@ -1,5 +1,6 @@
 {
-  "name": "react-animejs",
+  "name": "@shakibdshy/react-animejs",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.33.2",
@@ -11,11 +12,13 @@
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sync:lib": "../scripts/sync-lib.sh",
+    "sync:lib:check": "../scripts/sync-lib.sh --check"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.0",
-    "@shakibdshy/react-animejs": "^1.0.0",
+    "@shakibdshy/react-animejs": "^1.1.0",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-router": "1.157.15",
