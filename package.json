@@ -12,7 +12,9 @@
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sync:lib": "../scripts/sync-lib.sh",
+    "sync:lib:check": "../scripts/sync-lib.sh --check"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.0",
