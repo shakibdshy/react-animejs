@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef, useState } from 'react';
-import { useAnimeDraggable, useAnimeOnScroll, useAnimeTimer } from '@shakibdshy/react-animejs';
+import { useAnimeDraggable, useAnimeOnScroll } from '@shakibdshy/react-animejs';
 import { AnimatedReorderList } from '@/demo-examples/components/common/AnimatedReorderList';
 import { DemoButton, PreviewCard } from './shared';
 import { cn } from './utils';
@@ -468,76 +468,6 @@ export const ScrollLinkedAnimationsPreview = memo(function ScrollLinkedAnimation
           <span className="landing-font-mono text-[9px] tabular-nums text-landing-muted">
             {Math.round(p * 100).toString().padStart(3, '0')}
           </span>
-        </div>
-      </div>
-    </PreviewCard>
-  );
-});
-
-/**
- * Illustrative stacked-cards preview for the scroll-pin gallery card.
- *
- * Gallery previews are small, always-mounted thumbnails — not real scroll
- * contexts — so this simulates the recede effect with an auto-advancing timer
- * rather than driving a real pin (which needs a scrollable window). The full
- * interactive pin lives at /demo/scroll-pin.
- */
-export const ScrollPinPreview = memo(function ScrollPinPreview(_props: PreviewProps) {
-  const TOTAL = 4;
-  // Cycle an "active" card 0→TOTAL every ~1.4s, then loop. The active card and
-  // those below it recede as later cards cover them, mirroring the pin demo.
-  const { state } = useAnimeTimer({
-    duration: TOTAL * 1400,
-    loop: true,
-  });
-  const activeIndex = Math.min(TOTAL - 1, Math.floor((state.progress || 0) * TOTAL));
-
-  const accent = 'var(--landing-accent)';
-  return (
-    <PreviewCard title="Scroll Pin">
-      <div className="mb-2 flex items-center justify-between">
-        <span className="landing-font-mono text-[10px] uppercase tracking-[0.25em] text-landing-muted">
-          pinned stack
-        </span>
-        <span className="landing-font-mono text-[9px] text-landing-muted">see /demo/scroll-pin →</span>
-      </div>
-      <div className="relative h-64 w-full overflow-hidden rounded-xl border border-landing-border bg-landing-bg">
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4">
-          {Array.from({ length: TOTAL }).map((_, i) => {
-            const isLast = i === TOTAL - 1;
-            // Each card recedes based on how far `activeIndex` has moved past it.
-            const p = Math.max(0, Math.min(1, activeIndex - i));
-            const translateY = -20 * p;
-            const scale = 1 - p * 0.1;
-            const opacity = isLast ? 1 : 1 - p * 0.7;
-            return (
-              <div
-                key={i}
-                className="flex h-12 w-full max-w-56 items-center justify-center rounded-lg transition-[transform,opacity] duration-500 ease-out"
-                style={{
-                  background:
-                    i % 2 === 0
-                      ? `color-mix(in oklch, ${accent} ${20 - p * 10}%, var(--landing-surface))`
-                      : 'var(--landing-surface)',
-                  border: `1px solid color-mix(in oklch, ${accent} ${30 - p * 20}%, transparent)`,
-                  zIndex: 10 + i,
-                  transform: `translateY(${translateY}px) scale(${scale})`,
-                  opacity,
-                }}
-              >
-                <span className="landing-font-mono text-[10px] uppercase tracking-[0.3em] text-landing-fg">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-        {/* progress hairline mirrors the pin progress bar in the full demo */}
-        <div className="absolute inset-x-4 bottom-3 h-0.5 overflow-hidden rounded-full bg-landing-border">
-          <div
-            className="h-full rounded-full bg-landing-accent transition-[width] duration-100"
-            style={{ width: `${(state.progress || 0) * 100}%` }}
-          />
         </div>
       </div>
     </PreviewCard>

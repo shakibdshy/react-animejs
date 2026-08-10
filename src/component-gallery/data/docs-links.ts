@@ -68,11 +68,6 @@ export const demoDocsLinks: Record<
     label: 'useAnimeOnScroll',
     extras: ['anime-scroll'],
   },
-  'scroll-pin': {
-    anchor: 'use-anime-onscroll',
-    label: 'useAnimeOnScroll',
-    extras: ['anime-scroll'],
-  },
   'scramble-text': { anchor: 'use-anime-scramble', label: 'useAnimeScramble' },
   tooltip: { anchor: 'use-anime', label: 'useAnime', extras: ['anime-component'] },
   'dropdown-menu': { anchor: 'anime-component', label: 'Anime' },

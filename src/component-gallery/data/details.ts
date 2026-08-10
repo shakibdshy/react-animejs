@@ -544,48 +544,6 @@ const ty = p * layer.depth * -56; // depth drives parallax rate
     ],
   },
 
-  "scroll-pin": {
-    component: "useAnimeOnScroll (pin)",
-    summary:
-      "GSAP-style scroll pinning — full-viewport cards lock to the viewport and recede in 3D as the next card covers them.",
-    code: `// pin:true equivalent. Each card pins as its top meets the viewport top
-// and releases as its bottom meets the viewport top.
-const { ref, progress } = useAnimeOnScrollPin({
-  pin: true,
-  start: 'top top',
-  end: 'bottom top',
-  pinSpacing: false,
-});
-
-// progress (0→1) drives how far the next card has covered this one.
-const p = clamp(progress, 0, 1);
-<section ref={ref} className="h-screen">
-  <div style={{
-    opacity: 1 - p,
-    transform: \`translateY(\${-25 * p}%) translateZ(\${-800 * p}px) rotateX(\${80 * p}deg)\`,
-  }} />
-</section>`,
-    props: [
-      { name: "pin", type: "boolean", default: "false", desc: "Lock the element to the viewport across the pin range" },
-      { name: "start", type: "ScrollThreshold", default: "'top top'", desc: "When pinning begins (container edge + target edge)" },
-      { name: "end", type: "ScrollThreshold", default: "'top bottom'", desc: "When pinning ends" },
-      { name: "pinSpacing", type: "boolean", default: "true", desc: "Reserve layout space while pinned (false overlaps)" },
-      { name: "endSpacing", type: "number (px)", default: "0", desc: "Extra trailing scroll room (e.g. (N-1)*innerHeight for stacked cards). Inert on axis:x" },
-      { name: "axis", type: "'y' | 'x'", default: "'y'", desc: "Pin axis — 'x' reads scrollLeft and fixes left (horizontal pin)" },
-      { name: "anticipatePin", type: "number (seconds)", default: "0", desc: "Pre-pin on fast forward entry; smooths the 1-frame flash" },
-      { name: "pinType", type: "'auto' | 'fixed' | 'sticky'", default: "'auto'", desc: "Positioning strategy; 'auto' ancestor-walks (transform→sticky, overflow:hidden→fixed)" },
-      { name: "pinReparent", type: "boolean", default: "false", desc: "<AnimeScroll> only — portal pinned children to document.body" },
-      { name: "scrub", type: "boolean | number", default: "false", desc: "Drive a linked anime.js instance from pin progress (true=1:1, number=smoothing)" },
-      { name: "snap", type: "number | number[]", default: "-", desc: "Settle progress to nearest snap point on scroll-end" },
-      { name: "snapDuration", type: "number (seconds)", default: "0.3", desc: "Snap settle tween duration" },
-      { name: "onRefresh", type: "(state) => void", default: "-", desc: "Fired after every pin bounds recomputation" },
-      { name: "invalidateOnRefresh", type: "boolean", default: "false", desc: "Re-capture geometry on size change (ResizeObserver)" },
-      { name: "progress", type: "number", default: "-", desc: "Clamped 0-1 progress across the [start, end] pin range" },
-      { name: "isPinned", type: "boolean", default: "-", desc: "True while the element is actively pinned" },
-      { name: "onPin / onUnpin", type: "(instance) => void", default: "-", desc: "Fire once when the pin state changes" },
-    ],
-  },
-
   "scramble-text": {
     component: "useAnimeScramble",
     summary: "Decoding character scramble with a custom charset and optional cursor.",

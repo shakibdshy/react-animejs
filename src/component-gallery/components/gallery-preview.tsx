@@ -429,7 +429,6 @@ export const galleryPreviewRegistry = {
   'animated-slider': BarsGrowPreview,
   'reorder-list': BounceDotsPreview,
   'scroll-linked-animations': RingOrbitPreview,
-  'scroll-pin': RingOrbitPreview,
   'scramble-text': ScramblePreview,
   tooltip: TooltipCardPreview,
   'dropdown-menu': DropdownMenuCardPreview,

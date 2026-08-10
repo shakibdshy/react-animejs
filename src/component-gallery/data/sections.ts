@@ -208,18 +208,6 @@ export const demoSections = [
   },
 
   {
-    title: 'Scroll Pin (stacked cards)',
-    playgroundPath: '/demo/scroll-pin',
-    hasPlayground: true,
-    description: 'GSAP-style scroll pinning (pin: true) — stacked full-viewport cards that recede in 3D as the next covers them',
-    category: 'scroll',
-    componentId: 'scroll-pin',
-    tags: ['scroll', 'pin', 'stacked-cards', 'fixed'],
-    difficulty: 'advanced',
-    docsAnchor: 'use-anime-onscroll',
-  },
-
-  {
     title: 'Scramble Text',
     playgroundPath: '/demo/scramble-text',
     description: 'Text scramble animation with autoplay, loop, and custom chars',
