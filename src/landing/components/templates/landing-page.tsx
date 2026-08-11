@@ -35,7 +35,7 @@ export const LandingPage = memo(function LandingPage({
         <main>
           <ErrorBoundary>
             <HeroSection
-              eyebrow="v2.0 \u2014 React animation library"
+              eyebrow="v1.1 — React animation library"
               words={['Animations', 'that', 'flow.']}
               description="The animation power of anime.js, wrapped in beautiful React components. Zero boilerplate. Production-ready."
               primaryCta={{ label: 'See the demos \u2192', href: '/demos' }}
