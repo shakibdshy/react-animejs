@@ -59,7 +59,7 @@ export const HeroSection = memo(function HeroSection({
         <div className="col-span-12 lg:col-span-7">
           <h1
             className="landing-font-display font-bold tracking-[-0.02em] leading-[0.9] text-landing-fg mb-8"
-            style={{ fontSize: 'clamp(56px, 9.5vw, 132px)' }}
+            style={{ fontSize: 'clamp(56px, 9.5vw, 116px)' }}
           >
             {chars.map((c, i) => (
               <span

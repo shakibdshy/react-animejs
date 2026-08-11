@@ -24,7 +24,6 @@ interface LandingPageProps {
 
 export const LandingPage = memo(function LandingPage({
   features,
-  testimonials,
   footerColumns,
   footerSocials,
   navItems,
