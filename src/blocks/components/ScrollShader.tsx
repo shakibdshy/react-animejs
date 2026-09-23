@@ -1,15 +1,15 @@
 /**
  * ScrollShader — a native WebGL scroll-distortion gallery.
  *
- * Each frame owns a small WebGL canvas. AnimeScroll supplies one shared,
- * signed velocity so every shader bends with the same scroll gesture while
- * Anime handles the stage's intro reveal. The image remains visible as a
- * fallback when WebGL or a remote texture is unavailable.
+ * Each frame owns a small WebGL canvas. A container-scoped `onScroll` observer
+ * supplies one shared, signed velocity so every shader bends with the same
+ * scroll gesture while Anime handles the stage's intro reveal. The image
+ * remains visible as a fallback when WebGL or a remote texture is unavailable.
  */
-import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowDown, Gauge, Sparkles } from 'lucide-react';
 import type { ScrollObserver } from 'animejs';
-import { Anime, AnimeScroll, utils } from '@shakibdshy/react-animejs';
+import { Anime, engine, onScroll, utils } from '@shakibdshy/react-animejs';
 
 const { clamp } = utils;
 
@@ -410,17 +410,29 @@ const SHADER_IMAGES: ShaderImage[] = [
 
 export const ScrollShader = memo(function ScrollShader({ className = '' }: { className?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const gaugeRef = useRef<HTMLSpanElement>(null);
   const signalRef = useRef<ScrollSignal>({
     targetVelocity: 0,
     targetStrength: 0,
   });
   const decayTimerRef = useRef<number | null>(null);
-  const [ready, setReady] = useState(false);
 
   const handleScrollUpdate = useCallback((observer: ScrollObserver) => {
     const targetVelocity = normalizeScrollVelocity(observer.velocity, observer.backward);
     signalRef.current.targetVelocity = targetVelocity;
-    signalRef.current.targetStrength = Math.min(1, Math.abs(targetVelocity));
+    const strength = Math.min(1, Math.abs(targetVelocity));
+    signalRef.current.targetStrength = strength;
+
+    // Chrome for the footer bar + velocity gauge, written imperatively so
+    // scrolling never re-renders the gallery.
+    if (progressBarRef.current) {
+      progressBarRef.current.style.width = `${Math.round(clamp(observer.progress ?? 0, 0, 1) * 100)}%`;
+    }
+    if (gaugeRef.current) {
+      gaugeRef.current.textContent = `${Math.round(strength * 100)}%`;
+    }
 
     if (decayTimerRef.current !== null) window.clearTimeout(decayTimerRef.current);
     decayTimerRef.current = window.setTimeout(() => {
@@ -437,95 +449,97 @@ export const ScrollShader = memo(function ScrollShader({ className = '' }: { cla
     []
   );
 
-  useLayoutEffect(() => {
-    setReady(true);
-  }, []);
+  // Container-scoped scroll observer driving the velocity signal. Built with
+  // the library's `onScroll` primitive (the observer resolves its target on
+  // the engine's next tick, so a plain effect with explicit elements is the
+  // most robust wiring); `engine.wake()` makes the observer measurable before
+  // the first user scroll.
+  useEffect(() => {
+    const box = containerRef.current;
+    const track = trackRef.current;
+    if (!box || !track) return;
+
+    const observer = onScroll({
+      container: box,
+      target: track,
+      enter: { target: 'top', container: 'top' },
+      leave: { target: 'bottom', container: 'bottom' },
+      onUpdate: handleScrollUpdate,
+    });
+    engine.wake();
+
+    return () => {
+      try {
+        observer.revert();
+      } catch {
+        // already reverted by a scope/unmount pass
+      }
+    };
+  }, [handleScrollUpdate]);
 
   return (
-    <AnimeScroll<HTMLDivElement, HTMLDivElement>
-      container={containerRef}
-      enter={{ target: 'top', container: 'top' }}
-      leave={{ target: 'bottom', container: 'bottom' }}
-      onUpdate={handleScrollUpdate}
-      enabled={ready}
+    <div
+      className={`relative overflow-hidden rounded-2xl border border-landing-border/60 bg-[#050707] text-landing-fg ${className}`}
     >
-      {({ ref: trackRef, progress, velocity, backward }) => {
-        const normalizedProgress = clamp(progress, 0, 1);
-        const normalizedVelocity = normalizeScrollVelocity(velocity, backward);
-        const velocityStrength = Math.min(1, Math.abs(normalizedVelocity));
+      <div
+        ref={containerRef}
+        tabIndex={0}
+        role="region"
+        aria-label="Velocity distortion shader gallery"
+        className="relative h-[min(78vh,700px)] overflow-y-auto overscroll-contain"
+      >
+        <div
+          ref={trackRef}
+          className="relative flex min-h-[480%] flex-col gap-24 py-20 sm:gap-32 sm:py-28"
+        >
+          <Anime opacity={[0, 1]} translateY={[18, 0]} duration={700} ease="outQuad" autoplay>
+            <header className="mx-auto flex w-[88%] items-end justify-between gap-6 pb-2">
+              <div>
+                <p className="landing-font-mono text-[10px] uppercase tracking-[0.3em] text-landing-accent">
+                  Scroll shader / WebGL canvas
+                </p>
+                <h2 className="landing-font-display mt-3 max-w-xl text-3xl font-semibold tracking-tight text-white sm:text-5xl">
+                  Let velocity leave a trace.
+                </h2>
+                <p className="mt-3 max-w-md text-sm leading-relaxed text-white/50">
+                  Each frame is its own shader surface. Scroll faster to pull color apart and bend
+                  the image.
+                </p>
+              </div>
+              <ArrowDown className="mb-2 hidden h-5 w-5 animate-bounce text-white/35 sm:block" />
+            </header>
+          </Anime>
 
-        return (
+          {SHADER_IMAGES.map((image) => (
+            <ShaderFrame key={image.number} {...image} signal={signalRef} />
+          ))}
+        </div>
+
+        <div className="pointer-events-none absolute inset-x-5 top-5 z-20 flex items-center justify-between sm:inset-x-8">
+          <span className="landing-font-mono flex items-center gap-2 text-[9px] uppercase tracking-[0.2em] text-white/40">
+            <Sparkles className="h-3.5 w-3.5 text-landing-accent" />
+            live distortion
+          </span>
+          <span className="landing-font-mono flex items-center gap-2 text-[9px] uppercase tracking-[0.2em] text-white/40">
+            <Gauge className="h-3.5 w-3.5" />
+            <span ref={gaugeRef}>0%</span>
+          </span>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between gap-4 border-t border-white/10 bg-[#0a0c0c] px-5 py-4 sm:px-7">
+        <span className="landing-font-mono text-[9px] uppercase tracking-[0.22em] text-white/40">
+          scroll velocity → shader strength
+        </span>
+        <div className="h-1 w-28 overflow-hidden rounded-full bg-white/10">
           <div
-            className={`relative overflow-hidden rounded-2xl border border-landing-border/60 bg-[#050707] text-landing-fg ${className}`}
-          >
-            <div
-              ref={containerRef}
-              tabIndex={0}
-              role="region"
-              aria-label="Velocity distortion shader gallery"
-              className="relative h-[min(78vh,700px)] overflow-y-auto overscroll-contain"
-            >
-              <div
-                ref={trackRef}
-                className="relative flex min-h-[480%] flex-col gap-24 py-20 sm:gap-32 sm:py-28"
-              >
-                <Anime
-                  opacity={[0, 1]}
-                  translateY={[18, 0]}
-                  duration={700}
-                  ease="outQuad"
-                  autoplay
-                  enabled={ready}
-                >
-                  <header className="mx-auto flex w-[88%] items-end justify-between gap-6 pb-2">
-                    <div>
-                      <p className="landing-font-mono text-[10px] uppercase tracking-[0.3em] text-landing-accent">
-                        Scroll shader / WebGL canvas
-                      </p>
-                      <h2 className="landing-font-display mt-3 max-w-xl text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-                        Let velocity leave a trace.
-                      </h2>
-                      <p className="mt-3 max-w-md text-sm leading-relaxed text-white/50">
-                        Each frame is its own shader surface. Scroll faster to pull color apart and
-                        bend the image.
-                      </p>
-                    </div>
-                    <ArrowDown className="mb-2 hidden h-5 w-5 animate-bounce text-white/35 sm:block" />
-                  </header>
-                </Anime>
-
-                {SHADER_IMAGES.map((image) => (
-                  <ShaderFrame key={image.number} {...image} signal={signalRef} />
-                ))}
-              </div>
-
-              <div className="pointer-events-none absolute inset-x-5 top-5 z-20 flex items-center justify-between sm:inset-x-8">
-                <span className="landing-font-mono flex items-center gap-2 text-[9px] uppercase tracking-[0.2em] text-white/40">
-                  <Sparkles className="h-3.5 w-3.5 text-landing-accent" />
-                  live distortion
-                </span>
-                <span className="landing-font-mono flex items-center gap-2 text-[9px] uppercase tracking-[0.2em] text-white/40">
-                  <Gauge className="h-3.5 w-3.5" />
-                  {Math.round(velocityStrength * 100)}%
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between gap-4 border-t border-white/10 bg-[#0a0c0c] px-5 py-4 sm:px-7">
-              <span className="landing-font-mono text-[9px] uppercase tracking-[0.22em] text-white/40">
-                scroll velocity → shader strength
-              </span>
-              <div className="h-1 w-28 overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-landing-accent transition-[width] duration-100"
-                  style={{ width: `${Math.round(normalizedProgress * 100)}%` }}
-                />
-              </div>
-            </div>
-          </div>
-        );
-      }}
-    </AnimeScroll>
+            ref={progressBarRef}
+            className="h-full rounded-full bg-landing-accent"
+            style={{ width: '0%' }}
+          />
+        </div>
+      </div>
+    </div>
   );
 });
 
