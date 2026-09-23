@@ -2,13 +2,13 @@
  * ScrollImageComparison — a finite, container-scoped before/after reveal.
  *
  * The comparison stage lives in a fixed-height, independently scrollable panel.
- * AnimeScroll observes that panel's target and maps progress to two opposing
+ * A container-scoped `onScroll` observer maps progress to two opposing
  * transforms: the after panel enters from the right while its image enters from
  * the left, keeping the image aligned instead of squashing it as the reveal grows.
  */
-import { memo, useLayoutEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { Anime, AnimeScroll, utils } from '@shakibdshy/react-animejs';
+import { Anime, engine, onScroll, utils } from '@shakibdshy/react-animejs';
 
 const { clamp } = utils;
 
@@ -66,10 +66,44 @@ export const ScrollImageComparison = memo(function ScrollImageComparison({
   className = '',
 }: ScrollImageComparisonProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const afterPanelRef = useRef<HTMLDivElement>(null);
+  const afterImageRef = useRef<HTMLImageElement>(null);
 
-  useLayoutEffect(() => {
-    setReady(true);
+  // Container-scoped observer scrubbing the reveal. Created imperatively with
+  // the library's `onScroll` primitive + `engine.wake()` so the observer is
+  // measurable before the first user scroll; transforms are written straight
+  // to the two layers, so scrolling never re-renders the stage.
+  useEffect(() => {
+    const box = containerRef.current;
+    const track = trackRef.current;
+    if (!box || !track) return;
+
+    const observer = onScroll({
+      container: box,
+      target: track,
+      enter: { target: 'top', container: 'top' },
+      leave: { target: 'bottom', container: 'bottom' },
+      onUpdate: (observer) => {
+        const reveal = clamp(observer.progress ?? 0, 0, 1);
+        const afterOffset = (1 - reveal) * 100;
+        if (afterPanelRef.current) {
+          afterPanelRef.current.style.transform = `translate3d(${afterOffset}%, 0, 0)`;
+        }
+        if (afterImageRef.current) {
+          afterImageRef.current.style.transform = `translate3d(${-afterOffset}%, 0, 0)`;
+        }
+      },
+    });
+    engine.wake();
+
+    return () => {
+      try {
+        observer.revert();
+      } catch {
+        // already reverted by a scope/unmount pass
+      }
+    };
   }, []);
 
   return (
@@ -82,83 +116,63 @@ export const ScrollImageComparison = memo(function ScrollImageComparison({
         aria-label="Scroll image comparison"
         className="relative h-[min(72vh,640px)] overflow-y-auto overscroll-contain border-b border-white/10 bg-landing-bg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-landing-accent"
       >
-        <AnimeScroll<HTMLDivElement, HTMLDivElement>
-          container={containerRef}
-          enter={{ target: 'top', container: 'top' }}
-          leave={{ target: 'bottom', container: 'bottom' }}
-          enabled={ready}
-        >
-          {({ ref: trackRef, progress }) => {
-            const reveal = clamp(progress, 0, 1);
-            const afterOffset = (1 - reveal) * 100;
-            const imageOffset = -afterOffset;
+        <div ref={trackRef} className="relative h-[240%]">
+          <div className="sticky top-0 h-[min(72vh,640px)] overflow-hidden bg-landing-surface">
+            <div className="absolute inset-0">
+              <img
+                src={before}
+                alt="Before color grade"
+                className="absolute inset-0 h-full w-full object-cover"
+                draggable={false}
+              />
+              <div
+                ref={afterPanelRef}
+                className="absolute inset-0 overflow-hidden"
+                style={{ transform: 'translate3d(100%, 0, 0)' }}
+              >
+                <img
+                  ref={afterImageRef}
+                  src={after}
+                  alt="After color grade"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{ transform: 'translate3d(-100%, 0, 0)' }}
+                  draggable={false}
+                />
+              </div>
 
-            return (
-              <div ref={trackRef} className="relative h-[240%]">
-                <div className="sticky top-0 h-[min(72vh,640px)] overflow-hidden bg-landing-surface">
-                  <div className="absolute inset-0">
-                    <img
-                      src={before}
-                      alt="Before color grade"
-                      className="absolute inset-0 h-full w-full object-cover"
-                      draggable={false}
-                    />
-                    <div
-                      className="absolute inset-0 overflow-hidden"
-                      style={{ transform: `translate3d(${afterOffset}%, 0, 0)` }}
-                    >
-                      <img
-                        src={after}
-                        alt="After color grade"
-                        className="absolute inset-0 h-full w-full object-cover"
-                        style={{ transform: `translate3d(${imageOffset}%, 0, 0)` }}
-                        draggable={false}
-                      />
-                    </div>
-
-                    <div className="pointer-events-none absolute inset-x-5 top-5 z-20 flex items-start justify-between sm:inset-x-8 sm:top-7">
-                      <div className="rounded-full border border-white/20 bg-black/25 px-3 py-1.5 backdrop-blur-md">
-                        <span className="landing-font-mono text-[9px] uppercase tracking-[0.22em] text-white/75">
-                          before / raw light
-                        </span>
-                      </div>
-                      <div className="rounded-full border border-white/20 bg-black/25 px-3 py-1.5 backdrop-blur-md">
-                        <span className="landing-font-mono text-[9px] uppercase tracking-[0.22em] text-white/75">
-                          after / color grade
-                        </span>
-                      </div>
-                    </div>
-
-                    <Anime
-                      opacity={[0, 1]}
-                      translateY={[18, 0]}
-                      duration={700}
-                      ease="outQuad"
-                      autoplay
-                      enabled={ready}
-                    >
-                      <div className="pointer-events-none absolute inset-x-5 bottom-6 z-20 sm:inset-x-8 sm:bottom-8">
-                        <p className="landing-font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
-                          Scroll comparison / 01
-                        </p>
-                        <h3 className="landing-font-display mt-2 max-w-xl text-3xl font-semibold tracking-tight text-white drop-shadow-lg sm:text-5xl">
-                          Scroll to reveal the other side.
-                        </h3>
-                      </div>
-                    </Anime>
-
-                    <div className="pointer-events-none absolute bottom-5 right-5 z-20 flex items-center gap-2 sm:bottom-8 sm:right-8">
-                      <ChevronDown className="h-4 w-4 animate-bounce text-white/55" />
-                      <span className="landing-font-mono text-[9px] uppercase tracking-[0.2em] text-white/55">
-                        keep scrolling
-                      </span>
-                    </div>
-                  </div>
+              <div className="pointer-events-none absolute inset-x-5 top-5 z-20 flex items-start justify-between sm:inset-x-8 sm:top-7">
+                <div className="rounded-full border border-white/20 bg-black/25 px-3 py-1.5 backdrop-blur-md">
+                  <span className="landing-font-mono text-[9px] uppercase tracking-[0.22em] text-white/75">
+                    before / raw light
+                  </span>
+                </div>
+                <div className="rounded-full border border-white/20 bg-black/25 px-3 py-1.5 backdrop-blur-md">
+                  <span className="landing-font-mono text-[9px] uppercase tracking-[0.22em] text-white/75">
+                    after / color grade
+                  </span>
                 </div>
               </div>
-            );
-          }}
-        </AnimeScroll>
+
+              <Anime opacity={[0, 1]} translateY={[18, 0]} duration={700} ease="outQuad" autoplay>
+                <div className="pointer-events-none absolute inset-x-5 bottom-6 z-20 sm:inset-x-8 sm:bottom-8">
+                  <p className="landing-font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
+                    Scroll comparison / 01
+                  </p>
+                  <h3 className="landing-font-display mt-2 max-w-xl text-3xl font-semibold tracking-tight text-white drop-shadow-lg sm:text-5xl">
+                    Scroll to reveal the other side.
+                  </h3>
+                </div>
+              </Anime>
+
+              <div className="pointer-events-none absolute bottom-5 right-5 z-20 flex items-center gap-2 sm:bottom-8 sm:right-8">
+                <ChevronDown className="h-4 w-4 animate-bounce text-white/55" />
+                <span className="landing-font-mono text-[9px] uppercase tracking-[0.2em] text-white/55">
+                  keep scrolling
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="flex items-center justify-between gap-4 border-t border-white/10 bg-landing-surface/70 px-5 py-4 sm:px-8">

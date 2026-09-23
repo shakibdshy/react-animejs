@@ -5,9 +5,9 @@
  * Each panel is sticky at the top of the scroll box, so later panels layer
  * over earlier ones while the browser keeps the scroll gesture continuous.
  */
-import { memo, useLayoutEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { ArrowDown, Layers3 } from 'lucide-react';
-import { Anime, AnimeScroll, utils } from '@shakibdshy/react-animejs';
+import { Anime, engine, onScroll, utils } from '@shakibdshy/react-animejs';
 
 const { clamp } = utils;
 
@@ -75,143 +75,156 @@ export const LayeredPinningLoop = memo(function LayeredPinningLoop({
   className?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activePanel = PANELS[activeIndex];
 
-  useLayoutEffect(() => {
-    setReady(true);
+  // Container-scoped scroll observer driving the active-panel highlight and
+  // the footer progress bar. Created imperatively with the library's
+  // `onScroll` primitive + `engine.wake()` so the observer is measurable
+  // before the first user scroll (the render-prop <AnimeScroll> path loses
+  // the observer when gated behind an `enabled` flip).
+  useEffect(() => {
+    const box = containerRef.current;
+    const track = trackRef.current;
+    if (!box || !track) return;
+
+    const observer = onScroll({
+      container: box,
+      target: track,
+      enter: { target: 'top', container: 'top' },
+      leave: { target: 'bottom', container: 'bottom' },
+      onUpdate: (observer) => {
+        const normalizedProgress = clamp(observer.progress ?? 0, 0, 1);
+        const index = Math.min(
+          PANEL_COUNT - 1,
+          Math.floor(clamp(normalizedProgress, 0, 0.999999) * PANEL_COUNT)
+        );
+        setActiveIndex((prev) => (prev === index ? prev : index));
+        if (progressBarRef.current) {
+          progressBarRef.current.style.width = `${Math.round(normalizedProgress * 100)}%`;
+        }
+      },
+    });
+    engine.wake();
+
+    return () => {
+      try {
+        observer.revert();
+      } catch {
+        // already reverted by a scope/unmount pass
+      }
+    };
   }, []);
 
   return (
-    <AnimeScroll<HTMLDivElement, HTMLDivElement>
-      container={containerRef}
-      enter={{ target: 'top', container: 'top' }}
-      leave={{ target: 'bottom', container: 'bottom' }}
-      enabled={ready}
+    <div
+      className={`relative overflow-hidden rounded-2xl border border-landing-border/60 bg-[#070808] text-landing-fg ${className}`}
     >
-      {({ ref: trackRef, progress }) => {
-        const normalizedProgress = clamp(progress, 0, 0.999999);
-        const activeIndex = Math.min(PANEL_COUNT - 1, Math.floor(normalizedProgress * PANEL_COUNT));
-        const activePanel = PANELS[activeIndex];
-
-        return (
-          <div
-            className={`relative overflow-hidden rounded-2xl border border-landing-border/60 bg-[#070808] text-landing-fg ${className}`}
-          >
-            <div
-              ref={containerRef}
-              tabIndex={0}
-              role="region"
-              aria-label="Layered pinning panels"
-              className="relative w-full overflow-y-auto overscroll-contain"
-              style={{ height: 'min(74vh, 640px)' }}
-            >
-              <div ref={trackRef} className="relative" style={{ height: TRACK_HEIGHT }}>
-                {PANELS.map((panel, index) => {
-                  return (
-                    <section
-                      key={`${panel.number}-${index}`}
-                      className="sticky top-0 flex items-center overflow-hidden"
-                      style={{
-                        height: `${100 / PANEL_COUNT}%`,
-                        zIndex: index + 1,
-                        backgroundColor: panel.surface,
-                      }}
-                    >
-                      <div
-                        className="absolute inset-0 opacity-60"
-                        style={{
-                          background: `radial-gradient(circle at 72% 28%, ${panel.accent}28, transparent 42%)`,
-                        }}
-                      />
-                      <div className="relative mx-auto flex h-full w-full max-w-5xl flex-col justify-between px-7 py-8 transition-all duration-500 sm:px-12 sm:py-12">
-                        <div className="flex items-start justify-between gap-5">
-                          <div
-                            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-black/20"
-                            style={{ color: panel.accent }}
-                          >
-                            <Layers3 className="h-5 w-5" />
-                          </div>
-                          <span
-                            className="landing-font-mono text-[10px] uppercase tracking-[0.28em]"
-                            style={{ color: panel.accent }}
-                          >
-                            {panel.eyebrow}
-                          </span>
-                        </div>
-
-                        <div className="max-w-2xl">
-                          <span
-                            className="landing-font-mono text-[clamp(4rem,14vw,10rem)] font-semibold leading-none tracking-[-0.09em] opacity-20"
-                            style={{ color: panel.accent }}
-                          >
-                            {panel.number}
-                          </span>
-                          <h3 className="landing-font-display -mt-3 text-3xl font-bold tracking-tight text-white sm:text-5xl">
-                            {panel.title}
-                          </h3>
-                          <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/60 sm:text-base">
-                            {panel.description}
-                          </p>
-                        </div>
-
-                        <div className="flex items-center justify-between gap-4 border-t border-white/10 pt-4">
-                          <span className="landing-font-mono text-[9px] uppercase tracking-[0.24em] text-white/35">
-                            Layered pin · {String(index + 1).padStart(2, '0')} / {PANEL_COUNT}
-                          </span>
-                          <span className="h-px w-20" style={{ backgroundColor: panel.accent }} />
-                        </div>
-                      </div>
-                    </section>
-                  );
-                })}
-              </div>
-
-              <Anime
-                opacity={[0, 1]}
-                translateY={[18, 0]}
-                duration={700}
-                ease="outQuad"
-                autoplay
-                enabled={ready}
+      <div
+        ref={containerRef}
+        tabIndex={0}
+        role="region"
+        aria-label="Layered pinning panels"
+        className="relative w-full overflow-y-auto overscroll-contain"
+        style={{ height: 'min(74vh, 640px)' }}
+      >
+        <div ref={trackRef} className="relative" style={{ height: TRACK_HEIGHT }}>
+          {PANELS.map((panel, index) => {
+            return (
+              <section
+                key={`${panel.number}-${index}`}
+                className="sticky top-0 flex items-center overflow-hidden"
+                style={{
+                  height: `${100 / PANEL_COUNT}%`,
+                  zIndex: index + 1,
+                  backgroundColor: panel.surface,
+                }}
               >
-                <div className="pointer-events-none absolute inset-x-0 top-5 z-30 flex flex-col items-center text-center">
-                  <p className="landing-font-mono text-[10px] uppercase tracking-[0.28em] text-landing-accent">
-                    Layered pinning · finite stack
-                  </p>
-                  <h3 className="landing-font-display mt-2 text-base font-bold text-white/90 drop-shadow">
-                    Scroll to stack the panels
-                  </h3>
-                  <ArrowDown className="mt-3 h-4 w-4 animate-bounce text-white/40" />
-                </div>
-              </Anime>
-            </div>
+                <div
+                  className="absolute inset-0 opacity-60"
+                  style={{
+                    background: `radial-gradient(circle at 72% 28%, ${panel.accent}28, transparent 42%)`,
+                  }}
+                />
+                <div className="relative mx-auto flex h-full w-full max-w-5xl flex-col justify-between px-7 py-8 transition-all duration-500 sm:px-12 sm:py-12">
+                  <div className="flex items-start justify-between gap-5">
+                    <div
+                      className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-black/20"
+                      style={{ color: panel.accent }}
+                    >
+                      <Layers3 className="h-5 w-5" />
+                    </div>
+                    <span
+                      className="landing-font-mono text-[10px] uppercase tracking-[0.28em]"
+                      style={{ color: panel.accent }}
+                    >
+                      {panel.eyebrow}
+                    </span>
+                  </div>
 
-            <div className="flex flex-col gap-3 border-t border-white/10 bg-[#0b0d0d] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-2">
-                <Layers3 className="h-4 w-4 text-landing-accent" />
-                <span className="landing-font-mono text-[9px] uppercase tracking-[0.22em] text-white/45">
-                  wheel inside the stage · five pinned layers
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="h-1 w-28 overflow-hidden rounded-full bg-white/10">
-                  <div
-                    className="h-full rounded-full transition-[width] duration-100"
-                    style={{
-                      width: `${Math.round(normalizedProgress * 100)}%`,
-                      backgroundColor: activePanel.accent,
-                    }}
-                  />
+                  <div className="max-w-2xl">
+                    <span
+                      className="landing-font-mono text-[clamp(4rem,14vw,10rem)] font-semibold leading-none tracking-[-0.09em] opacity-20"
+                      style={{ color: panel.accent }}
+                    >
+                      {panel.number}
+                    </span>
+                    <h3 className="landing-font-display -mt-3 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+                      {panel.title}
+                    </h3>
+                    <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/60 sm:text-base">
+                      {panel.description}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-4 border-t border-white/10 pt-4">
+                    <span className="landing-font-mono text-[9px] uppercase tracking-[0.24em] text-white/35">
+                      Layered pin · {String(index + 1).padStart(2, '0')} / {PANEL_COUNT}
+                    </span>
+                    <span className="h-px w-20" style={{ backgroundColor: panel.accent }} />
+                  </div>
                 </div>
-                <span className="landing-font-mono min-w-12 text-right text-[10px] uppercase tracking-[0.18em] text-white/55">
-                  {activePanel.number} / {PANEL_COUNT}
-                </span>
-              </div>
-            </div>
+              </section>
+            );
+          })}
+        </div>
+
+        <Anime opacity={[0, 1]} translateY={[18, 0]} duration={700} ease="outQuad" autoplay>
+          <div className="pointer-events-none absolute inset-x-0 top-5 z-30 flex flex-col items-center text-center">
+            <p className="landing-font-mono text-[10px] uppercase tracking-[0.28em] text-landing-accent">
+              Layered pinning · finite stack
+            </p>
+            <h3 className="landing-font-display mt-2 text-base font-bold text-white/90 drop-shadow">
+              Scroll to stack the panels
+            </h3>
+            <ArrowDown className="mt-3 h-4 w-4 animate-bounce text-white/40" />
           </div>
-        );
-      }}
-    </AnimeScroll>
+        </Anime>
+      </div>
+
+      <div className="flex flex-col gap-3 border-t border-white/10 bg-[#0b0d0d] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2">
+          <Layers3 className="h-4 w-4 text-landing-accent" />
+          <span className="landing-font-mono text-[9px] uppercase tracking-[0.22em] text-white/45">
+            wheel inside the stage · five pinned layers
+          </span>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="h-1 w-28 overflow-hidden rounded-full bg-white/10">
+            <div
+              ref={progressBarRef}
+              className="h-full rounded-full"
+              style={{ width: '0%', backgroundColor: activePanel.accent }}
+            />
+          </div>
+          <span className="landing-font-mono min-w-12 text-right text-[10px] uppercase tracking-[0.18em] text-white/55">
+            {activePanel.number} / {PANEL_COUNT}
+          </span>
+        </div>
+      </div>
+    </div>
   );
 });
 
