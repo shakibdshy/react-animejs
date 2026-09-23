@@ -464,14 +464,15 @@ export const BlocksPage = memo(function BlocksPage() {
             <section className="mb-16">
               <SectionHeader
                 title="Scroll Shader · Velocity Distortion"
-                chip="<AnimeScroll> + WebGL"
+                chip="onScroll + WebGL"
                 codeKey="scroll-shader"
                 onViewCode={openCode}
               />
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
-                A native WebGL image stack where AnimeScroll feeds signed scroll velocity into a
-                cover-mapped shader. Move faster to pull the RGB channels apart; every frame falls
-                back to its image when WebGL is unavailable.
+                A native WebGL image stack where an{' '}
+                <code className="landing-font-mono text-landing-accent">onScroll</code> observer
+                feeds signed scroll velocity into a cover-mapped shader. Move faster to pull the RGB
+                channels apart; every frame falls back to its image when WebGL is unavailable.
               </p>
               <ErrorBoundary>
                 <ScrollShader />
