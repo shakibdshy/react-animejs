@@ -25,6 +25,7 @@ import { ScrollImageSequence } from './components/ScrollImageSequence';
 import { ScrollImageComparison } from './components/ScrollImageComparison';
 import { AnimatedContinuousSections } from './components/AnimatedContinuousSections';
 import { LayeredPinningLoop } from './components/LayeredPinningLoop';
+import { StackedCardsReveal } from './components/StackedCardsReveal';
 import { ScrollShader } from './components/ScrollShader';
 import { SOURCE_BY_KEY } from './registry';
 
@@ -430,6 +431,32 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <LayeredPinningLoop />
+              </ErrorBoundary>
+            </section>
+
+            {/* Stacked Cards Reveal — ScrollTrigger-style pinned card stack */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Stacked Cards Reveal · Scroll Trigger"
+                chip="onScroll + utils"
+                codeKey="stacked-cards-reveal"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                A port of the GSAP &ldquo;stacked cards reveal w/ ScrollTrigger&rdquo; pen. Five
+                stacked cards pin inside a self-contained scroll box; as you scroll, each card flies
+                off with a random tilt while the rest of the stack advances one slot forward, and the
+                final card pushes toward the camera. The ScrollTrigger pin + scrub is one
+                container-scoped{' '}
+                <code className="landing-font-mono text-landing-accent">onScroll</code> observer over
+                a sticky stage, and the GSAP timeline is re-evaluated per frame with{' '}
+                <code className="landing-font-mono text-landing-accent">utils.clamp</code>/
+                <code className="landing-font-mono text-landing-accent">utils.lerp</code> — the
+                observer&rsquo;s damped catch-up loop recreates the pen&rsquo;s{' '}
+                <code className="landing-font-mono">scrub:&nbsp;1</code> feel.
+              </p>
+              <ErrorBoundary>
+                <StackedCardsReveal />
               </ErrorBoundary>
             </section>
 
