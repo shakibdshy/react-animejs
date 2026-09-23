@@ -9,8 +9,8 @@
  * by computing every char's screen-X from the single scroll progress and easing
  * it to rest with a `back.out` curve (anime.js `utils` + `SplitText`).
  */
-import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { SplitText, useAnimeOnScroll, utils } from '@shakibdshy/react-animejs';
+import { memo, useCallback, useEffect, useRef } from 'react';
+import { engine, onScroll, SplitText, utils } from '@shakibdshy/react-animejs';
 import type { SplitTextRef } from '@shakibdshy/react-animejs';
 
 const { clamp, random } = utils;
@@ -36,12 +36,9 @@ export const HorizontalSplitText = memo(function HorizontalSplitText({
 }) {
   const boxRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   const splitRef = useRef<SplitTextRef>(null);
-  // Gate the observer creation until after layout so both the scroll box and
-  // the tall track are guaranteed to be in the DOM. Without this, anime.js can
-  // call `refresh()` on a null target/container and throw.
-  const [ready, setReady] = useState(false);
-
   // Per-char baseline screen-X (relative to the stage) captured at translate 0,
   // plus a stable random (y, rotation) assigned once per char.
   const baselineXRef = useRef<number[]>([]);
@@ -76,20 +73,37 @@ export const HorizontalSplitText = memo(function HorizontalSplitText({
 
   // Master scrub: the tall track travels through the box; progress 0→1 drives
   // the horizontal translate. Scoped to the box so the page scroll is untouched.
-  // `enabled: ready` prevents the observer from being created until the layout
-  // effect has confirmed the scroll box and track are mounted.
-  const { ref: trackRef, state } = useAnimeOnScroll<HTMLDivElement, HTMLDivElement>({
-    container: boxRef,
-    enter: { target: 'top', container: 'top' },
-    leave: { target: 'bottom', container: 'bottom' },
-    enabled: ready,
-    onUpdate: (observer) => applyFrame(observer.progress ?? 0),
-  });
+  // Created imperatively with the library's `onScroll` primitive (the observer
+  // resolves its target on the engine's next tick, so a plain effect with
+  // explicit elements is the most robust wiring); `engine.wake()` makes the
+  // observer measurable before the first user scroll.
+  useEffect(() => {
+    const box = boxRef.current;
+    const track = trackRef.current;
+    if (!box || !track) return;
 
-  // Confirm DOM nodes exist before allowing the observer to instantiate.
-  useLayoutEffect(() => {
-    setReady(true);
-  }, []);
+    const observer = onScroll({
+      container: box,
+      target: track,
+      enter: { target: 'top', container: 'top' },
+      leave: { target: 'bottom', container: 'bottom' },
+      onUpdate: (observer) => {
+        applyFrame(clamp(observer.progress ?? 0, 0, 1));
+        if (progressBarRef.current) {
+          progressBarRef.current.style.width = `${Math.round(clamp(observer.progress ?? 0, 0, 1) * 100)}%`;
+        }
+      },
+    });
+    engine.wake();
+
+    return () => {
+      try {
+        observer.revert();
+      } catch {
+        // already reverted by a scope/unmount pass
+      }
+    };
+  }, [applyFrame]);
 
   const handleReady = useCallback(() => {
     const split = splitRef.current?.split;
@@ -123,8 +137,6 @@ export const HorizontalSplitText = memo(function HorizontalSplitText({
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, [handleReady]);
-
-  const p = clamp(state.progress, 0, 1);
 
   return (
     <div
@@ -184,12 +196,13 @@ export const HorizontalSplitText = memo(function HorizontalSplitText({
         <div className="flex items-center gap-3">
           <div className="h-1 w-32 overflow-hidden rounded-full bg-landing-border/50">
             <div
+              ref={progressBarRef}
               className="h-full rounded-full bg-landing-accent"
-              style={{ width: `${Math.round(p * 100)}%`, transition: 'width 60ms linear' }}
+              style={{ width: '0%' }}
             />
           </div>
-          <span className="landing-font-mono text-[10px] tracking-[0.2em] uppercase text-landing-muted/70 tabular-nums">
-            {Math.round(p * 100)}%
+          <span className="landing-font-mono text-[9px] tracking-[0.2em] uppercase text-landing-muted/60">
+            scrub
           </span>
         </div>
       </div>

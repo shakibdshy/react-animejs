@@ -12,7 +12,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { Activity, Cpu, Layers, Pause, Play, RotateCcw, Sparkles, Volume2 } from 'lucide-react';
-import { useAnime, useAnimeOnScroll } from '@shakibdshy/react-animejs';
+import { engine, onScroll, useAnime } from '@shakibdshy/react-animejs';
 
 const FRAME_COUNT = 147;
 const IMAGE_WIDTH = 1158;
@@ -242,7 +242,7 @@ export const ScrollImageSequence = memo(function ScrollImageSequence({
         setShouldPreload(true);
         observer.disconnect();
       },
-      { rootMargin: '500px 0px' },
+      { rootMargin: '500px 0px' }
     );
     observer.observe(trigger);
     return () => observer.disconnect();
@@ -322,14 +322,42 @@ export const ScrollImageSequence = memo(function ScrollImageSequence({
   // Scroll Sync Binding
   const syncValue = syncMode === 'scroll' ? (syncType === 'smooth' ? 0.3 : true) : false;
 
-  const { ref: scrollObserverRef } = useAnimeOnScroll<HTMLDivElement, HTMLDivElement>({
-    container: containerRef,
-    linked: animation,
-    sync: syncValue,
-    enter: { target: 'top', container: 'top' },
-    leave: { target: 'bottom', container: 'bottom' },
-    enabled: isPreloaded && syncMode === 'scroll',
-  });
+  // Scroll-scrub observer: links the sequence animation to the box's scroll so
+  // scrolling scrubs the playhead (smooth = damped, direct = 1:1). Created
+  // imperatively with the library's `onScroll` primitive + `engine.wake()` —
+  // the hook path loses the observer because an `enabled` flip never re-runs
+  // its creation effect (isPreloaded starts false and only flips true after
+  // preloading). Re-created when the mode/sync options change; torn down when
+  // autoplay takes over.
+  const scrollObserverRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!isPreloaded || syncMode !== 'scroll') return;
+    const box = containerRef.current;
+    const track = scrollObserverRef.current;
+    const anim = animation.current; // useAnime hands back the raw instance via ref
+    if (!box || !track || !anim) return;
+
+    const observer = onScroll({
+      container: box,
+      target: track,
+      sync: syncValue,
+      enter: { target: 'top', container: 'top' },
+      leave: { target: 'bottom', container: 'bottom' },
+    });
+    // Linking hands the animation's playhead to the observer (scrub). Cast:
+    // the package's and the app's animejs copies ship distinct JSAnimation
+    // type declarations for the same runtime object.
+    observer.link(anim as never);
+    engine.wake();
+
+    return () => {
+      try {
+        observer.revert();
+      } catch {
+        // already reverted by a scope/unmount pass
+      }
+    };
+  }, [isPreloaded, syncMode, syncType, syncValue, animation]);
 
   // Autoplay State Handler
   useEffect(() => {
