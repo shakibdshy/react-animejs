@@ -91,10 +91,12 @@ export interface PinEngineOptions {
    *  geometry on size change (dynamic content). Default false to avoid observer
    *  overhead in the common case. @default false */
   invalidateOnRefresh?: boolean;
-  /** Link an anime.js animation's playhead to pin progress (GSAP scrub).
-   *  `true` or `1` = 1:1 (direct seek each tick); a number in (0,1) = smoothing
-   *  factor (lerp toward scroll progress). The `linked` object must expose
-   *  `duration: number` and `seek(timeMs): this` (anime.js Timer/JSAnimation). */
+  /** Link an anime.js animation's playhead to scroll progress (GSAP scrub).
+   *  `true` = 1:1 (direct seek each tick); a number = seconds-to-catch-up
+   *  damping (frame-rate-independent exponential chase toward raw progress,
+   *  GSAP-compatible). One meaning in pin mode and observer mode alike
+   *  (ADR-0001). The `linked` object must expose `duration: number` and
+   *  `seek(timeMs): this` (anime.js Timer/JSAnimation). */
   scrub?: boolean | number;
   /** The anime.js instance driven by `scrub`. Duck-typed: needs seek + duration. */
   linked?: { duration: number; seek: (time: number) => unknown } | null;
@@ -109,6 +111,9 @@ export interface PinEngineOptions {
   onPin?: (instance: PinObserverLike) => void;
   onUnpin?: (instance: PinObserverLike) => void;
   onUpdate?: (instance: PinObserverLike) => void;
+  /** Per-frame smoothed progress while scrub is active (`true` emits raw
+   *  progress each tick; a number emits every chase frame until settled). */
+  onScrubFrame?: (progress: number) => void;
 }
 
 /** Imperative handle returned by `createPinEngine`. */
@@ -286,9 +291,13 @@ export interface UseAnimeScrollTriggerOptions
   invalidateOnRefresh?: boolean;
 
   /**
-   * Link an anime.js animation's playhead to pin progress (GSAP scrub). `true`
-   * or `1` = 1:1; a number in (0,1) = smoothing factor. Only consulted when
-   * `pin` is enabled; the linked instance is provided via `linked`.
+   * Smooth the scroll progress driving linked instances and `onFrame`
+   * (GSAP ScrollTrigger scrub). `true` = direct 1:1 linkage. A number =
+   * seconds-to-catch-up damping: smoothed progress chases raw progress with a
+   * frame-rate-independent exponential decay whose time constant is the given
+   * number of seconds (`scrub: 1` ≈ GSAP `scrub: 1`). One meaning everywhere —
+   * pin mode and observer mode alike (ADR-0001). Under `prefers-reduced-motion`
+   * the smoothing collapses to direct 1:1.
    * @default false
    */
   scrub?: boolean | number;
@@ -325,6 +334,17 @@ export interface UseAnimeScrollTriggerOptions
  */
 export interface UseAnimeOnScrollOptions
   extends UseAnimeScrollTriggerOptions {
+
+  /**
+   * Per-animation-frame progress channel with zero React re-renders. Called
+   * on every observer update (and every scrub catch-up frame when `scrub` is
+   * a number) with the current progress — smoothed when scrub smoothing is
+   * active, raw otherwise — plus an observer-state snapshot whose `progress`
+   * matches. High-frequency work (transform writes, canvas draws, chrome
+   * updates) belongs here; reactive `state` only updates on meaningful
+   * transitions (ADR-0002).
+   */
+  onFrame?: (progress: number, state: ScrollObserverState) => void;
 
   /**
    * Optional animation/timer/timeline/WAAPI instance to link.

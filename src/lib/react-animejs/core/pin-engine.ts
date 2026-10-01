@@ -271,6 +271,7 @@ export function createPinEngine(options: PinEngineOptions): PinEngine {
     onPin,
     onUnpin,
     onUpdate,
+    onScrubFrame,
   } = options;
 
   const dim: PinDimension = axis === 'x' ? horizontalDim : verticalDim;
@@ -755,19 +756,30 @@ export function createPinEngine(options: PinEngineOptions): PinEngine {
     }
 
     // scrub: drive the linked anime.js instance's playhead from progress.
-    // `true`/`1` = 1:1 (direct seek). A number in (0,1) = exponential smoothing
-    // toward the raw scroll progress (frame-rate independent).
-    if (scrub && linked && typeof linked.seek === 'function' && linked.duration > 0) {
-      if (scrub === true || scrub === 1) {
+    // `true` = 1:1 (direct seek). A number = seconds-to-catch-up exponential
+    // chase toward raw progress (frame-rate independent, GSAP-compatible —
+    // ADR-0001). The chase reschedules ticks until settled so progress still
+    // lands when scrolling stops mid-gap.
+    if (scrub) {
+      if (scrub === true) {
         scrubbedProgress = progress;
       } else {
-        const smoothing = typeof scrub === 'number' && scrub > 0 && scrub < 1 ? scrub : 1;
-        const t = 1 - Math.pow(1 - smoothing, dt / 16.67);
+        const seconds = typeof scrub === "number" && scrub > 0 ? scrub : 0;
+        const t = seconds > 0 ? 1 - Math.exp(-dt / (seconds * 1000)) : 1;
         scrubbedProgress += (progress - scrubbedProgress) * t;
+        if (Math.abs(progress - scrubbedProgress) < 0.0005) {
+          scrubbedProgress = progress;
+        }
       }
-      // seek takes milliseconds; clamp to [0, duration].
-      const seekTime = Math.max(0, Math.min(scrubbedProgress * linked.duration, linked.duration));
-      linked.seek(seekTime);
+      if (linked && typeof linked.seek === 'function' && linked.duration > 0) {
+        // seek takes milliseconds; clamp to [0, duration].
+        const seekTime = Math.max(0, Math.min(scrubbedProgress * linked.duration, linked.duration));
+        linked.seek(seekTime);
+      }
+      onScrubFrame?.(scrubbedProgress);
+      if (scrub !== true && scrubbedProgress !== progress && !rafId) {
+        rafId = window.requestAnimationFrame(tick);
+      }
     }
 
     // snap: detect scroll-end (velocity ≈ 0) and settle to nearest snap point.

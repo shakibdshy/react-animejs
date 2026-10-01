@@ -14,7 +14,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { onScroll } from "animejs";
+import { engine, onScroll } from "animejs";
 import type {
   ScrollObserver,
   ScrollObserverParams,
@@ -165,6 +165,18 @@ function extractScrollObserverState(
   };
 }
 
+/**
+ * Per-observer frame plumbing for the hook's `onFrame` channel: routes raw
+ * observer progress either straight to `onFrame`, or — when numeric scrub is
+ * active — through a damped chase whose rAF frames carry smoothed progress
+ * until settled. Lives in a ref for the lifetime of one observer.
+ */
+interface ScrollFramePlumbing {
+  push: (progress: number, observer: ScrollObserver | null) => void;
+  rewind: (observer: ScrollObserver | null) => void;
+  stop: () => void;
+}
+
 export function useAnimeOnScroll<
   T extends HTMLElement = HTMLElement,
   C extends HTMLElement = HTMLElement,
@@ -191,6 +203,7 @@ export function useAnimeOnScroll<
     leave,
     repeat,
     debug,
+    enabled = true,
     linked,
     deps = [],
     // Pin-mode options (no-op unless `pin` is true).
@@ -217,6 +230,7 @@ export function useAnimeOnScroll<
     onSyncEnter,
     onSyncLeave,
     onUpdate,
+    onFrame,
     onResize,
     onSyncComplete,
   } = options;
@@ -235,6 +249,7 @@ export function useAnimeOnScroll<
     onSyncEnter,
     onSyncLeave,
     onUpdate,
+    onFrame,
     onResize,
     onSyncComplete,
   });
@@ -248,14 +263,30 @@ export function useAnimeOnScroll<
     onSyncEnter,
     onSyncLeave,
     onUpdate,
+    onFrame,
     onResize,
     onSyncComplete,
   };
 
   // Pin callbacks are read through a ref so the engine isn't rebuilt when they
   // change identity (matches the observer-callback pattern above).
-  const pinCallbacksRef = useRef({ onPin, onUnpin, onEnter, onLeave, onUpdate, onRefresh });
-  pinCallbacksRef.current = { onPin, onUnpin, onEnter, onLeave, onUpdate, onRefresh };
+  const pinCallbacksRef = useRef({ onPin, onUnpin, onEnter, onLeave, onUpdate, onFrame, onRefresh });
+  pinCallbacksRef.current = { onPin, onUnpin, onEnter, onLeave, onUpdate, onFrame, onRefresh };
+
+  // Active frame plumbing for the current observer (see ScrollFramePlumbing).
+  // Ref-held so the wrapped observer callbacks keep a stable identity.
+  const framePlumbingRef = useRef<ScrollFramePlumbing | null>(null);
+
+  // Mirror of the last reactive state: per-tick updates advance React state
+  // only when a tracked transition field actually flipped (ADR-0002); raw
+  // progress/scroll/velocity flow through onFrame instead.
+  const lastSyncedRef = useRef({
+    isInView: false,
+    began: false,
+    completed: false,
+    backward: false,
+    reverted: false,
+  });
 
   // Stable signature so the pin effect re-runs only on meaningful change.
   const pinConfigJson = useMemo(
@@ -320,7 +351,38 @@ export function useAnimeOnScroll<
   );
 
   const syncObserverState = useCallback((observer: ScrollObserver | null) => {
-    setState(extractScrollObserverState(observer));
+    const next = extractScrollObserverState(observer);
+    lastSyncedRef.current = {
+      isInView: next.isInView,
+      began: next.began,
+      completed: next.completed,
+      backward: next.backward,
+      reverted: next.reverted,
+    };
+    setState(next);
+  }, []);
+
+  // Per-tick sync that re-renders only when a tracked transition field
+  // flipped; raw progress/scroll/velocity stay out of React state (ADR-0002).
+  const syncSnapshotOnTransition = useCallback((next: ScrollObserverState) => {
+    const prev = lastSyncedRef.current;
+    if (
+      next.isInView === prev.isInView &&
+      next.began === prev.began &&
+      next.completed === prev.completed &&
+      next.backward === prev.backward &&
+      next.reverted === prev.reverted
+    ) {
+      return;
+    }
+    lastSyncedRef.current = {
+      isInView: next.isInView,
+      began: next.began,
+      completed: next.completed,
+      backward: next.backward,
+      reverted: next.reverted,
+    };
+    setState(next);
   }, []);
 
   const createWrappedCallback = useCallback(
@@ -339,11 +401,23 @@ export function useAnimeOnScroll<
         | "onSyncComplete",
     ) => {
       return (observer: ScrollObserver) => {
-        syncObserverState(observer);
+        if (key === "onUpdate") {
+          // Per-tick channel: scrub chase or direct onFrame emit, plus
+          // transition-only reactive sync — never a per-tick re-render.
+          framePlumbingRef.current?.push(observer.progress ?? 0, observer);
+          syncSnapshotOnTransition(extractScrollObserverState(observer));
+        } else {
+          if (key === "onLeaveBackward") {
+            // GSAP scrub rewinds to 0 when scrolling back above the band; the
+            // observer just stops updating outside it, so rewind here.
+            framePlumbingRef.current?.rewind(observer);
+          }
+          syncObserverState(observer);
+        }
         createSafeCallback(callbackRefs.current[key], key)?.(observer);
       };
     },
-    [syncObserverState],
+    [syncObserverState, syncSnapshotOnTransition],
   );
 
   useEffect(() => {
@@ -361,6 +435,7 @@ export function useAnimeOnScroll<
       debug: currentDebug,
       enabled: currentEnabled = true,
       pin: currentPin = false,
+      scrub: currentScrub = false,
     } = currentOptions;
 
     // Pin mode owns its own engine and never creates an anime observer, so
@@ -370,6 +445,8 @@ export function useAnimeOnScroll<
     }
 
     if (!currentEnabled) {
+      framePlumbingRef.current?.stop();
+      framePlumbingRef.current = null;
       observerRef.current?.revert();
       observerRef.current = null;
       syncObserverState(null);
@@ -393,6 +470,11 @@ export function useAnimeOnScroll<
       return;
     }
 
+    // The observer resolves its target and bounds asynchronously on the
+    // engine's next tick, so there is deliberately no synchronous refresh()
+    // here — calling it before that tick always throws, and the throw used to
+    // abort this effect before cleanup registration, leaking the live observer.
+    let observer: ScrollObserver | null = null;
     try {
       const config = {
         id: currentId,
@@ -419,7 +501,7 @@ export function useAnimeOnScroll<
 
       cleanUndefinedValues(config);
 
-      const observer = onScroll(config as ScrollObserverParams);
+      observer = onScroll(config as ScrollObserverParams);
       observerRef.current = observer;
 
       const currentLinkedInstance = linkedInstanceRef.current;
@@ -427,7 +509,69 @@ export function useAnimeOnScroll<
         observer.link(toAnimeScrollLinked(currentLinkedInstance)!);
       }
 
-      observer.refresh();
+      // The engine sleeps when nothing is animating, so the observer's
+      // deferred init tick may never run before the first user scroll lands.
+      engine.wake();
+
+      // Per-frame plumbing (see ScrollFramePlumbing): numeric scrub installs a
+      // damped chase with time constant = scrub seconds; its loop runs until
+      // settled so progress lands even when scrolling stops mid-gap. `scrub:
+      // true` and reduced motion are direct 1:1 — frames carry raw progress.
+      const scrubSeconds =
+        typeof currentScrub === "number" && currentScrub > 0 && !prefersReducedMotion()
+          ? currentScrub
+          : 0;
+      let chaseRaf = 0;
+      let chaseRaw = observer.progress ?? 0;
+      let chaseSmoothed = chaseRaw;
+      let chaseLast = 0;
+
+      const emitFrame = (progress: number, source: ScrollObserver | null) => {
+        const frameCb = callbackRefs.current.onFrame;
+        if (!frameCb || !source) return;
+        const snapshot = extractScrollObserverState(source);
+        snapshot.progress = progress;
+        frameCb(progress, snapshot);
+      };
+
+      const chaseTick = (now: number) => {
+        chaseRaf = 0;
+        const dt = chaseLast > 0 ? Math.min(now - chaseLast, 100) : 16.67;
+        chaseLast = now;
+        chaseSmoothed +=
+          (chaseRaw - chaseSmoothed) * (1 - Math.exp(-dt / (scrubSeconds * 1000)));
+        if (Math.abs(chaseRaw - chaseSmoothed) < 0.0005) chaseSmoothed = chaseRaw;
+        emitFrame(chaseSmoothed, observerRef.current);
+        if (chaseSmoothed !== chaseRaw) {
+          chaseRaf = requestAnimationFrame(chaseTick);
+        }
+      };
+
+      framePlumbingRef.current = {
+        push: (progress, source) => {
+          if (scrubSeconds > 0) {
+            chaseRaw = progress;
+            if (!chaseRaf) {
+              chaseLast = 0;
+              chaseRaf = requestAnimationFrame(chaseTick);
+            }
+          } else {
+            emitFrame(progress, source);
+          }
+        },
+        rewind: (source) => {
+          if (scrubSeconds <= 0) return;
+          if (chaseRaf) cancelAnimationFrame(chaseRaf);
+          chaseRaf = 0;
+          chaseRaw = 0;
+          chaseSmoothed = 0;
+          emitFrame(0, source);
+        },
+        stop: () => {
+          if (chaseRaf) cancelAnimationFrame(chaseRaf);
+          chaseRaf = 0;
+        },
+      };
 
       syncObserverState(observer);
       setIsReady(true);
@@ -435,31 +579,36 @@ export function useAnimeOnScroll<
       if (isScoped) {
         unregisterScopedCleanup = registerCleanup(() => {
           try {
-            observer.revert();
+            observer?.revert();
           } catch {}
         });
       }
-
-      return () => {
-        unregisterScopedCleanup?.();
-        try {
-          observer.revert();
-        } catch {}
-
-        if (observerRef.current === observer) {
-          observerRef.current = null;
-        }
-
-        syncObserverState(null);
-        setIsReady(false);
-      };
     } catch (error) {
       console.error("[react-animejs] ScrollObserver creation error:", error);
       observerRef.current = null;
       syncObserverState(null);
       setIsReady(false);
     }
+
+    // Registered unconditionally so a live observer is always reverted even if
+    // a post-creation step threw.
+    return () => {
+      framePlumbingRef.current?.stop();
+      framePlumbingRef.current = null;
+      unregisterScopedCleanup?.();
+      try {
+        observer?.revert();
+      } catch {}
+
+      if (observerRef.current === observer) {
+        observerRef.current = null;
+      }
+
+      syncObserverState(null);
+      setIsReady(false);
+    };
   }, [
+    enabled,
     resolvedPropLinked,
     configJson,
     scopeRootRef,
@@ -546,7 +695,16 @@ export function useAnimeOnScroll<
         pinCallbacksRef.current.onRefresh?.(instance);
       },
       onUpdate: (instance) => {
-        setState(pinStateToObserverState(instance));
+        // Frames: with scrub active the engine's chase emits them via
+        // onScrubFrame; without, each tick carries raw progress. Either way
+        // reactive state only advances on tracked transitions (ADR-0002).
+        if (!scrub) {
+          const frameCb = pinCallbacksRef.current.onFrame;
+          if (frameCb) {
+            frameCb(instance.progress, pinStateToObserverState(instance));
+          }
+        }
+        syncSnapshotOnTransition(pinStateToObserverState(instance));
         // Mirror the observer's enter/leave semantics: onEnter when crossing
         // into the pinned range, onLeave when crossing out. The instance is
         // observer-shaped, so cast to the observer type the callbacks expect.
@@ -557,6 +715,11 @@ export function useAnimeOnScroll<
           pinCallbacksRef.current.onLeave?.(asObserver);
         }
         pinCallbacksRef.current.onUpdate?.(asObserver);
+      },
+      onScrubFrame: (smoothed) => {
+        const frameCb = pinCallbacksRef.current.onFrame;
+        if (!frameCb || !engineRef.current) return;
+        frameCb(smoothed, pinStateToObserverState(engineRef.current.getState()));
       },
     });
 
@@ -583,7 +746,7 @@ export function useAnimeOnScroll<
       setIsReady(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pin, pinConfigJson, scopeRootRef, isScoped, registerCleanup, depsSignal]);
+  }, [pin, enabled, pinConfigJson, scopeRootRef, isScoped, registerCleanup, depsSignal]);
 
   const controls = useMemo(
     () => ({
@@ -612,6 +775,8 @@ export function useAnimeOnScroll<
         try {
           observerRef.current?.revert();
         } catch {}
+        framePlumbingRef.current?.stop();
+        framePlumbingRef.current = null;
         observerRef.current = null;
         syncObserverState(null);
         setIsReady(false);

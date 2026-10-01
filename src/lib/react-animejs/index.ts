@@ -43,6 +43,8 @@ export { Anime } from './components/Anime';
 export type { AnimeProps } from './components/Anime';
 export { AnimeScroll } from './components/AnimeScroll';
 export type { AnimeScrollProps, AnimeScrollRef } from './components/AnimeScroll';
+export { ScrollScene } from './components/ScrollScene';
+export type { ScrollSceneProps, ScrollSceneRef } from './components/ScrollScene';
 export { AnimeBatch } from './components/AnimeBatch';
 export type { AnimeBatchAnimation, AnimeBatchProps } from './components/AnimeBatch';
 export { AnimeMorph } from './components/AnimeMorph';
