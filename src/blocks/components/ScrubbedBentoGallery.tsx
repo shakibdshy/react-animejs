@@ -24,7 +24,10 @@
  * moves on transitions, so a 60fps zoom must not read it.
  */
 import { memo, useCallback, useLayoutEffect, useRef } from 'react';
-import { useAnimeOnScroll, utils } from '@shakibdshy/react-animejs';
+// onFrame lives in the in-repo library mirror's hook until
+// @shakibdshy/react-animejs@1.2.0 publishes; switch this import to the
+// package name at the version bump.
+import { useAnimeOnScroll, utils } from '@/lib/react-animejs';
 
 const { lerp, clamp } = utils;
 
