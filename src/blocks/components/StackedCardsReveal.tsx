@@ -8,20 +8,23 @@
  *    `sticky` inside a tall scroll track (N + 1 × the box height), so it pins
  *    for exactly N × stageHeight of scroll — the pen's travel, scoped to a
  *    self-contained scroll box instead of the page.
- *  - `scrub: 1` → the raw observer progress is chased by a damped rAF loop
- *    (~250ms catch-up), giving the pen's buttery scrub feel.
+ *  - `scrub: 1` → `scrub={0.25}` on the scene: the library's damped chase
+ *    (seconds-to-catch-up) smooths progress and rewinds to 0 above the band,
+ *    the pen's buttery scrub feel with zero hand-written frame code.
  *  - the `gsap.timeline()` tween stack → one `applyFrame(progress)` function
  *    evaluating the same math: card i flies off (y → −stageHeight,
  *    z → +120, rotate → stable random tilt) during segment i while every card
  *    above it shifts one slot forward (40px / −150px per slot); the final
  *    segment pushes the last card toward the camera (z → +150).
  *
- * The observer drives the frames through anime.js's `onScroll` ScrollObserver
- * (container-scoped, exposed by react-animejs); frame writes go straight to
- * `style.transform` — no React re-render per frame.
+ * The scene routes progress through `onFrame` — per-frame writes straight to
+ * `style.transform`, no React re-render per frame.
  */
-import { memo, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
-import { engine, onScroll, utils } from '@shakibdshy/react-animejs';
+import { memo, useCallback, useLayoutEffect, useRef } from 'react';
+// ScrollScene lives in the in-repo library mirror until
+// @shakibdshy/react-animejs@1.2.0 publishes; switch this import to the
+// package name at the version bump.
+import { ScrollScene, utils } from '@/lib/react-animejs';
 
 const { clamp, lerp } = utils;
 
@@ -90,18 +93,11 @@ export const StackedCardsReveal = memo(function StackedCardsReveal({
 }: {
   className?: string;
 }) {
-  const boxRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const rotationsRef = useRef<number[]>([]);
   const barRef = useRef<HTMLDivElement>(null);
   const pctRef = useRef<HTMLSpanElement>(null);
-
-  // Scrub state: the observer writes the raw progress here; a rAF loop chases
-  // it with damping (the pen's `scrub: 1` catch-up).
-  const rawProgressRef = useRef(0);
-  const smoothedRef = useRef(0);
-  const rafRef = useRef(0);
 
   /** The ported timeline: one segment per card, evaluated from progress. */
   const applyFrame = useCallback((p: number) => {
@@ -140,89 +136,10 @@ export const StackedCardsReveal = memo(function StackedCardsReveal({
     }
   }, []);
 
-  const writeChrome = useCallback((p: number) => {
-    if (barRef.current) barRef.current.style.width = `${Math.round(p * 100)}%`;
-    if (pctRef.current) pctRef.current.textContent = `${Math.round(p * 100)}%`;
-  }, []);
-
-  // The damped catch-up loop: start on scroll updates, stop when settled.
-  const ensureLoop = useCallback(() => {
-    if (rafRef.current) return;
-    let last = performance.now();
-    const loop = (now: number) => {
-      const dt = Math.min(64, now - last) / 1000;
-      last = now;
-      const cur = smoothedRef.current;
-      const target = rawProgressRef.current;
-      const next =
-        cur === target
-          ? target
-          : cur + (target - cur) * (1 - Math.exp(-dt * 4));
-      smoothedRef.current = next;
-      applyFrame(next);
-      writeChrome(next);
-      rafRef.current = next === target ? 0 : requestAnimationFrame(loop);
-    };
-    rafRef.current = requestAnimationFrame(loop);
-  }, [applyFrame, writeChrome]);
-
-  useEffect(() => {
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = 0;
-    };
-  }, []);
-
-  // Master scrub: the tall track travels through the box; progress 0→1 drives
-  // the pinned card sequence. Scoped to the box so page scroll is untouched.
-  // Created imperatively with the library's `onScroll` primitive (the observer
-  // resolves its target on the engine's next tick, so a plain effect with
-  // explicit elements is the most robust wiring — no wrapper state machine).
-  const trackRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const box = boxRef.current;
-    const track = trackRef.current;
-    if (!box || !track) return;
-
-    const observer = onScroll({
-      container: box,
-      target: track,
-      enter: { target: 'top', container: 'top' },
-      leave: { target: 'bottom', container: 'bottom' },
-      onUpdate: (o) => {
-        rawProgressRef.current = clamp(o.progress ?? 0, 0, 1);
-        ensureLoop();
-      },
-      // GSAP's scrub rewinds when scrolling back above the pin start; the
-      // observer just stops updating outside its band, so rewind it ourselves.
-      onLeaveBackward: () => {
-        rawProgressRef.current = 0;
-        ensureLoop();
-      },
-    });
-
-    return () => {
-      try {
-        observer.revert();
-      } catch {
-        // already reverted by a scope/unmount pass
-      }
-    };
-  }, [ensureLoop]);
-
-  // The observer resolves its target + bounds on the engine's next tick — but
-  // the engine sleeps when no animation is running, so without a wake the very
-  // first user scroll lands before the observer is measurable. (ScrollTrigger
-  // measures on load; this is that.)
-  useEffect(() => {
-    engine.wake();
-  }, []);
-
-  // Initial stack pose + progress chrome before the first scroll event.
+  // Initial stack pose before the first scroll frame lands (SSR-safe).
   useLayoutEffect(() => {
     applyFrame(0);
-    writeChrome(0);
-  }, [applyFrame, writeChrome]);
+  }, [applyFrame]);
 
   return (
     <div
@@ -233,93 +150,107 @@ export const StackedCardsReveal = memo(function StackedCardsReveal({
         {`@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');`}
       </style>
 
-      {/* ── Self-contained scroll box (the pen's page) ─────────────────── */}
-      <div
-        ref={boxRef}
-        tabIndex={0}
-        role="region"
-        aria-label="Stacked cards reveal scroll animation"
-        className="relative w-full overflow-y-auto overscroll-contain"
-        style={{
-          height: STAGE_HEIGHT,
-          backgroundColor: '#ececec',
-          color: '#222',
-          fontFamily: "'Instrument Serif', Georgia, serif",
-          textWrap: 'pretty',
+      {/* One scene owns the observer: scrub damping, rewind, cleanup. */}
+      <ScrollScene<HTMLDivElement, HTMLDivElement>
+        enter={{ target: 'top', container: 'top' }}
+        leave={{ target: 'bottom', container: 'bottom' }}
+        scrub={0.25}
+        onFrame={(p) => {
+          applyFrame(p);
+          if (barRef.current) barRef.current.style.width = `${Math.round(p * 100)}%`;
+          if (pctRef.current) pctRef.current.textContent = `${Math.round(p * 100)}%`;
         }}
       >
-        {/* The pen's intro paragraph. */}
-        <div className="mx-auto max-w-200 px-6 pt-14 pb-10 text-center text-[clamp(1.25rem,2.5vw,1.9rem)] leading-snug sm:px-10">
-          <p>{INTRO}</p>
-          <div className="mt-10">
-            <CheckeredRule />
-          </div>
-        </div>
-
-        {/* Tall track: the observed target; travel = N × stage height. */}
-        <div ref={trackRef} className="relative" style={{ height: TRACK_HEIGHT }}>
-          {/* Sticky stage = the pen's pin (`start: 'center center'`). */}
+        {({ targetRef, containerRef }) => (
+          /* ── Self-contained scroll box (the pen's page) ────────────────── */
           <div
-            ref={stageRef}
-            className="sticky top-0 flex w-full items-center justify-center overflow-hidden"
-            style={{ height: STAGE_HEIGHT }}
+            ref={containerRef}
+            tabIndex={0}
+            role="region"
+            aria-label="Stacked cards reveal scroll animation"
+            className="relative w-full overflow-y-auto overscroll-contain"
+            style={{
+              height: STAGE_HEIGHT,
+              backgroundColor: '#ececec',
+              color: '#222',
+              fontFamily: "'Instrument Serif', Georgia, serif",
+              textWrap: 'pretty',
+            }}
           >
-            <div
-              className="relative w-full max-w-152 px-6 pb-12"
-              style={{ perspective: '1200px' }}
-            >
-              {CARDS.map((card, i) => {
-                const isLast = i === CARD_COUNT - 1;
-                return (
-                  <div
-                    key={i}
-                    ref={(el) => {
-                      cardsRef.current[i] = el;
-                    }}
-                    className="flex items-center gap-6 p-6"
-                    style={{
-                      backgroundColor: BG_COLORS[i],
-                      zIndex: CARD_COUNT - i,
-                      position: isLast ? 'relative' : 'absolute',
-                      inset: isLast ? undefined : 0,
-                      maxWidth: 600,
-                      marginInline: 'auto',
-                      aspectRatio: '4 / 3',
-                      willChange: 'transform',
-                      // The pen's `gsap.set` initial pose (SSR-safe too).
-                      transform: `translate3d(0, ${i * STEP_Y}px, ${i * -STEP_Z}px)`,
-                    }}
-                  >
-                    <span
-                      aria-hidden
-                      className="absolute top-6 left-6 italic"
-                      style={{ fontSize: '2em', mixBlendMode: 'difference' }}
-                    >
-                      {i + 1}
-                    </span>
-                    <div className="min-w-0 flex-1" style={{ fontSize: 'clamp(1rem, 1.2rem + 0.5vw, 1.5rem)' }}>
-                      {card.text}
-                    </div>
-                    <img
-                      src={card.img}
-                      alt=""
-                      loading="lazy"
-                      draggable={false}
-                      className="aspect-square w-1/2 object-cover"
-                    />
-                  </div>
-                );
-              })}
+            {/* The pen's intro paragraph. */}
+            <div className="mx-auto max-w-200 px-6 pt-14 pb-10 text-center text-[clamp(1.25rem,2.5vw,1.9rem)] leading-snug sm:px-10">
+              <p>{INTRO}</p>
+              <div className="mt-10">
+                <CheckeredRule />
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* The pen's footer, revealed when the pin releases. */}
-        <footer className="mx-auto max-w-200 px-6 pt-12 pb-16 text-center text-[clamp(1.25rem,2.5vw,1.9rem)] sm:px-10">
-          <CheckeredRule />
-          <p className="mt-8">The end.</p>
-        </footer>
-      </div>
+            {/* Tall track: the observed target; travel = N × stage height. */}
+            <div ref={targetRef} className="relative" style={{ height: TRACK_HEIGHT }}>
+              {/* Sticky stage = the pen's pin (`start: 'center center'`). */}
+              <div
+                ref={stageRef}
+                className="sticky top-0 flex w-full items-center justify-center overflow-hidden"
+                style={{ height: STAGE_HEIGHT }}
+              >
+                <div
+                  className="relative w-full max-w-152 px-6 pb-12"
+                  style={{ perspective: '1200px' }}
+                >
+                  {CARDS.map((card, i) => {
+                    const isLast = i === CARD_COUNT - 1;
+                    return (
+                      <div
+                        key={i}
+                        ref={(el) => {
+                          cardsRef.current[i] = el;
+                        }}
+                        className="flex items-center gap-6 p-6"
+                        style={{
+                          backgroundColor: BG_COLORS[i],
+                          zIndex: CARD_COUNT - i,
+                          position: isLast ? 'relative' : 'absolute',
+                          inset: isLast ? undefined : 0,
+                          maxWidth: 600,
+                          marginInline: 'auto',
+                          aspectRatio: '4 / 3',
+                          willChange: 'transform',
+                          // The pen's `gsap.set` initial pose (SSR-safe too).
+                          transform: `translate3d(0, ${i * STEP_Y}px, ${i * -STEP_Z}px)`,
+                        }}
+                      >
+                        <span
+                          aria-hidden
+                          className="absolute top-6 left-6 italic"
+                          style={{ fontSize: '2em', mixBlendMode: 'difference' }}
+                        >
+                          {i + 1}
+                        </span>
+                        <div className="min-w-0 flex-1" style={{ fontSize: 'clamp(1rem, 1.2rem + 0.5vw, 1.5rem)' }}>
+                          {card.text}
+                        </div>
+                        <img
+                          src={card.img}
+                          alt=""
+                          loading="lazy"
+                          draggable={false}
+                          className="aspect-square w-1/2 object-cover"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* The pen's footer, revealed when the pin releases. */}
+            <footer className="mx-auto max-w-200 px-6 pt-12 pb-16 text-center text-[clamp(1.25rem,2.5vw,1.9rem)] sm:px-10">
+              <CheckeredRule />
+              <p className="mt-8">The end.</p>
+            </footer>
+          </div>
+        )}
+      </ScrollScene>
 
       {/* Progress + hint footer, outside the scroll box. */}
       <div className="flex items-center justify-between gap-3 px-5 py-3">

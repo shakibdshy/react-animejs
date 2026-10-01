@@ -18,12 +18,16 @@
  *     the content section underneath. One element, one continuous scroll.
  *
  * Self-contained: the scroll happens inside the box (scoped via the
- * `useAnimeOnScroll({ container })` option), so it never hijacks the Blocks
- * page scroll. The observer's `state.progress` drives the zoom through
- * `utils.lerp`; the reveal is plain document flow.
+ * `container` option), so it never hijacks the Blocks page scroll. Per-tick
+ * progress arrives through the observer's `onFrame` channel and is written
+ * straight to the DOM (grid tracks, fades, chrome) — reactive `state` only
+ * moves on transitions, so a 60fps zoom must not read it.
  */
-import { memo, useRef } from 'react';
-import { useAnimeOnScroll, utils } from '@shakibdshy/react-animejs';
+import { memo, useCallback, useLayoutEffect, useRef } from 'react';
+// onFrame lives in the in-repo library mirror's hook until
+// @shakibdshy/react-animejs@1.2.0 publishes; switch this import to the
+// package name at the version bump.
+import { useAnimeOnScroll, utils } from '@/lib/react-animejs';
 
 const { lerp, clamp } = utils;
 
@@ -75,33 +79,45 @@ export const ScrubbedBentoGallery = memo(function ScrubbedBentoGallery({
   className?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
+  const pctRef = useRef<HTMLSpanElement>(null);
+
+  /** One scrub frame: grid tracks + fades + chrome, written straight to the
+   *  DOM. The non-hero cells read their opacity from the `--bento-fade` var
+   *  on the grid, so one custom-property write fades all eight. */
+  const applyFrame = useCallback((p: number) => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const zoom = clamp(p / ZOOM_END, 0, 1);
+    grid.style.width = `${lerp(BENTO_COL, FINAL_COL, zoom) * 3}%`;
+    grid.style.height = `${lerp(BENTO_ROW, FINAL_ROW, zoom) * 3}%`;
+    grid.style.setProperty('--bento-fade', String(lerp(1, 0, clamp(zoom * 1.6, 0, 1))));
+
+    if (headingRef.current) {
+      headingRef.current.style.opacity = String(lerp(1, 0, clamp(p * 2.5, 0, 1)));
+    }
+    if (barRef.current) barRef.current.style.width = `${Math.round(p * 100)}%`;
+    if (pctRef.current) pctRef.current.textContent = `${Math.round(p * 100)}%`;
+  }, []);
+
+  // Initial compact-grid pose before the first scroll frame lands (SSR-safe).
+  useLayoutEffect(() => {
+    applyFrame(0);
+  }, [applyFrame]);
 
   // One observer drives the zoom. `container` scopes the scroll to the box;
   // the tall zoom track is the target (it travels through the container, so
   // progress actually moves). enter/leave use the object form so the active
   // band spans the track's full travel: 0 at scroll start, 1 at scroll end.
-  const { ref: zoomTrackRef, state } = useAnimeOnScroll<HTMLDivElement, HTMLDivElement>({
+  const { ref: zoomTrackRef } = useAnimeOnScroll<HTMLDivElement, HTMLDivElement>({
     container: containerRef,
     enter: { target: 'top', container: 'top' },
     leave: { target: 'bottom', container: 'bottom' },
+    onFrame: applyFrame,
   });
-
-  const p = clamp(state.progress, 0, 1);
-  // The zoom itself completes at ZOOM_END; map progress into that window so
-  // the hero reaches fullscreen, then holds while the track finishes scrolling.
-  const zoom = clamp(p / ZOOM_END, 0, 1);
-
-  // Interpolate grid tracks (in % of the stage). This is the entire zoom — the
-  // browser's centering + overflow clipping turns it into a zoom-to-fill.
-  const colSize = lerp(BENTO_COL, FINAL_COL, zoom); // %
-  const rowSize = lerp(BENTO_ROW, FINAL_ROW, zoom); // %
-
-  // Non-hero cells fade out as the grid expands, so the zoom reads as "one
-  // image takes over" rather than "a grid grows". The HERO never fades.
-  const exitOpacity = lerp(1, 0, clamp(zoom * 1.6, 0, 1));
-
-  // Heading fades out as the zoom takes over.
-  const headingOpacity = lerp(1, 0, clamp(p * 2.5, 0, 1));
 
   return (
     <div
@@ -134,15 +150,20 @@ export const ScrubbedBentoGallery = memo(function ScrubbedBentoGallery({
                 centered, so as tracks grow the grid overflows SYMMETRICALLY —
                 only the center cell stays on-screen. (Using % tracks on a
                 fixed-size container would overflow asymmetrically to the
-                bottom-right, leaving the hero stranded in a corner.) */}
+                bottom-right, leaving the hero stranded in a corner.)
+                flexShrink: 0 is load-bearing: the centered-overflow zoom needs
+                the grid to actually exceed the flex container (default
+                flex-shrink clamps it back to 100%, flattening the zoom). */}
             <div className="flex h-full w-full items-center justify-center overflow-hidden">
               <div
+                ref={gridRef}
                 className="grid"
                 style={{
+                  flexShrink: 0,
                   gridTemplateColumns: 'repeat(3, 1fr)',
                   gridTemplateRows: 'repeat(3, 1fr)',
-                  width: `${colSize * 3}%`,
-                  height: `${rowSize * 3}%`,
+                  width: `${BENTO_COL * 3}%`,
+                  height: `${BENTO_ROW * 3}%`,
                   gap: 0,
                 }}
               >
@@ -152,10 +173,7 @@ export const ScrubbedBentoGallery = memo(function ScrubbedBentoGallery({
                     <div
                       key={i}
                       className="relative flex items-center justify-center overflow-hidden bg-landing-surface"
-                      style={{
-                        opacity: isHero ? 1 : exitOpacity,
-                        transition: 'opacity 80ms linear',
-                      }}
+                      style={{ opacity: isHero ? 1 : 'var(--bento-fade, 1)' }}
                     >
                       <img
                         src={cell.src}
@@ -177,8 +195,9 @@ export const ScrubbedBentoGallery = memo(function ScrubbedBentoGallery({
 
             {/* Heading overlay — fades out early so the zoomed hero reads clean. */}
             <div
+              ref={headingRef}
               className="pointer-events-none absolute inset-x-0 top-5 text-center"
-              style={{ opacity: headingOpacity }}
+              style={{ opacity: 1 }}
             >
               <p className="landing-font-mono text-[10px] tracking-[0.25em] uppercase text-landing-accent">
                 Scrubbed · Grid-track zoom
@@ -206,16 +225,17 @@ export const ScrubbedBentoGallery = memo(function ScrubbedBentoGallery({
           <p className="mt-4 text-base leading-relaxed text-landing-muted">
             The bento collapsed into a single fullscreen frame as you scrolled, the hero held for a
             beat, then slid up to reveal this section — a pinned scrub sequence built entirely with{' '}
-            <code className="landing-font-mono text-landing-accent">useAnimeOnScroll</code> driving a
+            <code className="landing-font-mono text-landing-accent">useAnimeOnScroll</code>: its{' '}
+            <code className="landing-font-mono text-landing-accent">onFrame</code> channel drives the
             grid-track interpolation through{' '}
-            <code className="landing-font-mono text-landing-accent">utils.lerp</code>. No FLIP plugin,
-            no manual requestAnimationFrame loop.
+            <code className="landing-font-mono text-landing-accent">utils.lerp</code> with zero React
+            re-renders per frame. No FLIP plugin, no manual requestAnimationFrame loop.
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
             {[
               { k: 'useAnimeOnScroll', v: 'One observer scrubs the whole zoom, scoped to a container.' },
-              { k: 'utils.lerp', v: 'Interpolates grid tracks 33% → 100% so only the center cell wins.' },
+              { k: 'onFrame + utils.lerp', v: 'Per-frame track interpolation 33% → 100%, no re-renders.' },
               { k: 'sticky + clip', v: 'Centering + overflow turns track growth into a zoom-to-fill.' },
             ].map((f) => (
               <div
@@ -239,13 +259,13 @@ export const ScrubbedBentoGallery = memo(function ScrubbedBentoGallery({
         </span>
         <div className="flex items-center gap-3">
           <div className="h-1 w-32 overflow-hidden rounded-full bg-landing-border/50">
-            <div
-              className="h-full rounded-full bg-landing-accent"
-              style={{ width: `${Math.round(p * 100)}%`, transition: 'width 60ms linear' }}
-            />
+            <div ref={barRef} className="h-full rounded-full bg-landing-accent" style={{ width: '0%' }} />
           </div>
-          <span className="landing-font-mono text-[10px] tracking-[0.2em] uppercase text-landing-muted/70 tabular-nums">
-            {Math.round(p * 100)}%
+          <span
+            ref={pctRef}
+            className="landing-font-mono text-[10px] tracking-[0.2em] uppercase text-landing-muted/70 tabular-nums"
+          >
+            0%
           </span>
         </div>
       </div>
