@@ -27,6 +27,7 @@ import { AnimatedContinuousSections } from './components/AnimatedContinuousSecti
 import { LayeredPinningLoop } from './components/LayeredPinningLoop';
 import { StackedCardsReveal } from './components/StackedCardsReveal';
 import { ScrollShader } from './components/ScrollShader';
+import { CardDeckStack } from './components/CardDeckStack';
 import { SOURCE_BY_KEY } from './registry';
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -445,17 +446,44 @@ export const BlocksPage = memo(function BlocksPage() {
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
                 A port of the GSAP &ldquo;stacked cards reveal w/ ScrollTrigger&rdquo; pen. Five
                 stacked cards pin inside a self-contained scroll box; as you scroll, each card flies
-                off with a random tilt while the rest of the stack advances one slot forward, and the
-                final card pushes toward the camera. The ScrollTrigger pin + scrub is one declarative{' '}
+                off with a random tilt while the rest of the stack advances one slot forward, and
+                the final card pushes toward the camera. The ScrollTrigger pin + scrub is one
+                declarative{' '}
                 <code className="landing-font-mono text-landing-accent">ScrollScene</code> — sticky
-                stage in, <code className="landing-font-mono text-landing-accent">scrub</code> (seconds
-                of catch-up, like GSAP) and an <code className="landing-font-mono text-landing-accent">onFrame</code>{' '}
-                callback out — and the GSAP timeline is re-evaluated per frame with{' '}
+                stage in, <code className="landing-font-mono text-landing-accent">scrub</code>{' '}
+                (seconds of catch-up, like GSAP) and an{' '}
+                <code className="landing-font-mono text-landing-accent">onFrame</code> callback out
+                — and the GSAP timeline is re-evaluated per frame with{' '}
                 <code className="landing-font-mono text-landing-accent">utils.clamp</code>/
                 <code className="landing-font-mono text-landing-accent">utils.lerp</code>.
               </p>
               <ErrorBoundary>
                 <StackedCardsReveal />
+              </ErrorBoundary>
+            </section>
+
+            {/* Card Deck Stack — pinned deck where each slide covers the last */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Card Deck Stack · Cover Scroll"
+                chip="ScrollScene + scrub"
+                codeKey="card-deck-stack"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                A port of Urvashi Jain&rsquo;s CodePen stacked-cards demo. Four gradient slides pin
+                inside a self-contained scroll box; each new slide rises from below the stage while
+                the slide it covers scales down and tucks away, ending in one layered deck. The pin
+                + scrub pairing is a single declarative{' '}
+                <code className="landing-font-mono text-landing-accent">ScrollScene</code> — sticky
+                stage in, <code className="landing-font-mono text-landing-accent">scrub</code>{' '}
+                (seconds of catch-up) and{' '}
+                <code className="landing-font-mono text-landing-accent">onFrame</code> out — and the
+                original timeline is replayed per frame from one small tween table with{' '}
+                <code className="landing-font-mono text-landing-accent">eases.outQuad</code>.
+              </p>
+              <ErrorBoundary>
+                <CardDeckStack />
               </ErrorBoundary>
             </section>
 
