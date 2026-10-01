@@ -609,6 +609,10 @@ export function useAnimeOnScroll<
     };
   }, [
     enabled,
+    // scrub is hook-internal (not part of the anime config), so it can't ride
+    // configJson — but a change must rebuild the effect-scoped frame plumbing
+    // (the chase bakes scrubSeconds into its closure), hence the raw dep.
+    scrub,
     resolvedPropLinked,
     configJson,
     scopeRootRef,

@@ -291,13 +291,15 @@ export interface UseAnimeScrollTriggerOptions
   invalidateOnRefresh?: boolean;
 
   /**
-   * Smooth the scroll progress driving linked instances and `onFrame`
-   * (GSAP ScrollTrigger scrub). `true` = direct 1:1 linkage. A number =
-   * seconds-to-catch-up damping: smoothed progress chases raw progress with a
-   * frame-rate-independent exponential decay whose time constant is the given
-   * number of seconds (`scrub: 1` ≈ GSAP `scrub: 1`). One meaning everywhere —
-   * pin mode and observer mode alike (ADR-0001). Under `prefers-reduced-motion`
-   * the smoothing collapses to direct 1:1.
+   * Smooth scrub-controlled progress (GSAP ScrollTrigger scrub). `true` =
+   * direct 1:1; a number = seconds-to-catch-up damping: progress chases raw
+   * scroll progress with a frame-rate-independent exponential decay whose
+   * time constant is the given number of seconds (`scrub: 1` ≈ GSAP
+   * `scrub: 1`). What gets smoothed differs by mode: in **pin mode** the
+   * chase drives the `linked` instance's playhead and `onFrame`; in
+   * **observer mode** it smooths `onFrame` only, while `linked` instances
+   * are driven 1:1 by Anime.js's own observer sync. Under
+   * `prefers-reduced-motion` the smoothing collapses to direct 1:1.
    * @default false
    */
   scrub?: boolean | number;
