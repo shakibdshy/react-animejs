@@ -28,6 +28,7 @@ import { LayeredPinningLoop } from './components/LayeredPinningLoop';
 import { StackedCardsReveal } from './components/StackedCardsReveal';
 import { ScrollShader } from './components/ScrollShader';
 import { CardDeckStack } from './components/CardDeckStack';
+import { BlurTiltStack } from './components/BlurTiltStack';
 import { SOURCE_BY_KEY } from './registry';
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -484,6 +485,30 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <CardDeckStack />
+              </ErrorBoundary>
+            </section>
+
+            {/* Blur Tilt Stack — pinned cards that blur and tilt as they're covered */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Blur Tilt Stack · Pinned Cards"
+                chip="ScrollScene + 1:1 scrub"
+                codeKey="blur-tilt-stack"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                A port of Arunakeshavaiah&rsquo;s CodePen card-stack demo. Five pastel cards pin in
+                a self-contained box; each new card fades in and rises into place while the card it
+                covers blurs and tilts aside — direction alternating per card — and keeps both
+                effects behind the stack. The pair is scrubbed 1:1 with no damping: one declarative{' '}
+                <code className="landing-font-mono text-landing-accent">ScrollScene</code> with{' '}
+                <code className="landing-font-mono text-landing-accent">scrub</code> set to true and
+                an <code className="landing-font-mono text-landing-accent">onFrame</code> callback
+                replaying the original timeline from one tween table with{' '}
+                <code className="landing-font-mono text-landing-accent">eases.outQuad</code>.
+              </p>
+              <ErrorBoundary>
+                <BlurTiltStack />
               </ErrorBoundary>
             </section>
 
