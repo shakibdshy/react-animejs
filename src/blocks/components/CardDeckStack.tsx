@@ -4,10 +4,12 @@
  *
  * Every concept from the original pen maps to the library like this:
  *
- *  - `pin: true` + `end: '+=2000'` → the deck sits on a `sticky` stage inside
- *    a tall scroll track (stage height + 2000px), so it pins for exactly
- *    2000px of scroll inside a self-contained scroll box — the pen's travel,
- *    scoped to the box instead of the page.
+ *  - `pin: true` + `start: 'top-=50px top'` + `end: '+=2000'` → the deck sits
+ *    on a `sticky` stage offset 50px from the box top (the pen's start gap),
+ *    inside a scroll box 180px taller than the stage: the strip below the pin
+ *    stays white and arrived cards hang into it, like the page showing under
+ *    the pen's pinned container. The track absorbs both gutters, so pinned
+ *    travel stays exactly the pen's 2000px.
  *  - `scrub: 1` (seconds to catch up) → `scrub={0.5}` on the scene: the
  *    library's damped chase smooths raw progress into smoothed progress and
  *    rewinds to 0 above the band (halved for the smaller stage).
@@ -38,8 +40,17 @@ const CARD_GRADIENT = 'linear-gradient(-40deg, #d754ad 0%, #f96785 67%, #fe7333 
 const TOP_OFFSETS = [0, 30, 60, 90];
 /** The pen's stage: a 70vh-tall, 80%-wide deck of rounded gradient cards. */
 const STAGE_HEIGHT = 'min(70vh, 640px)';
-/** The pen's `end: '+=2000'` — 2000px of pinned travel, exactly. */
-const TRACK_HEIGHT = `calc(${STAGE_HEIGHT} + 2000px)`;
+/**
+ * The pen pins with the deck ~50px below the viewport top (`top-=50px`) and
+ * leaves the white page visible under the pinned container — the box keeps
+ * both gutters: the stage sticks 50px down, and the box runs 130px past the
+ * stage so arrived cards (deepest hang: 90px) overlay white, not the edge.
+ */
+const TOP_GAP = 50;
+const BOTTOM_GAP = 130;
+const BOX_HEIGHT = `calc(${STAGE_HEIGHT} + ${TOP_GAP + BOTTOM_GAP}px)`;
+/** The pen's `end: '+=2000'` — track minus box = 2000px of travel, exactly. */
+const TRACK_HEIGHT = `calc(${STAGE_HEIGHT} + ${TOP_GAP + BOTTOM_GAP + 2000}px)`;
 
 type DeckProp = 'y' | 'scale' | 'opacity';
 type DeckState = Record<DeckProp, number>;
@@ -149,12 +160,14 @@ export const CardDeckStack = memo(function CardDeckStack({
             role="region"
             aria-label="Card deck stack scroll animation"
             className="relative w-full overflow-y-auto overscroll-contain"
-            style={{ height: STAGE_HEIGHT, backgroundColor: '#fff' }}
+            style={{ height: BOX_HEIGHT, backgroundColor: '#fff' }}
           >
             {/* Tall track: the observed target; travel = the pen's +=2000. */}
             <div ref={targetRef} className="relative" style={{ height: TRACK_HEIGHT }}>
-              {/* Sticky stage = the pen's pin (`start: 'top-=50px top'`). */}
-              <div className="sticky top-0 w-full overflow-hidden" style={{ height: STAGE_HEIGHT }}>
+              {/* Sticky stage = the pen's pin, held TOP_GAP below the box top
+                  like the pen's `start: 'top-=50px top'`; overflow stays
+                  visible so arrived cards hang into the white strip below. */}
+              <div className="sticky w-full" style={{ top: TOP_GAP, height: STAGE_HEIGHT }}>
                 <div className="relative mx-auto h-full" style={{ width: '80%' }}>
                   {TOP_OFFSETS.map((top, i) => (
                     <div
