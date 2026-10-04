@@ -419,6 +419,7 @@ export const galleryPreviewRegistry = {
   timeline: BarsGrowPreview,
   draggable: ScaleBoxPreview,
   'on-scroll': BarsGrowPreview,
+  'scroll-scene': BarsGrowPreview,
   layout: ScaleBoxPreview,
   scope: StaggerBoxesPreview,
   'split-text': ScramblePreview,

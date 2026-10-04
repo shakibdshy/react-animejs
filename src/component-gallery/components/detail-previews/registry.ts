@@ -8,7 +8,7 @@ import { ScopePreview } from './scope';
 import { SplitTextPreview } from './split-text';
 import { ScrambleTextPreview } from './scramble-text';
 import { SvgDrawPreview, SvgMorphPreview, SvgMotionPathPreview } from './svg-previews';
-import { DraggablePreview, OnScrollPreview, ReorderListPreview, ScrollLinkedAnimationsPreview } from './interaction-previews';
+import { DraggablePreview, OnScrollPreview, ReorderListPreview, ScrollLinkedAnimationsPreview, ScrollScenePreview } from './interaction-previews';
 import { AnimatedSliderPreview, ClipPathRevealPreview, CounterCountdownPreview, SpinningCubePreview, ToggleSwitchPreview } from './wrapper-previews';
 import {
   AccordionPresencePreview,
@@ -28,6 +28,7 @@ export const previewRegistry = {
   timeline: TimelinesPreview,
   draggable: DraggablePreview,
   'on-scroll': OnScrollPreview,
+  'scroll-scene': ScrollScenePreview,
   layout: LayoutPreview,
   scope: ScopePreview,
   'split-text': SplitTextPreview,

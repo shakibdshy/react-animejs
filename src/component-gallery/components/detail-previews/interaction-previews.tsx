@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef, useState } from 'react';
-import { useAnimeDraggable, useAnimeOnScroll } from '@shakibdshy/react-animejs';
+import { ScrollScene, useAnimeDraggable, useAnimeOnScroll } from '@shakibdshy/react-animejs';
 import { AnimatedReorderList } from '@/demo-examples/components/common/AnimatedReorderList';
 import { DemoButton, PreviewCard } from './shared';
 import { cn } from './utils';
@@ -471,5 +471,104 @@ export const ScrollLinkedAnimationsPreview = memo(function ScrollLinkedAnimation
         </div>
       </div>
     </PreviewCard>
+  );
+});
+
+export const ScrollScenePreview = memo(function ScrollScenePreview(_props: PreviewProps) {
+  const barRef = useRef<HTMLDivElement>(null);
+  const pctRef = useRef<HTMLSpanElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <ScrollScene<HTMLDivElement, HTMLDivElement>
+      enter={{ target: 'top', container: 'top' }}
+      leave={{ target: 'bottom', container: 'bottom' }}
+      scrub={0.25}
+      onFrame={(progress) => {
+        const stage = stageRef.current;
+        if (stage) {
+          // Per-frame work: a direct transform write, no React state.
+          stage.style.transform = `rotateX(${(1 - progress) * 55}deg) scale(${0.7 + progress * 0.3})`;
+        }
+        if (barRef.current) barRef.current.style.width = `${Math.round(progress * 100)}%`;
+        if (pctRef.current) {
+          pctRef.current.textContent = `${Math.round(progress * 100)}%`;
+        }
+      }}
+    >
+      {({ targetRef, containerRef, controls, isInView }) => (
+        <PreviewCard
+          title="Scroll Scene"
+          description="Refs in · scrub · onFrame out"
+          controls={
+            <>
+              <DemoButton onClick={() => controls.refresh()} variant="surface" small>
+                Refresh
+              </DemoButton>
+              <span
+                className={cn(
+                  'landing-font-mono text-[10px]',
+                  isInView ? 'text-landing-accent' : 'text-landing-muted',
+                )}
+              >
+                {isInView ? 'Active' : 'Scroll ↓'}
+              </span>
+            </>
+          }
+        >
+          <div className="flex flex-col gap-3 w-full">
+            <div className="landing-font-mono text-[9px] tracking-[0.22em] uppercase text-landing-muted/70">
+              Scroll inside the panel to scrub the stage
+            </div>
+            <div
+              ref={containerRef}
+              className="w-full h-52 rounded-xl border border-landing-border border-dashed bg-landing-bg/40 overflow-y-auto overscroll-contain relative"
+            >
+              <div className="h-10" />
+              {/* Tall track: the observed target. */}
+              <div ref={targetRef} className="relative h-105">
+                {/* Sticky stage holds still while the track travels. */}
+                <div className="sticky top-0 h-52 flex items-center justify-center overflow-hidden">
+                  <div style={{ perspective: '700px' }} className="w-full max-w-56">
+                    <div
+                      ref={stageRef}
+                      className="w-full rounded-xl p-4 flex flex-col items-center gap-1 will-change-transform"
+                      style={{
+                        transform: 'rotateX(55deg) scale(0.7)',
+                        background: 'linear-gradient(135deg, #22c55e, #15803d)',
+                      }}
+                    >
+                      <span className="landing-font-mono text-[9px] tracking-[0.3em] uppercase text-white/60">
+                        stage
+                      </span>
+                      <span className="landing-font-display text-sm text-white font-bold">
+                        ScrollScene
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="h-10" />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-1 rounded-full bg-landing-border overflow-hidden">
+                <div
+                  ref={barRef}
+                  className="h-full rounded-full bg-landing-accent"
+                  style={{ width: '0%' }}
+                />
+              </div>
+              <span
+                ref={pctRef}
+                className="landing-font-mono text-[9px] tabular-nums text-landing-muted"
+              >
+                0%
+              </span>
+            </div>
+          </div>
+        </PreviewCard>
+      )}
+    </ScrollScene>
   );
 });

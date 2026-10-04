@@ -93,6 +93,19 @@ export const demoSections = [
   },
 
   {
+    title: 'Scroll Scene',
+    playgroundPath: '/demo/onscroll',
+    hasPlayground: true,
+    description:
+      'Declarative scroll scene: refs in, coarse state and onFrame out, no DOM of its own',
+    category: 'scroll',
+    componentId: 'scroll-scene',
+    tags: ['scroll', 'scrub', 'onframe'],
+    difficulty: 'intermediate',
+    docsAnchor: 'scroll-scene',
+  },
+
+  {
     title: 'Layout',
     playgroundPath: '/demo/layout',
     hasPlayground: true,
