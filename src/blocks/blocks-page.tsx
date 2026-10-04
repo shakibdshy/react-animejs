@@ -29,6 +29,7 @@ import { StackedCardsReveal } from './components/StackedCardsReveal';
 import { ScrollShader } from './components/ScrollShader';
 import { CardDeckStack } from './components/CardDeckStack';
 import { BlurTiltStack } from './components/BlurTiltStack';
+import { ButterScroll } from './components/ButterScroll';
 import { SOURCE_BY_KEY } from './registry';
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -635,6 +636,38 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <HorizontalSplitText />
+              </ErrorBoundary>
+            </section>
+
+            {/* Butter Scroll — clips fly from the timeline into the sentence */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Butter Scroll · Clip Flight"
+                chip="ScrollScene + SplitText"
+                codeKey="butter-scroll"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                Five clips rest in the slots of a hero sentence above a dark video-editor timeline.
+                As you scroll the page, each clip drops out of its slot and flies down into its cell
+                — the timeline assembles as you go, ending on a full track. One declarative{' '}
+                <code className="landing-font-mono text-landing-accent">ScrollScene</code> owns the
+                band (<code className="landing-font-mono text-landing-accent">enter</code>/
+                <code className="landing-font-mono text-landing-accent">leave</code>,{' '}
+                <code className="landing-font-mono text-landing-accent">scrub</code> in
+                seconds-to-catch-up) and an{' '}
+                <code className="landing-font-mono text-landing-accent">onFrame</code> callback
+                replays the flight with <code className="landing-font-mono">utils.clamp</code>/
+                <code className="landing-font-mono">utils.lerp</code>. On load, the sentence&rsquo;s
+                words glow in through{' '}
+                <code className="landing-font-mono text-landing-accent">SplitText</code> pairs of{' '}
+                <code className="landing-font-mono text-landing-accent">AnimeTimeline</code> +{' '}
+                <code className="landing-font-mono text-landing-accent">SplitTextEntry</code>, and
+                each clip fades in with its own{' '}
+                <code className="landing-font-mono text-landing-accent">Anime</code>.
+              </p>
+              <ErrorBoundary>
+                <ButterScroll />
               </ErrorBoundary>
             </section>
           </div>

@@ -22,6 +22,7 @@ import stackedCardsRevealSource from './components/StackedCardsReveal.tsx?raw';
 import scrollShaderSource from './components/ScrollShader.tsx?raw';
 import cardDeckStackSource from './components/CardDeckStack.tsx?raw';
 import blurTiltStackSource from './components/BlurTiltStack.tsx?raw';
+import butterScrollSource from './components/ButterScroll.tsx?raw';
 
 export type BlockCodeTarget = {
   title: string;
@@ -60,4 +61,5 @@ export const SOURCE_BY_KEY: Record<string, BlockCodeTarget> = {
   'scroll-shader': { title: 'ScrollShader.tsx', code: scrollShaderSource },
   'card-deck-stack': { title: 'CardDeckStack.tsx', code: cardDeckStackSource },
   'blur-tilt-stack': { title: 'BlurTiltStack.tsx', code: blurTiltStackSource },
+  'butter-scroll': { title: 'ButterScroll.tsx', code: butterScrollSource },
 };
