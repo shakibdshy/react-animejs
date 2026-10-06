@@ -587,7 +587,7 @@ export const componentReferences: ReferenceEntry[] = [
     description:
       'The declarative face of useAnimeOnScroll: attach the refs it hands you, read coarse state for UI, and keep per-frame work in onFrame. Renders no DOM of its own, so the scene never adds a wrapper to your layout.',
     usage: `import { ScrollScene } ${localImport}`,
-    example: `<ScrollScene\n  enter={{ target: 'top', container: 'top' }}\n  leave={{ target: 'bottom', container: 'bottom' }}\n  scrub={0.25}\n  onFrame={(progress) => draw(progress)}\n>\n  {({ targetRef, containerRef }) => (\n    <div ref={containerRef} style={{ height: '400vh', overflowY: 'auto' }}>\n      <div ref={targetRef} style={{ position: 'sticky', top: 0 }}>…</div>\n    </div>\n  )}\n</ScrollScene>`,
+    example: `<ScrollScene\n  enter={{ target: 'top', container: 'top' }}\n  leave={{ target: 'bottom', container: 'bottom' }}\n  scrub={0.25}\n  onFrame={(progress) => draw(progress)}\n>\n  {({ targetRef, containerRef }) => (\n    <div ref={containerRef} style={{ height: '100vh', overflowY: 'auto' }}>\n      {/* Tall track = the observed target. */}\n      <div ref={targetRef} style={{ height: '300vh' }}>\n        {/* Sticky stage holds still while the track scrolls past. */}\n        <div style={{ position: 'sticky', top: 0, height: '100vh' }}>…</div>\n      </div>\n    </div>\n  )}\n</ScrollScene>`,
     properties: [
       {
         name: 'children',

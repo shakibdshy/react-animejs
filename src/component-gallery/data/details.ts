@@ -241,7 +241,7 @@ function getRotationX(i: number): number {
   onFrame={(progress) => applyFrame(progress)}
 >
   {({ targetRef, containerRef }) => (
-    <div ref={containerRef} style={{ height: '300vh', overflowY: 'auto' }}>
+    <div ref={containerRef} style={{ height: '100vh', overflowY: 'auto' }}>
       {/* Tall track = the observed target, measured as it travels. */}
       <div ref={targetRef} style={{ height: '300vh' }}>
         {/* Sticky stage holds still while the track scrolls past. */}

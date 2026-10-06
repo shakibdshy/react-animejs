@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef, useState } from 'react';
+import { memo, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { ScrollScene, useAnimeDraggable, useAnimeOnScroll } from '@shakibdshy/react-animejs';
 import { AnimatedReorderList } from '@/demo-examples/components/common/AnimatedReorderList';
 import { DemoButton, PreviewCard } from './shared';
@@ -478,6 +478,18 @@ export const ScrollScenePreview = memo(function ScrollScenePreview(_props: Previ
   const barRef = useRef<HTMLDivElement>(null);
   const pctRef = useRef<HTMLSpanElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  /** Set at mount when the user prefers reduced motion; holds the stage flat. */
+  const reducedMotionRef = useRef(false);
+
+  // Reduced motion: skip the scroll-driven 3D flip and hold the stage flat —
+  // the progress readout still tracks the scene. Read once at mount to match
+  // the library's own prefersReducedMotion() semantics.
+  useLayoutEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      reducedMotionRef.current = true;
+      if (stageRef.current) stageRef.current.style.transform = '';
+    }
+  }, []);
 
   return (
     <ScrollScene<HTMLDivElement, HTMLDivElement>
@@ -488,7 +500,9 @@ export const ScrollScenePreview = memo(function ScrollScenePreview(_props: Previ
         const stage = stageRef.current;
         if (stage) {
           // Per-frame work: a direct transform write, no React state.
-          stage.style.transform = `rotateX(${(1 - progress) * 55}deg) scale(${0.7 + progress * 0.3})`;
+          stage.style.transform = reducedMotionRef.current
+            ? ''
+            : `rotateX(${(1 - progress) * 55}deg) scale(${0.7 + progress * 0.3})`;
         }
         if (barRef.current) barRef.current.style.width = `${Math.round(progress * 100)}%`;
         if (pctRef.current) {

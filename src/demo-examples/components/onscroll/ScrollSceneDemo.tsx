@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { ScrollScene } from '@shakibdshy/react-animejs';
 import { DemoCard } from '../DemoCard';
@@ -18,6 +18,18 @@ export function ScrollSceneDemo() {
   const stageRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const pctRef = useRef<HTMLSpanElement>(null);
+  /** Set at mount when the user prefers reduced motion; holds the stage flat. */
+  const reducedMotionRef = useRef(false);
+
+  // Reduced motion: skip the scroll-driven 3D flip and hold the stage flat —
+  // the progress readout still tracks the scene. Read once at mount to match
+  // the library's own prefersReducedMotion() semantics.
+  useLayoutEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      reducedMotionRef.current = true;
+      if (stageRef.current) stageRef.current.style.transform = '';
+    }
+  }, []);
 
   return (
     <ScrollScene<HTMLDivElement, HTMLDivElement>
@@ -27,7 +39,9 @@ export function ScrollSceneDemo() {
       onFrame={(progress) => {
         const stage = stageRef.current;
         if (stage) {
-          stage.style.transform = `rotateX(${(1 - progress) * 60}deg) scale(${0.65 + progress * 0.35})`;
+          stage.style.transform = reducedMotionRef.current
+            ? ''
+            : `rotateX(${(1 - progress) * 60}deg) scale(${0.65 + progress * 0.35})`;
         }
         if (barRef.current) {
           barRef.current.style.width = `${Math.round(progress * 100)}%`;

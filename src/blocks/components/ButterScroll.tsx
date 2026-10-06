@@ -84,6 +84,8 @@ export const ButterScroll = memo(function ButterScroll({ className = '' }: { cla
     scale: [],
   });
   const lastProgressRef = useRef(0);
+  /** Set at mount when the user prefers reduced motion; freezes the flight. */
+  const reducedMotionRef = useRef(false);
 
   /** The ported timeline, reversed: one segment per clip, evaluated from
    *  progress. The measured offsets point from a clip's cell to its slot, so
@@ -116,6 +118,7 @@ export const ButterScroll = memo(function ButterScroll({ className = '' }: { cla
 
   const handleFrame = useCallback(
     (p: number) => {
+      if (reducedMotionRef.current) return;
       lastProgressRef.current = p;
       applyFrame(p);
     },
@@ -174,6 +177,19 @@ export const ButterScroll = memo(function ButterScroll({ className = '' }: { cla
     };
   }, [measure, applyFrame]);
 
+  // Reduced motion: hold the assembled end pose — clips stay in their cells,
+  // videos hold their first frame — instead of the scroll-driven flight and
+  // sway. Read once at mount to match the library's own prefersReducedMotion()
+  // semantics. The word intro is opacity/color only, so it runs either way.
+  useLayoutEffect(() => {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    reducedMotionRef.current = true;
+    for (const media of mediaRefs.current) {
+      if (media instanceof HTMLVideoElement) media.pause();
+    }
+    applyFrame(1);
+  }, [applyFrame]);
+
   return (
     <ScrollScene<HTMLDivElement>
       enter={{ target: 'top', container: 'bottom' }}
@@ -198,7 +214,7 @@ export const ButterScroll = memo(function ButterScroll({ className = '' }: { cla
             }}
           >
             {/* ── Hero: the sentence with its five clip slots ────────────── */}
-            <section className="grid h-screen place-items-center px-[5vw]">
+            <section className="grid min-h-screen place-items-center px-[5vw]">
               <AnimeTimeline autoplay defaults={{ duration: 600, ease: 'outQuad' }}>
                 <SplitText ref={splitRef} params={{ words: true }}>
                   <h1 className="max-w-[16em] text-center text-[clamp(2rem,5vw,5rem)] leading-[1.1] font-medium tracking-[-0.04em] text-balance">
