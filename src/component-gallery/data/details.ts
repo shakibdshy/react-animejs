@@ -231,6 +231,81 @@ function getRotationX(i: number): number {
     ],
   },
 
+  "scroll-scene": {
+    component: "ScrollScene",
+    summary: "The declarative face of useAnimeOnScroll. The scene owns the observer and hands you refs, coarse state, and an onFrame channel — so a scrubbed stage costs zero React re-renders and adds no wrapper element to your layout.",
+    code: `<ScrollScene
+  enter={{ target: 'top', container: 'top' }}
+  leave={{ target: 'bottom', container: 'bottom' }}
+  scrub={0.25}
+  onFrame={(progress) => applyFrame(progress)}
+>
+  {({ targetRef, containerRef }) => (
+    <div ref={containerRef} style={{ height: '300vh', overflowY: 'auto' }}>
+      {/* Tall track = the observed target, measured as it travels. */}
+      <div ref={targetRef} style={{ height: '300vh' }}>
+        {/* Sticky stage holds still while the track scrolls past. */}
+        <div style={{ position: 'sticky', top: 0, height: '100vh' }}>
+          <Stage />
+        </div>
+      </div>
+    </div>
+  )}
+</ScrollScene>
+
+// One function replaces the whole tween list: per-frame writes go
+// straight to style, never through React state.
+function applyFrame(progress: number) {
+  const t = Math.max(0, Math.min(1, progress))
+  card.style.transform = \`rotateY(\${t * 180}deg) translateZ(\${t * 200}px)\`
+}`,
+    props: [
+      {
+        name: "children",
+        type: "ReactNode | (api: ScrollSceneRef) => ReactNode",
+        default: "-",
+        desc: "Static content, or a render function receiving ref, targetRef, containerRef, controls, state, observer, isReady, isInView, isPinned, progress, scroll, velocity, and backward",
+      },
+      {
+        name: "enter / leave",
+        type: "string | { target, container }",
+        default: "-",
+        desc: "Edges where progress starts and ends, as a pair ('top bottom') or an object",
+      },
+      {
+        name: "container / target",
+        type: "TargetSelector",
+        default: "refs",
+        desc: "Override the refs with selectors or elements; an unattached container defaults to the page",
+      },
+      {
+        name: "scrub",
+        type: "boolean | number",
+        default: "false",
+        desc: "true scrubs 1:1; a number is seconds-to-catch-up damping",
+      },
+      {
+        name: "onFrame",
+        type: "(progress, state) => void",
+        default: "-",
+        desc: "Per-frame channel for transforms, canvas draws, or chrome — never route per-tick work through reactive state",
+      },
+      {
+        name: "pin / pinStart / pinEnd",
+        type: "boolean / string / string",
+        default: "false / 'top top'",
+        desc: "Pin mode holds the target on screen instead of only observing it",
+      },
+      {
+        name: "enabled / deps",
+        type: "boolean / unknown[]",
+        default: "true / []",
+        desc: "Gate the scene, or rebuild the observer when layout inputs change",
+      },
+      { name: "onReady", type: "(api) => void", default: "-", desc: "Runs once the observer is ready" },
+    ],
+  },
+
   "layout": {
     component: "AnimeLayout",
     summary: "FLIP-based automatic and manual layout animations, supporting dynamic grid transitions, parent-child state propagation, and custom styling updates.",

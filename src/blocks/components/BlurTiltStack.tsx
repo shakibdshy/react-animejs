@@ -21,10 +21,7 @@
  * `style.transform` / `style.filter` / `style.opacity`, no React re-render.
  */
 import { memo, useCallback, useLayoutEffect, useRef } from 'react';
-// ScrollScene lives in the in-repo library mirror until
-// @shakibdshy/react-animejs@1.2.0 publishes; switch this import to the
-// package name at the version bump.
-import { eases, ScrollScene, utils } from '@/lib/react-animejs';
+import { eases, ScrollScene, utils } from '@shakibdshy/react-animejs';
 
 const { clamp, lerp } = utils;
 

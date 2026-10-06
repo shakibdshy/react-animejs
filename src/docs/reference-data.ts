@@ -581,6 +581,58 @@ export const componentReferences: ReferenceEntry[] = [
     ],
   },
   {
+    id: 'scroll-scene',
+    name: 'ScrollScene',
+    signature: '<ScrollScene {...scrollOptions}>{children}</ScrollScene>',
+    description:
+      'The declarative face of useAnimeOnScroll: attach the refs it hands you, read coarse state for UI, and keep per-frame work in onFrame. Renders no DOM of its own, so the scene never adds a wrapper to your layout.',
+    usage: `import { ScrollScene } ${localImport}`,
+    example: `<ScrollScene\n  enter={{ target: 'top', container: 'top' }}\n  leave={{ target: 'bottom', container: 'bottom' }}\n  scrub={0.25}\n  onFrame={(progress) => draw(progress)}\n>\n  {({ targetRef, containerRef }) => (\n    <div ref={containerRef} style={{ height: '400vh', overflowY: 'auto' }}>\n      <div ref={targetRef} style={{ position: 'sticky', top: 0 }}>…</div>\n    </div>\n  )}\n</ScrollScene>`,
+    properties: [
+      {
+        name: 'children',
+        type: 'ReactNode | (api: ScrollSceneRef) => ReactNode',
+        description:
+          'Static content, or a render function receiving ref, targetRef, containerRef, controls, state, observer, isReady, isInView, isPinned, progress, scroll, velocity, and backward.',
+      },
+      {
+        name: 'enter? / leave?',
+        type: 'string | { target, container }',
+        description:
+          'Edges where progress starts and ends, written as a pair ("top bottom") or as an object.',
+      },
+      {
+        name: 'container? / target?',
+        type: 'TargetSelector',
+        description:
+          'Override the refs with selectors or elements. Left unattached, the container defaults to the page.',
+      },
+      {
+        name: 'scrub?',
+        type: 'boolean | number',
+        description:
+          'true scrubs progress 1:1; a number is seconds-to-catch-up damping (ADR-0001) — one meaning in observer and pin mode alike.',
+      },
+      {
+        name: 'onFrame?',
+        type: '(progress, state) => void',
+        description:
+          'Per-frame channel for high-frequency work such as transform writes or canvas draws. Reactive state only advances on meaningful transitions (ADR-0002), so never route per-tick work through it.',
+      },
+      {
+        name: 'pin? / pinStart? / pinEnd?',
+        type: 'boolean / string / string',
+        description: 'Pin mode holds the target on screen across a range instead of observing it.',
+      },
+      {
+        name: 'onReady? / enabled? / deps?',
+        type: '(api) => void / boolean / unknown[]',
+        description:
+          'Readiness callback, an on/off gate for the scene, and inputs that rebuild the observer when layout changes.',
+      },
+    ],
+  },
+  {
     id: 'anime-batch',
     name: 'AnimeBatch',
     signature: '<AnimeBatch animation={...}>{children}</AnimeBatch>',

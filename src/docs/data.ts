@@ -96,6 +96,12 @@ export const hookBackedComponents: ApiItem[] = [
     description: 'Render-prop scroll observer without an extra wrapper element.',
   },
   {
+    name: 'ScrollScene',
+    companion: 'useAnimeOnScroll',
+    description:
+      'Declarative scroll scene: refs in, coarse state and onFrame out, no DOM of its own.',
+  },
+  {
     name: 'AnimeTimeline',
     companion: 'useAnimeTimeline',
     description: 'Timeline provider with entries, state, controls, and an imperative ref.',

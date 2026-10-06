@@ -38,6 +38,11 @@ export const demoDocsLinks: Record<
     label: 'useAnimeOnScroll',
     extras: ['anime-scroll'],
   },
+  'scroll-scene': {
+    anchor: 'scroll-scene',
+    label: 'ScrollScene',
+    extras: ['use-anime-onscroll', 'anime-scroll'],
+  },
   layout: {
     anchor: 'anime-layout',
     label: 'AnimeLayout',

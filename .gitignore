@@ -8,6 +8,8 @@ count.txt
 .nitro
 .tanstack
 .wrangler
+# Local Vercel build output from the nitro vercel preset (VERCEL=1 builds).
+.vercel
 .output
 .vinxi
 todos.json

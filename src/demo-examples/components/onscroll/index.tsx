@@ -4,6 +4,7 @@ import { ScrollScrubDemo } from './ScrollScrubDemo';
 import { ScrollCallbacksDemo } from './ScrollCallbacksDemo';
 import { ScrollSmoothSyncDemo } from './ScrollSmoothSyncDemo';
 import { ScrollHorizontalAxisDemo } from './ScrollHorizontalAxisDemo';
+import { ScrollSceneDemo } from './ScrollSceneDemo';
 
 export const OnScrollGroup = () => {
   return (
@@ -13,6 +14,7 @@ export const OnScrollGroup = () => {
       <ScrollCallbacksDemo />
       <ScrollSmoothSyncDemo />
       <ScrollHorizontalAxisDemo />
+      <ScrollSceneDemo />
     </DemoSection>
   );
 };
