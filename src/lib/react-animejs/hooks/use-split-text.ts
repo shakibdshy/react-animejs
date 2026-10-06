@@ -18,11 +18,11 @@ import type { RefObject } from "react";
 import { safeJsonStringify } from '../core';
 import { useDependencySignal } from './use-dependency-signal';
 
-export interface UseSplitTextOptions {
+export interface UseSplitTextOptions<T extends Element = Element> {
   /**
    * Ref to the target element containing text
    */
-  target: RefObject<Element | null>;
+  target: RefObject<T | null>;
 
   /**
    * Text splitter parameters
@@ -46,11 +46,11 @@ export interface UseSplitTextOptions {
   onReady?: (split: TextSplitter) => void;
 }
 
-export interface UseSplitTextReturn {
+export interface UseSplitTextReturn<T extends Element = Element> {
   /**
    * Ref to attach to the target element
    */
-  ref: RefObject<Element | null>;
+  ref: RefObject<T | null>;
 
   /**
    * The TextSplitter instance
@@ -151,9 +151,9 @@ export interface UseSplitTextReturn {
   setCharTemplate: (template: string | false | ((value?: Node | HTMLElement) => any)) => void;
 }
 
-export function useSplitText(
-  options: UseSplitTextOptions,
-): UseSplitTextReturn {
+export function useSplitText<T extends Element = Element>(
+  options: UseSplitTextOptions<T>,
+): UseSplitTextReturn<T> {
   const {
     target,
     params = { lines: true, words: true, chars: true },
@@ -315,7 +315,7 @@ export function useSplitText(
     }
   }, []);
 
-  return useMemo<UseSplitTextReturn>(
+  return useMemo<UseSplitTextReturn<T>>(
     () => ({
       ref: target,
       split: splitRef.current,

@@ -9,50 +9,40 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as McpRouteImport } from './routes/mcp'
-import { Route as DocsRouteImport } from './routes/docs'
-import { Route as DemosRouteImport } from './routes/demos'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlocksRouteImport } from './routes/blocks'
 import { Route as DemoRouteRouteImport } from './routes/demo/route'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as DemosRouteImport } from './routes/demos'
+import { Route as DocsRouteImport } from './routes/docs'
+import { Route as McpRouteImport } from './routes/mcp'
+import { Route as DemoAnimatedSliderRouteImport } from './routes/demo/animated-slider'
+import { Route as DemoCallbacksRouteImport } from './routes/demo/callbacks'
+import { Route as DemoClippathRevealRouteImport } from './routes/demo/clippath-reveal'
+import { Route as DemoCoreFeaturesRouteImport } from './routes/demo/core-features'
+import { Route as DemoCounterCountdownRouteImport } from './routes/demo/counter-countdown'
+import { Route as DemoDraggableRouteImport } from './routes/demo/draggable'
+import { Route as DemoLayoutRouteImport } from './routes/demo/layout'
+import { Route as DemoMethodsRouteImport } from './routes/demo/methods'
+import { Route as DemoOnscrollRouteImport } from './routes/demo/onscroll'
+import { Route as DemoPlaybackSettingsRouteImport } from './routes/demo/playback-settings'
+import { Route as DemoReorderListRouteImport } from './routes/demo/reorder-list'
+import { Route as DemoScopeRouteImport } from './routes/demo/scope'
+import { Route as DemoScrambleTextRouteImport } from './routes/demo/scramble-text'
+import { Route as DemoScrollLinkedAnimationsRouteImport } from './routes/demo/scroll-linked-animations'
+import { Route as DemoScrollPinRouteImport } from './routes/demo/scroll-pin'
+import { Route as DemoSpinningCubeRouteImport } from './routes/demo/spinning-cube'
+import { Route as DemoSplitTextRouteImport } from './routes/demo/split-text'
+import { Route as DemoSvgRouteImport } from './routes/demo/svg'
+import { Route as DemoSvgPathDrawRouteImport } from './routes/demo/svg-path-draw'
+import { Route as DemoTimelinesRouteImport } from './routes/demo/timelines'
+import { Route as DemoTimersRouteImport } from './routes/demo/timers'
+import { Route as DemoToggleSwitchRouteImport } from './routes/demo/toggle-switch'
 import { Route as DemosIndexRouteImport } from './routes/demos.index'
 import { Route as DemosComponentIdRouteImport } from './routes/demos.$componentId'
-import { Route as DemoToggleSwitchRouteImport } from './routes/demo/toggle-switch'
-import { Route as DemoTimersRouteImport } from './routes/demo/timers'
-import { Route as DemoTimelinesRouteImport } from './routes/demo/timelines'
-import { Route as DemoSvgPathDrawRouteImport } from './routes/demo/svg-path-draw'
-import { Route as DemoSvgRouteImport } from './routes/demo/svg'
-import { Route as DemoSplitTextRouteImport } from './routes/demo/split-text'
-import { Route as DemoSpinningCubeRouteImport } from './routes/demo/spinning-cube'
-import { Route as DemoScrollPinRouteImport } from './routes/demo/scroll-pin'
-import { Route as DemoScrollLinkedAnimationsRouteImport } from './routes/demo/scroll-linked-animations'
-import { Route as DemoScrambleTextRouteImport } from './routes/demo/scramble-text'
-import { Route as DemoScopeRouteImport } from './routes/demo/scope'
-import { Route as DemoReorderListRouteImport } from './routes/demo/reorder-list'
-import { Route as DemoPlaybackSettingsRouteImport } from './routes/demo/playback-settings'
-import { Route as DemoOnscrollRouteImport } from './routes/demo/onscroll'
-import { Route as DemoMethodsRouteImport } from './routes/demo/methods'
-import { Route as DemoLayoutRouteImport } from './routes/demo/layout'
-import { Route as DemoDraggableRouteImport } from './routes/demo/draggable'
-import { Route as DemoCounterCountdownRouteImport } from './routes/demo/counter-countdown'
-import { Route as DemoCoreFeaturesRouteImport } from './routes/demo/core-features'
-import { Route as DemoClippathRevealRouteImport } from './routes/demo/clippath-reveal'
-import { Route as DemoCallbacksRouteImport } from './routes/demo/callbacks'
-import { Route as DemoAnimatedSliderRouteImport } from './routes/demo/animated-slider'
 
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DocsRoute = DocsRouteImport.update({
-  id: '/docs',
-  path: '/docs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemosRoute = DemosRouteImport.update({
-  id: '/demos',
-  path: '/demos',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlocksRoute = BlocksRouteImport.update({
@@ -65,10 +55,131 @@ const DemoRouteRoute = DemoRouteRouteImport.update({
   path: '/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const DemosRoute = DemosRouteImport.update({
+  id: '/demos',
+  path: '/demos',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoAnimatedSliderRoute = DemoAnimatedSliderRouteImport.update({
+  id: '/animated-slider',
+  path: '/animated-slider',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoCallbacksRoute = DemoCallbacksRouteImport.update({
+  id: '/callbacks',
+  path: '/callbacks',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoClippathRevealRoute = DemoClippathRevealRouteImport.update({
+  id: '/clippath-reveal',
+  path: '/clippath-reveal',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoCoreFeaturesRoute = DemoCoreFeaturesRouteImport.update({
+  id: '/core-features',
+  path: '/core-features',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoCounterCountdownRoute = DemoCounterCountdownRouteImport.update({
+  id: '/counter-countdown',
+  path: '/counter-countdown',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoDraggableRoute = DemoDraggableRouteImport.update({
+  id: '/draggable',
+  path: '/draggable',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoLayoutRoute = DemoLayoutRouteImport.update({
+  id: '/layout',
+  path: '/layout',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoMethodsRoute = DemoMethodsRouteImport.update({
+  id: '/methods',
+  path: '/methods',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoOnscrollRoute = DemoOnscrollRouteImport.update({
+  id: '/onscroll',
+  path: '/onscroll',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoPlaybackSettingsRoute = DemoPlaybackSettingsRouteImport.update({
+  id: '/playback-settings',
+  path: '/playback-settings',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoReorderListRoute = DemoReorderListRouteImport.update({
+  id: '/reorder-list',
+  path: '/reorder-list',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoScopeRoute = DemoScopeRouteImport.update({
+  id: '/scope',
+  path: '/scope',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoScrambleTextRoute = DemoScrambleTextRouteImport.update({
+  id: '/scramble-text',
+  path: '/scramble-text',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoScrollLinkedAnimationsRoute =
+  DemoScrollLinkedAnimationsRouteImport.update({
+    id: '/scroll-linked-animations',
+    path: '/scroll-linked-animations',
+    getParentRoute: () => DemoRouteRoute,
+  } as any)
+const DemoScrollPinRoute = DemoScrollPinRouteImport.update({
+  id: '/scroll-pin',
+  path: '/scroll-pin',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoSpinningCubeRoute = DemoSpinningCubeRouteImport.update({
+  id: '/spinning-cube',
+  path: '/spinning-cube',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoSplitTextRoute = DemoSplitTextRouteImport.update({
+  id: '/split-text',
+  path: '/split-text',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoSvgRoute = DemoSvgRouteImport.update({
+  id: '/svg',
+  path: '/svg',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoSvgPathDrawRoute = DemoSvgPathDrawRouteImport.update({
+  id: '/svg-path-draw',
+  path: '/svg-path-draw',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoTimelinesRoute = DemoTimelinesRouteImport.update({
+  id: '/timelines',
+  path: '/timelines',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoTimersRoute = DemoTimersRouteImport.update({
+  id: '/timers',
+  path: '/timers',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoToggleSwitchRoute = DemoToggleSwitchRouteImport.update({
+  id: '/toggle-switch',
+  path: '/toggle-switch',
+  getParentRoute: () => DemoRouteRoute,
 } as any)
 const DemosIndexRoute = DemosIndexRouteImport.update({
   id: '/',
@@ -79,117 +190,6 @@ const DemosComponentIdRoute = DemosComponentIdRouteImport.update({
   id: '/$componentId',
   path: '/$componentId',
   getParentRoute: () => DemosRoute,
-} as any)
-const DemoToggleSwitchRoute = DemoToggleSwitchRouteImport.update({
-  id: '/toggle-switch',
-  path: '/toggle-switch',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoTimersRoute = DemoTimersRouteImport.update({
-  id: '/timers',
-  path: '/timers',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoTimelinesRoute = DemoTimelinesRouteImport.update({
-  id: '/timelines',
-  path: '/timelines',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoSvgPathDrawRoute = DemoSvgPathDrawRouteImport.update({
-  id: '/svg-path-draw',
-  path: '/svg-path-draw',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoSvgRoute = DemoSvgRouteImport.update({
-  id: '/svg',
-  path: '/svg',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoSplitTextRoute = DemoSplitTextRouteImport.update({
-  id: '/split-text',
-  path: '/split-text',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoSpinningCubeRoute = DemoSpinningCubeRouteImport.update({
-  id: '/spinning-cube',
-  path: '/spinning-cube',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoScrollPinRoute = DemoScrollPinRouteImport.update({
-  id: '/scroll-pin',
-  path: '/scroll-pin',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoScrollLinkedAnimationsRoute =
-  DemoScrollLinkedAnimationsRouteImport.update({
-    id: '/scroll-linked-animations',
-    path: '/scroll-linked-animations',
-    getParentRoute: () => DemoRouteRoute,
-  } as any)
-const DemoScrambleTextRoute = DemoScrambleTextRouteImport.update({
-  id: '/scramble-text',
-  path: '/scramble-text',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoScopeRoute = DemoScopeRouteImport.update({
-  id: '/scope',
-  path: '/scope',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoReorderListRoute = DemoReorderListRouteImport.update({
-  id: '/reorder-list',
-  path: '/reorder-list',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoPlaybackSettingsRoute = DemoPlaybackSettingsRouteImport.update({
-  id: '/playback-settings',
-  path: '/playback-settings',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoOnscrollRoute = DemoOnscrollRouteImport.update({
-  id: '/onscroll',
-  path: '/onscroll',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoMethodsRoute = DemoMethodsRouteImport.update({
-  id: '/methods',
-  path: '/methods',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoLayoutRoute = DemoLayoutRouteImport.update({
-  id: '/layout',
-  path: '/layout',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoDraggableRoute = DemoDraggableRouteImport.update({
-  id: '/draggable',
-  path: '/draggable',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoCounterCountdownRoute = DemoCounterCountdownRouteImport.update({
-  id: '/counter-countdown',
-  path: '/counter-countdown',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoCoreFeaturesRoute = DemoCoreFeaturesRouteImport.update({
-  id: '/core-features',
-  path: '/core-features',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoClippathRevealRoute = DemoClippathRevealRouteImport.update({
-  id: '/clippath-reveal',
-  path: '/clippath-reveal',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoCallbacksRoute = DemoCallbacksRouteImport.update({
-  id: '/callbacks',
-  path: '/callbacks',
-  getParentRoute: () => DemoRouteRoute,
-} as any)
-const DemoAnimatedSliderRoute = DemoAnimatedSliderRouteImport.update({
-  id: '/animated-slider',
-  path: '/animated-slider',
-  getParentRoute: () => DemoRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -397,25 +397,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/docs': {
-      id: '/docs'
-      path: '/docs'
-      fullPath: '/docs'
-      preLoaderRoute: typeof DocsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demos': {
-      id: '/demos'
-      path: '/demos'
-      fullPath: '/demos'
-      preLoaderRoute: typeof DemosRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blocks': {
@@ -432,12 +418,180 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/demos': {
+      id: '/demos'
+      path: '/demos'
+      fullPath: '/demos'
+      preLoaderRoute: typeof DemosRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/animated-slider': {
+      id: '/demo/animated-slider'
+      path: '/animated-slider'
+      fullPath: '/demo/animated-slider'
+      preLoaderRoute: typeof DemoAnimatedSliderRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/callbacks': {
+      id: '/demo/callbacks'
+      path: '/callbacks'
+      fullPath: '/demo/callbacks'
+      preLoaderRoute: typeof DemoCallbacksRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/clippath-reveal': {
+      id: '/demo/clippath-reveal'
+      path: '/clippath-reveal'
+      fullPath: '/demo/clippath-reveal'
+      preLoaderRoute: typeof DemoClippathRevealRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/core-features': {
+      id: '/demo/core-features'
+      path: '/core-features'
+      fullPath: '/demo/core-features'
+      preLoaderRoute: typeof DemoCoreFeaturesRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/counter-countdown': {
+      id: '/demo/counter-countdown'
+      path: '/counter-countdown'
+      fullPath: '/demo/counter-countdown'
+      preLoaderRoute: typeof DemoCounterCountdownRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/draggable': {
+      id: '/demo/draggable'
+      path: '/draggable'
+      fullPath: '/demo/draggable'
+      preLoaderRoute: typeof DemoDraggableRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/layout': {
+      id: '/demo/layout'
+      path: '/layout'
+      fullPath: '/demo/layout'
+      preLoaderRoute: typeof DemoLayoutRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/methods': {
+      id: '/demo/methods'
+      path: '/methods'
+      fullPath: '/demo/methods'
+      preLoaderRoute: typeof DemoMethodsRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/onscroll': {
+      id: '/demo/onscroll'
+      path: '/onscroll'
+      fullPath: '/demo/onscroll'
+      preLoaderRoute: typeof DemoOnscrollRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/playback-settings': {
+      id: '/demo/playback-settings'
+      path: '/playback-settings'
+      fullPath: '/demo/playback-settings'
+      preLoaderRoute: typeof DemoPlaybackSettingsRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/reorder-list': {
+      id: '/demo/reorder-list'
+      path: '/reorder-list'
+      fullPath: '/demo/reorder-list'
+      preLoaderRoute: typeof DemoReorderListRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/scope': {
+      id: '/demo/scope'
+      path: '/scope'
+      fullPath: '/demo/scope'
+      preLoaderRoute: typeof DemoScopeRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/scramble-text': {
+      id: '/demo/scramble-text'
+      path: '/scramble-text'
+      fullPath: '/demo/scramble-text'
+      preLoaderRoute: typeof DemoScrambleTextRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/scroll-linked-animations': {
+      id: '/demo/scroll-linked-animations'
+      path: '/scroll-linked-animations'
+      fullPath: '/demo/scroll-linked-animations'
+      preLoaderRoute: typeof DemoScrollLinkedAnimationsRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/scroll-pin': {
+      id: '/demo/scroll-pin'
+      path: '/scroll-pin'
+      fullPath: '/demo/scroll-pin'
+      preLoaderRoute: typeof DemoScrollPinRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/spinning-cube': {
+      id: '/demo/spinning-cube'
+      path: '/spinning-cube'
+      fullPath: '/demo/spinning-cube'
+      preLoaderRoute: typeof DemoSpinningCubeRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/split-text': {
+      id: '/demo/split-text'
+      path: '/split-text'
+      fullPath: '/demo/split-text'
+      preLoaderRoute: typeof DemoSplitTextRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/svg': {
+      id: '/demo/svg'
+      path: '/svg'
+      fullPath: '/demo/svg'
+      preLoaderRoute: typeof DemoSvgRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/svg-path-draw': {
+      id: '/demo/svg-path-draw'
+      path: '/svg-path-draw'
+      fullPath: '/demo/svg-path-draw'
+      preLoaderRoute: typeof DemoSvgPathDrawRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/timelines': {
+      id: '/demo/timelines'
+      path: '/timelines'
+      fullPath: '/demo/timelines'
+      preLoaderRoute: typeof DemoTimelinesRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/timers': {
+      id: '/demo/timers'
+      path: '/timers'
+      fullPath: '/demo/timers'
+      preLoaderRoute: typeof DemoTimersRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/toggle-switch': {
+      id: '/demo/toggle-switch'
+      path: '/toggle-switch'
+      fullPath: '/demo/toggle-switch'
+      preLoaderRoute: typeof DemoToggleSwitchRouteImport
+      parentRoute: typeof DemoRouteRoute
     }
     '/demos/': {
       id: '/demos/'
@@ -452,160 +606,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/demos/$componentId'
       preLoaderRoute: typeof DemosComponentIdRouteImport
       parentRoute: typeof DemosRoute
-    }
-    '/demo/toggle-switch': {
-      id: '/demo/toggle-switch'
-      path: '/toggle-switch'
-      fullPath: '/demo/toggle-switch'
-      preLoaderRoute: typeof DemoToggleSwitchRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/timers': {
-      id: '/demo/timers'
-      path: '/timers'
-      fullPath: '/demo/timers'
-      preLoaderRoute: typeof DemoTimersRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/timelines': {
-      id: '/demo/timelines'
-      path: '/timelines'
-      fullPath: '/demo/timelines'
-      preLoaderRoute: typeof DemoTimelinesRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/svg-path-draw': {
-      id: '/demo/svg-path-draw'
-      path: '/svg-path-draw'
-      fullPath: '/demo/svg-path-draw'
-      preLoaderRoute: typeof DemoSvgPathDrawRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/svg': {
-      id: '/demo/svg'
-      path: '/svg'
-      fullPath: '/demo/svg'
-      preLoaderRoute: typeof DemoSvgRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/split-text': {
-      id: '/demo/split-text'
-      path: '/split-text'
-      fullPath: '/demo/split-text'
-      preLoaderRoute: typeof DemoSplitTextRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/spinning-cube': {
-      id: '/demo/spinning-cube'
-      path: '/spinning-cube'
-      fullPath: '/demo/spinning-cube'
-      preLoaderRoute: typeof DemoSpinningCubeRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/scroll-pin': {
-      id: '/demo/scroll-pin'
-      path: '/scroll-pin'
-      fullPath: '/demo/scroll-pin'
-      preLoaderRoute: typeof DemoScrollPinRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/scroll-linked-animations': {
-      id: '/demo/scroll-linked-animations'
-      path: '/scroll-linked-animations'
-      fullPath: '/demo/scroll-linked-animations'
-      preLoaderRoute: typeof DemoScrollLinkedAnimationsRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/scramble-text': {
-      id: '/demo/scramble-text'
-      path: '/scramble-text'
-      fullPath: '/demo/scramble-text'
-      preLoaderRoute: typeof DemoScrambleTextRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/scope': {
-      id: '/demo/scope'
-      path: '/scope'
-      fullPath: '/demo/scope'
-      preLoaderRoute: typeof DemoScopeRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/reorder-list': {
-      id: '/demo/reorder-list'
-      path: '/reorder-list'
-      fullPath: '/demo/reorder-list'
-      preLoaderRoute: typeof DemoReorderListRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/playback-settings': {
-      id: '/demo/playback-settings'
-      path: '/playback-settings'
-      fullPath: '/demo/playback-settings'
-      preLoaderRoute: typeof DemoPlaybackSettingsRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/onscroll': {
-      id: '/demo/onscroll'
-      path: '/onscroll'
-      fullPath: '/demo/onscroll'
-      preLoaderRoute: typeof DemoOnscrollRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/methods': {
-      id: '/demo/methods'
-      path: '/methods'
-      fullPath: '/demo/methods'
-      preLoaderRoute: typeof DemoMethodsRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/layout': {
-      id: '/demo/layout'
-      path: '/layout'
-      fullPath: '/demo/layout'
-      preLoaderRoute: typeof DemoLayoutRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/draggable': {
-      id: '/demo/draggable'
-      path: '/draggable'
-      fullPath: '/demo/draggable'
-      preLoaderRoute: typeof DemoDraggableRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/counter-countdown': {
-      id: '/demo/counter-countdown'
-      path: '/counter-countdown'
-      fullPath: '/demo/counter-countdown'
-      preLoaderRoute: typeof DemoCounterCountdownRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/core-features': {
-      id: '/demo/core-features'
-      path: '/core-features'
-      fullPath: '/demo/core-features'
-      preLoaderRoute: typeof DemoCoreFeaturesRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/clippath-reveal': {
-      id: '/demo/clippath-reveal'
-      path: '/clippath-reveal'
-      fullPath: '/demo/clippath-reveal'
-      preLoaderRoute: typeof DemoClippathRevealRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/callbacks': {
-      id: '/demo/callbacks'
-      path: '/callbacks'
-      fullPath: '/demo/callbacks'
-      preLoaderRoute: typeof DemoCallbacksRouteImport
-      parentRoute: typeof DemoRouteRoute
-    }
-    '/demo/animated-slider': {
-      id: '/demo/animated-slider'
-      path: '/animated-slider'
-      fullPath: '/demo/animated-slider'
-      preLoaderRoute: typeof DemoAnimatedSliderRouteImport
-      parentRoute: typeof DemoRouteRoute
     }
   }
 }

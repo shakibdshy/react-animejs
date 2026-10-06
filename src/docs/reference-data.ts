@@ -350,26 +350,35 @@ export const hookReferences: ReferenceEntry[] = [
   {
     id: 'use-split-text',
     name: 'useSplitText',
-    signature: 'useSplitText(options?: UseSplitTextOptions)',
+    signature: 'useSplitText(options: UseSplitTextOptions)',
     description:
       'Splits a text target into characters, words, or lines and gives you the Anime.js TextSplitter plus safe lifecycle methods.',
-    usage: `import { useSplitText } ${localImport}\n\nconst split = useSplitText({\n  chars: true,\n})`,
-    example: `const { ref, split, isReady } = useSplitText({\n  chars: true,\n  words: true,\n})\n\nuseEffect(() => {\n  if (isReady) {\n    animate(split.current?.chars, {\n      opacity: [0, 1],\n    })\n  }\n}, [isReady])\n\nreturn <h1 ref={ref}>Hello</h1>`,
+    usage: `import { useSplitText } ${localImport}\n\nconst target = useRef<HTMLHeadingElement>(null)\n\nconst { split, isReady } = useSplitText({\n  target,\n  params: { chars: true },\n})`,
+    example: `useEffect(() => {\n  if (isReady && split) {\n    animate(split.chars, {\n      opacity: [0, 1],\n    })\n  }\n}, [isReady, split])\n\nreturn <h1 ref={target}>Hello</h1>`,
     properties: [
       {
-        name: 'options?',
-        type: 'UseSplitTextOptions',
-        description: 'Text splitter parameters plus deps and enabled.',
+        name: 'target',
+        type: 'RefObject<Element | null>',
+        description:
+          'Ref to the element to split. Create it yourself and attach it to your element — the hook returns the same ref.',
       },
       {
-        name: 'chars? / words? / lines?',
-        type: 'boolean',
-        description: 'Selects which text units the splitter creates.',
+        name: 'params?',
+        type: 'TextSplitterParams',
+        description:
+          'Anime.js splitter options — chars / words / lines, templates, accessible, debug. Defaults to splitting all three.',
+      },
+      {
+        name: 'splitOnMount? / deps? / onReady?',
+        type: 'boolean / unknown[] / (split) => void',
+        description:
+          'Split on mount (default true), re-split when these dependencies change, or run a callback when the split is ready.',
       },
       {
         name: 'returns',
         type: 'UseSplitTextReturn',
-        description: 'ref, splitter ref, split/revert/refresh methods, and isReady.',
+        description:
+          'ref, the TextSplitter instance (split — read split.chars / split.words / split.lines directly, there is no .current), split/revert/refresh/setHtml/addEffect methods, and isReady.',
       },
     ],
   },
