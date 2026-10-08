@@ -366,6 +366,7 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
   const jarRef = useRef<HTMLDivElement>(null);
   const streamRef = useRef<HTMLDivElement>(null);
   const insideRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
   const buyRef = useRef<HTMLDivElement>(null);
   const buyMidRef = useRef<HTMLDivElement>(null);
   const bagRef = useRef<HTMLButtonElement>(null);
@@ -451,6 +452,9 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
         const rise = smooth(seg(p, 0.86, 0.97));
         inside.style.transform = `translate3d(0, ${(1 - rise) * 105}%, 0)`;
       }
+
+      // Scrub position rail.
+      if (barRef.current) barRef.current.style.width = `${clamp(p, 0, 1) * 100}%`;
 
       // Replay the hero cascade when the scene returns to its start.
       if (heroReadyRef.current && lastPRef.current > 0.06 && p <= 0.02) {
@@ -623,28 +627,15 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
           pointer-events: none;
         }
 
-        /* The stage's scrollbar, dressed for the brand: a slim gold thumb on
-           a transparent track. The browser default is a white 17px strip
-           that breaks the poster's full-bleed canvas. */
+        /* The stage's native scrollbar is hidden — its placement varies by
+           platform and never sits right on the poster. Scrub position is
+           shown by the gold progress rail along the stage's bottom edge
+           instead (same affordance as the other scrubbed blocks). */
         .ht-scroll {
-          scrollbar-width: thin;
-          scrollbar-color: rgba(250, 174, 51, 0.4) transparent;
+          scrollbar-width: none;
         }
         .ht-scroll::-webkit-scrollbar {
-          width: 8px;
-        }
-        .ht-scroll::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .ht-scroll::-webkit-scrollbar-thumb {
-          background: rgba(250, 174, 51, 0.35);
-          border-radius: 999px;
-          border: 2px solid transparent;
-          background-clip: padding-box;
-        }
-        .ht-scroll::-webkit-scrollbar-thumb:hover {
-          background: rgba(250, 174, 51, 0.6);
-          background-clip: padding-box;
+          display: none;
         }
 
         /* Focus is a border-colour shift only — the brand has no focus ring. */
@@ -830,6 +821,20 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
                     willChange: 'transform, opacity',
                   }}
                 />
+
+                {/* Scrub progress rail — replaces the native scrollbar as the
+                    position affordance, along the stage's bottom edge. */}
+                <div
+                  className="pointer-events-none absolute inset-x-0 bottom-0 z-30 h-[3px]"
+                  style={{ background: "rgba(250, 174, 51, 0.18)" }}
+                  aria-hidden="true"
+                >
+                  <div
+                    ref={barRef}
+                    className="h-full"
+                    style={{ width: "0%", background: PALETTE.gold }}
+                  />
+                </div>
 
                 {/* The jar — pinned center stage, above every band. */}
                 <div
