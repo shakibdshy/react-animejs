@@ -21,7 +21,9 @@ mcp-todos.json
 .playwright-mcp
 .vscode
 .zcode
-/docs
+/docs/*
+!/docs/agents/
+!/docs/adr/
 # Local pnpm override that links the sibling react-animejs-package for dev.
 # Kept out of git so it doesn't impose a directory layout on other contributors.
 pnpm-workspace.yaml
