@@ -623,6 +623,30 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
           pointer-events: none;
         }
 
+        /* The stage's scrollbar, dressed for the brand: a slim gold thumb on
+           a transparent track. The browser default is a white 17px strip
+           that breaks the poster's full-bleed canvas. */
+        .ht-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(250, 174, 51, 0.4) transparent;
+        }
+        .ht-scroll::-webkit-scrollbar {
+          width: 8px;
+        }
+        .ht-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .ht-scroll::-webkit-scrollbar-thumb {
+          background: rgba(250, 174, 51, 0.35);
+          border-radius: 999px;
+          border: 2px solid transparent;
+          background-clip: padding-box;
+        }
+        .ht-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(250, 174, 51, 0.6);
+          background-clip: padding-box;
+        }
+
         /* Focus is a border-colour shift only — the brand has no focus ring. */
         .ht-input {
           border: 1px solid var(--ht-cardamom);
@@ -661,7 +685,7 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
             tabIndex={0}
             role="region"
             aria-label="Hungry Tiger brand landing page"
-            className="relative w-full overflow-y-auto overscroll-contain"
+            className="ht-scroll relative w-full overflow-y-auto overscroll-contain"
             style={{ height: STAGE_HEIGHT }}
           >
             {/* Six stage-heights of track → five of scrub travel. */}
