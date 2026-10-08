@@ -676,22 +676,26 @@ export const BlocksPage = memo(function BlocksPage() {
             <section className="mb-16">
               <SectionHeader
                 title="Hungry Tiger Landing · Poster Page"
-                chip="SplitText + IntersectionObserver"
+                chip="SplitText + ScrollScene + Anime"
                 codeKey="hungry-tiger"
                 onViewCode={openCode}
               />
               <p className="text-sm text-landing-muted max-w-2xl mb-5">
                 A complete brand landing page built as one self-contained block: oversized condensed
                 type on a rust canvas, pill controls, dotted rules between bands, and the product
-                sitting raw with no frame. <code className="landing-font-mono text-landing-accent">SplitText</code>{' '}
-                plus <code className="landing-font-mono text-landing-accent">animate()</code> and{' '}
-                <code className="landing-font-mono text-landing-accent">stagger()</code> cascade the hero
-                headline in per character, replaying whenever the stage returns to the top; a{' '}
-                <code className="landing-font-mono">IntersectionObserver</code> rooted in the stage
-                reveals each band on scroll; and clicking{' '}
-                <code className="landing-font-mono text-landing-accent">BUY NOW</code> arcs the jar into
-                the docked bag on <code className="landing-font-mono">&lt;Anime&gt;</code> keyframes. The
-                palette is scoped to the block, so the site theme toggle cannot reach it.
+                pinned center-stage.{' '}
+                <code className="landing-font-mono text-landing-accent">ScrollScene</code> scrubs the
+                choreography from one progress value — the jar tumbles through four display bands,
+                settles for the ingredient line, then tips and pours into the WHAT&apos;S INSIDE
+                split panel.{' '}
+                <code className="landing-font-mono text-landing-accent">SplitText</code> plus{' '}
+                <code className="landing-font-mono text-landing-accent">animate()</code> and{' '}
+                <code className="landing-font-mono text-landing-accent">stagger()</code> cascade the
+                hero headline in per character, replaying at the scene&apos;s start; clicking{' '}
+                <code className="landing-font-mono text-landing-accent">BUY NOW</code> — in the hero
+                or mid-page — arcs the jar into the docked bag on{' '}
+                <code className="landing-font-mono">&lt;Anime&gt;</code> keyframes. The palette is
+                scoped to the block, so the site theme toggle cannot reach it.
               </p>
               <ErrorBoundary>
                 <HungryTigerLanding />

@@ -1,24 +1,33 @@
 /**
  * HungryTigerLanding — a complete brand landing page rendered inside the
- * blocks gallery, and a study in applying one primitive's choreography to an
- * entire page rather than a single effect.
+ * blocks gallery, ported from the reference Hungry Tiger scroll film: one
+ * product pinned center-stage while display bands scrub past it, the jar
+ * tumbling through each cut, settling for the ingredient line, then tipping
+ * to pour into the WHAT'S INSIDE split panel.
  *
- * The page is a full-viewport poster in miniature: oversized condensed display
- * type on a rust canvas, pill-shaped controls, dotted rules between bands, and
- * the product sitting raw on the canvas with no frame. Structure follows the
- * other nested-scroll blocks — a bounded `min(74vh, 640px)` scroller with
- * `overscroll-contain` — so it reads as a sibling of the existing set.
+ * Structure is the gallery's nested-scroll idiom — a bounded
+ * `min(74vh, 640px)` scroller with `overscroll-contain`, inside which a
+ * `ScrollScene` observes a six-stage track holding a sticky stage. Progress
+ * routes through `onFrame` only: per-frame writes straight to
+ * `style.transform` / `style.opacity`, no React re-render (the same
+ * data-table evaluation the other scrubbed blocks use). `scrub` is bare —
+ * direct 1:1 like the film's scroll linkage; the jar has no lag to hide.
  *
  * Driven entirely by react-animejs:
- *   - `SplitText` + `animate()` + `stagger()` cascade the hero headline in per
- *     character, and replay whenever the stage scrolls back to the top
- *   - `IntersectionObserver` rooted in the stage reveals each band on scroll
- *   - `<Anime>` keyframes arc the jar into the bag button on `BUY NOW`
+ *   - `ScrollScene` + `scrub` drives the whole choreography from one progress
+ *     value: hero lift-away, four display bands, the sauce pour, and the
+ *     split panel rise
+ *   - `SplitText` + `animate()` + `stagger()` cascade the hero headline in
+ *     per character, replaying whenever the scene returns to its start
+ *   - `<Anime>` keyframes arc the jar into the bag button from either
+ *     `BUY NOW` (hero or mid-page)
+ *   - `IntersectionObserver` rooted in the stage still reveals the email
+ *     capture and footer, which scroll in normally after the scene ends
  *
  * Two deliberate departures from the gallery's own conventions:
- *   - The palette is scoped to this block via `--ht-*` custom properties so the
- *     site theme toggle cannot reach it. Nothing is added to the global token
- *     layer.
+ *   - The palette is scoped to this block via `--ht-*` custom properties so
+ *     the site theme toggle cannot reach it. The split panel's pink is lifted
+ *     from the reference film's WHAT'S INSIDE band and scoped here too.
  *   - Display type is scaled down (195px -> 120px) to fit the stage-height
  *     convention. Small UI sizes stay at 11-18px, where the brand spec's
  *     legibility floor lives.
@@ -29,16 +38,21 @@ import {
   type ReactNode,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
 import {
   animate,
   Anime,
+  ScrollScene,
   SplitText,
   type SplitTextRef,
   stagger,
+  utils,
 } from '@shakibdshy/react-animejs';
+
+const { clamp, lerp } = utils;
 
 /* ------------------------------------------------------------------ *
  * Brand tokens
@@ -54,39 +68,62 @@ const PALETTE = {
   clove: '#281006',
   cardamom: '#6b2e12',
   chili: '#d1255c',
+  /** The reference film's WHAT'S INSIDE panel — warm-leaning pink. */
+  blossom: '#e0517f',
 } as const;
 
 const STAGE_HEIGHT = 'min(74vh, 640px)';
+/** Six stage-heights of track → five stage-heights of scrub travel. */
+const TRACK_HEIGHT = `calc(${STAGE_HEIGHT} * 6)`;
 
 const HERO_TITLE = 'BOLD FLAVOR';
 const HERO_EYEBROW = 'FIRE ROASTED INDIAN SAUCE';
 
+/* ------------------------------------------------------------------ *
+ * Choreography tables
+ *
+ * One progress value p ∈ [0, 1] across the track. Bands open and close on
+ * windows; the jar pose interpolates between keys. All evaluation happens
+ * per frame in `applyFrame`.
+ * ------------------------------------------------------------------ */
+
+/** Normalised window [a, b] → eased 0..1. */
+const seg = (p: number, a: number, b: number) => clamp((p - a) / (b - a), 0, 1);
+/** Smoothstep — the scrub's default easing for band moves. */
+const smooth = (t: number) => t * t * (3 - 2 * t);
+
 /**
- * Bands of the page. `flip` mirrors the two-column composition so consecutive
- * sections alternate which side the headline occupies.
+ * The jar's pose, one key per cut. `rz` accumulates monotonically so the
+ * tumble never snaps back on reverse; `ry` stays a shallow wobble — a full
+ * Y flip would pass edge-on and blink the flat SVG out of sight.
  */
-const PRODUCT_BANDS = [
-  {
-    key: 'angle',
-    eyebrow: 'The blend',
-    headline: 'A NEW ANGLE OF FLAVOR',
-    caption:
-      'DISCOVER HOW OUR CREAMY TOMATO BLEND AND AUTHENTIC SPICES ELEVATE EVERY MEAL',
-    badges: [{ label: 'Creamy tomato', tone: 'primary' }, { label: 'Medium heat', tone: 'secondary' }],
-    heat: 'HEAT 02',
-    flavour: 'tomato',
-  },
-  {
-    key: 'tandoor',
-    eyebrow: 'The method',
-    headline: 'ROASTED IN THE TANDOOR',
-    caption:
-      'CHARCOAL, CLAY AND TIME. EVERY JAR IS FIRE-ROASTED TO A DEEP, UNEVEN CHAR',
-    badges: [{ label: 'Tandoor fire', tone: 'primary' }, { label: 'Slow roasted', tone: 'secondary' }],
-    heat: 'HEAT 03',
-    flavour: 'char',
-  },
-] as const;
+type JarPose = { at: number; rz: number; ry: number; x: number; y: number; s: number };
+const JAR_KEYS: JarPose[] = [
+  { at: 0.0, rz: 0, ry: 0, x: 0, y: 85, s: 0.94 },
+  { at: 0.14, rz: 0, ry: 6, x: 0, y: 85, s: 1.0 },
+  { at: 0.3, rz: -360, ry: -10, x: 26, y: -12, s: 1.1 },
+  { at: 0.46, rz: -720, ry: 12, x: -26, y: 4, s: 1.16 },
+  { at: 0.62, rz: -810, ry: -8, x: -70, y: -16, s: 1.02 },
+  { at: 0.78, rz: -1080, ry: 10, x: 50, y: 30, s: 1.08 },
+  { at: 0.9, rz: -1230, ry: -6, x: -8, y: 85, s: 0.9 },
+  { at: 1.0, rz: -1230, ry: -6, x: -8, y: 88, s: 0.9 },
+];
+
+function poseAt(p: number): JarPose {
+  let i = 0;
+  while (i < JAR_KEYS.length - 2 && p > JAR_KEYS[i + 1].at) i++;
+  const a = JAR_KEYS[i];
+  const b = JAR_KEYS[i + 1];
+  const t = smooth(seg(p, a.at, b.at));
+  return {
+    at: p,
+    rz: lerp(a.rz, b.rz, t),
+    ry: lerp(a.ry, b.ry, t),
+    x: lerp(a.x, b.x, t),
+    y: lerp(a.y, b.y, t),
+    s: lerp(a.s, b.s, t),
+  };
+}
 
 /* ------------------------------------------------------------------ *
  * Presentational atoms
@@ -136,35 +173,6 @@ function FilledButton({
 }
 
 type Flavour = 'tomato' | 'char';
-
-type BadgeTone = 'primary' | 'secondary' | 'alert';
-
-/** Badge fills. Never white — the palette is warm-only by rule. */
-const TONE_STYLE: Record<BadgeTone, CSSProperties> = {
-  primary: {
-    background: PALETTE.gold,
-    color: PALETTE.clove,
-    border: `1px solid ${PALETTE.gold}`,
-  },
-  alert: {
-    background: PALETTE.chili,
-    color: PALETTE.clove,
-    border: `1px solid ${PALETTE.chili}`,
-  },
-  secondary: {
-    background: PALETTE.spice,
-    color: PALETTE.gold,
-    border: `1px solid ${PALETTE.cardamom}`,
-  },
-};
-
-function Badge({ label, tone }: { label: string; tone: BadgeTone }) {
-  return (
-    <span className="ht-label rounded-full px-3 py-1.5" style={TONE_STYLE[tone]}>
-      {label}
-    </span>
-  );
-}
 
 /**
  * The product. Inline vector art sitting directly on the canvas — the brand's
@@ -255,7 +263,9 @@ function BotanicalWatermark({ seed, style }: { seed: number; style: CSSPropertie
   );
 }
 
-/** A single flying jar, animated along a three-keyframe arc. */
+/**
+ * A single flying jar, animated along a three-keyframe arc.
+ */
 const FlyingJar = memo(function FlyingJar({
   from,
   to,
@@ -309,6 +319,35 @@ const FlyingJar = memo(function FlyingJar({
   );
 });
 
+/** Ingredient chip — one of the three circular icons from the reference. */
+function IngredientChip({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <span
+      className="flex h-11 w-11 items-center justify-center rounded-full"
+      style={{ border: `1px solid ${PALETTE.gold}`, color: PALETTE.gold }}
+      role="img"
+      aria-label={label}
+    >
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+        {children}
+      </svg>
+    </span>
+  );
+}
+
+/** Leaf veining laid over the veined headline — pure chrome, hidden from AT. */
+function VeinOverlay() {
+  return (
+    <svg viewBox="0 0 120 60" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M14 2c10 16 10 34 0 52C4 36 4 18 14 2Z" fill={PALETTE.rust} />
+      <path d="M52 4c10 16 10 34 0 52-10-16-10-34 0-52Z" fill={PALETTE.rust} />
+      <path d="M92 2c10 16 10 34 0 52-10-16-10-34 0-52Z" fill={PALETTE.rust} />
+      <path d="M0 30c22-8 44-5 60 8-18 8-42 6-60-8Z" fill={PALETTE.rust} />
+      <path d="M120 26c-22-8-44-5-60 8 18 8 42 6 60-8Z" fill={PALETTE.rust} />
+    </svg>
+  );
+}
+
 /* ------------------------------------------------------------------ *
  * Page
  * ------------------------------------------------------------------ */
@@ -318,11 +357,21 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
 }: {
   className?: string;
 }) {
-  const stageRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const heroLayerRef = useRef<HTMLDivElement>(null);
+  const angleRef = useRef<HTMLDivElement>(null);
+  const unwrapRef = useRef<HTMLDivElement>(null);
+  const crackRef = useRef<HTMLDivElement>(null);
+  const perspectiveRef = useRef<HTMLDivElement>(null);
+  const jarRef = useRef<HTMLDivElement>(null);
+  const streamRef = useRef<HTMLDivElement>(null);
+  const insideRef = useRef<HTMLDivElement>(null);
   const buyRef = useRef<HTMLDivElement>(null);
+  const buyMidRef = useRef<HTMLDivElement>(null);
   const bagRef = useRef<HTMLButtonElement>(null);
   const heroSplitRef = useRef<SplitTextRef>(null);
   const heroReadyRef = useRef(false);
+  const lastPRef = useRef(0);
 
   const [cartCount, setCartCount] = useState(0);
   const [pulseKey, setPulseKey] = useState(0);
@@ -332,7 +381,7 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
   >([]);
   const flyerIdRef = useRef(0);
 
-  /** Per-character cascade, replayed on demand (see the scroll listener). */
+  /** Per-character cascade, replayed on demand (see `applyFrame`). */
   const playHeroEntrance = useCallback(() => {
     const chars = (heroSplitRef.current?.split?.chars as HTMLElement[]) ?? [];
     if (chars.length === 0) return;
@@ -350,32 +399,77 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
     playHeroEntrance();
   }, [playHeroEntrance]);
 
-  // Replay the hero cascade whenever the stage returns to the top, so a reader
-  // who scrolled past it can see it again without a control bar.
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
-    let wasScrolled = false;
-    const onScroll = () => {
-      const atTop = stage.scrollTop <= 4;
-      if (!atTop) {
-        wasScrolled = true;
-        return;
+  /**
+   * The whole choreography, evaluated from one progress value. Every write
+   * lands directly on `style` — no React state on this path (ADR-0002).
+   */
+  const applyFrame = useCallback(
+    (p: number) => {
+      // Hero lifts away like the reference's opening cut.
+      const hero = heroLayerRef.current;
+      if (hero) {
+        const out = smooth(seg(p, 0.02, 0.14));
+        hero.style.transform = `translate3d(0, ${-out * 62}%, 0)`;
+        hero.style.opacity = `${1 - seg(p, 0.05, 0.14)}`;
+        hero.style.pointerEvents = p < 0.05 ? 'auto' : 'none';
       }
-      if (wasScrolled && heroReadyRef.current) {
-        wasScrolled = false;
+
+      // Display bands: rise in, drift up and out. Inert unless visible.
+      const bands: [HTMLDivElement | null, number, number, number, number][] = [
+        // [el, in-start, in-end, out-start, out-end]
+        [angleRef.current, 0.12, 0.2, 0.26, 0.32],
+        [unwrapRef.current, 0.3, 0.38, 0.44, 0.5],
+        [crackRef.current, 0.48, 0.56, 0.6, 0.66],
+        [perspectiveRef.current, 0.62, 0.7, 0.74, 0.8],
+      ];
+      for (const [el, a, b, c, d] of bands) {
+        if (!el) continue;
+        const rise = smooth(seg(p, a, b));
+        const fall = smooth(seg(p, c, d));
+        const vis = Math.min(rise, 1 - fall);
+        el.style.opacity = `${vis}`;
+        el.style.transform = `translate3d(0, ${(1 - rise) * 70 - fall * 70}px, 0)`;
+        el.style.pointerEvents = vis > 0.5 ? 'auto' : 'none';
+      }
+
+      // The jar's tumble, one pose table.
+      const jar = jarRef.current;
+      if (jar) {
+        const { rz, ry, x, y, s } = poseAt(p);
+        jar.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${y}px, 0) rotate(${rz}deg) rotateY(${ry}deg) scale(${s})`;
+      }
+
+      // The pour: jar tips, sauce streams, then the split panel rises over it.
+      const stream = streamRef.current;
+      if (stream) {
+        const pour = smooth(seg(p, 0.78, 0.86));
+        stream.style.transform = `scaleY(${pour})`;
+        stream.style.opacity = `${seg(p, 0.77, 0.8)}`;
+      }
+      const inside = insideRef.current;
+      if (inside) {
+        const rise = smooth(seg(p, 0.86, 0.97));
+        inside.style.transform = `translate3d(0, ${(1 - rise) * 105}%, 0)`;
+      }
+
+      // Replay the hero cascade when the scene returns to its start.
+      if (heroReadyRef.current && lastPRef.current > 0.06 && p <= 0.02) {
         playHeroEntrance();
       }
-    };
-    stage.addEventListener('scroll', onScroll, { passive: true });
-    return () => stage.removeEventListener('scroll', onScroll);
-  }, [playHeroEntrance]);
+      lastPRef.current = p;
+    },
+    [playHeroEntrance],
+  );
 
-  // Reveal each band the first time it enters the stage. Rooted in the stage so
-  // only this block's scroll drives it, not the page.
+  // Initial pose before the first scroll frame lands (SSR-safe).
+  useLayoutEffect(() => {
+    applyFrame(0);
+  }, [applyFrame]);
+
+  // Reveal the post-scene bands (email capture, footer) the first time they
+  // enter the viewport. They scroll with the page below the stage, so the
+  // observer roots at the viewport.
   useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -385,22 +479,21 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
           observer.unobserve(entry.target);
         }
       },
-      { root: stage, threshold: 0.25 },
+      { threshold: 0.25 },
     );
-    stage.querySelectorAll('[data-band]').forEach((el) => observer.observe(el));
+    document.querySelectorAll('[data-band]').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
-  const handleBuy = useCallback(() => {
-    const hero = buyRef.current;
+  const handleBuy = useCallback((source: HTMLDivElement | null) => {
     const bag = bagRef.current;
-    if (!hero || !bag) return;
+    if (!source || !bag) return;
 
-    const heroRect = hero.getBoundingClientRect();
+    const sourceRect = source.getBoundingClientRect();
     const bagRect = bag.getBoundingClientRect();
     const from = {
-      x: heroRect.left + heroRect.width / 2,
-      y: heroRect.top + heroRect.height / 2,
+      x: sourceRect.left + sourceRect.width / 2,
+      y: sourceRect.top + sourceRect.height / 2,
     };
     const to = { x: bagRect.left + bagRect.width / 2, y: bagRect.top + bagRect.height / 2 };
 
@@ -443,7 +536,6 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
           background: var(--ht-rust);
           font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
         }
-
 
         /* One shared display face; each size overrides only the three
            metrics the brand couples to type size. */
@@ -511,6 +603,26 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
           color: var(--ht-gold);
         }
 
+        /* The reference's UNWRAP THE ADVENTURE headline carries a leaf-veined
+           fill. background-clip:text proved fragile inside the embedded
+           style tag, so the veining is a watermark layered over solid type. */
+        .ht-veined {
+          position: relative;
+        }
+        .ht-veined > svg {
+          position: absolute;
+          inset: -8% -4%;
+          width: 108%;
+          height: 116%;
+          opacity: 0.32;
+        }
+
+        /* Scrubbed bands are inert chrome — only their live buttons accept
+           pointers, toggled per frame. */
+        [data-ht-band] {
+          pointer-events: none;
+        }
+
         /* Focus is a border-colour shift only — the brand has no focus ring. */
         .ht-input {
           border: 1px solid var(--ht-cardamom);
@@ -520,7 +632,7 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
           border-color: var(--ht-gold);
         }
 
-        /* Reveal bands on scroll — no elevation, no shadow, colour shift only. */
+        /* Reveal the post-scene bands on scroll — colour shift only. */
         .ht-band [data-reveal] {
           opacity: 0;
           transform: translateY(26px);
@@ -532,119 +644,218 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
         }
       `}</style>
 
-      {/* Scroll box — the self-contained scroller. */}
-      <div
-        ref={stageRef}
-        tabIndex={0}
-        role="region"
-        aria-label="Hungry Tiger brand landing page"
-        className="relative w-full overflow-y-auto overscroll-contain"
-        style={{ height: STAGE_HEIGHT }}
+      {/* The scene owns the scroll box: container = the scroller, target =
+          the six-stage track, sticky stage pinned within it. */}
+      <ScrollScene<HTMLDivElement, HTMLDivElement>
+        enter={{ target: 'top', container: 'top' }}
+        leave={{ target: 'bottom', container: 'bottom' }}
+        scrub
+        onFrame={applyFrame}
       >
-        {/* Nav */}
-        <nav className="sticky top-0 z-20 flex items-center justify-between gap-4 px-5 py-3 sm:px-8">
-          <span className="ht-type ht-heading-sm">HUNGRY TIGER</span>
-          <div className="flex items-center gap-2">
-            <GhostButton>SAUCE</GhostButton>
-            <GhostButton>RECIPES</GhostButton>
-            <GhostButton>ABOUT</GhostButton>
-          </div>
-        </nav>
-
-        {/* Hero — animates on mount rather than on scroll, so it carries no
-            `data-reveal`: the scroll-reveal CSS would otherwise hold it at
-            opacity 0 forever. */}
-        <header className="ht-band relative flex flex-col items-center px-6 pb-14 text-center">
-          <BotanicalWatermark seed={1} style={{ width: 190, height: 316, left: -40, top: -30 }} />
-          <Anime
-            autoplay
-            duration={640}
-            ease="outQuad"
-            opacity={[0, 1]}
-            translateY={[14, 0]}
-            className="relative"
+        {({ targetRef, containerRef }) => (
+          <div
+            ref={(el) => {
+              scrollerRef.current = el;
+              containerRef.current = el;
+            }}
+            tabIndex={0}
+            role="region"
+            aria-label="Hungry Tiger brand landing page"
+            className="relative w-full overflow-y-auto overscroll-contain"
+            style={{ height: STAGE_HEIGHT }}
           >
-            <div className="flex flex-col items-center">
-              <span className="ht-eyebrow">{HERO_EYEBROW}</span>
-              <p
-                className="ht-sub mt-4 max-w-md"
-                style={{ color: PALETTE.gold, opacity: 0.82 }}
-              >
-                FIRE-ROASTED INDIAN SAUCE, GROUNDED IN CHAR AND SPICE
-              </p>
-              <div className="mt-6" ref={buyRef}>
-                <FilledButton onClick={handleBuy}>BUY NOW</FilledButton>
-              </div>
-            </div>
-          </Anime>
-          <SplitText ref={heroSplitRef} params={{ chars: true }} onReady={handleSplitReady}>
-            <h2 className="ht-type ht-display relative mt-3 mb-0">{HERO_TITLE}</h2>
-          </SplitText>
-          <Anime
-            autoplay
-            duration={780}
-            ease="outExpo"
-            opacity={[0, 1]}
-            translateY={[30, 0]}
-            className="relative mt-10 block"
-          >
-            <Jar flavour="tomato" style={{ width: 132, height: 220 }} />
-          </Anime>
-        </header>
+            {/* Six stage-heights of track → five of scrub travel. */}
+            <div ref={targetRef} className="relative w-full" style={{ height: TRACK_HEIGHT }}>
+              {/* Sticky stage — the reference's pinned shot. */}
+              <div className="sticky top-0 w-full overflow-hidden" style={{ height: STAGE_HEIGHT }}>
+                {/* Hero — nav, eyebrow, display line, first BUY NOW. Lifts
+                    away on scrub like the reference's opening cut. */}
+                <div
+                  ref={heroLayerRef}
+                  data-ht-band="hero"
+                  className="absolute inset-0 z-10 flex flex-col"
+                  style={{ willChange: 'transform, opacity' }}
+                >
+                  <nav className="flex items-center justify-between gap-4 px-5 py-3 sm:px-8">
+                    <span className="ht-type ht-heading-sm">HUNGRY TIGER</span>
+                    <div className="flex items-center gap-2">
+                      <GhostButton>SAUCE</GhostButton>
+                      <GhostButton>RECIPES</GhostButton>
+                      <GhostButton>ABOUT</GhostButton>
+                    </div>
+                  </nav>
+                  <div className="relative flex flex-1 flex-col items-center px-6 text-center">
+                    <BotanicalWatermark seed={1} style={{ width: 190, height: 316, left: -40, top: -30 }} />
+                    <span className="ht-eyebrow relative">{HERO_EYEBROW}</span>
+                    <SplitText ref={heroSplitRef} params={{ chars: true }} onReady={handleSplitReady}>
+                      <h2 className="ht-type ht-display relative mt-2 mb-0">{HERO_TITLE}</h2>
+                    </SplitText>
+                    <p
+                      className="ht-sub relative mt-3 max-w-md"
+                      style={{ color: PALETTE.gold, opacity: 0.82 }}
+                    >
+                      FIRE-ROASTED INDIAN SAUCE, GROUNDED IN CHAR AND SPICE
+                    </p>
+                    <div className="relative mt-5" ref={buyRef}>
+                      <FilledButton onClick={() => handleBuy(buyRef.current)}>BUY NOW</FilledButton>
+                    </div>
+                  </div>
+                  <DottedRule />
+                </div>
 
-        <DottedRule />
+                {/* A NEW ANGLE OF FLAVOR */}
+                <div
+                  ref={angleRef}
+                  data-ht-band="angle"
+                  className="absolute inset-0 z-[2] flex flex-col justify-center px-8 sm:px-14"
+                  style={{ opacity: 0, willChange: 'transform, opacity' }}
+                >
+                  <h3 className="ht-type ht-display leading-[0.82]">
+                    A NEW
+                    <br />
+                    ANGLE
+                  </h3>
+                  <p className="ht-caption mt-5 max-w-[240px]" style={{ opacity: 0.8 }}>
+                    DISCOVER HOW OUR CREAMY TOMATO BLEND AND AUTHENTIC SPICES ELEVATE EVERY MEAL
+                  </p>
+                </div>
 
-        {/* Product bands — alternating asymmetric compositions. */}
-        {PRODUCT_BANDS.map((band, index) => {
-          const isRevealed = revealed[band.key] === true;
-          const isFlipped = index % 2 !== 0;
-          return (
-            <div key={band.key}>
-              <section
-                data-band={band.key}
-                data-revealed={isRevealed}
-                className={`ht-band relative flex flex-col items-center gap-8 px-6 py-14 sm:px-10 ${
-                  isFlipped ? 'sm:flex-row-reverse' : 'sm:flex-row'
-                }`}
-              >
-                <BotanicalWatermark
-                  seed={index + 2}
+                {/* UNWRAP THE ADVENTURE — veined type */}
+                <div
+                  ref={unwrapRef}
+                  data-ht-band="unwrap"
+                  className="absolute inset-0 z-[2] flex flex-col items-center justify-center px-6 text-center"
+                  style={{ opacity: 0, willChange: 'transform, opacity' }}
+                >
+                  <h3 className="ht-type ht-heading-lg ht-veined leading-[0.9]">
+                    <VeinOverlay />
+                    UNWRAP THE
+                    <br />
+                    ADVENTURE
+                  </h3>
+                </div>
+
+                {/* Ingredient moment */}
+                <div
+                  ref={crackRef}
+                  data-ht-band="crack"
+                  className="absolute inset-0 z-[2] flex flex-col items-center justify-end px-6 pb-[7%] text-center"
+                  style={{ opacity: 0, willChange: 'transform, opacity' }}
+                >
+                  <div className="flex items-center gap-3">
+                    <IngredientChip label="Garlic">
+                      <path d="M12 4c2 3 5 5 5 9a5 5 0 0 1-10 0c0-4 3-6 5-9Z" />
+                      <path d="M12 4v4" />
+                    </IngredientChip>
+                    <IngredientChip label="Signature masala">
+                      <circle cx="8.5" cy="9" r="2.2" />
+                      <circle cx="15.5" cy="9" r="2.2" />
+                      <circle cx="12" cy="15.5" r="2.2" />
+                    </IngredientChip>
+                    <IngredientChip label="Tandoor pot">
+                      <path d="M5 11h14a7 7 0 0 1-14 0Z" />
+                      <path d="M9 8V6M12 8V5M15 8V6" />
+                    </IngredientChip>
+                  </div>
+                  <p className="ht-caption mt-4 max-w-[300px]" style={{ opacity: 0.85 }}>
+                    CRACK OPEN THE JAR AND YOU&apos;RE HIT WITH THE BOLD SCENT OF FENUGREEK, GARLIC,
+                    AND OUR SIGNATURE MASALA BLEND
+                  </p>
+                </div>
+
+                {/* A NEW PERSPECTIVE ON TASTE + mid-page BUY NOW */}
+                <div
+                  ref={perspectiveRef}
+                  data-ht-band="perspective"
+                  className="absolute inset-0 z-[2] flex flex-col"
+                  style={{ opacity: 0, willChange: 'transform, opacity' }}
+                >
+                  <div className="flex flex-1 items-center justify-end px-8 sm:px-16">
+                    <div className="max-w-[220px] text-right">
+                      <p className="ht-caption" style={{ opacity: 0.85 }}>
+                        BOLD FLAVORS, SMOOTH TEXTURES, AND A TIMELESS TASTE OF INDIAN TRADITION —
+                        ALL IN ONE JAR.
+                      </p>
+                      <div className="mt-4 flex justify-end" ref={buyMidRef}>
+                        <FilledButton onClick={() => handleBuy(buyMidRef.current)}>
+                          BUY NOW
+                        </FilledButton>
+                      </div>
+                    </div>
+                  </div>
+                  <h3 className="ht-type ht-heading-lg px-8 pb-6 leading-[0.85] sm:px-14">
+                    A NEW
+                    <br />
+                    PERSPECTIVE
+                  </h3>
+                </div>
+
+                {/* The pour — sauce falls from the tipped jar's mouth. */}
+                <div
+                  ref={streamRef}
+                  aria-hidden="true"
+                  className="pointer-events-none absolute z-[6] w-[13px]"
                   style={{
-                    width: 150,
-                    height: 250,
-                    right: isFlipped ? 0 : 'auto',
-                    left: isFlipped ? 'auto' : 0,
-                    top: -20,
+                    left: 'calc(50% - 55px)',
+                    top: 'calc(50% + 138px)',
+                    height: 122,
+                    transformOrigin: 'top center',
+                    transform: 'scaleY(0)',
+                    background: `linear-gradient(180deg, ${PALETTE.gold}, #d96c1f)`,
+                    borderRadius: '0 0 10px 10px',
+                    willChange: 'transform, opacity',
                   }}
                 />
-                <div className="relative flex-1" data-reveal>
-                  <span className="ht-caption" style={{ opacity: 0.75 }}>
-                    {band.eyebrow}
-                  </span>
-                  <h3 className="ht-type ht-heading-lg mt-2">{band.headline}</h3>
-                  <p className="ht-sub mt-4 max-w-md" style={{ opacity: 0.8 }}>
-                    {band.caption}
-                  </p>
+
+                {/* The jar — pinned center stage, above every band. */}
+                <div
+                  ref={jarRef}
+                  className="absolute top-1/2 left-1/2 z-[8]"
+                  style={{ willChange: 'transform' }}
+                >
+                  <Jar flavour="tomato" style={{ width: 118, height: 197 }} />
+                </div>
+
+                {/* WHAT'S INSIDE — the reference's split panel rises last. */}
+                <div
+                  ref={insideRef}
+                  data-ht-band="inside"
+                  className="absolute inset-x-0 bottom-0 z-20 flex h-[58%]"
+                  style={{ transform: 'translate3d(0, 105%, 0)', willChange: 'transform' }}
+                >
                   <div
-                    className="mt-6 inline-flex flex-wrap items-center gap-2 rounded-[6px] p-4"
-                    style={{ background: PALETTE.spice, border: `1px solid ${PALETTE.cardamom}` }}
+                    className="relative flex flex-1 flex-col justify-center gap-3 px-7 sm:px-10"
+                    style={{ background: PALETTE.clove }}
                   >
-                    {band.badges.map((badge) => (
-                      <Badge key={badge.label} label={badge.label} tone={badge.tone} />
-                    ))}
-                    <Badge label={band.heat} tone="alert" />
+                    <h3 className="ht-type ht-heading-lg leading-[0.85]">
+                      WHAT&apos;S
+                      <br />
+                      INSIDE
+                    </h3>
+                    <div className="[&>div]:!px-0">
+                      <DottedRule />
+                    </div>
+                    <p className="ht-caption max-w-[260px]" style={{ opacity: 0.85 }}>
+                      OUR TIKKA MASALA SAUCE IS MADE WITH REAL INGREDIENTS FOR REAL FLAVOR.
+                    </p>
+                  </div>
+                  <div
+                    className="relative hidden w-[42%] items-end justify-center sm:flex"
+                    style={{ background: PALETTE.blossom }}
+                  >
+                    <BotanicalWatermark seed={3} style={{ width: 170, height: 284, right: -20, top: -20 }} />
+                    <Jar flavour="tomato" style={{ width: 96, height: 160, marginBottom: '-12px' }} />
                   </div>
                 </div>
-                <div className="shrink-0" data-reveal>
-                  <Jar flavour={band.flavour} style={{ width: 108, height: 180 }} />
-                </div>
-              </section>
-              <DottedRule />
+              </div>
             </div>
-          );
-        })}
+          </div>
+        )}
+      </ScrollScene>
 
-        {/* Email capture */}
+      {/* Email capture — page flow below the stage. The scene's container
+          holds only the track, so its scroll range ends exactly at the
+          scene's leave point and the observer never overshoots it. */}
         <section
           data-band="capture"
           data-revealed={revealed.capture === true}
@@ -688,7 +899,6 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
             © FIRE ROASTED, SMALL BATCH
           </span>
         </footer>
-      </div>
 
       {/* Floating bag — docked outside the scroller so it never scrolls away. */}
       <div className="pointer-events-none absolute right-5 bottom-5 z-30 flex flex-col items-center gap-1.5">
@@ -703,7 +913,7 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
           ref={bagRef}
           type="button"
           aria-label={`Shopping bag, ${cartCount} items`}
-          className="relative flex h-12 w-12 items-center justify-center rounded-full"
+          className="pointer-events-auto relative flex h-12 w-12 items-center justify-center rounded-full"
           style={{ border: `1px solid ${PALETTE.gold}`, background: PALETTE.clove }}
         >
           <svg
@@ -748,10 +958,10 @@ export const HungryTigerLanding = memo(function HungryTigerLanding({
       {/* Hint bar — matches the other blocks' footer convention. */}
       <div className="flex items-center justify-between gap-3 border-t border-landing-border/40 px-5 py-3">
         <span className="landing-font-mono text-[9px] uppercase tracking-[0.22em] text-landing-muted/60">
-          scroll the stage · buy now flies the jar into the bag
+          scroll the stage · the jar tumbles, settles, and pours
         </span>
         <span className="landing-font-mono text-[9px] uppercase tracking-[0.22em] text-landing-muted/60">
-          SplitText + IntersectionObserver
+          SplitText + ScrollScene + &lt;Anime&gt;
         </span>
       </div>
     </div>
