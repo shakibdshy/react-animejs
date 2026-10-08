@@ -30,6 +30,7 @@ import { ScrollShader } from './components/ScrollShader';
 import { CardDeckStack } from './components/CardDeckStack';
 import { BlurTiltStack } from './components/BlurTiltStack';
 import { ButterScroll } from './components/ButterScroll';
+import { HungryTigerLanding } from './components/HungryTigerLanding';
 import { SOURCE_BY_KEY } from './registry';
 
 /** Header row for a block section: title, library-primitive chip, and a
@@ -668,6 +669,32 @@ export const BlocksPage = memo(function BlocksPage() {
               </p>
               <ErrorBoundary>
                 <ButterScroll />
+              </ErrorBoundary>
+            </section>
+
+            {/* Hungry Tiger Landing — a whole brand page inside one block */}
+            <section className="mb-16">
+              <SectionHeader
+                title="Hungry Tiger Landing · Poster Page"
+                chip="SplitText + IntersectionObserver"
+                codeKey="hungry-tiger"
+                onViewCode={openCode}
+              />
+              <p className="text-sm text-landing-muted max-w-2xl mb-5">
+                A complete brand landing page built as one self-contained block: oversized condensed
+                type on a rust canvas, pill controls, dotted rules between bands, and the product
+                sitting raw with no frame. <code className="landing-font-mono text-landing-accent">SplitText</code>{' '}
+                plus <code className="landing-font-mono text-landing-accent">animate()</code> and{' '}
+                <code className="landing-font-mono text-landing-accent">stagger()</code> cascade the hero
+                headline in per character, replaying whenever the stage returns to the top; a{' '}
+                <code className="landing-font-mono">IntersectionObserver</code> rooted in the stage
+                reveals each band on scroll; and clicking{' '}
+                <code className="landing-font-mono text-landing-accent">BUY NOW</code> arcs the jar into
+                the docked bag on <code className="landing-font-mono">&lt;Anime&gt;</code> keyframes. The
+                palette is scoped to the block, so the site theme toggle cannot reach it.
+              </p>
+              <ErrorBoundary>
+                <HungryTigerLanding />
               </ErrorBoundary>
             </section>
           </div>

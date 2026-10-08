@@ -23,6 +23,7 @@ import scrollShaderSource from './components/ScrollShader.tsx?raw';
 import cardDeckStackSource from './components/CardDeckStack.tsx?raw';
 import blurTiltStackSource from './components/BlurTiltStack.tsx?raw';
 import butterScrollSource from './components/ButterScroll.tsx?raw';
+import hungryTigerLandingSource from './components/HungryTigerLanding.tsx?raw';
 
 export type BlockCodeTarget = {
   title: string;
@@ -62,4 +63,5 @@ export const SOURCE_BY_KEY: Record<string, BlockCodeTarget> = {
   'card-deck-stack': { title: 'CardDeckStack.tsx', code: cardDeckStackSource },
   'blur-tilt-stack': { title: 'BlurTiltStack.tsx', code: blurTiltStackSource },
   'butter-scroll': { title: 'ButterScroll.tsx', code: butterScrollSource },
+  'hungry-tiger': { title: 'HungryTigerLanding.tsx', code: hungryTigerLandingSource },
 };
